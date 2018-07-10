@@ -1,0 +1,32 @@
+<div class="container-fluid">
+
+  {{#if image._links.image.href}}
+
+    <div class="row">
+      <div class="col-xs-10 col-xs-offset-1 bg-info text-info">
+        Click top left position, move mouse to bottom right position and click again.
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-10 col-xs-offset-1" id="warpjs-imagemap-editor-placeholder" data-warpjs-placeholder="image">
+        <div class="bg-warning text-warning">Loading image <span class="glyphicon glyphicon-hourglass"></span>...</div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-10 col-xs-offset-1">
+        {{> areas areas=image._embedded.areas}}
+      </div>
+    </div>
+
+  {{else}}
+
+    <div class="row">
+      <div class="col-xs-10 col-xs-offset-1 bg-danger text-danger">
+        There are no ImageURL defined.
+      </div>
+    </div>
+
+  {{/if}}
+</div>

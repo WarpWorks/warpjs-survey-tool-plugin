@@ -1,0 +1,7 @@
+/.babelrc
+/.npmignore
+/.nycrc
+/client
+/Gruntfile.js
+/grunt
+/warp-works-warpjs-imagemap-editor-plugin-*.tgz

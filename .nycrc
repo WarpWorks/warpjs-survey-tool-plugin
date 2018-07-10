@@ -1,0 +1,22 @@
+{
+  "all": true,
+  "report-dir": "./reports/coverage",
+  "check-coverage": false,
+  "exclude": [
+    "**/*.*.test.js",
+    "assets",
+    "reports"
+  ],
+  "reporter": [
+    "cobertura",
+    "html",
+    "text",
+    "text-summary"
+  ],
+  "watermarks": {
+    "statements": [50, 80],
+    "lines": [50, 80],
+    "functions": [50, 80],
+    "branches": [50, 80]
+  }
+}

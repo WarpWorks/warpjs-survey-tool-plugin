@@ -1,0 +1,79 @@
+{
+  "name": "@warp-works/warpjs-ipt-plugin",
+  "version": "1.2.3",
+  "description": "Plugin to easily create imagemap areas Edit",
+  "main": "index.js",
+  "scripts": {
+    "prepublish": "grunt && npm -s test",
+    "grunt": "grunt",
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WarpWorks/warpjs-ipt-plugin.git"
+  },
+  "keywords": [
+    "warpjs",
+    "plugin",
+    "imagemap",
+    "content"
+  ],
+  "author": {
+    "name": "Hữu Ðà Trần",
+    "email": "huuda.tran@quoininc.com",
+    "url": "https://www.quoininc.com/staff/huu-da-tran/"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/WarpWorks/warpjs-ipt-plugin/issues"
+  },
+  "homepage": "https://github.com/WarpWorks/warpjs-ipt-plugin#readme",
+  "devDependencies": {
+    "@quoin/eslint-config-quoin": "latest",
+    "@quoin/expressjs-routes-info": "latest",
+    "@quoin/node-test-helpers": "latest",
+    "@warp-works/warpjs-plugins": "^1.2.5",
+    "@warp-works/warpjs-utils": "release-1.2",
+    "babel-core": "6.26.x",
+    "babel-loader": "7.1.x",
+    "babel-preset-env": "1.7.x",
+    "babel-preset-stage-0": "6.24.1",
+    "body-parser": "1.18.x",
+    "cookie-parser": "1.4.3",
+    "eslint": "5.0.x",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-html": "4.0.x",
+    "eslint-plugin-import": "2.13.x",
+    "eslint-plugin-json": "1.2.0",
+    "eslint-plugin-node": "6.0.x",
+    "eslint-plugin-promise": "3.8.x",
+    "eslint-plugin-standard": "3.1.x",
+    "express": "4.16.x",
+    "grunt": "^1.0.1",
+    "grunt-contrib-clean": "1.1.0",
+    "grunt-contrib-less": "2.0.x",
+    "grunt-eslint": "20.0.x",
+    "grunt-webpack": "3.1.x",
+    "handlebars": "4.0.11",
+    "handlebars-loader": "1.7.x",
+    "load-grunt-config": "0.19.2",
+    "mocha": "5.2.x",
+    "nyc": "12.0.x",
+    "svg.js": "2.6.x",
+    "time-grunt": "1.4.0",
+    "webpack": "2.7.0"
+  },
+  "peerDependencies": {
+    "@quoin/expressjs-routes-info": ">=0.2.0",
+    "@warp-works/warpjs-utils": ">=1.2.8",
+    "body-parser": ">=1.17.0",
+    "cookie-parser": ">=1.4.0",
+    "express": ">=4.0.0"
+  },
+  "dependencies": {
+    "bluebird": "3.5.1",
+    "debug": "3.1.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "lodash": "4.17.x"
+  }
+}

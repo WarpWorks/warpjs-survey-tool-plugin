@@ -1,0 +1,9 @@
+<div class="row">
+  <ul class="bg-danger text-danger">
+    {{#each errors as |error|}}
+      {{#each error.errors as |areaError|}}
+        <li>{{areaError}}</li>
+      {{/each}}
+    {{/each}}
+  </ul>
+</div>

@@ -1,0 +1,19 @@
+<div class="container-fluid">
+  {{#each areas as |area|}}
+    <div class="row">
+      <div class="col-xs-2 col-xs-offset-1 {{#unless area.coords}}bg-danger text-danger{{/unless}}">
+        {{#if area.coords}}{{area.coords}}{{else}}NO COORDS{{/if}}
+      </div>
+      <div class="col-xs-1 {{#unless area.shape}}bg-danger{{/unless}}">
+        {{#if area.shape}}{{area.shape}}{{else}}NO SHAPE{{/if}}
+      </div>
+      <div class="col-xs-3">{{area.title}}</div>
+      <div class="col-xs-2">ACTIONS HERE</div>
+      {{#if area.coords}}
+        {{#unless area.isRect}}
+          <div class="col-xs-2 bg-danger text-danger">Coords not exactly 4</div>
+        {{/unless}}
+      {{/if}}
+    </div>
+  {{/each}}
+</div>
