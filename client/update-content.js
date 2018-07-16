@@ -1,6 +1,4 @@
 const Promise = require('bluebird');
-// const addImage = require('./add-image');
-//  const bodyTemplate = require('./modal-body.hbs');
 const errorTemplate = require('./error.hbs');
 const questionnaireTemplate = require('./questionnaire.hbs');
 
