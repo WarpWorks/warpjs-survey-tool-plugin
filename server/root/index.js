@@ -1,7 +1,7 @@
-const createNewAreas = require('./create-new-areas');
-const getCurrentData = require('./get-current-data');
+const getAllQuesitonnaires = require('./get-all-questionnaires');
+const createQuestionnaireInstance = require('./create-questionnaire-instance');
 
 module.exports = {
-    patch: (req, res) => createNewAreas(req, res),
-    post: (req, res) => getCurrentData(req, res)
+    get: (req, res) => getAllQuesitonnaires(req, res),
+    post: (req, res) => createQuestionnaireInstance(req, res)
 };

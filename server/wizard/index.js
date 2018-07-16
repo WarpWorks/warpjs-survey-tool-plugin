@@ -1,5 +1,5 @@
-const getAnswers = require('./get-answers');
+const getCurrentData = require('./get-current-data');
 
 module.exports = {
-    get: (req, res) => getAnswers(req, res)
+    get: (req, res) => getCurrentData(req, res)
 };

@@ -1,22 +1,9 @@
-<div class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" data-warpjs-modal="{{modalName}}">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content container">
-      <div class="modal-header row">
-        <div class="logo col-sm-1"></div>
-        <div class="modal-title col-sm-3">
-          IIC Project Explorer
-        </div>
-        <div class="progress-container col-sm-7">
-          <span class="progress-label">Progress</span>
-          <div class="progress-bar-container">
-            <div class="progress-bar"></div>
-          </div>
-        </div>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      </div>
-      <div class="modal-body row">
-        {{> loading}}
-      </div>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      {{#each questionnaire._embedded.questionnaires}}
+        <div class="questionnaire-name"><a href="{{_links.self.href}}" class="quesitonnaire-link" data-id="{{id}}">{{name}}</a></div>
+      {{/each}}
     </div>
   </div>
 </div>

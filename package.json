@@ -71,6 +71,7 @@
     "express": ">=4.0.0"
   },
   "dependencies": {
+    "@warp-works/warpjs-action-plugin": "1.2",
     "bluebird": "3.5.1",
     "debug": "3.1.0",
     "grunt-contrib-copy": "^1.0.0",

@@ -1,6 +1,6 @@
-# Warpjs ImageMap Editor Plugin
+# Warpjs IPT Plugin
 
-This plugin allows to use the mouse to add Rect shape image areas to the image.
+This plugin sets up the IPT questionnaire.
 
 ## Configuration
 
@@ -8,25 +8,19 @@ Add the following to `.warp-works-warpjsrc` of your project:
 
     {
       plugins: [{
-        "name": "imagemap-editor",
-        "moduleName": "@warp-works/warpjs-imagemap-editor-plugin",
-        "path": "/imagemap-editor",
+        "name": "ipt",
+        "moduleName": "@warp-works/warpjs-ipt-plugin",
+        "path": "/ipt",
         "type": "action",
         "config": {
-          "glyphicon": "picture",
-          "label": "Edit ImageMap"
+          "glyphicon": "plane",
+          "label": "IPT Survey",
+          "schema": {
+            "questionnaire": "IPT",
+            "category": "CategoryQ",
+            "question": "DimensionQ",
+            "option": "OptionQ"
+          }
         }
       }]
     }
-
-To be able to use it, the schema must have the following in the view:
-
-    actions: [{
-      name: "EditImageMap",
-      desc: "Action to launch ImageMap editor",
-      type: "Action",
-      id: <some-id>,
-      pluginName: "imagemap-editor"
-    }]
-
-The schema's `pluginName` must match the RC file's `plugin.name`.

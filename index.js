@@ -1,12 +1,27 @@
+const ActionPlugin = require('@warp-works/warpjs-action-plugin');
+const RoutesInfo = require('@quoin/expressjs-routes-info');
+
 const app = require('./server/app');
-const getJsScriptUrl = require('./lib/get-js-script-url');
-const getPluginIdentifier = require('./lib/get-plugin-identifier');
-const getRootUrl = require('./lib/get-root-url');
+const constants = require('./lib/constants');
+const packageJson = require('./package.json');
 
-const plugin = (config, warpCore) => (baseUrl, staticUrl) => app(config, warpCore, baseUrl, staticUrl);
+class IptPlugin extends ActionPlugin {
+    constructor(config, warpCore, pluginType) {
+        super(config, warpCore, packageJson, pluginType);
+    }
 
-plugin.getJsScriptUrl = () => getJsScriptUrl();
-plugin.getPluginIdentifier = () => getPluginIdentifier();
-plugin.getRootUrl = (domain, type, id) => getRootUrl(domain, type, id);
+    get app() {
+        return (baseUrl, staticUrl) => app(this.config, this.warpCore, baseUrl, staticUrl);
+    }
 
-module.exports = plugin;
+    get jsScriptUrl() {
+        // This plugin doesn't need any UI.
+        return null;
+    }
+
+    getRootUrl(domain, type, id) {
+        return RoutesInfo.expand(constants.routes.root, { domain, type, id });
+    }
+}
+
+module.exports = IptPlugin;
