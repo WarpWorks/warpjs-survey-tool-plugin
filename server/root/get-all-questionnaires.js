@@ -1,4 +1,3 @@
-// const _ = require('lodash');
 const Promise = require('bluebird');
 const RoutesInfo = require('@quoin/expressjs-routes-info');
 const warpjsUtils = require('@warp-works/warpjs-utils');
@@ -30,16 +29,6 @@ module.exports = (req, res) => {
             Promise.resolve()
                 .then(() => req.app.get(constants.appKeys.warpCore).getDomainByName(domain))
                 .then((domainModel) => domainModel.getEntityByName(pluginConfig.schema.questionnaire))
-                // .then((questionnaireEntity) => questionnaireEntity.getDocuments(persistence))
-                // .then((questionnaires) => {
-                //     console.log('questionnaires: ', questionnaires);
-                //     // const resource = warpjsUtils.createResource(req, {_embedded: {questionnaires: questionnaires}});
-                //     resource.embed('questionnaires', questionnaires);
-                //     console.log('questionnaire resource:::: ', resource);
-                //     // warpjsUtils.sendHal(req, res, resource, RoutesInfo);
-                // })
-                // .then((questionnaires) => resource.embed('questionnaires', questionnaires))
-
                 .then((questionnaireEntity) => Promise.resolve()
                     .then(() => questionnaireEntity.getDocuments(persistence))
                     .then((questionnaireDocuments) => questionnaireDocuments.map((questionnaireDocument) => new Questionnaire(questionnaireEntity, questionnaireDocument)))

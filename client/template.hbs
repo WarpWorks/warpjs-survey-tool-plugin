@@ -1,9 +1,21 @@
-<div class="container">
-  <div class="row">
-    <div class="col-sm-12">
-      {{#each questionnaire._embedded.questionnaires}}
-        <div class="questionnaire-name"><a href="{{_links.self.href}}" class="quesitonnaire-link" data-id="{{id}}">{{name}}</a></div>
-      {{/each}}
+<div class="ipt">
+  <div class="container">
+    <div class="ipt-container">
+      <div class="row title-section">
+        <div class="col-sm-2">
+          <div class="logo"></div>
+        </div>
+        <div class="col-sm-3">
+          <h2 class="ipt-title">IIC Project Explorer</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12">
+          <div class="ipt-body">
+          {{> loading}}
+        </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

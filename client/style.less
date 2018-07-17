@@ -1,13 +1,20 @@
-[data-warpjs-modal="ipt"] {
-    .modal-dialog {
-        width: 95%;
+.ipt {
+    background-color: #6e6e6e;
+    height: 100vh;
+    width: 100vw;
 
-        .modal-content .modal-header {
-            border-bottom: 0px;
+    .ipt-container {
+        background-color: #ffffff;
+        margin-bottom: 20px;
+        padding: 15px 30px 40px 30px;
 
-            .modal-title {
+        .title-section {
+            margin-bottom: 30px;
+            position: relative;
+
+            .ipt-title {
                 font-size: 18px;
-                line-height: 42px;
+                line-height: 18px;
             }
 
             .logo {
@@ -15,146 +22,148 @@
                 background-size: contain;
                 background-position: left bottom;
                 background-repeat: no-repeat;
-                height: 32px;
-            }
-
-            .progress-container {
-                .progress-label {
-                    font-size: 12px;
-                    color: #ccc;
-                    display: block;
-                }
-
-                .progress-bar-container {
-                    height: 12px;
-                    background-color: #ccc;
-                    border-radius: 6px;
-                    width: 100%;
-                    background-size: 20% 100%;
-
-                    .progress-bar {
-                        width: 0px;
-                        height: 12px;
-                        border-radius: 6px;
-                    }
-                }
+                height: 40px;
             }
         }
 
-        .modal-content {
-            .modal-body {
-                max-height: calc(~"100vh - 200px");
-                overflow-y: auto;
+        .progress-container {
+            .progress-label {
+                font-size: 12px;
+                color: #ccc;
+                display: block;
+            }
 
-                .category,
-                .question,
-                .end {
-                    display: none;
-                }
+            .progress-bar-container {
+                height: 12px;
+                background-color: #ccc;
+                border-radius: 6px;
+                width: 100%;
+                background-size: 20% 100%;
 
-                .question {
-                    padding: 10px 45px;
-
-                    .breadcrumbs {
-                        font-size: 12px;
-                        color: #ccc;
-                    }
-
-                    .options {
-                        padding: 10px 30px;
-                    }
-                }
-
-                .show-item {
-                    display: block;
-                }
-
-                .option-level-block {
-                    width: 100%;
-                    background-color: #5296b3;
-                }
-
-                .block-0 {
-                    margin-top: 80px;
-                    height: 10px;
-                }
-
-                .block-1 {
-                    margin-top: 70px;
-                    height: 20px;
-                }
-
-                .block-2 {
-                    margin-top: 36px;
-                    height: 55px;
-                }
-
-                .block-3 {
-                    margin-top: 0px;
-                    height: 90px;
-                }
-
-                .radio-text {
-                    text-align: center;
-                    margin-top: 10px;
-                }
-                .radio {
-                    background-image: url('images/checkbox-off.svg');
-                    background-repeat: no-repeat;
-                    background-size: 22px;
-                    background-position: center center;
-                    width: 30px;
-                    height: 30px;
-                    margin-left: auto;
-                    margin-right: auto;
-                }
-
-                .radio-checked {
-                    background-image: url('images/checkbox-on.svg') !important;
-                    background-size: 30px;
-                }
-
-                .buttons {
-                    .next {
-                        background-color: #c7281a;
-                        border-radius: 3px;
-                        color: #fff;
-                        border: none;
-                        text-transform: uppercase;
-                        padding: 7px 30px;
-                        font-size: 12px;
-                        float: right;
-                    }
-
-                    .comments {
-                        margin-left: auto;
-                        margin-right: auto;
-                        display: block;
-                        background-color: transparent;
-                        border: solid 1px #82808a;
-                        color: #82808a;
-                        border-radius: 10px;
-                        padding: 3px 24px;
-                    }
-
-                    .back {
-                        font-weight: bold;
-                        background: transparent;
-                        border: none;
-                    }
-                }
-
-                .category-image-map {
-                    margin: 40px -15px -15px -15px;
-                    background-image: url('images/flow-map-fade.svg');
-                    background-position: center center;
-                    background-repeat: no-repeat;
-                    background-size: contain;
-                    height: 200px;
-                    width: calc(100% + 30px);
-                    background-color: #f5f3f2;
+                .progress-bar {
+                    width: 0px;
+                    height: 12px;
+                    border-radius: 6px;
                 }
             }
+        }
+    }
+}
+
+
+
+.modal-content {
+    .modal-body {
+        max-height: calc(~"100vh - 200px");
+        overflow-y: auto;
+
+        .category,
+        .question,
+        .end {
+            display: none;
+        }
+
+        .question {
+            padding: 10px 45px;
+
+            .breadcrumbs {
+                font-size: 12px;
+                color: #ccc;
+            }
+
+            .options {
+                padding: 10px 30px;
+            }
+        }
+
+        .show-item {
+            display: block;
+        }
+
+        .option-level-block {
+            width: 100%;
+            background-color: #5296b3;
+        }
+
+        .block-0 {
+            margin-top: 80px;
+            height: 10px;
+        }
+
+        .block-1 {
+            margin-top: 70px;
+            height: 20px;
+        }
+
+        .block-2 {
+            margin-top: 36px;
+            height: 55px;
+        }
+
+        .block-3 {
+            margin-top: 0px;
+            height: 90px;
+        }
+
+        .radio-text {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .radio {
+            background-image: url('images/checkbox-off.svg');
+            background-repeat: no-repeat;
+            background-size: 22px;
+            background-position: center center;
+            width: 30px;
+            height: 30px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .radio-checked {
+            background-image: url('images/checkbox-on.svg') !important;
+            background-size: 30px;
+        }
+
+        .buttons {
+            .next {
+                background-color: #c7281a;
+                border-radius: 3px;
+                color: #fff;
+                border: none;
+                text-transform: uppercase;
+                padding: 7px 30px;
+                font-size: 12px;
+                float: right;
+            }
+
+            .comments {
+                margin-left: auto;
+                margin-right: auto;
+                display: block;
+                background-color: transparent;
+                border: solid 1px #82808a;
+                color: #82808a;
+                border-radius: 10px;
+                padding: 3px 24px;
+            }
+
+            .back {
+                font-weight: bold;
+                background: transparent;
+                border: none;
+            }
+        }
+
+        .category-image-map {
+            margin: 40px -15px -15px -15px;
+            background-image: url('images/flow-map-fade.svg');
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            height: 200px;
+            width: calc(100% + 30px);
+            background-color: #f5f3f2;
         }
     }
 }
