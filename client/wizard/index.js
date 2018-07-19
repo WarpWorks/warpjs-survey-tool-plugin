@@ -4,6 +4,7 @@ const warpjsUtils = require('@warp-works/warpjs-utils');
 const errorTemplate = require('./../error.hbs');
 const template = require('./../template.hbs');
 const quesitonnaireIntroTemplate = require('./questionnaire-intro.hbs');
+const quesitonnairePrivacyTemplate = require('./questionnaire-privacy.hbs');
 
 (($) => $(document).ready(() => {
     const loader = warpjsUtils.toast.loading($, "Page is loading");
@@ -17,12 +18,13 @@ const quesitonnaireIntroTemplate = require('./questionnaire-intro.hbs');
                 placeholder.html(errorTemplate(result.data));
             } else {
                 return Promise.resolve()
-                    .then(() => quesitonnaireIntroTemplate({questionnaire: result.data}))
+                    .then(() => quesitonnaireIntroTemplate())
                     .then((content) => $('.ipt-body').html(content))
                     .then(() => warpjsUtils.documentReady($))
                     .then(() => {
                         $(document).on('click', '.intro-next', (event) => {
                             event.preventDefault();
+                            $('.ipt-body').html(quesitonnairePrivacyTemplate());
                         });
                     })
                 ;
