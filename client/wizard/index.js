@@ -1,9 +1,9 @@
 const Promise = require('bluebird');
 const warpjsUtils = require('@warp-works/warpjs-utils');
 
-const errorTemplate = require('./error.hbs');
-const template = require('./template.hbs');
-const quesitonnairesTemplate = require('./questionnaires.hbs');
+const errorTemplate = require('./../error.hbs');
+const template = require('./../template.hbs');
+const quesitonnaireIntroTemplate = require('./questionnaire-intro.hbs');
 
 (($) => $(document).ready(() => {
     const loader = warpjsUtils.toast.loading($, "Page is loading");
@@ -17,15 +17,12 @@ const quesitonnairesTemplate = require('./questionnaires.hbs');
                 placeholder.html(errorTemplate(result.data));
             } else {
                 return Promise.resolve()
-                    .then(() => quesitonnairesTemplate({questionnaire: result.data}))
+                    .then(() => quesitonnaireIntroTemplate({questionnaire: result.data}))
                     .then((content) => $('.ipt-body').html(content))
                     .then(() => warpjsUtils.documentReady($))
                     .then(() => {
-                        $(document).on('click', '.quesitonnaire-link', (event) => {
+                        $(document).on('click', '.intro-next', (event) => {
                             event.preventDefault();
-                            $.post($(event.target).data('url'), (data) => {
-                                window.location.href = data._links.self.href;
-                            });
                         });
                     })
                 ;

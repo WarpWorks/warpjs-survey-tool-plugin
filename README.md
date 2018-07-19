@@ -19,8 +19,17 @@ Add the following to `.warp-works-warpjsrc` of your project:
             "questionnaire": "IPT",
             "category": "CategoryQ",
             "question": "DimensionQ",
-            "option": "OptionQ"
+            "option": "OptionQ",
+            "attempt": "IPT_Attempt"
           }
         }
       }]
     }
+
+- `schema` is the bridge between IPT entities in studio and what is sent with HAL to the front end.
+- `questionnaire` is for questionnaires
+- `category` is for categories
+- `question` is for questions and interim detail pages
+- `option` is for options for quesitons
+- `attemp` is for attempts on a specific questionnaire
+

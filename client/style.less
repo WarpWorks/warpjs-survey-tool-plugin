@@ -1,6 +1,6 @@
 .ipt {
     background-color: #6e6e6e;
-    height: 100vh;
+    min-height: 100vh;
     width: 100vw;
 
     .ipt-container {
@@ -8,14 +8,14 @@
         margin-bottom: 20px;
         padding: 15px 30px 40px 30px;
 
-        .title-section {
-            margin-bottom: 30px;
-            position: relative;
+        .ipt-title {
+            font-size: 18px;
+            line-height: 18px;
+        }
 
-            .ipt-title {
-                font-size: 18px;
-                line-height: 18px;
-            }
+        .title-section {
+            margin-bottom: 10px;
+            position: relative;
 
             .logo {
                 background-image: url(images/IIC-logo.png);
@@ -50,120 +50,134 @@
     }
 }
 
+.questionnaire {
+    padding-left: 15px;
+    padding-right: 15px;
 
+    .start-overview {
+        background-image: url(images/start-overview.svg);
+        background-size: contain;
+        background-position: center center;
+        background-repeat: no-repeat;
+        width: 100%;
+        height: 280px;
+        margin-bottom: 30px;
+    }
 
-.modal-content {
-    .modal-body {
-        max-height: calc(~"100vh - 200px");
-        overflow-y: auto;
+    .category,
+    .question,
+    .end {
+        display: none;
+    }
 
-        .category,
-        .question,
-        .end {
-            display: none;
+    .question {
+        padding: 10px 45px;
+
+        .breadcrumbs {
+            font-size: 12px;
+            color: #ccc;
         }
 
-        .question {
-            padding: 10px 45px;
+        .options {
+            padding: 10px 30px;
+        }
+    }
 
-            .breadcrumbs {
-                font-size: 12px;
-                color: #ccc;
-            }
+    .show-item {
+        display: block;
+    }
 
-            .options {
-                padding: 10px 30px;
-            }
+    .option-level-block {
+        width: 100%;
+        background-color: #5296b3;
+    }
+
+    .block-0 {
+        margin-top: 80px;
+        height: 10px;
+    }
+
+    .block-1 {
+        margin-top: 70px;
+        height: 20px;
+    }
+
+    .block-2 {
+        margin-top: 36px;
+        height: 55px;
+    }
+
+    .block-3 {
+        margin-top: 0px;
+        height: 90px;
+    }
+
+    .radio-text {
+        text-align: center;
+        margin-top: 10px;
+    }
+    .radio {
+        background-image: url('images/checkbox-off.svg');
+        background-repeat: no-repeat;
+        background-size: 22px;
+        background-position: center center;
+        width: 30px;
+        height: 30px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .radio-checked {
+        background-image: url('images/checkbox-on.svg') !important;
+        background-size: 30px;
+    }
+
+    .buttons {
+        .next {
+            background-color: #c7281a;
+            border-radius: 3px;
+            color: #fff;
+            border: none;
+            text-transform: uppercase;
+            padding: 7px 30px;
+            font-size: 12px;
+            float: right;
         }
 
-        .show-item {
-            display: block;
-        }
-
-        .option-level-block {
-            width: 100%;
-            background-color: #5296b3;
-        }
-
-        .block-0 {
-            margin-top: 80px;
-            height: 10px;
-        }
-
-        .block-1 {
-            margin-top: 70px;
-            height: 20px;
-        }
-
-        .block-2 {
-            margin-top: 36px;
-            height: 55px;
-        }
-
-        .block-3 {
-            margin-top: 0px;
-            height: 90px;
-        }
-
-        .radio-text {
-            text-align: center;
-            margin-top: 10px;
-        }
-        .radio {
-            background-image: url('images/checkbox-off.svg');
-            background-repeat: no-repeat;
-            background-size: 22px;
-            background-position: center center;
-            width: 30px;
-            height: 30px;
+        .comments {
             margin-left: auto;
             margin-right: auto;
+            display: block;
+            background-color: transparent;
+            border: solid 1px #82808a;
+            color: #82808a;
+            border-radius: 10px;
+            padding: 3px 24px;
         }
 
-        .radio-checked {
-            background-image: url('images/checkbox-on.svg') !important;
-            background-size: 30px;
+        .back {
+            font-weight: bold;
+            background: transparent;
+            border: none;
         }
 
-        .buttons {
-            .next {
-                background-color: #c7281a;
-                border-radius: 3px;
-                color: #fff;
-                border: none;
-                text-transform: uppercase;
-                padding: 7px 30px;
-                font-size: 12px;
-                float: right;
-            }
-
-            .comments {
-                margin-left: auto;
-                margin-right: auto;
-                display: block;
-                background-color: transparent;
-                border: solid 1px #82808a;
-                color: #82808a;
-                border-radius: 10px;
-                padding: 3px 24px;
-            }
-
-            .back {
-                font-weight: bold;
-                background: transparent;
-                border: none;
-            }
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 7px 100px;
+            float: none;
         }
+    }
 
-        .category-image-map {
-            margin: 40px -15px -15px -15px;
-            background-image: url('images/flow-map-fade.svg');
-            background-position: center center;
-            background-repeat: no-repeat;
-            background-size: contain;
-            height: 200px;
-            width: calc(100% + 30px);
-            background-color: #f5f3f2;
-        }
+    .category-image-map {
+        margin: 40px -15px -15px -15px;
+        background-image: url('images/flow-map-fade.svg');
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        height: 200px;
+        width: calc(100% + 30px);
+        background-color: #f5f3f2;
     }
 }

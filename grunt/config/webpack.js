@@ -10,7 +10,8 @@ module.exports = {
         target: 'web',
         devtool: 'source-map',
         entry: {
-            [constants.versionedName]: './client/index.js'
+            [constants.versionedName]: './client/index.js',
+            [constants.versionedNameWizard]: './client/wizard/index.js'
         },
         externals: {
             jquery: true
