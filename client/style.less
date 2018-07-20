@@ -3,6 +3,10 @@
     min-height: 100vh;
     width: 100vw;
 
+    h1, h2, h3, h4, h5, h6, p, label, span {
+        color: #65636e;
+    }
+
     .ipt-container {
         background-color: #ffffff;
         margin-bottom: 20px;
@@ -48,155 +52,206 @@
             }
         }
     }
-}
 
-.questionnaire {
-    padding-left: 15px;
-    padding-right: 15px;
+    .questionnaire {
+        padding-left: 15px;
+        padding-right: 15px;
 
-    .start-overview {
-        background-image: url(images/start-overview.svg);
-        background-size: contain;
-        background-position: center center;
-        background-repeat: no-repeat;
-        width: 100%;
-        height: 280px;
-        margin-bottom: 30px;
-    }
-
-    .privacy-lock-container {
-        background-color: #f0f0f0;
-        width: 60%;
-        height: 250px;
-        margin-bottom: 70px;
-        border-radius: 5px;
-        margin-left: 20%;
-        padding: 30px 0px 50px 0px;
-
-        .privacy-lock {
-            background-image: url(images/lock.svg);
+        .start-overview {
+            background-image: url(images/start-overview.svg);
             background-size: contain;
             background-position: center center;
             background-repeat: no-repeat;
             width: 100%;
-            height: 170px;
-        }
-    }
-
-    .category,
-    .question,
-    .end {
-        display: none;
-    }
-
-    .question {
-        padding: 10px 45px;
-
-        .breadcrumbs {
-            font-size: 12px;
-            color: #ccc;
+            height: 280px;
+            margin-bottom: 30px;
         }
 
-        .options {
-            padding: 10px 30px;
-        }
-    }
+        .privacy-lock-container {
+            background-color: #f0f0f0;
+            width: 60%;
+            height: 250px;
+            margin-bottom: 70px;
+            border-radius: 5px;
+            margin-left: 20%;
+            padding: 30px 0px 50px 0px;
 
-    .show-item {
-        display: block;
-    }
-
-    .option-level-block {
-        width: 100%;
-        background-color: #5296b3;
-    }
-
-    .block-0 {
-        margin-top: 80px;
-        height: 10px;
-    }
-
-    .block-1 {
-        margin-top: 70px;
-        height: 20px;
-    }
-
-    .block-2 {
-        margin-top: 36px;
-        height: 55px;
-    }
-
-    .block-3 {
-        margin-top: 0px;
-        height: 90px;
-    }
-
-    .radio-text {
-        text-align: center;
-        margin-top: 10px;
-    }
-    .radio {
-        background-image: url('images/checkbox-off.svg');
-        background-repeat: no-repeat;
-        background-size: 22px;
-        background-position: center center;
-        width: 30px;
-        height: 30px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    .radio-checked {
-        background-image: url('images/checkbox-on.svg') !important;
-        background-size: 30px;
-    }
-
-    .buttons {
-        .next {
-            background-color: #c7281a;
-            border-radius: 3px;
-            color: #fff;
-            border: none;
-            text-transform: uppercase;
-            padding: 7px 30px;
-            font-size: 12px;
-            float: right;
+            .privacy-lock {
+                background-image: url(images/lock.svg);
+                background-size: contain;
+                background-position: center center;
+                background-repeat: no-repeat;
+                width: 100%;
+                height: 170px;
+            }
         }
 
-        .comments {
+        .project-description {
+            width: 60%;
+            margin: 60px auto 80px auto;
+
+            input {
+                background-color: #f0f0f0;
+                border: 0px;
+                border-radus: 2px;
+                margin-bottom: 25px;
+            }
+        }
+
+        .project-levels {
+            width: 80%;
+            margin: 10px auto;
+            position: relative;
+            overflow: hidden;
+
+            .level-container {
+                background-color: #f0f0f0;
+                padding: 20px;
+                margin-bottom: 15px;
+                position: relative;
+                overflow: hidden;
+
+                > div {
+                    float: none;
+                    display: inline-block;
+                    vertical-align: middle;
+                }
+
+                h3 {
+                    font-size: 15px;
+                    margin-top: 0px;
+                    margin-bottom: 0px;
+                }
+
+                p {
+                    text-align: left;
+                    margin-top: 5px;
+                    margin-bottom: 0px;
+                }
+
+                .level-timeframe p {
+                    font-weight: bold;
+                    color: #000000;
+                    font-size: 13px;
+                }
+            }
+        }
+
+        .category,
+        .question,
+        .end {
+            display: none;
+        }
+
+        .question {
+            padding: 10px 45px;
+
+            .breadcrumbs {
+                font-size: 12px;
+                color: #ccc;
+            }
+
+            .options {
+                padding: 10px 30px;
+            }
+        }
+
+        .show-item {
+            display: block;
+        }
+
+        .option-level-block {
+            width: 100%;
+            background-color: #5296b3;
+        }
+
+        .block-0 {
+            margin-top: 80px;
+            height: 10px;
+        }
+
+        .block-1 {
+            margin-top: 70px;
+            height: 20px;
+        }
+
+        .block-2 {
+            margin-top: 36px;
+            height: 55px;
+        }
+
+        .block-3 {
+            margin-top: 0px;
+            height: 90px;
+        }
+
+        .radio-text {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .radio {
+            background-image: url('images/checkbox-off.svg');
+            background-repeat: no-repeat;
+            background-size: 22px;
+            background-position: center center;
+            width: 30px;
+            height: 30px;
             margin-left: auto;
             margin-right: auto;
-            display: block;
-            background-color: transparent;
-            border: solid 1px #82808a;
-            color: #82808a;
-            border-radius: 10px;
-            padding: 3px 24px;
         }
 
-        .back {
-            font-weight: bold;
-            background: transparent;
-            border: none;
+        .radio-checked {
+            background-image: url('images/checkbox-on.svg') !important;
+            background-size: 30px;
         }
 
-        .center {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            padding: 7px 100px;
-            float: none;
-        }
-    }
+        .buttons {
+            .next {
+                background-color: #c7281a;
+                border-radius: 3px;
+                color: #fff;
+                border: none;
+                text-transform: uppercase;
+                padding: 7px 30px;
+                font-size: 12px;
+                float: right;
+            }
 
-    .category-image-map {
-        margin: 40px -15px -15px -15px;
-        background-image: url('images/flow-map-fade.svg');
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-size: contain;
-        height: 200px;
-        width: calc(100% + 30px);
-        background-color: #f5f3f2;
+            .comments {
+                margin-left: auto;
+                margin-right: auto;
+                display: block;
+                background-color: transparent;
+                border: solid 1px #82808a;
+                color: #82808a;
+                border-radius: 10px;
+                padding: 3px 24px;
+            }
+
+            .back {
+                font-weight: bold;
+                background: transparent;
+                border: none;
+            }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                padding: 7px 100px;
+                float: none;
+            }
+        }
+
+        .category-image-map {
+            margin: 40px -15px -15px -15px;
+            background-image: url('images/flow-map-fade.svg');
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            height: 200px;
+            width: calc(100% + 30px);
+            background-color: #f5f3f2;
+        }
     }
 }
