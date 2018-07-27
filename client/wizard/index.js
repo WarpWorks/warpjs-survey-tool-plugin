@@ -40,6 +40,9 @@ const questionnaireEndTemplate = require('./questionnaire-end.hbs');
             let categoryPointer = 0;
             let iterationPointer = 0;
             let questionPointer = 0;
+            let progress = 0;
+            let categories = result.data._embedded.answers[0]._embedded.categories;
+            const progressTotal = categories.length + 5;
 
             warpjsUtils.toast.close($, loader);
             if (result.error) {
@@ -53,10 +56,14 @@ const questionnaireEndTemplate = require('./questionnaire-end.hbs');
                         $(document).on('click', '.intro-next', (event) => {
                             event.preventDefault();
                             $('.ipt-body').html(questionnairePrivacyTemplate());
+                            progress = 1 / progressTotal * 100;
+                            $('.ipt .progress-bar').css('width', progress + '%');
                         });
                         $(document).on('click', '.privacy-next', (event) => {
                             event.preventDefault();
                             $('.ipt-body').html(questionnaireDescriptionTemplate());
+                            progress = 2 / progressTotal * 100;
+                            $('.ipt .progress-bar').css('width', progress + '%');
                         });
                         $(document).on('click', '.description-next', (event) => {
                             event.preventDefault();
@@ -78,6 +85,8 @@ const questionnaireEndTemplate = require('./questionnaire-end.hbs');
                             // })
 
                             $('.ipt-body').html(questionnaireLevelsTemplate());
+                            progress = 3 / progressTotal * 100;
+                            $('.ipt .progress-bar').css('width', progress + '%');
 
                             styleRadio();
                         });
@@ -86,18 +95,23 @@ const questionnaireEndTemplate = require('./questionnaire-end.hbs');
                             event.preventDefault();
                             result.data.detailLevel = $("input[name='questionnaire-level'][checked='checked']").val();
                             $('.ipt-body').html(questionnaireSolutionCanvasTemplate());
+                            progress = 4 / progressTotal * 100;
+                            $('.ipt .progress-bar').css('width', progress + '%');
                         });
 
                         $(document).on('click', '.solution-canvas-next', (event) => {
                             event.preventDefault();
 
-                            let categories = result.data._embedded.answers[0]._embedded.categories;
+                            categories = result.data._embedded.answers[0]._embedded.categories;
                             let iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
                                 return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                             });
                             let questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
                                 return question.detailLevel <= result.data.detailLevel;
                             }) : [];
+                            progress = 5 / progressTotal * 100;
+                            $('.ipt .progress-bar').css('width', progress + '%');
+
                             console.log('data: ', result.data);
                             console.log('iterations: ', iterations, 'categories', categories, 'questions', questions);
 
@@ -178,12 +192,28 @@ const questionnaireEndTemplate = require('./questionnaire-end.hbs');
                                 updateQuestionContent(outOfBounds);
                             }
 
+                            function assignOptionSelected(qQuestion, aQuestion) {
+                                if (typeof qQuestion !== 'undefined' && typeof aQuestion !== 'undefined') {
+                                    let option = _.find(qQuestion._embedded.options, (option) => {
+                                        console.log('check: ', option.position, aQuestion.answer, option.position === aQuestion.answer, result.data);
+                                        return option.position === aQuestion.answer;
+                                    });
+                                    if (typeof option !== 'undefined') {
+                                        option.isSelected = true;
+                                    }
+                                }
+                                return qQuestion;
+                            }
+
                             function updateQuestionContent(outOfBounds = '') {
+                                progress = (categoryPointer + 5) / progressTotal * 100;
                                 console.log('updateQuestionContent question pointer: ', questionPointer);
                                 if (outOfBounds !== '') {
                                     if (outOfBounds === 'front') {
+                                        progress = 4 / progressTotal * 100;
                                         $('.ipt-body').html(questionnaireSolutionCanvasTemplate());
                                     } else if (outOfBounds === 'end') {
+                                        progress = progressTotal / progressTotal * 100;
                                         $('.ipt-body').html(questionnaireEndTemplate());
                                     }
                                 } else if (questionPointer === -1) {
@@ -196,16 +226,20 @@ const questionnaireEndTemplate = require('./questionnaire-end.hbs');
                                         return category.id === categories[categoryPointer].id;
                                     });
                                     console.log('currentCategory', currentCategory);
-                                    const currentQuestion = _.find(currentCategory._embedded.questions, (question) => {
+                                    const currentQuestion = _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
+                                        console.log();
                                         return question.id === questions[questionPointer].id;
-                                    });
-                                    let templateValues = {category: currentCategory, question: currentQuestion};
+                                    }));
+
+                                    const updatedQuestion = assignOptionSelected(currentQuestion, questions[questionPointer]);
+                                    let templateValues = {category: currentCategory, question: updatedQuestion};
                                     if (iterations[iterationPointer].name !== '') {
                                         templateValues.iteration = iterations[iterationPointer];
                                     }
                                     $('.ipt-body').html(questionnaireTemplate(templateValues));
                                 }
 
+                                $('.ipt .progress-bar').css('width', progress + '%');
                                 styleRadio();
                             }
 
@@ -219,10 +253,16 @@ const questionnaireEndTemplate = require('./questionnaire-end.hbs');
                                 category._embedded.iterations[5].name = $('input#iteration6').val();
                             }
 
+                            function updateQuestions() {
+                                questions[questionPointer].answer = $("input[name='quesiton-options'][checked='checked']").val();
+                            }
+
                             $(document).on('click', '.question-next', (event) => {
+                                updateQuestions();
                                 updatePointers('next');
                             });
                             $(document).on('click', '.question-back', (event) => {
+                                updateQuestions();
                                 updatePointers('back');
                             });
                             $(document).on('click', '.iteration-next', (event) => {
