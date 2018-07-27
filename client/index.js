@@ -3,7 +3,7 @@ const warpjsUtils = require('@warp-works/warpjs-utils');
 
 const errorTemplate = require('./error.hbs');
 const template = require('./template.hbs');
-const quesitonnairesTemplate = require('./questionnaires.hbs');
+const questionnairesTemplate = require('./questionnaires.hbs');
 
 (($) => $(document).ready(() => {
     const loader = warpjsUtils.toast.loading($, "Page is loading");
@@ -17,11 +17,11 @@ const quesitonnairesTemplate = require('./questionnaires.hbs');
                 placeholder.html(errorTemplate(result.data));
             } else {
                 return Promise.resolve()
-                    .then(() => quesitonnairesTemplate({questionnaire: result.data}))
+                    .then(() => questionnairesTemplate({questionnaire: result.data}))
                     .then((content) => $('.ipt-body').html(content))
                     .then(() => warpjsUtils.documentReady($))
                     .then(() => {
-                        $(document).on('click', '.quesitonnaire-link', (event) => {
+                        $(document).on('click', '.questionnaire-link', (event) => {
                             event.preventDefault();
                             $.post($(event.target).data('url'), (data) => {
                                 window.location.href = data._links.self.href;

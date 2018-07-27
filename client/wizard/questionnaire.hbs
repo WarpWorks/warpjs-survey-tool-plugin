@@ -1,42 +1,35 @@
-<div class="questionnaire">
-  <div class="categories">
-    {{#each questionnaire._embedded.categories as |questionnaire index|}}
-      <div class="category category-{{@index}} {{#unless @index}}show-item{{/unless}}">
-        <div class="questions">
-          {{#each _embedded.questions as |question index|}}
-            <div class="question question-{{@index}} {{#unless @index}}show-item{{/unless}}">
-              <span class="breadcrumbs">{{../name}} {{#if @index}} => {{../_embedded.questions.[0].name}}{{/if}}</span>
-              <h2>{{name}}</h2>
-              <p>{{content}}</p>
-              <div class="options row">
-                {{#each _embedded.options as |option index|}}
-                  <div class="option-container col-sm-3">
-                    <div class="option-level-block block-{{@index}}"></div>
-                    <p class="radio-text">{{name}}</p>
-                    <input type="radio" name="{{../id}}" value="{{value}}">
-                  </div>
-                {{/each}}
-              </div>
-            </div>
-          {{/each}}
-          <div class="buttons row">
-            <div class="col-sm-4">
-              <button class="back">back</button>
-            </div>
-            <div class="col-sm-4">
-              <button class="comments">Comments</button>
-            </div>
-            <div class="col-sm-4">
-              <button class="next">Next Question</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    {{/each}}
-    <div class="category-image-map">
+<div class="questionnaire question">
+  <div class="row">
+    <div class="col-12">
+      <span class="breadcrumbs">{{category.name}}{{#if iteration}} => {{iteration.name}}{{/if}}</span>
+      <h2>{{question.name}}</h2>
+      <p>{{question.content}}</p>
     </div>
   </div>
-  <div class="end">
-    <h3>Thank you for taking the questionnaire</h3>
+  <div class="options row">
+    {{#each question._embedded.options as |option index|}}
+      <div class="option-container col-sm-3">
+        <div class="option-level-block block-{{@index}}"></div>
+        <p class="radio-text">{{name}}</p>
+        <input type="radio" name="{{../id}}" value="{{value}}">
+      </div>
+    {{/each}}
+  </div>
+
+  <div class="buttons row">
+    <div class="col-sm-4">
+      <button class="question-back">back</button>
+    </div>
+    <div class="col-sm-4">
+      <button class="comments">Comments</button>
+    </div>
+    <div class="col-sm-4">
+      <button class="question-next">Next Question</button>
+    </div>
   </div>
 </div>
+<div class="category-image-map">
+</div>
+
+
+

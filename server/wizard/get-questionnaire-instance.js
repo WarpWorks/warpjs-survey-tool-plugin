@@ -1,5 +1,6 @@
 const Promise = require('bluebird');
 const RoutesInfo = require('@quoin/expressjs-routes-info');
+const uuid = require('uuid');
 const warpjsUtils = require('@warp-works/warpjs-utils');
 
 const constants = require('./../../lib/constants');
@@ -10,7 +11,6 @@ module.exports = (req, res) => {
     const pluginConfig = req.app.get(constants.appKeys.pluginConfig);
     const Persistence = require(pluginConfig.persistence.module);
     const persistence = new Persistence(pluginConfig.persistence.host, domain);
-    let resource;
 
     warpjsUtils.wrapWith406(res, {
         html: () => {
@@ -25,18 +25,58 @@ module.exports = (req, res) => {
             Promise.resolve()
                 .then(() => persistence.documents(pluginConfig.schema.attempt, {_id: wizardId}, true))
                 .then((attemptDocument) => Promise.resolve()
-                    .then(() => {
-                        resource = warpjsUtils.createResource(req, attemptDocument[0]);
-                    })
-                    .then(() => req.app.get(constants.appKeys.warpCore).getDomainByName(domain))
-                    .then((domainModel) => domainModel.getEntityByName(pluginConfig.schema.questionnaire))
-                    .then((questionnaireEntity) => Promise.resolve()
-                        .then(() => questionnaireEntity.getDocuments(persistence, {_id: attemptDocument[0].questionnaireId}, true))
-                        .then((questionnaireDocument) => new Questionnaire(questionnaireEntity, questionnaireDocument[0]))
+                    .then(() => warpjsUtils.createResource(req, attemptDocument[0]))
+                    .then((resource) => Promise.resolve()
+                        .then(() => req.app.get(constants.appKeys.warpCore).getDomainByName(domain))
+                        .then((domainModel) => domainModel.getEntityByName(pluginConfig.schema.questionnaire))
+                        .then((questionnaireEntity) => Promise.resolve()
+                            .then(() => questionnaireEntity.getDocuments(persistence, {_id: attemptDocument[0].questionnaireId}, true))
+                            .then((questionnaireDocument) => new Questionnaire(questionnaireEntity, questionnaireDocument[0]))
+                            .then((questionnaireInstance) => questionnaireInstance.toHallFull(domain, pluginConfig, persistence))
+                        )
+                        .then((questionnaireHAL) => resource.embed('questionnaires', questionnaireHAL))
+                        // create answers resource
+                        .then(() => warpjsUtils.createResource(req, {
+                            id: resource._embedded.questionnaires[0].id
+                        }))
+                        .then((answersResource) => Promise.resolve()
+                            .then(() => resource && resource._embedded ? resource._embedded.questionnaires : null)
+                            .then((questionnaires) => questionnaires ? questionnaires[0] : null)
+                            .then((questionnaire) => questionnaire && questionnaire._embedded ? questionnaire._embedded.categories : null)
+                            .then((categories) => Promise.map(categories, (category) => Promise.resolve()
+                                .then(() => warpjsUtils.createResource(req, {
+                                    id: category.id,
+                                    isRepeatable: category.isRepeatable
+                                }))
+                                .then((categoryResource) => Promise.resolve()
+                                    .then(() => {
+                                        return category.isRepeatable ? new Array(6) : new Array(1);
+                                    })
+                                    .then((answerIterationsEmpty) => Promise.map(answerIterationsEmpty, () => Promise.resolve()
+                                        .then(() => warpjsUtils.createResource('', {
+                                            id: uuid(),
+                                            name: ''
+                                        }))
+                                        .then((iterationResource) => Promise.resolve()
+                                            .then(() => Promise.map(category._embedded.questions, (question) => Promise.resolve()
+                                                .then(() => warpjsUtils.createResource('', {
+                                                    id: question.id,
+                                                    detailLevel: question.detailLevel,
+                                                    answer: ''
+                                                }))
+                                            ))
+                                            .then((answerQuestions) => iterationResource.embed('questions', answerQuestions))
+                                        )
+                                    ))
+                                    .then((answerIterations) => categoryResource.embed('iterations', answerIterations))
+                                )
+                            ))
+                            .then((answersCategories) => answersResource.embed('categories', answersCategories))
+                            .then((answersHAL) => resource.embed('answers', answersHAL))
+                        )
+                        .then(() => warpjsUtils.sendHal(req, res, resource, RoutesInfo))
                     )
-                    .then((questionnaireInstance) => questionnaireInstance.toHal(domain)))
-                .then((questionnaireHAL) => resource.embed('questionnaire', questionnaireHAL))
-                .then(() => warpjsUtils.sendHal(req, res, resource, RoutesInfo))
+                )
                 .catch((err) => {
                     console.error("server/root/get-all-questionnaires: err:", err);
                     throw err;

@@ -30,6 +30,6 @@ Add the following to `.warp-works-warpjsrc` of your project:
 - `questionnaire` is for questionnaires
 - `category` is for categories
 - `question` is for questions and interim detail pages
-- `option` is for options for quesitons
+- `option` is for options for questions
 - `attemp` is for attempts on a specific questionnaire
 

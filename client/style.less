@@ -98,6 +98,23 @@
             }
         }
 
+        .iterations-container {
+            width: 80%;
+            margin-left: 10%;
+
+            .iteration-form {
+                margin-left: -15px;
+                margin-right: -15px;
+
+                input {
+                    background-color: #f0f0f0;
+                    border: 0px;
+                    margin-bottom: 25px;
+                    border-radius: 0px;
+                }
+            }
+        }
+
         .project-levels {
             width: 80%;
             margin: 10px auto;
@@ -154,7 +171,7 @@
             display: none;
         }
 
-        .question {
+        &.question {
             padding: 10px 45px;
 
             .breadcrumbs {
@@ -217,7 +234,9 @@
         }
 
         .buttons {
-            .next {
+            .next,
+            .question-next,
+            .iteration-next {
                 background-color: #c7281a;
                 border-radius: 3px;
                 color: #fff;
@@ -239,7 +258,9 @@
                 padding: 3px 24px;
             }
 
-            .back {
+            .back,
+            .question-back,
+            .iteration-back {
                 font-weight: bold;
                 background: transparent;
                 border: none;
@@ -253,16 +274,16 @@
                 float: none;
             }
         }
+    }
 
-        .category-image-map {
-            margin: 40px -15px -15px -15px;
-            background-image: url('images/flow-map-fade.svg');
-            background-position: center center;
-            background-repeat: no-repeat;
-            background-size: contain;
-            height: 200px;
-            width: calc(100% + 30px);
-            background-color: #f5f3f2;
-        }
+    .category-image-map {
+        margin: 40px -30px -40px -30px;
+        background-image: url('images/flow-map-fade.svg');
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        height: 200px;
+        width: calc(100% + 60px);
+        background-color: #f5f3f2;
     }
 }
