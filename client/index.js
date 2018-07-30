@@ -9,6 +9,7 @@ const questionnairesTemplate = require('./questionnaires.hbs');
     const loader = warpjsUtils.toast.loading($, "Page is loading");
     const placeholder = $('#warpjs-content-placeholder');
     placeholder.html(template());
+    $('.progress-container').css('display', 'none');
 
     return warpjsUtils.getCurrentPageHAL($)
         .then((result) => {
