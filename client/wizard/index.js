@@ -219,6 +219,28 @@ const questionnaireEndTemplate = require('./questionnaire-end.hbs');
                             return qQuestion;
                         }
 
+                        function templateValues() {
+                            const currentCategory = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
+                                return category.id === categories[categoryPointer].id;
+                            });
+                            const currentQuestion = _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
+                                return question.id === questions[questionPointer].id;
+                            }));
+                            const updatedQuestion = assignOptionSelected(currentQuestion, questions[questionPointer]);
+                            let values = {category: currentCategory, question: updatedQuestion};
+                            if (iterations[iterationPointer] && iterations[iterationPointer].name !== '') {
+                                values.iteration = iterations[iterationPointer];
+                            }
+
+                            if (typeof currentQuestion._embedded.images[0].url !== 'undefined') {
+                                values.image = currentQuestion._embedded.images[0].url;
+                            } else if (currentCategory._embedded.images.length > 0) {
+                                values.image = currentCategory._embedded.images[0].url;
+                            }
+
+                            return values;
+                        }
+
                         function updateQuestionContent(outOfBounds = '') {
                             progress = (categoryPointer + 5) / progressTotal * 100;
 
@@ -234,21 +256,13 @@ const questionnaireEndTemplate = require('./questionnaire-end.hbs');
                                 const currentCategory = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
                                     return category.id === categories[categoryPointer].id;
                                 });
-                                $('.ipt-body').html(questionnaireIterationTemplate({category: currentCategory, iterations: categories[categoryPointer]._embedded.iterations}));
-                            } else {
-                                const currentCategory = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
-                                    return category.id === categories[categoryPointer].id;
-                                });
-                                const currentQuestion = _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
-                                    return question.id === questions[questionPointer].id;
-                                }));
-
-                                const updatedQuestion = assignOptionSelected(currentQuestion, questions[questionPointer]);
-                                let templateValues = {category: currentCategory, question: updatedQuestion};
-                                if (iterations[iterationPointer] && iterations[iterationPointer].name !== '') {
-                                    templateValues.iteration = iterations[iterationPointer];
+                                let image = '';
+                                if (currentCategory._embedded.images.length > 0) {
+                                    image = currentCategory._embedded.images[0].url;
                                 }
-                                $('.ipt-body').html(questionnaireTemplate(templateValues));
+                                $('.ipt-body').html(questionnaireIterationTemplate({category: currentCategory, iterations: categories[categoryPointer]._embedded.iterations, image: image}));
+                            } else {
+                                $('.ipt-body').html(questionnaireTemplate(templateValues()));
                             }
 
                             $('.ipt .progress-bar').css('width', progress + '%');

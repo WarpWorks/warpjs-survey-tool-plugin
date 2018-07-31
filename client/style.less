@@ -279,12 +279,19 @@
 
     .category-image-map {
         margin: 40px -30px -40px -30px;
-        background-image: url('images/flow-map-fade.svg');
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-size: contain;
         height: 200px;
         width: calc(100% + 60px);
         background-color: #f5f3f2;
+        text-align: center;
+
+        .image-map-img-container {
+            height: 90%;
+            margin: 0px auto;
+            display: inline-block;
+
+            img {
+                height: 100%;
+            }
+        }
     }
 }

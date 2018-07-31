@@ -69,6 +69,7 @@ module.exports = (req, res) => {
                                         )
                                     ))
                                     .then((answerIterations) => categoryResource.embed('iterations', answerIterations))
+
                                 )
                             ))
                             .then((answersCategories) => answersResource.embed('categories', answersCategories))
