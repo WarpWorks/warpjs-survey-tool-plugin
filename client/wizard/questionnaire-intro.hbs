@@ -1,18 +1,27 @@
 <div class="questionnaire">
   <div class="row">
     <div class="col-12">
-      <h2 class="ipt-title">Actionable Intelligence from IIC</h2>
-      <p>Welcome to the IIC Project Explorer! In the following, we will guide you through a set of questions to help you analyse your own project. The results will help you to better understand the requirements and risks of your project. We will also provide you with actionable guidence by referring you to different areas in the IIC resouce hub which are of direct relevance to your project.</p>
+      <h2 class="ipt-title">{{question.name}}</h2>
+      <p>{{question.content}}</p>
     </div>
   </div>
   <div class="row">
     <div class="col-12">
-      <div class="start-overview"></div>
+      {{#if image}}
+        <div class="intro-image">
+          <img src="{{image}}">
+        </div>
+      {{/if}}
     </div>
   </div>
-  <div class="row">
-    <div class="col-12 buttons">
-      <button class="next center intro-next">NEXT</button>
+  <div class="buttons row">
+    <div class="col-sm-4">
+      {{#if notFirst}}
+        <button class="question-back">back</button>
+      {{/if}}
+    </div>
+    <div class="col-sm-4 col-sm-push-4">
+      <button class="question-next">NEXT</button>
     </div>
   </div>
 </div>

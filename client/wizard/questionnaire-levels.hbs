@@ -1,8 +1,8 @@
 <div class="questionnaire">
   <div class="row">
     <div class="col-12">
-      <h2 class="ipt-title">Levels of Detail</h2>
-      <p>Please indicate below how detailed you want the following project assessment to be:</p>
+      <h2 class="ipt-title">{{question.name}}</h2>
+      <p>{{question.content}}</p>
     </div>
   </div>
   <div class="row">
@@ -49,10 +49,10 @@
   </div>
   <div class="buttons row">
     <div class="col-sm-4">
-      <button class="back levels-back">back</button>
+      <button class="back levels-back question-back">back</button>
     </div>
-    <div class="col-sm-4 col-md-push-4">
-      <button class="next levels-next">NEXT</button>
+    <div class="col-sm-4 col-sm-push-4">
+      <button class="next levels-next question-next">NEXT</button>
     </div>
   </div>
 </div>
