@@ -2,14 +2,15 @@ const _ = require('lodash');
 const Promise = require('bluebird');
 const warpjsUtils = require('@warp-works/warpjs-utils');
 
+const constants = require('./../constants');
 const errorTemplate = require('./../error.hbs');
-const template = require('./../template.hbs');
 const questionnaireTemplate = require('./questionnaire.hbs');
 const questionnaireIntroTemplate = require('./questionnaire-intro.hbs');
 const questionnaireDescriptionTemplate = require('./questionnaire-description.hbs');
 const questionnaireLevelsTemplate = require('./questionnaire-levels.hbs');
 const questionnaireIterationTemplate = require('./questionnaire-iterations.hbs');
 const questionnaireEndTemplate = require('./questionnaire-end.hbs');
+const template = require('./../template.hbs');
 
 (($) => $(document).ready(() => {
     const loader = warpjsUtils.toast.loading($, "Page is loading");
@@ -82,7 +83,7 @@ const questionnaireEndTemplate = require('./questionnaire-end.hbs');
                             iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
                                 return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                             });
-                            questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
+                            questions = iterations.length ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
                                 return question.detailLevel <= result.data.detailLevel;
                             }) : [];
                             let outOfBounds = '';
@@ -143,7 +144,11 @@ const questionnaireEndTemplate = require('./questionnaire-end.hbs');
                                 }
                             }
 
-                            updateQuestionContent(outOfBounds);
+                            if (questions.length || outOfBounds) {
+                                updateQuestionContent(outOfBounds);
+                            } else {
+                                updatePointers(direction);
+                            }
                         }
 
                         function assignOptionSelected(qQuestion, aQuestion) {
@@ -162,19 +167,50 @@ const questionnaireEndTemplate = require('./questionnaire-end.hbs');
                             const currentCategory = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
                                 return category.id === categories[categoryPointer].id;
                             });
-                            const currentQuestion = _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
+                            const currentQuestion = questions[questionPointer] ? _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
                                 return question.id === questions[questionPointer].id;
-                            }));
+                            })) : null;
                             const updatedQuestion = assignOptionSelected(currentQuestion, questions[questionPointer]);
                             let values = {category: currentCategory, question: updatedQuestion};
                             if (iterations[iterationPointer] && iterations[iterationPointer].name !== '') {
                                 values.iteration = iterations[iterationPointer];
                             }
 
-                            if (typeof currentQuestion._embedded.images[0].url !== 'undefined') {
-                                values.image = currentQuestion._embedded.images[0].url;
-                            } else if (currentCategory._embedded.images.length > 0) {
-                                values.image = currentCategory._embedded.images[0].url;
+                            if (currentQuestion && currentQuestion.imageUrl) {
+                                values.image = currentQuestion.imageUrl;
+                            } else if (currentCategory.imageUrl) {
+                                values.image = currentCategory.imageUrl;
+                            }
+
+                            let currentImageLibrary = null;
+                            let imageArea = null;
+                            if (currentQuestion && currentQuestion.imgLibId && currentQuestion.imageArea) {
+                                currentImageLibrary = currentQuestion.imgLibId;
+                                imageArea = currentQuestion.imageArea;
+                            } else if (currentQuestion && currentQuestion.imgLibId) {
+
+                            } else if (currentQuestion && currentQuestion.imageArea) {
+                                currentImageLibrary = currentCategory.imgLibId;
+                                imageArea = currentQuestion.imageArea;
+                            } else {
+                                currentImageLibrary = currentCategory.imgLibId;
+                                imageArea = currentCategory.imageArea;
+                            }
+
+                            if (currentImageLibrary && imageArea) {
+                                const currentImglib = _.find(result.data._embedded.questionnaires[0]._embedded.imageLibraries, (imageLibrary) => {
+                                    return imageLibrary.id === currentImageLibrary;
+                                });
+
+                                const currentImageArea = _.find(currentImglib && currentImglib._embedded.images ? currentImglib._embedded.images[0]._embedded.imageMaps : null, (imageMap) => {
+                                    return imageMap && imageMap.title === imageArea;
+                                });
+
+                                const currentImageHeight = currentImglib && currentImglib._embedded.images ? currentImglib._embedded.images[0].height : null;
+                                const currentImageWidth = currentImglib && currentImglib._embedded.images ? currentImglib._embedded.images[0].width : null;
+                                values.imageMap = currentImageArea ? currentImageArea.coords : null;
+                                values.imageHeight = currentImageHeight;
+                                values.imageWidth = currentImageWidth;
                             }
 
                             return values;
@@ -192,11 +228,103 @@ const questionnaireEndTemplate = require('./questionnaire-end.hbs');
                                 values.notFirst = true;
                             }
 
-                            if (typeof currentQuestion._embedded.images[0].url !== 'undefined') {
-                                values.image = currentQuestion._embedded.images[0].url;
+                            if (currentQuestion.imageUrl) {
+                                values.image = currentQuestion.imageUrl;
                             }
 
                             return values;
+                        }
+
+                        function createImageMapElements(imageMapValues) {
+                            const imageMapCoords = imageMapValues.split(',');
+                            const topLeft = document.createElement('div');
+                            $(topLeft).addClass('image-map-overlay top-left')
+                                .css({
+                                    left: '0px',
+                                    top: '0px',
+                                    width: imageMapCoords[0] + 'px',
+                                    height: imageMapCoords[1] + 'px'
+                                })
+                                .appendTo($('.image-map-img-container'));
+
+                            const topMid = document.createElement('div');
+                            $(topMid).addClass('image-map-overlay top-mid')
+                                .css({
+                                    left: imageMapCoords[0] + 'px',
+                                    top: '0px',
+                                    width: (imageMapCoords[2] - imageMapCoords[0]) + 'px',
+                                    height: imageMapCoords[1] + 'px'
+                                })
+                                .appendTo($('.image-map-img-container'));
+
+                            const topRight = document.createElement('div');
+                            $(topRight).addClass('image-map-overlay top-right')
+                                .css({
+                                    left: imageMapCoords[2] + 'px',
+                                    top: '0px',
+                                    width: 'calc(100% - ' + imageMapCoords[2] + 'px)',
+                                    height: imageMapCoords[1] + 'px'
+                                })
+                                .appendTo($('.image-map-img-container'));
+
+                            const midRight = document.createElement('div');
+                            $(midRight).addClass('image-map-overlay mid-right')
+                                .css({
+                                    left: imageMapCoords[2] + 'px',
+                                    top: imageMapCoords[1] + 'px',
+                                    width: 'calc(100% - ' + imageMapCoords[2] + 'px)',
+                                    height: (imageMapCoords[3] - imageMapCoords[1]) + 'px'
+                                })
+                                .appendTo($('.image-map-img-container'));
+
+                            const midLeft = document.createElement('div');
+                            $(midLeft).addClass('image-map-overlay mid-left')
+                                .css({
+                                    left: '0px',
+                                    top: imageMapCoords[1] + 'px',
+                                    width: imageMapCoords[0] + 'px',
+                                    height: (imageMapCoords[3] - imageMapCoords[1]) + 'px'
+                                })
+                                .appendTo($('.image-map-img-container'));
+
+                            const bottomLeft = document.createElement('div');
+                            $(bottomLeft).addClass('image-map-overlay bottom-left')
+                                .css({
+                                    left: '0px',
+                                    top: imageMapCoords[3] + 'px',
+                                    width: imageMapCoords[0] + 'px',
+                                    height: 'calc(100% - ' + imageMapCoords[3] + 'px)'
+                                })
+                                .appendTo($('.image-map-img-container'));
+
+                            const bottomMid = document.createElement('div');
+                            $(bottomMid).addClass('image-map-overlay bottom-mid')
+                                .css({
+                                    left: imageMapCoords[0] + 'px',
+                                    top: imageMapCoords[3] + 'px',
+                                    width: (imageMapCoords[2] - imageMapCoords[0]) + 'px',
+                                    height: 'calc(100% - ' + imageMapCoords[3] + 'px)'
+                                })
+                                .appendTo($('.image-map-img-container'));
+
+                            const bottomRight = document.createElement('div');
+                            $(bottomRight).addClass('image-map-overlay bottom-right')
+                                .css({
+                                    left: imageMapCoords[2] + 'px',
+                                    top: imageMapCoords[3] + 'px',
+                                    width: 'calc(100% - ' + imageMapCoords[2] + 'px)',
+                                    height: 'calc(100% - ' + imageMapCoords[3] + 'px)'
+                                })
+                                .appendTo($('.image-map-img-container'));
+                            const mapBorder = document.createElement('div');
+                            $(mapBorder).addClass('image-map-border')
+                                .css({
+                                    left: imageMapCoords[0] + 'px',
+                                    top: imageMapCoords[1] + 'px',
+                                    width: (imageMapCoords[2] - imageMapCoords[0]) + 'px',
+                                    height: (imageMapCoords[3] - imageMapCoords[1]) + 'px'
+                                })
+                                .appendTo($('.image-map-img-container'));
                         }
 
                         function updateQuestionContent(outOfBounds = '') {
@@ -207,33 +335,38 @@ const questionnaireEndTemplate = require('./questionnaire-end.hbs');
 
                             if (outOfBounds !== '') {
                                 if (outOfBounds === 'front') {
-                                    // progress = 0
-                                    // $('.ipt-body').html(questionnaireSolutionCanvasTemplate());
+
                                 } else if (outOfBounds === 'end') {
                                     progress = progressTotal / progressTotal * 100;
                                     $('.ipt-body').html(questionnaireEndTemplate());
                                 }
                             } else if (questionPointer === -1) {
-                                let image = '';
-                                if (currentCategory._embedded.images.length > 0) {
-                                    image = currentCategory._embedded.images[0].url;
+                                const values = templateValues();
+                                $('.ipt-body').html(questionnaireIterationTemplate({category: currentCategory, iterations: categories[categoryPointer]._embedded.iterations, image: values.image}));
+                                if (values.imageMap) {
+                                    createImageMapElements(values.imageMap);
                                 }
-                                $('.ipt-body').html(questionnaireIterationTemplate({category: currentCategory, iterations: categories[categoryPointer]._embedded.iterations, image: image}));
                             } else {
-                                if (currentCategory.name === 'intro') {
+                                if (currentCategory.name === constants.specializedTemplates.introCategory) {
                                     const currentQuestion = _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
                                         return question.id === questions[questionPointer].id;
                                     }));
-                                    if (currentQuestion.name === 'Project Description') {
+                                    if (currentQuestion.name === constants.specializedTemplates.description) {
                                         $('.ipt-body').html(questionnaireDescriptionTemplate({projectName: result.data.projectName, projectStatus: result.data.projectStatus, mainContact: result.data.mainContact, question: currentQuestion}));
-                                    } else if (currentQuestion.name === 'Levels of Detail') {
+                                    } else if (currentQuestion.name === constants.specializedTemplates.details) {
                                         $('.ipt-body').html(questionnaireLevelsTemplate({level: result.data.detailLevel, question: currentQuestion}));
                                         assignDetailLevelSelected();
                                     } else {
                                         $('.ipt-body').html(questionnaireIntroTemplate(introTemplateValues()));
                                     }
                                 } else {
-                                    $('.ipt-body').html(questionnaireTemplate(templateValues()));
+                                    const values = templateValues();
+                                    $('.ipt-body').html(questionnaireTemplate(values));
+                                    if (values.imageMap) {
+                                        createImageMapElements(values.imageMap);
+                                    }
+
+                                    $('.image-map-img-container > img').css({width: values.imageWidth ? values.imageWidth : 'auto', height: values.imageHeight ? values.imageHeight : 'auto'});
                                 }
                             }
 
@@ -252,6 +385,7 @@ const questionnaireEndTemplate = require('./questionnaire-end.hbs');
                         }
 
                         function updateQuestions() {
+                            console.log('question check: ', questions, questionPointer, questions[questionPointer]);
                             questions[questionPointer].answer = $("input[name='question-options'][checked='checked']").val();
                         }
 

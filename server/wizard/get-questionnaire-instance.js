@@ -30,11 +30,11 @@ module.exports = (req, res) => {
                         .then(() => req.app.get(constants.appKeys.warpCore).getDomainByName(domain))
                         .then((domainModel) => domainModel.getEntityByName(pluginConfig.schema.questionnaire))
                         .then((questionnaireEntity) => Promise.resolve()
-                            .then(() => questionnaireEntity.getDocuments(persistence, {_id: attemptDocument[0].questionnaireId}, true))
-                            .then((questionnaireDocument) => new Questionnaire(questionnaireEntity, questionnaireDocument[0]))
-                            .then((questionnaireInstance) => questionnaireInstance.toHallFull(domain, pluginConfig, persistence))
+                            .then(() => attemptDocument.length ? questionnaireEntity.getDocuments(persistence, {_id: attemptDocument[0].questionnaireId}, true) : null)
+                            .then((questionnaireDocument) => questionnaireDocument ? new Questionnaire(questionnaireEntity, questionnaireDocument[0]) : null)
+                            .then((questionnaireInstance) => questionnaireInstance ? questionnaireInstance.toHallFull(domain, pluginConfig, persistence) : null)
                         )
-                        .then((questionnaireHAL) => resource.embed('questionnaires', questionnaireHAL))
+                        .then((questionnaireHAL) => questionnaireHAL ? resource.embed('questionnaires', questionnaireHAL) : null)
                         // create answers resource
                         .then(() => warpjsUtils.createResource(req, {
                             id: resource._embedded.questionnaires[0].id

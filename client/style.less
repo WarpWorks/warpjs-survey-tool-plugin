@@ -256,12 +256,23 @@
         text-align: center;
 
         .image-map-img-container {
-            height: 90%;
             margin: 0px auto;
             display: inline-block;
+            position: relative;
+            overflow: hidden;
 
             img {
                 height: 100%;
+            }
+
+            .image-map-overlay {
+                background: rgba(245, 243, 242, .6);
+                position: absolute;
+            }
+
+            .image-map-border {
+                border: solid 2px #aab881;
+                position: absolute;
             }
         }
     }
