@@ -327,6 +327,40 @@ const template = require('./../template.hbs');
                                 .appendTo($('.image-map-img-container'));
                         }
 
+                        function summaryValues() {
+                            return _.filter(_.map(result.data._embedded.answers[0]._embedded.categories, (category) => {
+                                const categoryQ = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (questionCategory) => {
+                                    return questionCategory.id === category.id;
+                                });
+                                const answersList = _.compact(_.flatten(_.map(category._embedded.iterations, (iteration) => {
+                                    return _.map(iteration._embedded.questions, (question) => {
+                                        let position = null;
+                                        if (question.detailLevel <= result.data.detailLevel) {
+                                            const categoryQ = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (questionCategory) => {
+                                                return questionCategory.id === category.id;
+                                            });
+                                            const questionQ = _.find(categoryQ._embedded.questions, (questionQuestion) => {
+                                                return questionQuestion.id === question.id;
+                                            });
+                                            const option = _.find(questionQ._embedded.options, (option) => {
+                                                return option.id === question.answer;
+                                            });
+                                            position = option ? option.position : null;
+                                        }
+
+                                        return parseInt(position);
+                                    });
+                                })));
+
+                                return {
+                                    category: categoryQ.name,
+                                    answerAverage: answersList ? Math.round(_.mean(answersList) * 10) / 10 : null
+                                };
+                            }), (category) => {
+                                return category.answerAverage;
+                            });
+                        }
+
                         function updateQuestionContent(outOfBounds = '') {
                             progress = categoryPointer / progressTotal * 100;
                             const currentCategory = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
@@ -338,7 +372,24 @@ const template = require('./../template.hbs');
 
                                 } else if (outOfBounds === 'end') {
                                     progress = progressTotal / progressTotal * 100;
-                                    $('.ipt-body').html(questionnaireSummaryTemplate());
+                                    $('.ipt-body').html(questionnaireSummaryTemplate({values: summaryValues()}));
+                                    $('.summary .marker').each((index, element) => {
+                                        const score = $(element).data('score');
+                                        const offset = (score - 1) / 4 * 100 + 12.5;
+                                        const colorScore = Math.round(score);
+                                        let color = '#de2a2d';
+                                        if (colorScore <= 2) {
+                                            color = '#7eba41';
+                                        } else if (colorScore === 3) {
+                                            color = '#fcb830';
+                                        }
+                                        $(element).css('left', 'calc(' + offset + '% - 5px)').css('background-color', color);
+                                    });
+                                    $('.summary .average-number').each((index, element) => {
+                                        const score = $(element).data('score');
+                                        const offset = (score - 1) / 4 * 100 + 12.5;
+                                        $(element).css('margin-left', 'calc(' + offset + '% - 15px)');
+                                    });
                                 }
                             } else if (questionPointer === -1) {
                                 const values = templateValues();
@@ -385,7 +436,6 @@ const template = require('./../template.hbs');
                         }
 
                         function updateQuestions() {
-                            console.log('question check: ', questions, questionPointer, questions[questionPointer]);
                             questions[questionPointer].answer = $("input[name='question-options'][checked='checked']").val();
                         }
 

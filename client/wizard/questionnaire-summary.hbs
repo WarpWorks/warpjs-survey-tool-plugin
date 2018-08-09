@@ -1,13 +1,34 @@
-<div class="questionnaire">
+<div class="questionnaire summary">
   <div class="row">
-    <div class="col-12">
+    <div class="col-sm-12">
       <h2 class="ipt-title summary-title">Summary</h2>
-      <h2 class="ipt-title summary-title">Details</h2>
-      <h2 class="ipt-title summary-title">Related Readings</h2>
+      <h2 class="ipt-title summary-title faded">Details</h2>
+      <h2 class="ipt-title summary-title faded">Related Readings</h2>
     </div>
   </div>
   <div class="row">
-
+    <div class="col-sm-12">
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </div>
   </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <h3 class="summary-title">Summary Project Assessment</h3>
+      {{#each values}}
+        <div class="summary-scales">
+          <h3>{{category}}</h3>
+          <div class="summary-scale-container">
+            <div class="scale-section-one"></div>
+            <div class="scale-section-two"></div>
+            <div class="scale-section-three"></div>
+            <div class="scale-section-four"></div>
+            <div class="marker" data-score="{{answerAverage}}"></div>
+          </div>
+          <div class="average-number" data-score="{{answerAverage}}">
+            <p>{{answerAverage}}</p>
+          </div>
+        </div>
+      {{/each}}
+    </div>
   </div>
 </div>
