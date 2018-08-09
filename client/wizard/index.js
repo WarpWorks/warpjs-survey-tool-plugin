@@ -9,7 +9,7 @@ const questionnaireIntroTemplate = require('./questionnaire-intro.hbs');
 const questionnaireDescriptionTemplate = require('./questionnaire-description.hbs');
 const questionnaireLevelsTemplate = require('./questionnaire-levels.hbs');
 const questionnaireIterationTemplate = require('./questionnaire-iterations.hbs');
-const questionnaireEndTemplate = require('./questionnaire-end.hbs');
+const questionnaireSummaryTemplate = require('./questionnaire-summary.hbs');
 const template = require('./../template.hbs');
 
 (($) => $(document).ready(() => {
@@ -129,7 +129,7 @@ const template = require('./../template.hbs');
                                             iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
                                                 return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                                             });
-                                            questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
+                                            questions = iterations.length ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
                                                 return question.detailLevel <= result.data.detailLevel;
                                             }) : [];
                                             iterationPointer = iterations.length === 0 ? 0 : iterations.length - 1;
@@ -338,7 +338,7 @@ const template = require('./../template.hbs');
 
                                 } else if (outOfBounds === 'end') {
                                     progress = progressTotal / progressTotal * 100;
-                                    $('.ipt-body').html(questionnaireEndTemplate());
+                                    $('.ipt-body').html(questionnaireSummaryTemplate());
                                 }
                             } else if (questionPointer === -1) {
                                 const values = templateValues();
