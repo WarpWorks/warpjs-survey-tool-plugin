@@ -466,6 +466,9 @@ const template = require('./../template.hbs');
                             updateIterations();
                             updatePointers('back');
                         });
+                        $(document).on('click', '.summary-back', () => {
+                            updateQuestionContent();
+                        });
                     })
                 ;
             }
