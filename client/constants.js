@@ -1,6 +1,6 @@
 module.exports = {
     specializedTemplates: {
-        introCategory: 'intro',
+        introCategory: 'Introduction',
         description: 'Project Description',
         details: 'Levels of Detail'
     }

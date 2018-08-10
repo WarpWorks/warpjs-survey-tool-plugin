@@ -20,7 +20,7 @@ module.exports = (req, res) => {
             .then((questionnaire) => Promise.resolve()
                 .then(() => {
                     return {
-                        detailLevel: 2,
+                        detailLevel: 1,
                         projectName: '',
                         mainContact: '',
                         projectStatus: '',

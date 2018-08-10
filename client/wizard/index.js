@@ -144,7 +144,7 @@ const template = require('./../template.hbs');
                                 }
                             }
 
-                            if (questions.length || outOfBounds) {
+                            if (questions.length || outOfBounds || questionPointer === -1) {
                                 updateQuestionContent(outOfBounds);
                             } else {
                                 updatePointers(direction);
@@ -197,21 +197,18 @@ const template = require('./../template.hbs');
                                 imageArea = currentCategory.imageArea;
                             }
 
-                            if (currentImageLibrary && imageArea) {
-                                const currentImglib = _.find(result.data._embedded.questionnaires[0]._embedded.imageLibraries, (imageLibrary) => {
-                                    return imageLibrary.id === currentImageLibrary;
-                                });
+                            const currentImglib = currentImageLibrary ? _.find(result.data._embedded.questionnaires[0]._embedded.imageLibraries, (imageLibrary) => {
+                                return imageLibrary.id === currentImageLibrary;
+                            }) : null;
 
-                                const currentImageArea = _.find(currentImglib && currentImglib._embedded.images ? currentImglib._embedded.images[0]._embedded.imageMaps : null, (imageMap) => {
-                                    return imageMap && imageMap.title === imageArea;
-                                });
-
-                                const currentImageHeight = currentImglib && currentImglib._embedded.images ? currentImglib._embedded.images[0].height : null;
-                                const currentImageWidth = currentImglib && currentImglib._embedded.images ? currentImglib._embedded.images[0].width : null;
-                                values.imageMap = currentImageArea ? currentImageArea.coords : null;
-                                values.imageHeight = currentImageHeight;
-                                values.imageWidth = currentImageWidth;
-                            }
+                            const currentImageArea = imageArea ? _.find(currentImglib && currentImglib._embedded.images ? currentImglib._embedded.images[0]._embedded.imageMaps : null, (imageMap) => {
+                                return imageMap && imageMap.title === imageArea;
+                            }) : null;
+                            const currentImageHeight = currentImglib && currentImglib._embedded.images ? currentImglib._embedded.images[0].height : null;
+                            const currentImageWidth = currentImglib && currentImglib._embedded.images ? currentImglib._embedded.images[0].width : null;
+                            values.imageMap = currentImageArea ? currentImageArea.coords : null;
+                            values.imageHeight = currentImageHeight;
+                            values.imageWidth = currentImageWidth;
 
                             return values;
                         }
