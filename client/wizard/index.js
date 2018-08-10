@@ -36,18 +36,35 @@ const template = require('./../template.hbs');
 
     return warpjsUtils.getCurrentPageHAL($)
         .then((result) => {
+            const introCategory = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
+                return category.name === constants.specializedTemplates.introCategory;
+            });
             let categoryPointer = 0;
             let iterationPointer = 0;
             let questionPointer = 0;
             let progress = 0;
-            let categories = result.data._embedded.answers[0]._embedded.categories;
+            let categories = _.filter(result.data._embedded.answers[0]._embedded.categories, (progressCategory) => {
+                const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
+                    return progressQuestion.detailLevel <= result.data.detailLevel;
+                });
+                return questionDetailLevels.length > 0;
+            });
             let iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
                 return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
             });
             let questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
                 return question.detailLevel <= result.data.detailLevel;
             }) : [];
-            const progressTotal = categories.length + 5;
+
+            let progressFilteredCategories = [];
+
+            function updateProgressTotal() {
+                progressFilteredCategories = _.filter(categories, (progressCategory) => {
+                    return introCategory ? progressCategory.id !== introCategory.id : true;
+                });
+            }
+
+            updateProgressTotal();
 
             warpjsUtils.toast.close($, loader);
             if (result.error) {
@@ -73,13 +90,32 @@ const template = require('./../template.hbs');
                         });
                         $(document).on('click', '.levels-back', () => {
                             result.data.detailLevel = $("input[name='questionnaire-level'][checked='checked']").val();
+                            categories = _.filter(result.data._embedded.answers[0]._embedded.categories, (progressCategory) => {
+                                const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
+                                    return progressQuestion.detailLevel <= result.data.detailLevel;
+                                });
+                                return questionDetailLevels.length > 0;
+                            });
+                            updateProgressTotal();
                         });
                         $(document).on('click', '.levels-next', () => {
                             result.data.detailLevel = $("input[name='questionnaire-level'][checked='checked']").val();
+                            categories = _.filter(result.data._embedded.answers[0]._embedded.categories, (progressCategory) => {
+                                const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
+                                    return progressQuestion.detailLevel <= result.data.detailLevel;
+                                });
+                                return questionDetailLevels.length > 0;
+                            });
+                            updateProgressTotal();
                         });
 
                         function updatePointers(direction) {
-                            categories = result.data._embedded.answers[0]._embedded.categories;
+                            categories = _.filter(categories, (progressCategory) => {
+                                const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
+                                    return progressQuestion.detailLevel <= result.data.detailLevel;
+                                });
+                                return questionDetailLevels.length > 0;
+                            });
                             iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
                                 return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                             });
@@ -144,11 +180,7 @@ const template = require('./../template.hbs');
                                 }
                             }
 
-                            if (questions.length || outOfBounds || questionPointer === -1) {
-                                updateQuestionContent(outOfBounds);
-                            } else {
-                                updatePointers(direction);
-                            }
+                            updateQuestionContent(outOfBounds);
                         }
 
                         function assignOptionSelected(qQuestion, aQuestion) {
@@ -359,7 +391,10 @@ const template = require('./../template.hbs');
                         }
 
                         function updateQuestionContent(outOfBounds = '') {
-                            progress = categoryPointer / progressTotal * 100;
+                            const progressPosition = _.findIndex(progressFilteredCategories, function(o) {
+                                return o.id === categories[categoryPointer].id;
+                            });
+                            progress = (progressPosition + 1) / progressFilteredCategories.length * 100;
                             const currentCategory = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
                                 return category.id === categories[categoryPointer].id;
                             });
@@ -368,7 +403,7 @@ const template = require('./../template.hbs');
                                 if (outOfBounds === 'front') {
 
                                 } else if (outOfBounds === 'end') {
-                                    progress = progressTotal / progressTotal * 100;
+                                    progress = 100;
                                     $('.ipt-body').html(questionnaireSummaryTemplate({values: summaryValues()}));
                                     $('.summary .marker').each((index, element) => {
                                         const score = $(element).data('score');
