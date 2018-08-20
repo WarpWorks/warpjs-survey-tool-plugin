@@ -468,7 +468,9 @@ const template = require('./../template.hbs');
                         }
 
                         function updateQuestions() {
-                            questions[questionPointer].answer = $("input[name='question-options'][checked='checked']").val();
+                            if (questions && questions[questionPointer]) {
+                                questions[questionPointer].answer = $("input[name='question-options'][checked='checked']").val();
+                            }
                         }
 
                         if (result.data._embedded.answers[0]._embedded.categories[categoryPointer].isRepeatable === true) {
@@ -503,6 +505,55 @@ const template = require('./../template.hbs');
                         });
                         $(document).on('click', '.summary-back', () => {
                             updateQuestionContent();
+                        });
+                        $(document).on('click', '.quesitonnaire-beginning', () => {
+                            updateQuestions();
+                            categoryPointer = 0;
+                            iterationPointer = 0;
+                            questionPointer = 0;
+                            iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
+                                return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
+                            });
+                            questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
+                                return question.detailLevel <= result.data.detailLevel;
+                            }) : [];
+
+                            if (categories[categoryPointer].isRepeatable) {
+                                questionPointer = -1;
+                            }
+
+                            updateQuestionContent('');
+                        });
+                        $(document).on('click', '.category-beginning', () => {
+                            updateQuestions();
+                            iterationPointer = 0;
+                            questionPointer = 0;
+                            iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
+                                return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
+                            });
+                            questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
+                                return question.detailLevel <= result.data.detailLevel;
+                            }) : [];
+
+                            if (categories[categoryPointer].isRepeatable) {
+                                questionPointer = -1;
+                            }
+
+                            updateQuestionContent('');
+                        });
+                        $(document).on('click', '.questionnaire-end', () => {
+                            updateQuestions();
+                            categoryPointer = categories.length - 1;
+                            iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
+                                return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
+                            });
+                            questions = iterations.length ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
+                                return question.detailLevel <= result.data.detailLevel;
+                            }) : [];
+                            iterationPointer = iterations.length - 1;
+                            questionPointer = questions.length ? questions.length - 1 : -1;
+
+                            updatePointers('next');
                         });
                     })
                 ;
