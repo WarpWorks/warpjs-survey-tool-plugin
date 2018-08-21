@@ -10,6 +10,7 @@ const questionnaireDescriptionTemplate = require('./questionnaire-description.hb
 const questionnaireLevelsTemplate = require('./questionnaire-levels.hbs');
 const questionnaireIterationTemplate = require('./questionnaire-iterations.hbs');
 const questionnaireSummaryTemplate = require('./questionnaire-summary.hbs');
+const questionnaireDetailsTemplate = require('./questionnaire-details.hbs');
 const template = require('./../template.hbs');
 
 (($) => $(document).ready(() => {
@@ -390,6 +391,82 @@ const template = require('./../template.hbs');
                             });
                         }
 
+                        function summarySetup() {
+                            $('.ipt-body').html(questionnaireSummaryTemplate({values: summaryValues()}));
+                            $('.summary .marker').each((index, element) => {
+                                const score = $(element).data('score');
+                                const offset = (score - 1) / 4 * 100 + 12.5;
+                                const colorScore = Math.round(score);
+                                let color = '#de2a2d';
+                                if (colorScore <= 2) {
+                                    color = '#7eba41';
+                                } else if (colorScore === 3) {
+                                    color = '#fcb830';
+                                }
+                                $(element).css('left', 'calc(' + offset + '% - 5px)').css('background-color', color);
+                            });
+                            $('.summary .average-number').each((index, element) => {
+                                const score = $(element).data('score');
+                                const offset = (score - 1) / 4 * 100 + 12.5;
+                                $(element).css('margin-left', 'calc(' + offset + '% - 15px)');
+                            });
+                        }
+
+                        function detailsValues() {
+                            return _.filter(_.map(result.data._embedded.answers[0]._embedded.categories, (category) => {
+                                const categoryQ = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (questionCategory) => {
+                                    return questionCategory.id === category.id;
+                                });
+                                const answersList = _.map(category._embedded.iterations, (iteration) => {
+                                    const iterationQ = _.map(iteration._embedded.questions, (question) => {
+                                        if (question.detailLevel <= result.data.detailLevel) {
+                                            const questionQ = _.find(categoryQ._embedded.questions, (questionQuestion) => {
+                                                return questionQuestion.id === question.id;
+                                            });
+                                            const option = _.find(questionQ._embedded.options, (option) => {
+                                                return option.id === question.answer;
+                                            });
+                                            if (questionQ._embedded.options.length) {
+                                                return {
+                                                    name: questionQ.name,
+                                                    position: option ? option.position : null,
+                                                    option: option ? option.name : null
+                                                };
+                                            } else {
+                                                return null;
+                                            }
+                                        } else {
+                                            return null;
+                                        }
+                                    });
+                                    const filteredQuestions = _.filter(iterationQ, (question) => {
+                                        return question !== null;
+                                    });
+                                    if (((iterationQ && category.isRepeatable === true && iteration.name && iteration.name !== '') || (iterationQ && category.isRepeatable !== true)) && filteredQuestions.length) {
+                                        return {
+                                            name: iteration.name,
+                                            questions: filteredQuestions
+                                        };
+                                    } else {
+                                        return null;
+                                    }
+                                });
+                                const filteredAnswersList = _.filter(answersList, (iteration) => {
+                                    return iteration !== null;
+                                });
+                                if (filteredAnswersList.length) {
+                                    return {
+                                        category: categoryQ.name,
+                                        iterations: filteredAnswersList
+                                    };
+                                } else {
+                                    return null;
+                                }
+                            }), (category) => {
+                                return category !== null;
+                            });
+                        }
+
                         function updateQuestionContent(outOfBounds = '') {
                             const progressPosition = _.findIndex(progressFilteredCategories, function(o) {
                                 return o.id === categories[categoryPointer].id;
@@ -404,24 +481,7 @@ const template = require('./../template.hbs');
 
                                 } else if (outOfBounds === 'end') {
                                     progress = 100;
-                                    $('.ipt-body').html(questionnaireSummaryTemplate({values: summaryValues()}));
-                                    $('.summary .marker').each((index, element) => {
-                                        const score = $(element).data('score');
-                                        const offset = (score - 1) / 4 * 100 + 12.5;
-                                        const colorScore = Math.round(score);
-                                        let color = '#de2a2d';
-                                        if (colorScore <= 2) {
-                                            color = '#7eba41';
-                                        } else if (colorScore === 3) {
-                                            color = '#fcb830';
-                                        }
-                                        $(element).css('left', 'calc(' + offset + '% - 5px)').css('background-color', color);
-                                    });
-                                    $('.summary .average-number').each((index, element) => {
-                                        const score = $(element).data('score');
-                                        const offset = (score - 1) / 4 * 100 + 12.5;
-                                        $(element).css('margin-left', 'calc(' + offset + '% - 15px)');
-                                    });
+                                    summarySetup();
                                 }
                             } else if (questionPointer === -1) {
                                 const values = templateValues();
@@ -506,6 +566,18 @@ const template = require('./../template.hbs');
                         $(document).on('click', '.summary-back', () => {
                             updateQuestionContent();
                         });
+                        $(document).on('click', '.summary-next', () => {
+                            console.log('sumary data: ', detailsValues());
+                            const formDetails = {
+                                name: result.data.projectName,
+                                contact: result.data.mainContact,
+                                status: result.data.projectStatus
+                            };
+                            $('.ipt-body').html(questionnaireDetailsTemplate({formDetails: formDetails}));
+                        });
+                        $(document).on('click', '.details-back', () => {
+                            summarySetup();
+                        });
                         $(document).on('click', '.quesitonnaire-beginning', () => {
                             updateQuestions();
                             categoryPointer = 0;
@@ -547,10 +619,10 @@ const template = require('./../template.hbs');
                             iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
                                 return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                             });
+                            iterationPointer = iterations.length - 1;
                             questions = iterations.length ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
                                 return question.detailLevel <= result.data.detailLevel;
                             }) : [];
-                            iterationPointer = iterations.length - 1;
                             questionPointer = questions.length ? questions.length - 1 : -1;
 
                             updatePointers('next');

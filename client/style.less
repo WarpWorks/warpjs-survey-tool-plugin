@@ -235,7 +235,10 @@
             .next,
             .question-next,
             .iteration-next,
-            .end-next {
+            .end-next,
+            .summary-next,
+            .details-next,
+            .questionnaire-end {
                 background-color: #c7281a;
                 border-radius: 3px;
                 color: #fff;
@@ -246,7 +249,8 @@
                 float: right;
             }
 
-            .comments {
+            .comments,
+            .category-beginning {
                 margin-left: auto;
                 margin-right: auto;
                 display: block;
@@ -260,7 +264,9 @@
             .back,
             .question-back,
             .iteration-back,
-            .summary-back {
+            .summary-back,
+            .details-back,
+            .quesitonnaire-beginning {
                 font-weight: bold;
                 background: transparent;
                 border: none;
@@ -390,4 +396,9 @@
         }
     }
 
+    .details {
+        .form-details {
+            font-weight: bold;
+        }
+    }
 }
