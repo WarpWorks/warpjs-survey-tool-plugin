@@ -24,7 +24,11 @@
       <button class="comments">Comments</button>
     </div>
     <div class="col-sm-4">
-      <button class="question-next">Next Question</button>
+      {{#if question._embedded.options.length}}
+        <button class="question-next">Don't know (yet)</button>
+      {{else}}
+        <button class="question-next">Next Question</button>
+      {{/if}}
     </div>
   </div>
   <div class="buttons row">

@@ -25,13 +25,26 @@ const template = require('./../template.hbs');
             $('<a ' + (label !== '' ? 'title=" ' + label + ' "' : '') + ' data-radio-fx="' + this.name + '" class="radio-fx" href="#">' +
                 '<span class="radio' + (this.checked ? ' radio-checked' : '') + '"></span></a>').insertAfter(this);
         });
+
+        if ($(":radio[checked='checked']").length) {
+            $('.questionnaire.question .question-next').html('Next Question');
+        }
+
         $('a.radio-fx').on('click', function(event) {
             event.preventDefault();
-            var unique = $(this).attr('data-radio-fx');
+            const unique = $(this).attr('data-radio-fx');
+            const checked = $(this).find('span').hasClass('radio-checked');
             $("a[data-radio-fx='" + unique + "'] span").removeClass('radio-checked');
             $(":radio[data-radio-fx='" + unique + "']").attr('checked', false);
-            $(this).find('span').addClass('radio-checked');
-            $(this).prev('input:radio').attr('checked', true);
+            if (!checked || !$('.questionnaire.question').length) {
+                $(this).find('span').addClass('radio-checked');
+                $(this).prev('input:radio').attr('checked', true);
+            }
+            if ($(":radio[data-radio-fx='" + unique + "'][checked='checked']").length) {
+                $('.questionnaire.question .question-next').html('Next Question');
+            } else {
+                $('.questionnaire.question .question-next').html("Don't know (yet)");
+            }
         });
     }
 
