@@ -1,28 +1,50 @@
-<div class="questionnaire summary">
+<div class="questionnaire details">
   <div class="row">
     <div class="col-sm-12">
-      <h2 class="ipt-title summary-title faded">Summary</h2>
-      <h2 class="ipt-title summary-title">Details</h2>
-      <h2 class="ipt-title summary-title faded">Related Readings</h2>
+      <h2 class="ipt-title results-title faded">Summary</h2>
+      <h2 class="ipt-title results-title">Details</h2>
+      <h2 class="ipt-title results-title faded">Related Readings</h2>
     </div>
   </div>
   <div class="row">
     <div class="col-sm-3">
       <p>Solution / Testbed Name</p>
-      <p class="form-details">{{formDetails.name}}</p>
+      <p class="form-details">{{details.name}}</p>
     </div>
     <div class="col-sm-3">
       <p>Main Contact</p>
-      <p class="form-details">{{formDetails.contact}}</p>
+      <p class="form-details">{{details.contact}}</p>
     </div>
     <div class="col-sm-3">
       <p>Project Status</p>
-      <p class="form-details">{{formDetails.status}}</p>
+      <p class="form-details">{{details.status}}</p>
     </div>
   </div>
   <div class="row">
-    <div class="col-sm-12">
-      <h3 class="summary-title"></h3>
+    <div class="col-sm-10 col-sm-push-1">
+      <h3 class="ipt-name">{{details.questionnaire}}</h3>
+      {{#each details.data}}
+        <p class="summary-category">{{category}}</p>
+        {{#each iterations}}
+          {{#if name}}<p class="summary-iteration">{{name}}</p>{{/if}}
+          {{#each questions}}
+            {{#if hasOptions}}
+              <div class="question-block">
+                <div class="position-display selected-position{{position}}">
+                  <div class="position1"></div>
+                  <div class="position2"></div>
+                  <div class="position3"></div>
+                  <div class="position4"></div>
+                </div>
+                <span class="summary-question">{{name}}</span>
+                <span class="summary-selection">{{option}}</span>
+              </div>
+            {{else}}
+              <p class="sub-category-name">{{name}}</p>
+            {{/if}}
+          {{/each}}
+        {{/each}}
+      {{/each}}
     </div>
   </div>
 

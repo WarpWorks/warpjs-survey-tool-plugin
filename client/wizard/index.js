@@ -426,15 +426,13 @@ const template = require('./../template.hbs');
                                             const option = _.find(questionQ._embedded.options, (option) => {
                                                 return option.id === question.answer;
                                             });
-                                            if (questionQ._embedded.options.length) {
-                                                return {
-                                                    name: questionQ.name,
-                                                    position: option ? option.position : null,
-                                                    option: option ? option.name : null
-                                                };
-                                            } else {
-                                                return null;
-                                            }
+
+                                            return {
+                                                name: questionQ.name,
+                                                hasOptions: !!questionQ._embedded.options.length,
+                                                position: questionQ._embedded.options.length && option ? option.position : null,
+                                                option: questionQ._embedded.options.length && option ? option.name : null
+                                            };
                                         } else {
                                             return null;
                                         }
@@ -463,7 +461,7 @@ const template = require('./../template.hbs');
                                     return null;
                                 }
                             }), (category) => {
-                                return category !== null;
+                                return category !== null && category.category !== constants.specializedTemplates.introCategory;
                             });
                         }
 
@@ -567,13 +565,14 @@ const template = require('./../template.hbs');
                             updateQuestionContent();
                         });
                         $(document).on('click', '.summary-next', () => {
-                            console.log('sumary data: ', detailsValues());
-                            const formDetails = {
+                            const details = {
+                                questionnaire: result.data._embedded.questionnaires[0].name,
                                 name: result.data.projectName,
                                 contact: result.data.mainContact,
-                                status: result.data.projectStatus
+                                status: result.data.projectStatus,
+                                data: detailsValues()
                             };
-                            $('.ipt-body').html(questionnaireDetailsTemplate({formDetails: formDetails}));
+                            $('.ipt-body').html(questionnaireDetailsTemplate({details: details}));
                         });
                         $(document).on('click', '.details-back', () => {
                             summarySetup();

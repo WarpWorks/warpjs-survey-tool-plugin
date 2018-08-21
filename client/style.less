@@ -311,16 +311,15 @@
         }
     }
 
-    .summary {
-        .summary-title {
-            display: inline-block;
-            margin-right: 30px;
+    .results-title {
+        display: inline-block;
+        margin-right: 30px;
 
-            &.faded {
-                color: #d6d6d6;
-            }
+        &.faded {
+            color: #d6d6d6;
         }
-
+    }
+    .summary {
         h3 {
             font-size: 15px;
             line-height: 15px;
@@ -399,6 +398,94 @@
     .details {
         .form-details {
             font-weight: bold;
+        }
+
+        .summary-category {
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 40px;
+        }
+
+        .summary-iteration {
+            font-weight: bold;
+            margin-top: 25px;
+        }
+
+        .sub-category-name {
+            margin-top: 10px;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .question-block {
+            background-color: #f0f0f0;
+            border: solid 1px #e0e0e0;
+            padding: 10px;
+            margin-bottom: 5px;
+            position: relative;
+            overflow: hidden;
+
+            .position-display {
+                float: left;
+                height: 16px;
+                margin-right: 10px;
+
+                div {
+                    height: 16px;
+                    width: 16px;
+                    border-radius: 8px;
+                    display: inline-block;
+                    margin-right: 5px;
+
+                }
+
+                .position1 {
+                    background-color: #f6ffed;
+                }
+
+                .position2 {
+                    background-color: #f6ffed;
+                }
+
+                .position3 {
+                    background-color: #fff9ed;
+                }
+
+                .position4 {
+                    background-color: #fce3e3;
+                }
+
+                &.selected-position1 .position1 {
+                    background-color: #5ca81e;
+                }
+
+                &.selected-position2 .position2 {
+                    background-color: #5ca81e;
+                }
+
+                &.selected-position3 .position3 {
+                    background-color: #fcb830;
+                }
+
+                &.selected-position4 .position4 {
+                    background-color: #de2a2d;
+                }
+            }
+
+            .summary-question {
+                color: #87868f;
+                display: block;
+                float: left;
+                max-width: calc(50% - 68px);
+            }
+
+            .summary-selection {
+                color: #171717;
+                font-weight: bold;
+                display:block;
+                float: right;
+                max-width: calc(50% - 68px);
+            }
         }
     }
 }
