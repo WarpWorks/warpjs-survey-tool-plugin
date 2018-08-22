@@ -50,9 +50,9 @@ const template = require('./../template.hbs');
 
     return warpjsUtils.getCurrentPageHAL($)
         .then((result) => {
-            const introCategory = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
-                return category.name === constants.specializedTemplates.introCategory;
-            });
+            // const introCategory = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
+            //     return category.name === constants.specializedTemplates.introCategory;
+            // });
             let categoryPointer = 0;
             let iterationPointer = 0;
             let questionPointer = 0;
@@ -73,9 +73,11 @@ const template = require('./../template.hbs');
             let progressFilteredCategories = [];
 
             function updateProgressTotal() {
-                progressFilteredCategories = _.filter(categories, (progressCategory) => {
-                    return introCategory ? progressCategory.id !== introCategory.id : true;
-                });
+                // progressFilteredCategories = _.filter(categories, (progressCategory) => {
+                //     return introCategory ? progressCategory.id !== introCategory.id : true;
+                // });
+                progressFilteredCategories = _.cloneDeep(categories);
+                progressFilteredCategories.push('results');
             }
 
             updateProgressTotal();
@@ -480,7 +482,7 @@ const template = require('./../template.hbs');
 
                         function updateQuestionContent(outOfBounds = '') {
                             const progressPosition = _.findIndex(progressFilteredCategories, function(o) {
-                                return o.id === categories[categoryPointer].id;
+                                return o.id && o.id === categories[categoryPointer].id;
                             });
                             progress = (progressPosition + 1) / progressFilteredCategories.length * 100;
                             const currentCategory = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
@@ -590,54 +592,64 @@ const template = require('./../template.hbs');
                         $(document).on('click', '.details-back', () => {
                             summarySetup();
                         });
-                        $(document).on('click', '.quesitonnaire-beginning', () => {
-                            updateQuestions();
-                            categoryPointer = 0;
-                            iterationPointer = 0;
-                            questionPointer = 0;
-                            iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
-                                return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
-                            });
-                            questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                return question.detailLevel <= result.data.detailLevel;
-                            }) : [];
+                        $(document).on('click', '.progress-bar-container', (event) => {
+                            const progressBar = $('.progress-bar-container');
+                            const progressWidth = progressBar.innerWidth();
+                            const offset_l = progressBar.offset().left - $(window).scrollLeft();
+                            const left = Math.round((event.clientX - offset_l));
+                            const progressPercent = Math.round((left / progressWidth) * 100);
+                            const selectedCategoryIndex = (Math.ceil((progressPercent / 100) * progressFilteredCategories.length) - 1);
 
-                            if (categories[categoryPointer].isRepeatable) {
-                                questionPointer = -1;
+                            if ($('.questionnaire.question').length) {
+                                updateQuestions();
+                            } else if ($('.questionnaire.description').length) {
+                                result.data.projectName = $('#project-name').val();
+                                result.data.mainContact = $('#main-contact').val();
+                                result.data.projectStatus = $('#project-status').val();
+                            } else if ($('.questionnaire.levels').length) {
+                                result.data.detailLevel = $("input[name='questionnaire-level'][checked='checked']").val();
+                                categories = _.filter(result.data._embedded.answers[0]._embedded.categories, (progressCategory) => {
+                                    const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
+                                        return progressQuestion.detailLevel <= result.data.detailLevel;
+                                    });
+                                    return questionDetailLevels.length > 0;
+                                });
+                                updateProgressTotal();
+                            } else if ($('.questionnaire.iterations').length) {
+                                updateIterations();
                             }
 
-                            updateQuestionContent('');
-                        });
-                        $(document).on('click', '.category-beginning', () => {
-                            updateQuestions();
-                            iterationPointer = 0;
-                            questionPointer = 0;
-                            iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
-                                return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
-                            });
-                            questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                return question.detailLevel <= result.data.detailLevel;
-                            }) : [];
+                            if (progressFilteredCategories[selectedCategoryIndex] === 'results') {
+                                categoryPointer = categories.length - 1;
+                                iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
+                                    return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
+                                });
+                                iterationPointer = iterations.length - 1;
+                                questions = iterations.length ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
+                                    return question.detailLevel <= result.data.detailLevel;
+                                }) : [];
+                                questionPointer = questions.length ? questions.length - 1 : -1;
 
-                            if (categories[categoryPointer].isRepeatable) {
-                                questionPointer = -1;
+                                updatePointers('next');
+                            } else {
+                                categoryPointer = _.findIndex(categories, (o) => {
+                                    return o.id && o.id === progressFilteredCategories[selectedCategoryIndex].id;
+                                });
+                                iterationPointer = 0;
+                                questionPointer = 0;
+                                iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
+                                    return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
+                                });
+                                questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
+                                    return question.detailLevel <= result.data.detailLevel;
+                                }) : [];
+
+                                if (categories[categoryPointer].isRepeatable) {
+                                    questionPointer = -1;
+                                }
+
+                                updateQuestionContent('');
                             }
-
-                            updateQuestionContent('');
-                        });
-                        $(document).on('click', '.questionnaire-end', () => {
-                            updateQuestions();
-                            categoryPointer = categories.length - 1;
-                            iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
-                                return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
-                            });
-                            iterationPointer = iterations.length - 1;
-                            questions = iterations.length ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                return question.detailLevel <= result.data.detailLevel;
-                            }) : [];
-                            questionPointer = questions.length ? questions.length - 1 : -1;
-
-                            updatePointers('next');
                         });
                     })
                 ;
