@@ -651,6 +651,35 @@ const template = require('./../template.hbs');
                                 updateQuestionContent('');
                             }
                         });
+
+                        function download(content, fileName, contentType) {
+                            var a = document.createElement("a");
+                            var file = new Blob([content], {type: contentType});
+                            a.href = URL.createObjectURL(file);
+                            a.download = fileName;
+                            a.click();
+                        }
+
+                        function formatDate(value) {
+                            const month = value.getMonth() + 1;
+                            return value.getDate() + "-" + month + "-" + value.getFullYear();
+                        }
+
+                        $(document).on('click', '.download-json', () => {
+                            const jsonData = JSON.stringify({
+                                projectName: result.data.projectName,
+                                mainContact: result.data.mainContact,
+                                projectStatus: result.data.projectStatus,
+                                detailLevel: result.data.detailLevel,
+                                id: result.data.id,
+                                solutionCanvas: result.data.solutionCanvas,
+                                answers: result.data._embedded
+                            });
+                            const date = formatDate(new Date());
+                            const formattedTitle = result.data.projectName.replace(/[^a-zA-Z ]/g, "").toLowerCase().replace(/ /g, "_");
+
+                            download(jsonData, 'ipt-' + formattedTitle + '-' + date + '.txt', 'text/plain');
+                        });
                     })
                 ;
             }
