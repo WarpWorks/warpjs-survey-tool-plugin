@@ -673,12 +673,51 @@ const template = require('./../template.hbs');
                                 detailLevel: result.data.detailLevel,
                                 id: result.data.id,
                                 solutionCanvas: result.data.solutionCanvas,
-                                answers: result.data._embedded
+                                answers: result.data._embedded.answers
                             });
                             const date = formatDate(new Date());
-                            const formattedTitle = result.data.projectName.replace(/[^a-zA-Z ]/g, "").toLowerCase().replace(/ /g, "_");
+                            const formattedTitle = result.data.projectName.replace(/[^a-zA-Z0-9_ ]/g, "").toLowerCase().replace(/ /g, "_");
 
                             download(jsonData, 'ipt-' + formattedTitle + '-' + date + '.txt', 'text/plain');
+                        });
+
+                        $('#inputFile').change((event) => {
+                            onJsonSelect(event);
+                        });
+
+                        function onJsonSelect(event) {
+                            var reader = new FileReader();
+                            reader.onload = onReaderLoad;
+                            reader.readAsText(event.target.files[0]);
+                        }
+
+                        function onReaderLoad(event) {
+                            var obj = JSON.parse(event.target.result);
+                            result.data.projectName = obj.projectName;
+                            result.data.mainContact = obj.mainContact;
+                            result.data.projectStatus = obj.projectStatus;
+                            result.data.detailLevel = obj.detailLevel;
+                            result.data._embedded.answers = obj.answers;
+
+                            categoryPointer = 0;
+                            iterationPointer = 0;
+                            questionPointer = 0;
+                            iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
+                                return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
+                            });
+                            questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
+                                return question.detailLevel <= result.data.detailLevel;
+                            }) : [];
+
+                            if (categories[categoryPointer].isRepeatable) {
+                                questionPointer = -1;
+                            }
+
+                            updateQuestionContent('');
+                        }
+
+                        $(document).on('click', '.load-json', () => {
+                            $('#inputFile').trigger('click');
                         });
                     })
                 ;
