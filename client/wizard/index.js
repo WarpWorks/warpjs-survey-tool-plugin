@@ -88,11 +88,16 @@ const template = require('./../template.hbs');
                             $("input[name='questionnaire-level'][value='" + detailLevel + "']").attr('checked', 'checked');
                         };
 
+                        if (result.data.projectName) {
+                            $('.progress-label').html('Progress for ' + result.data.projectName);
+                        }
+
                         const descriptionOnLeave = (direction) => {
                             if ($('#project-name').val()) {
                                 result.data.projectName = $('#project-name').val();
                                 result.data.mainContact = $('#main-contact').val();
                                 result.data.projectStatus = $('#project-status').val();
+                                $('.progress-label').html('Progress for ' + result.data.projectName); ;
                                 updateQuestions();
                                 updatePointers(direction);
                             } else {
@@ -639,6 +644,7 @@ const template = require('./../template.hbs');
                                     result.data.projectName = $('#project-name').val();
                                     result.data.mainContact = $('#main-contact').val();
                                     result.data.projectStatus = $('#project-status').val();
+                                    $('.progress-label').html('Progress for ' + result.data.projectName);
                                 } else {
                                     $('#project-name').addClass('is-invalid');
                                     $('.invalid-feedback').css('display', 'block');
