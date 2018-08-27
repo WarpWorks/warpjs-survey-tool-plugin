@@ -50,9 +50,6 @@ const template = require('./../template.hbs');
 
     return warpjsUtils.getCurrentPageHAL($)
         .then((result) => {
-            // const introCategory = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
-            //     return category.name === constants.specializedTemplates.introCategory;
-            // });
             let categoryPointer = 0;
             let iterationPointer = 0;
             let questionPointer = 0;
@@ -73,9 +70,6 @@ const template = require('./../template.hbs');
             let progressFilteredCategories = [];
 
             const updateProgressTotal = () => {
-                // progressFilteredCategories = _.filter(categories, (progressCategory) => {
-                //     return introCategory ? progressCategory.id !== introCategory.id : true;
-                // });
                 progressFilteredCategories = _.cloneDeep(categories);
                 progressFilteredCategories.push('results');
             };
@@ -563,6 +557,22 @@ const template = require('./../template.hbs');
                             }
                         };
 
+                        const iterationClick = (direction) => {
+                            let hasIteration = false;
+                            $('.iteration-form input[type="text"]').each((index, element) => {
+                                if ($(element).val()) {
+                                    hasIteration = true;
+                                }
+                            });
+                            if (hasIteration) {
+                                updateIterations();
+                                updatePointers(direction);
+                            } else {
+                                $('.iteration-form input[type="text"]').first().addClass('is-invalid');
+                                $('.invalid-feedback').css('display', 'block');
+                            }
+                        };
+
                         if (result.data._embedded.answers[0]._embedded.categories[categoryPointer].isRepeatable === true) {
                             questionPointer = -1;
                         }
@@ -586,12 +596,10 @@ const template = require('./../template.hbs');
                             updatePointers('back');
                         });
                         $(document).on('click', '.iteration-next', () => {
-                            updateIterations();
-                            updatePointers('next');
+                            iterationClick('next');
                         });
                         $(document).on('click', '.iteration-back', () => {
-                            updateIterations();
-                            updatePointers('back');
+                            iterationClick('back');
                         });
                         $(document).on('click', '.summary-back', () => {
                             updateQuestionContent();
@@ -627,9 +635,15 @@ const template = require('./../template.hbs');
                             if ($('.questionnaire.question').length) {
                                 updateQuestions();
                             } else if ($('.questionnaire.description').length) {
-                                result.data.projectName = $('#project-name').val();
-                                result.data.mainContact = $('#main-contact').val();
-                                result.data.projectStatus = $('#project-status').val();
+                                if ($('#project-name').val()) {
+                                    result.data.projectName = $('#project-name').val();
+                                    result.data.mainContact = $('#main-contact').val();
+                                    result.data.projectStatus = $('#project-status').val();
+                                } else {
+                                    $('#project-name').addClass('is-invalid');
+                                    $('.invalid-feedback').css('display', 'block');
+                                    return;
+                                }
                             } else if ($('.questionnaire.levels').length) {
                                 result.data.detailLevel = $("input[name='questionnaire-level'][checked='checked']").val();
                                 categories = _.filter(result.data._embedded.answers[0]._embedded.categories, (progressCategory) => {
@@ -640,7 +654,19 @@ const template = require('./../template.hbs');
                                 });
                                 updateProgressTotal();
                             } else if ($('.questionnaire.iterations').length) {
-                                updateIterations();
+                                let hasIteration = false;
+                                $('.iteration-form input[type="text"]').each((index, element) => {
+                                    if ($(element).val()) {
+                                        hasIteration = true;
+                                    }
+                                });
+                                if (hasIteration) {
+                                    updateIterations();
+                                } else {
+                                    $('.iteration-form input[type="text"]').first().addClass('is-invalid');
+                                    $('.invalid-feedback').css('display', 'block');
+                                    return;
+                                }
                             }
 
                             if (progressFilteredCategories[selectedCategoryIndex] === 'results') {

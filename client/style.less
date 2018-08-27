@@ -132,6 +132,22 @@
                     border: 0px;
                     margin-bottom: 25px;
                     border-radius: 0px;
+
+                    &.is-invalid {
+                        border: solid 1px #c7281a;
+                    }
+                }
+
+                .iteration-col {
+                    position: relative;
+                }
+
+                .invalid-feedback {
+                    display: none;
+                    color: #c7281a;
+                    position: absolute;
+                    left: 16px;
+                    bottom: 4px;
                 }
             }
         }

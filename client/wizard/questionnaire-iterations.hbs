@@ -13,8 +13,11 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-4 iteration-col">
           <input type="text" class="form-control" id="iteration1" placeholder="Your Asset Category" value="{{iterations.[0].name}}"/>
+          <div class="invalid-feedback">
+            At least one class is required.
+          </div>
         </div>
         <div class="col-sm-4">
           <input type="text" class="form-control" id="iteration2" placeholder="Your Asset Category" value="{{iterations.[1].name}}"/>
