@@ -24,12 +24,12 @@
     <div class="col-sm-10 col-sm-push-1">
       <h3 class="ipt-name">{{details.questionnaire}}</h3>
       {{#each details.data}}
-        <p class="summary-category">{{category}}</p>
+        <p class="summary-category {{#if comments}} has-comments{{/if}}" data-comments="{{comments}}">{{category}}</p>
         {{#each iterations}}
           {{#if name}}<p class="summary-iteration">{{name}}</p>{{/if}}
           {{#each questions}}
             {{#if hasOptions}}
-              <div class="question-block">
+              <div class="question-block {{#if comments}} has-comments{{/if}}" data-comments="{{comments}}">
                 <div class="position-display selected-position{{position}}">
                   <div class="position1"></div>
                   <div class="position2"></div>
@@ -54,3 +54,4 @@
     </div>
   </div>
 </div>
+{{> comments}}

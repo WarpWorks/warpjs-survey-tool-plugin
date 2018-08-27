@@ -46,7 +46,8 @@ module.exports = (req, res) => {
                             .then((categories) => Promise.map(categories, (category) => Promise.resolve()
                                 .then(() => warpjsUtils.createResource(req, {
                                     id: category.id,
-                                    isRepeatable: category.isRepeatable
+                                    isRepeatable: category.isRepeatable,
+                                    comments: ''
                                 }))
                                 .then((categoryResource) => Promise.resolve()
                                     .then(() => {
@@ -62,7 +63,8 @@ module.exports = (req, res) => {
                                                 .then(() => warpjsUtils.createResource('', {
                                                     id: question.id,
                                                     detailLevel: question.detailLevel,
-                                                    answer: ''
+                                                    answer: '',
+                                                    comments: ''
                                                 }))
                                             ))
                                             .then((answerQuestions) => iterationResource.embed('questions', answerQuestions))

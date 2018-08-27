@@ -18,7 +18,7 @@ const template = require('./../template.hbs');
     const placeholder = $('#warpjs-content-placeholder');
     placeholder.html(template());
 
-    function styleRadio() {
+    const styleRadio = () => {
         $('input:radio').hide().each(function() {
             $(this).attr('data-radio-fx', this.name);
             var label = $("label[for=" + '"' + this.id + '"' + "]").text();
@@ -46,7 +46,7 @@ const template = require('./../template.hbs');
                 $('.questionnaire.question .question-next').html("Don't know (yet)");
             }
         });
-    }
+    };
 
     return warpjsUtils.getCurrentPageHAL($)
         .then((result) => {
@@ -72,13 +72,13 @@ const template = require('./../template.hbs');
 
             let progressFilteredCategories = [];
 
-            function updateProgressTotal() {
+            const updateProgressTotal = () => {
                 // progressFilteredCategories = _.filter(categories, (progressCategory) => {
                 //     return introCategory ? progressCategory.id !== introCategory.id : true;
                 // });
                 progressFilteredCategories = _.cloneDeep(categories);
                 progressFilteredCategories.push('results');
-            }
+            };
 
             updateProgressTotal();
 
@@ -89,20 +89,29 @@ const template = require('./../template.hbs');
                 return Promise.resolve()
                     .then(() => warpjsUtils.documentReady($))
                     .then(() => {
-                        function assignDetailLevelSelected() {
+                        const assignDetailLevelSelected = () => {
                             const detailLevel = result.data.detailLevel !== '' ? result.data.detailLevel : 2;
                             $("input[name='questionnaire-level'][value='" + detailLevel + "']").attr('checked', 'checked');
-                        }
+                        };
+
+                        const descriptionOnLeave = (direction) => {
+                            if ($('#project-name').val()) {
+                                result.data.projectName = $('#project-name').val();
+                                result.data.mainContact = $('#main-contact').val();
+                                result.data.projectStatus = $('#project-status').val();
+                                updateQuestions();
+                                updatePointers(direction);
+                            } else {
+                                $('#project-name').addClass('is-invalid');
+                                $('.invalid-feedback').css('display', 'block');
+                            }
+                        };
 
                         $(document).on('click', '.description-back', () => {
-                            result.data.projectName = $('#project-name').val();
-                            result.data.mainContact = $('#main-contact').val();
-                            result.data.projectStatus = $('#project-status').val();
+                            descriptionOnLeave('back');
                         });
                         $(document).on('click', '.description-next', () => {
-                            result.data.projectName = $('#project-name').val();
-                            result.data.mainContact = $('#main-contact').val();
-                            result.data.projectStatus = $('#project-status').val();
+                            descriptionOnLeave('next');
                         });
                         $(document).on('click', '.levels-back', () => {
                             result.data.detailLevel = $("input[name='questionnaire-level'][checked='checked']").val();
@@ -125,7 +134,7 @@ const template = require('./../template.hbs');
                             updateProgressTotal();
                         });
 
-                        function updatePointers(direction) {
+                        const updatePointers = (direction) => {
                             categories = _.filter(categories, (progressCategory) => {
                                 const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
                                     return progressQuestion.detailLevel <= result.data.detailLevel;
@@ -197,9 +206,9 @@ const template = require('./../template.hbs');
                             }
 
                             updateQuestionContent(outOfBounds);
-                        }
+                        };
 
-                        function assignOptionSelected(qQuestion, aQuestion) {
+                        const assignOptionSelected = (qQuestion, aQuestion) => {
                             if (typeof qQuestion !== 'undefined' && typeof aQuestion !== 'undefined') {
                                 let option = _.find(qQuestion._embedded.options, (option) => {
                                     return option.id === aQuestion.answer;
@@ -209,16 +218,20 @@ const template = require('./../template.hbs');
                                 }
                             }
                             return qQuestion;
-                        }
+                        };
 
-                        function templateValues() {
+                        const templateValues = () => {
                             const currentCategory = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
                                 return category.id === categories[categoryPointer].id;
                             });
+                            currentCategory.comments = categories[categoryPointer].comments;
                             const currentQuestion = questions[questionPointer] ? _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
                                 return question.id === questions[questionPointer].id;
                             })) : null;
                             const updatedQuestion = assignOptionSelected(currentQuestion, questions[questionPointer]);
+                            if (updatedQuestion) {
+                                updatedQuestion.comments = questions[questionPointer].comments;
+                            }
                             let values = {category: currentCategory, question: updatedQuestion};
                             if (iterations[iterationPointer] && iterations[iterationPointer].name !== '') {
                                 values.iteration = iterations[iterationPointer];
@@ -259,9 +272,9 @@ const template = require('./../template.hbs');
                             values.imageWidth = currentImageWidth;
 
                             return values;
-                        }
+                        };
 
-                        function introTemplateValues() {
+                        const introTemplateValues = () => {
                             const currentCategory = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
                                 return category.id === categories[categoryPointer].id;
                             });
@@ -278,9 +291,9 @@ const template = require('./../template.hbs');
                             }
 
                             return values;
-                        }
+                        };
 
-                        function createImageMapElements(imageMapValues) {
+                        const createImageMapElements = (imageMapValues) => {
                             const imageMapCoords = imageMapValues.split(',');
                             const topLeft = document.createElement('div');
                             $(topLeft).addClass('image-map-overlay top-left')
@@ -370,9 +383,9 @@ const template = require('./../template.hbs');
                                     height: (imageMapCoords[3] - imageMapCoords[1]) + 'px'
                                 })
                                 .appendTo($('.image-map-img-container'));
-                        }
+                        };
 
-                        function summaryValues() {
+                        const summaryValues = () => {
                             return _.filter(_.map(result.data._embedded.answers[0]._embedded.categories, (category) => {
                                 const categoryQ = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (questionCategory) => {
                                     return questionCategory.id === category.id;
@@ -404,9 +417,9 @@ const template = require('./../template.hbs');
                             }), (category) => {
                                 return category.answerAverage;
                             });
-                        }
+                        };
 
-                        function summarySetup() {
+                        const summarySetup = () => {
                             $('.ipt-body').html(questionnaireSummaryTemplate({values: summaryValues()}));
                             $('.summary .marker').each((index, element) => {
                                 const score = $(element).data('score');
@@ -425,9 +438,9 @@ const template = require('./../template.hbs');
                                 const offset = (score - 1) / 4 * 100 + 12.5;
                                 $(element).css('margin-left', 'calc(' + offset + '% - 15px)');
                             });
-                        }
+                        };
 
-                        function detailsValues() {
+                        const detailsValues = () => {
                             return _.filter(_.map(result.data._embedded.answers[0]._embedded.categories, (category) => {
                                 const categoryQ = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (questionCategory) => {
                                     return questionCategory.id === category.id;
@@ -446,7 +459,8 @@ const template = require('./../template.hbs');
                                                 name: questionQ.name,
                                                 hasOptions: !!questionQ._embedded.options.length,
                                                 position: questionQ._embedded.options.length && option ? option.position : null,
-                                                option: questionQ._embedded.options.length && option ? option.name : null
+                                                option: questionQ._embedded.options.length && option ? option.name : null,
+                                                comments: question.comments
                                             };
                                         } else {
                                             return null;
@@ -470,6 +484,7 @@ const template = require('./../template.hbs');
                                 if (filteredAnswersList.length) {
                                     return {
                                         category: categoryQ.name,
+                                        comments: category.comments,
                                         iterations: filteredAnswersList
                                     };
                                 } else {
@@ -478,9 +493,9 @@ const template = require('./../template.hbs');
                             }), (category) => {
                                 return category !== null && category.category !== constants.specializedTemplates.introCategory;
                             });
-                        }
+                        };
 
-                        function updateQuestionContent(outOfBounds = '') {
+                        const updateQuestionContent = (outOfBounds = '') => {
                             const progressPosition = _.findIndex(progressFilteredCategories, function(o) {
                                 return o.id && o.id === categories[categoryPointer].id;
                             });
@@ -498,7 +513,7 @@ const template = require('./../template.hbs');
                                 }
                             } else if (questionPointer === -1) {
                                 const values = templateValues();
-                                $('.ipt-body').html(questionnaireIterationTemplate({category: currentCategory, iterations: categories[categoryPointer]._embedded.iterations, image: values.image}));
+                                $('.ipt-body').html(questionnaireIterationTemplate({category: values.category, iterations: categories[categoryPointer]._embedded.iterations, image: values.image}));
                                 if (values.imageMap) {
                                     createImageMapElements(values.imageMap);
                                 }
@@ -528,9 +543,9 @@ const template = require('./../template.hbs');
 
                             $('.ipt .progress-bar').css('width', progress + '%');
                             styleRadio();
-                        }
+                        };
 
-                        function updateIterations() {
+                        const updateIterations = () => {
                             const category = result.data._embedded.answers[0]._embedded.categories[categoryPointer];
                             category._embedded.iterations[0].name = $('input#iteration1').val();
                             category._embedded.iterations[1].name = $('input#iteration2').val();
@@ -538,13 +553,15 @@ const template = require('./../template.hbs');
                             category._embedded.iterations[3].name = $('input#iteration4').val();
                             category._embedded.iterations[4].name = $('input#iteration5').val();
                             category._embedded.iterations[5].name = $('input#iteration6').val();
-                        }
+                            category.comments = $('textarea.comment-text').val();
+                        };
 
-                        function updateQuestions() {
+                        const updateQuestions = () => {
                             if (questions && questions[questionPointer]) {
                                 questions[questionPointer].answer = $("input[name='question-options'][checked='checked']").val();
+                                questions[questionPointer].comments = $('textarea.comment-text').val();
                             }
-                        }
+                        };
 
                         if (result.data._embedded.answers[0]._embedded.categories[categoryPointer].isRepeatable === true) {
                             questionPointer = -1;
@@ -588,6 +605,13 @@ const template = require('./../template.hbs');
                                 data: detailsValues()
                             };
                             $('.ipt-body').html(questionnaireDetailsTemplate({details: details}));
+                            $('.has-comments').append('<a class="has-comments-after" data-toggle="modal" data-target="#comments-modal"></a>');
+                            $(document).on('click', '.has-comments-after', (event) => {
+                                const comment = $(event.target).parent().data('comments');
+                                $('.comment-text').css('display', 'none');
+                                $('.comment-text-not-editable').css('display', 'block');
+                                $('.comment-text-not-editable').html(comment);
+                            });
                         });
                         $(document).on('click', '.details-back', () => {
                             summarySetup();
@@ -652,18 +676,18 @@ const template = require('./../template.hbs');
                             }
                         });
 
-                        function download(content, fileName, contentType) {
+                        const download = (content, fileName, contentType) => {
                             var a = document.createElement("a");
                             var file = new Blob([content], {type: contentType});
                             a.href = URL.createObjectURL(file);
                             a.download = fileName;
                             a.click();
-                        }
+                        };
 
-                        function formatDate(value) {
+                        const formatDate = (value) => {
                             const month = value.getMonth() + 1;
                             return value.getDate() + "-" + month + "-" + value.getFullYear();
-                        }
+                        };
 
                         $(document).on('click', '.download-json', () => {
                             const jsonData = JSON.stringify({
@@ -685,13 +709,13 @@ const template = require('./../template.hbs');
                             onJsonSelect(event);
                         });
 
-                        function onJsonSelect(event) {
+                        const onJsonSelect = (event) => {
                             var reader = new FileReader();
                             reader.onload = onReaderLoad;
                             reader.readAsText(event.target.files[0]);
-                        }
+                        };
 
-                        function onReaderLoad(event) {
+                        const onReaderLoad = (event) => {
                             var obj = JSON.parse(event.target.result);
                             result.data.projectName = obj.projectName;
                             result.data.mainContact = obj.mainContact;
@@ -714,10 +738,18 @@ const template = require('./../template.hbs');
                             }
 
                             updateQuestionContent('');
-                        }
+                        };
 
                         $(document).on('click', '.load-json', () => {
                             $('#inputFile').trigger('click');
+                        });
+
+                        $(document).on('change keyup paste', '.comment-text', (event) => {
+                            if ($(event.target).val().length) {
+                                $('.comments').addClass('has-comments');
+                            } else {
+                                $('.comments.has-comments').removeClass('has-comments');
+                            }
                         });
                     })
                 ;

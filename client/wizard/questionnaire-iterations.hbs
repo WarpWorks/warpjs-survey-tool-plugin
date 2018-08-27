@@ -40,7 +40,7 @@
         <button class="iteration-back">back</button>
       </div>
       <div class="col-sm-4">
-        <button class="comments">Comments</button>
+        <button class="comments {{#if category.comments}}has-comments{{/if}}" data-toggle="modal" data-target="#comments-modal">Comments</button>
       </div>
       <div class="col-sm-4">
         <button class="iteration-next">Next Question</button>
@@ -53,3 +53,4 @@
     <img src="{{image}}"/>
   </div>
 </div>
+{{> comments comments=category.comments}}
