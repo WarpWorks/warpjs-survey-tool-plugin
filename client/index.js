@@ -22,6 +22,9 @@ const questionnairesTemplate = require('./questionnaires.hbs');
                     .then((content) => $('.ipt-body').html(content))
                     .then(() => warpjsUtils.documentReady($))
                     .then(() => {
+                        $('[data-toggle="tooltip"]').tooltip({
+                            container: 'body'
+                        });
                         $(document).on('click', '.questionnaire-link', (event) => {
                             event.preventDefault();
                             $.post($(event.target).data('url'), (data) => {

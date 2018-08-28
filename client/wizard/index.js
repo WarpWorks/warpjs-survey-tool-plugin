@@ -18,6 +18,9 @@ const template = require('./../template.hbs');
     const placeholder = $('#warpjs-content-placeholder');
     placeholder.html(template());
 
+    $('[data-toggle="tooltip"]').tooltip({
+        container: 'body'
+    });
     const styleRadio = () => {
         $('input:radio').hide().each(function() {
             $(this).attr('data-radio-fx', this.name);
