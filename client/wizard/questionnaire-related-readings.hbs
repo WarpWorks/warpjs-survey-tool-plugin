@@ -1,0 +1,29 @@
+<div class="questionnaire related-readings">
+  <div class="row">
+    <div class="col-sm-12">
+      <h2 class="ipt-title results-title faded">Summary</h2>
+      <h2 class="ipt-title results-title faded">Details</h2>
+      <h2 class="ipt-title results-title">Related Readings</h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <p>The following contains a list of related readings that directly apply to your project. Using IIC's Actionable Intelligence Algorithms, we were able to create individual matches for you.</p>
+    </div>
+  </div>
+  <div class="row">
+    {{#each readings}}
+      <div class="col-sm-4">
+        <div class="related-reading">
+          <h3>{{name}}</h3>
+          <div class="related-reading-image"></div>
+        </div>
+      </div>
+    {{/each}}
+  <div class="buttons row">
+    <div class="col-sm-4">
+      <button class="related-reading-back">back</button>
+    </div>
+  </div>
+</div>

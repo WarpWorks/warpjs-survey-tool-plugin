@@ -11,6 +11,7 @@ const questionnaireLevelsTemplate = require('./questionnaire-levels.hbs');
 const questionnaireIterationTemplate = require('./questionnaire-iterations.hbs');
 const questionnaireSummaryTemplate = require('./questionnaire-summary.hbs');
 const questionnaireDetailsTemplate = require('./questionnaire-details.hbs');
+const questionnaireRelatedReadingTemplate = require('./questionnaire-related-readings.hbs');
 const template = require('./../template.hbs');
 
 (($) => $(document).ready(() => {
@@ -581,6 +582,24 @@ const template = require('./../template.hbs');
                             }
                         };
 
+                        const detailsSetup = () => {
+                            const details = {
+                                questionnaire: result.data._embedded.questionnaires[0].name,
+                                name: result.data.projectName,
+                                contact: result.data.mainContact,
+                                status: result.data.projectStatus,
+                                data: detailsValues()
+                            };
+                            $('.ipt-body').html(questionnaireDetailsTemplate({details: details}));
+                            $('.has-comments').append('<a class="has-comments-after" data-toggle="modal" data-target="#comments-modal"></a>');
+                            $(document).on('click', '.has-comments-after', (event) => {
+                                const comment = $(event.target).parent().data('comments');
+                                $('.comment-text').css('display', 'none');
+                                $('.comment-text-not-editable').css('display', 'block');
+                                $('.comment-text-not-editable').html(comment);
+                            });
+                        };
+
                         if (result.data._embedded.answers[0]._embedded.categories[categoryPointer].isRepeatable === true) {
                             questionPointer = -1;
                         }
@@ -613,24 +632,16 @@ const template = require('./../template.hbs');
                             updateQuestionContent();
                         });
                         $(document).on('click', '.summary-next', () => {
-                            const details = {
-                                questionnaire: result.data._embedded.questionnaires[0].name,
-                                name: result.data.projectName,
-                                contact: result.data.mainContact,
-                                status: result.data.projectStatus,
-                                data: detailsValues()
-                            };
-                            $('.ipt-body').html(questionnaireDetailsTemplate({details: details}));
-                            $('.has-comments').append('<a class="has-comments-after" data-toggle="modal" data-target="#comments-modal"></a>');
-                            $(document).on('click', '.has-comments-after', (event) => {
-                                const comment = $(event.target).parent().data('comments');
-                                $('.comment-text').css('display', 'none');
-                                $('.comment-text-not-editable').css('display', 'block');
-                                $('.comment-text-not-editable').html(comment);
-                            });
+                            detailsSetup();
+                        });
+                        $(document).on('click', '.details-next', () => {
+                            $('.ipt-body').html(questionnaireRelatedReadingTemplate({readings: result.data._embedded.questionnaires[0]._embedded.resultSets}));
                         });
                         $(document).on('click', '.details-back', () => {
                             summarySetup();
+                        });
+                        $(document).on('click', '.related-reading-back', () => {
+                            detailsSetup();
                         });
                         $(document).on('click', '.progress-bar-container', (event) => {
                             const progressBar = $('.progress-bar-container');

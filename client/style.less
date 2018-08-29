@@ -339,7 +339,8 @@
             .iteration-back,
             .summary-back,
             .details-back,
-            .description-back {
+            .description-back,
+            .related-reading-back {
                 font-weight: bold;
                 background: transparent;
                 border: none;
@@ -628,6 +629,36 @@
                 overflow-y: scroll;
                 display: none;
             }
+        }
+    }
+
+    .related-reading {
+        background-color: #f0f0f0;
+        border: solid 1px #dedede;
+        padding: 10px 100px 10px 10px;
+        margin: 20px 0px 20px 0px;
+        height: 225px;
+        width: 350px;
+        position: relative;
+
+        h3 {
+            color: #666470;
+            font-size: 14px;
+            font-size: 12px;
+            margin-top: 0px;
+            font-weight: bold;
+        }
+
+        .related-reading-image {
+            position: absolute;
+            right: 10px;
+            top: -30px;
+            background-image: url(images/bulb.svg);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center center;
+            width: 94px;
+            height: 168px;
         }
     }
 }

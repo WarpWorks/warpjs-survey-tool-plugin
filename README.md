@@ -23,7 +23,8 @@ Add the following to `.warp-works-warpjsrc` of your project:
             "attempt": "IPT_Attempt",
             "imageLibrary": "IMGLIB",
             "image": "Image",
-            "map": "Map"
+            "map": "Map",
+            "resultSet": "ResultSet"
           }
         }
       }]
@@ -38,3 +39,4 @@ Add the following to `.warp-works-warpjsrc` of your project:
 - `imageLibrary` is for the images associated with the questionnaire at the top level
 - `image` is for the image associated with a category or quesiton
 - `map` is for the image mapping for an image
+- `resultSet` is for the result sets for the suggested readings section
