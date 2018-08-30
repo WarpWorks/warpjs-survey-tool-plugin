@@ -600,6 +600,63 @@ const template = require('./../template.hbs');
                             });
                         };
 
+                        const relatedReadingSetup = () => {
+                            // flatten answers object so question id with selected answer are at top level
+                            const flattenedAnswers = [];
+                            _.each(result.data._embedded.answers[0]._embedded.categories, (rCategory) => {
+                                _.each(rCategory._embedded.iterations, (rIteration) => {
+                                    _.each(rIteration._embedded.questions, (rQuestion) => {
+                                        if (rQuestion.detailLevel <= result.data.detailLevel && rQuestion.answer) {
+                                            const questionCategory = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (qCategory) => {
+                                                return qCategory.id === rCategory.id;
+                                            });
+                                            const questionQuestion = questionCategory ? _.find(questionCategory._embedded.questions, (qQuestion) => {
+                                                return qQuestion.id === rQuestion.id;
+                                            }) : null;
+                                            const questionAnswer = questionQuestion ? _.find(questionQuestion._embedded.options, (qOption) => {
+                                                return qOption.id === rQuestion.answer;
+                                            }) : null;
+                                            flattenedAnswers.push({
+                                                id: rQuestion.id,
+                                                answer: questionAnswer ? questionAnswer.position : null,
+                                                questionName: questionQuestion ? questionQuestion.name : null,
+                                                answerName: questionAnswer ? questionAnswer.name : null
+                                            });
+                                        }
+                                    });
+                                });
+                            });
+                            console.log('flattenedAnswers:', flattenedAnswers);
+
+                            _.each(result.data._embedded.questionnaires[0]._embedded.resultSets, (resultSet) => {
+                                resultSet.recommendation = null;
+                                _.each(resultSet._embedded.results, (result) => {
+                                    result.points = 0;
+                                    _.each(result._embedded.relevantHighs, (relevantHigh) => {
+                                        _.each(_.filter(flattenedAnswers, (aQuestion) => {
+                                            return aQuestion.id === relevantHigh.id;
+                                        }), (aQuestion) => {
+                                            result.points += parseInt(aQuestion.answer, 10);
+                                        });
+                                    });
+                                    _.each(result._embedded.relevantLows, (relevantLow) => {
+                                        _.each(_.filter(flattenedAnswers, (aQuestion) => {
+                                            return aQuestion.id === relevantLow.id;
+                                        }), (aQuestion) => {
+                                            result.points += 5 - parseInt(aQuestion.answer, 10);
+                                        });
+                                    });
+                                });
+                                const recommendation = _.orderBy(_.filter(resultSet._embedded.results, (result) => {
+                                    return result.points > 0;
+                                }), ['points'], ['desc'])[0];
+                                resultSet.recommendation = recommendation ? recommendation.id : null;
+                                resultSet.RecommendationName = recommendation ? recommendation.name : null;
+                            });
+
+                            $('.ipt-body').html(questionnaireRelatedReadingTemplate({readings: result.data._embedded.questionnaires[0]._embedded.resultSets}));
+                        };
+
                         if (result.data._embedded.answers[0]._embedded.categories[categoryPointer].isRepeatable === true) {
                             questionPointer = -1;
                         }
@@ -635,7 +692,7 @@ const template = require('./../template.hbs');
                             detailsSetup();
                         });
                         $(document).on('click', '.details-next', () => {
-                            $('.ipt-body').html(questionnaireRelatedReadingTemplate({readings: result.data._embedded.questionnaires[0]._embedded.resultSets}));
+                            relatedReadingSetup();
                         });
                         $(document).on('click', '.details-back', () => {
                             summarySetup();

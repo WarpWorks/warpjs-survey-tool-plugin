@@ -24,7 +24,11 @@ Add the following to `.warp-works-warpjsrc` of your project:
             "imageLibrary": "IMGLIB",
             "image": "Image",
             "map": "Map",
-            "resultSet": "ResultSet"
+            "resultSet": "ResultSet",
+            "result": "Result",
+            "relevantHigh": "Relevant_If_High",
+            "relevantLow": "Relevant_If_Low",
+            "content": "Content"
           }
         }
       }]
