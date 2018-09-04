@@ -18,7 +18,10 @@
         <div class="related-reading">
           <h3>{{name}}</h3>
           <div class="related-reading-image"></div>
-          <h2>{{RecommendationName}}</h2>
+          <h2>{{recommendationName}}</h2>
+          {{#if recommendationName}}
+            <a class="releated-read-more" data-result-set="{{id}}">Read more</a>
+          {{/if}}
         </div>
       </div>
     {{/each}}

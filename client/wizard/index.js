@@ -12,6 +12,7 @@ const questionnaireIterationTemplate = require('./questionnaire-iterations.hbs')
 const questionnaireSummaryTemplate = require('./questionnaire-summary.hbs');
 const questionnaireDetailsTemplate = require('./questionnaire-details.hbs');
 const questionnaireRelatedReadingTemplate = require('./questionnaire-related-readings.hbs');
+const questionnaireRelatedDetailsTemplate = require('./questionnaire-related-reading-detail.hbs');
 const template = require('./../template.hbs');
 
 (($) => $(document).ready(() => {
@@ -599,10 +600,9 @@ const template = require('./../template.hbs');
                                 $('.comment-text-not-editable').html(comment);
                             });
                         };
-
+                        let flattenedAnswers = [];
                         const relatedReadingSetup = () => {
-                            // flatten answers object so question id with selected answer are at top level
-                            const flattenedAnswers = [];
+                            flattenedAnswers = [];
                             _.each(result.data._embedded.answers[0]._embedded.categories, (rCategory) => {
                                 _.each(rCategory._embedded.iterations, (rIteration) => {
                                     _.each(rIteration._embedded.questions, (rQuestion) => {
@@ -626,7 +626,6 @@ const template = require('./../template.hbs');
                                     });
                                 });
                             });
-                            console.log('flattenedAnswers:', flattenedAnswers);
 
                             _.each(result.data._embedded.questionnaires[0]._embedded.resultSets, (resultSet) => {
                                 resultSet.recommendation = null;
@@ -650,8 +649,8 @@ const template = require('./../template.hbs');
                                 const recommendation = _.orderBy(_.filter(resultSet._embedded.results, (result) => {
                                     return result.points > 0;
                                 }), ['points'], ['desc'])[0];
-                                resultSet.recommendation = recommendation ? recommendation.id : null;
-                                resultSet.RecommendationName = recommendation ? recommendation.name : null;
+                                resultSet.recommendation = recommendation;
+                                resultSet.recommendationName = recommendation ? recommendation.name : null;
                             });
 
                             $('.ipt-body').html(questionnaireRelatedReadingTemplate({readings: result.data._embedded.questionnaires[0]._embedded.resultSets}));
@@ -700,6 +699,39 @@ const template = require('./../template.hbs');
                         $(document).on('click', '.related-reading-back', () => {
                             detailsSetup();
                         });
+
+                        $(document).on('click', '.releated-read-more', (event) => {
+                            $('.progress-container, .blue-button-container').css('display', 'none');
+                            const resultSetId = $(event.target).data('result-set');
+                            const relatedResultSet = _.find(result.data._embedded.questionnaires[0]._embedded.resultSets, (resultSet) => {
+                                return resultSet.id === resultSetId;
+                            });
+                            relatedResultSet.recommendation.questions = _.filter(flattenedAnswers, (flat) => {
+                                const foundHigh = _.find(relatedResultSet.recommendation._embedded.relevantHighs, (relevantHigh) => {
+                                    return relevantHigh.id === flat.id;
+                                });
+                                const foundLow = _.find(relatedResultSet.recommendation._embedded.relevantLows, (relevantLow) => {
+                                    return relevantLow.id === flat.id;
+                                });
+
+                                return foundHigh || foundLow;
+                            });
+                            let contentPreview = null;
+                            if (relatedResultSet.recommendation && relatedResultSet.recommendation._embedded.contents[0] && relatedResultSet.recommendation._embedded.contents[0]._embedded.overviews) {
+                                contentPreview = _.find(relatedResultSet.recommendation._embedded.contents[0]._embedded.overviews, (overview) => {
+                                    return parseInt(overview.position, 10) === 1;
+                                });
+                            }
+                            console.log('relatedResultSet.recommendation._embedded.contents[0]._embedded.overviews', relatedResultSet.recommendation._embedded.contents[0]._embedded.overviews, contentPreview);
+                            console.log('result sets: ', result.data._embedded.questionnaires[0]._embedded.resultSets);
+                            $('.ipt-body').html(questionnaireRelatedDetailsTemplate({resultSet: relatedResultSet, contentPreview: contentPreview, href: relatedResultSet.recommendation._embedded.contents[0]._links.self.href}));
+                        });
+
+                        $(document).on('click', '.releated-details-back', () => {
+                            $('.progress-container, .blue-button-container').css('display', 'block');
+                            relatedReadingSetup();
+                        });
+
                         $(document).on('click', '.progress-bar-container', (event) => {
                             const progressBar = $('.progress-bar-container');
                             const progressWidth = progressBar.innerWidth();

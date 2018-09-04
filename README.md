@@ -44,3 +44,7 @@ Add the following to `.warp-works-warpjsrc` of your project:
 - `image` is for the image associated with a category or quesiton
 - `map` is for the image mapping for an image
 - `resultSet` is for the result sets for the suggested readings section
+- `result` is for the individual result
+- `relevantHigh`
+- `relevantLow`
+- `content`
