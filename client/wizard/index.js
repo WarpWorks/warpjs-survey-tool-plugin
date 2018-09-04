@@ -717,12 +717,16 @@ const template = require('./../template.hbs');
                                 return foundHigh || foundLow;
                             });
                             let contentPreview = null;
+                            let contentDocumentHref = null;
                             if (relatedResultSet.recommendation && relatedResultSet.recommendation._embedded.contents[0] && relatedResultSet.recommendation._embedded.contents[0]._embedded.overviews) {
                                 contentPreview = _.find(relatedResultSet.recommendation._embedded.contents[0]._embedded.overviews, (overview) => {
                                     return parseInt(overview.position, 10) === 1;
                                 });
+
+                                contentDocumentHref = relatedResultSet.recommendation._embedded.contents[0]._links.self.href;
                             }
-                            $('.ipt-body').html(questionnaireRelatedDetailsTemplate({resultSet: relatedResultSet, contentPreview: contentPreview, href: relatedResultSet.recommendation._embedded.contents[0]._links.self.href}));
+
+                            $('.ipt-body').html(questionnaireRelatedDetailsTemplate({resultSet: relatedResultSet, contentPreview: contentPreview, href: contentDocumentHref}));
                         });
 
                         $(document).on('click', '.releated-details-back', () => {
