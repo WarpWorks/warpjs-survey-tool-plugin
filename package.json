@@ -1,6 +1,6 @@
 {
   "name": "@warp-works/warpjs-ipt-plugin",
-  "version": "1.2.11",
+  "version": "1.2.12",
   "description": "Plugin to set up IPT questionnaires",
   "main": "index.js",
   "scripts": {

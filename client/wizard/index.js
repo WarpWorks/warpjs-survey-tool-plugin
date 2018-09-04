@@ -722,8 +722,6 @@ const template = require('./../template.hbs');
                                     return parseInt(overview.position, 10) === 1;
                                 });
                             }
-                            console.log('relatedResultSet.recommendation._embedded.contents[0]._embedded.overviews', relatedResultSet.recommendation._embedded.contents[0]._embedded.overviews, contentPreview);
-                            console.log('result sets: ', result.data._embedded.questionnaires[0]._embedded.resultSets);
                             $('.ipt-body').html(questionnaireRelatedDetailsTemplate({resultSet: relatedResultSet, contentPreview: contentPreview, href: relatedResultSet.recommendation._embedded.contents[0]._links.self.href}));
                         });
 
