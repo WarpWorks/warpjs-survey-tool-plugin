@@ -23,7 +23,8 @@ const questionnairesTemplate = require('./questionnaires.hbs');
                     .then(() => warpjsUtils.documentReady($))
                     .then(() => {
                         $('[data-toggle="tooltip"]').tooltip({
-                            container: 'body'
+                            container: 'body',
+                            trigger: 'click'
                         });
                         $(document).on('click', '.questionnaire-link', (event) => {
                             event.preventDefault();

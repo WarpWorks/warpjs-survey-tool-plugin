@@ -14,7 +14,9 @@
   </div>
   <div class="row">
     <div class="col-sm-12">
-      <a href="{{href}}" class="content-link">Click here for the full document</a>
+      {{#if href}}
+        <button data-url="{{href}}" class="content-link" data-toggle="modal" data-target="#save-warning-modal">Click here for the full document</button>
+      {{/if}}
     </div>
   </div>
   <div class="row">
@@ -40,3 +42,4 @@
     </div>
   </div>
 </div>
+{{> warning}}

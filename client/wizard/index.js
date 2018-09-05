@@ -21,7 +21,8 @@ const template = require('./../template.hbs');
     placeholder.html(template());
 
     $('[data-toggle="tooltip"]').tooltip({
-        container: 'body'
+        container: 'body',
+        trigger: 'click'
     });
     const styleRadio = () => {
         $('input:radio').hide().each(function() {
@@ -912,6 +913,10 @@ const template = require('./../template.hbs');
                                     $('.question-next').click();
                                 }
                             }
+                        });
+
+                        $(document).on('click', '.save-warning-continue', () => {
+                            window.location = $('.content-link').data('url');
                         });
                     })
                 ;
