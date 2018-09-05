@@ -888,6 +888,24 @@ const template = require('./../template.hbs');
                                 $('.comments.has-comments').removeClass('has-comments');
                             }
                         });
+
+                        $(document).on('keypress', (event) => {
+                            if ($('.questionnaire.question .option-container').length) {
+                                if (event.which === 49) {
+                                    $('.questionnaire.question .option-container:nth-child(1)').find('a.radio-fx').click();
+                                    $('.question-next').click();
+                                } else if (event.which === 50) {
+                                    $('.questionnaire.question .option-container:nth-child(2)').find('a.radio-fx').click();
+                                    $('.question-next').click();
+                                } else if (event.which === 51) {
+                                    $('.questionnaire.question .option-container:nth-child(3)').find('a.radio-fx').click();
+                                    $('.question-next').click();
+                                } else if (event.which === 52) {
+                                    $('.questionnaire.question .option-container:nth-child(4)').find('a.radio-fx').click();
+                                    $('.question-next').click();
+                                }
+                            }
+                        });
                     })
                 ;
             }
