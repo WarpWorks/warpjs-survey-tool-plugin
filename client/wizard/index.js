@@ -814,11 +814,18 @@ const template = require('./../template.hbs');
                         });
 
                         const download = (content, fileName, contentType) => {
-                            var a = document.createElement("a");
-                            var file = new Blob([content], {type: contentType});
-                            a.href = URL.createObjectURL(file);
+                            var a = document.createElement('a');
+                            a.style = "display: none";
+                            var file = new Blob([content], {type: "application/octet-stream"});
+                            var url = window.URL.createObjectURL(file);
+                            a.href = url;
                             a.download = fileName;
+                            document.body.appendChild(a);
                             a.click();
+                            setTimeout(function() {
+                                document.body.removeChild(a);
+                                window.URL.revokeObjectURL(url);
+                            }, 0);
                         };
 
                         const formatDate = (value) => {
