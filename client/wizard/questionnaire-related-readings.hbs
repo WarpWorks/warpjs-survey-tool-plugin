@@ -14,16 +14,16 @@
   </div>
   <div class="row">
     {{#each readings}}
-      <div class="col-sm-4">
-        <div class="related-reading">
-          <h3>{{name}}</h3>
-          <div class="related-reading-image"></div>
-          <h2>{{recommendationName}}</h2>
-          {{#if recommendationName}}
+      {{#if recommendationName}}
+        <div class="col-sm-4">
+          <div class="related-reading">
+            <h3>{{name}}</h3>
+            <div class="related-reading-image"></div>
+            <h2>{{recommendationName}}</h2>
             <a class="releated-read-more" data-result-set="{{id}}">Read more</a>
-          {{/if}}
+          </div>
         </div>
-      </div>
+      {{/if}}
     {{/each}}
   <div class="buttons row">
     <div class="col-sm-4">
