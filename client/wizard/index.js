@@ -529,7 +529,7 @@ const template = require('./../template.hbs');
                                     if (currentQuestion.name === constants.specializedTemplates.description) {
                                         $('.ipt-body').html(questionnaireDescriptionTemplate({projectName: result.data.projectName, projectStatus: result.data.projectStatus, mainContact: result.data.mainContact, question: currentQuestion}));
                                     } else if (currentQuestion.name === constants.specializedTemplates.details) {
-                                        $('.ipt-body').html(questionnaireLevelsTemplate({level: result.data.detailLevel, question: currentQuestion}));
+                                        $('.ipt-body').html(questionnaireLevelsTemplate({level: result.data.detailLevel, question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null, loginUrl: result.data._embedded.questionnaires[0].loginUrl}));
                                         assignDetailLevelSelected();
                                     } else {
                                         $('.ipt-body').html(questionnaireIntroTemplate(introTemplateValues()));

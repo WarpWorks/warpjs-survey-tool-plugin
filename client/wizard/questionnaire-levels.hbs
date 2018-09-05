@@ -34,11 +34,13 @@
         </div>
         <div class="level-container row">
           <div class="col-sm-1">
-            <input type="radio" name="questionnaire-level" value="3">
+            {{#if detailedEnabled}}
+              <input type="radio" name="questionnaire-level" value="3">
+            {{/if}}
           </div>
           <div class="col-sm-8 level-description">
             <h3>Detailed Assessment</h3>
-            <p class="radio-text">The detailed assessment is in-depth, covering additional technical questions, e.g. as a prerequisite for a detailed solution design. <a href="">This level is only available to IIC memebers and their customers.</a></p>
+            <p class="radio-text">The detailed assessment is in-depth, covering additional technical questions, e.g. as a prerequisite for a detailed solution design. <a href="{{loginUrl}}">This level is only available to IIC memebers and their customers.</a></p>
           </div>
           <div class="col-sm-2 level-timeframe">
             <p>120-180 mins</p>

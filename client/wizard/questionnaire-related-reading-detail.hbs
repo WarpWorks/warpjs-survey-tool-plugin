@@ -7,6 +7,18 @@
   </div>
   <div class="row">
     <div class="col-sm-12">
+      <h2 class="related-details-why">What is it?</h2>
+      <h3 class="content-heading">{{contentPreview.heading}}</h3>
+      <div class="content-text">{{{contentPreview.content}}}</div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <a href="{{href}}" class="content-link">Click here for the full document</a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
       <h2 class="related-details-why">Why?</h2>
       <p>Because you provided the following information, we think the "{{resultSet.recommendation.name}}" could be an interesting read for you:</p>
     </div>
@@ -25,18 +37,6 @@
           <span class="summary-selection">{{answerName}}</span>
         </div>
       {{/each}}
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-12">
-      <h2 class="related-details-why">What is it?</h2>
-      <h3 class="content-heading">{{contentPreview.heading}}</h3>
-      <div class="content-text">{{{contentPreview.content}}}</div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-12">
-      <a href="{{href}}" class="content-link">Click here for the full document</a>
     </div>
   </div>
 </div>
