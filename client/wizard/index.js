@@ -911,6 +911,9 @@ const template = require('./../template.hbs');
                                 } else if (event.which === 52) {
                                     $('.questionnaire.question .option-container:nth-child(4)').find('a.radio-fx').click();
                                     $('.question-next').click();
+                                } else if (event.which === 48) {
+                                    $('.questionnaire.question .radio-checked').parent().click();
+                                    $('.question-next').click();
                                 }
                             }
                         });
