@@ -89,6 +89,41 @@ const template = require('./../template.hbs');
                 return Promise.resolve()
                     .then(() => warpjsUtils.documentReady($))
                     .then(() => {
+                        let hydratedContent;
+
+                        const setLocalStorage = () => {
+                            const dehydratedContent = JSON.stringify(result.data);
+                            window.localStorage.setItem('iptContent', dehydratedContent);
+                            console.log('set local storage');
+                        };
+
+                        const getLocalStorage = () => {
+                            if (window.localStorage.getItem('iptContent')) {
+                                hydratedContent = JSON.parse(window.localStorage.getItem('iptContent'));
+                                console.log('hydrated content: ', hydratedContent);
+                            }
+                        };
+
+                        const replaceContentWithLocalStorage = () => {
+                            if (hydratedContent) {
+                                result.data.detailLevel = hydratedContent.detailLevel;
+                                result.data.mainContact = hydratedContent.mainContact;
+                                result.data.projectName = hydratedContent.projectName;
+                                result.data.projectStatus = hydratedContent.projectStatus;
+                                result.data.solutionCanvas = hydratedContent.solutionCanvas;
+                                result.data._embedded = hydratedContent._embedded;
+                            }
+                        };
+
+                        getLocalStorage();
+                        if (hydratedContent && hydratedContent.id === result.data.id) {
+                            console.log('same questionnaire instance: should replace data');
+                            replaceContentWithLocalStorage();
+                        } else {
+                            console.log('different questionnaire instance: should store new data');
+                            setLocalStorage();
+                        }
+
                         const assignDetailLevelSelected = () => {
                             const detailLevel = result.data.detailLevel !== '' ? result.data.detailLevel : 2;
                             $("input[name='questionnaire-level'][value='" + detailLevel + "']").attr('checked', 'checked');
@@ -103,6 +138,7 @@ const template = require('./../template.hbs');
                                 result.data.projectName = $('#project-name').val();
                                 result.data.mainContact = $('#main-contact').val();
                                 result.data.projectStatus = $('#project-status').val();
+                                setLocalStorage();
                                 $('.progress-label').html('Progress for ' + result.data.projectName); ;
                                 updateQuestions();
                                 updatePointers(direction);
@@ -120,6 +156,7 @@ const template = require('./../template.hbs');
                         });
                         $(document).on('click', '.levels-back', () => {
                             result.data.detailLevel = $("input[name='questionnaire-level'][checked='checked']").val();
+                            setLocalStorage();
                             categories = _.filter(result.data._embedded.answers[0]._embedded.categories, (progressCategory) => {
                                 const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
                                     return progressQuestion.detailLevel <= result.data.detailLevel;
@@ -130,6 +167,7 @@ const template = require('./../template.hbs');
                         });
                         $(document).on('click', '.levels-next', () => {
                             result.data.detailLevel = $("input[name='questionnaire-level'][checked='checked']").val();
+                            setLocalStorage();
                             categories = _.filter(result.data._embedded.answers[0]._embedded.categories, (progressCategory) => {
                                 const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
                                     return progressQuestion.detailLevel <= result.data.detailLevel;
@@ -559,12 +597,14 @@ const template = require('./../template.hbs');
                             category._embedded.iterations[4].name = $('input#iteration5').val();
                             category._embedded.iterations[5].name = $('input#iteration6').val();
                             category.comments = $('textarea.comment-text').val();
+                            setLocalStorage();
                         };
 
                         const updateQuestions = () => {
                             if (questions && questions[questionPointer]) {
                                 questions[questionPointer].answer = $("input[name='question-options'][checked='checked']").val();
                                 questions[questionPointer].comments = $('textarea.comment-text').val();
+                                setLocalStorage();
                             }
                         };
 
@@ -750,6 +790,7 @@ const template = require('./../template.hbs');
                                     result.data.projectName = $('#project-name').val();
                                     result.data.mainContact = $('#main-contact').val();
                                     result.data.projectStatus = $('#project-status').val();
+                                    setLocalStorage();
                                     $('.progress-label').html('Progress for ' + result.data.projectName);
                                 } else {
                                     $('#project-name').addClass('is-invalid');
@@ -758,6 +799,7 @@ const template = require('./../template.hbs');
                                 }
                             } else if ($('.questionnaire.levels').length) {
                                 result.data.detailLevel = $("input[name='questionnaire-level'][checked='checked']").val();
+                                setLocalStorage();
                                 categories = _.filter(result.data._embedded.answers[0]._embedded.categories, (progressCategory) => {
                                     const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
                                         return progressQuestion.detailLevel <= result.data.detailLevel;
@@ -867,6 +909,7 @@ const template = require('./../template.hbs');
                             result.data.projectStatus = obj.projectStatus;
                             result.data.detailLevel = obj.detailLevel;
                             result.data._embedded.answers = obj.answers;
+                            setLocalStorage();
 
                             categoryPointer = 0;
                             iterationPointer = 0;
