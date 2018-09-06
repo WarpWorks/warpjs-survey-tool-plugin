@@ -726,7 +726,6 @@ const template = require('./../template.hbs');
 
                                 contentDocumentHref = relatedResultSet.recommendation._embedded.contents[0]._links.self.href;
                             }
-                            console.log('relatedResultSet:', relatedResultSet);
 
                             $('.ipt-body').html(questionnaireRelatedDetailsTemplate({resultSet: relatedResultSet, contentPreview: contentPreview, href: contentDocumentHref}));
                         });
