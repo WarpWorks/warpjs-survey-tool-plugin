@@ -45,6 +45,6 @@ Add the following to `.warp-works-warpjsrc` of your project:
 - `map` is for the image mapping for an image
 - `resultSet` is for the result sets for the suggested readings section
 - `result` is for the individual result
-- `relevantHigh`
-- `relevantLow`
-- `content`
+- `relevantHigh` is for the list of questions of relevance with emphasis on answers with higher positions
+- `relevantLow` is for the list of questions of relevance with emphasis on answers with lower positions
+- `content` is the associated content linked to a result
