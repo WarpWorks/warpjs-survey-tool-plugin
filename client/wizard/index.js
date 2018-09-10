@@ -921,6 +921,10 @@ const template = require('./../template.hbs');
                         $(document).on('click', '.save-warning-continue', () => {
                             window.location = $('.content-link').data('url');
                         });
+
+                        $(document).on('click', '.save-warning-new-tab', () => {
+                            window.open($('.content-link').data('url'), '_blank');
+                        });
                     })
                 ;
             }
