@@ -394,77 +394,89 @@
         }
     }
     .summary {
-        h3 {
-            font-size: 15px;
-            line-height: 15px;
-            margin-bottom: 5px;
-            margin-top: 0px;
+        .word-download,
+        .word-modal {
+            background-color: #c7281a;
+            border-radius: 3px;
+            color: #fff;
+            border: none;
+            text-transform: uppercase;
+            padding: 7px 30px;
+            font-size: 12px;
+            float: right;
         }
+    }
 
-        .summary-title {
-            text-align: center;
-            margin-top: 30px;
-            margin-bottom: 20px;
-        }
+    .summary-category-title {
+        font-size: 15px;
+        line-height: 15px;
+        margin-bottom: 5px;
+        margin-top: 0px;
+    }
 
-        .summary-scales {
-            width: 80%;
-            margin-left: 10%;
+    .summary-title {
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: 20px;
+    }
 
-            .summary-scale-container {
-                border: solid 1px #ccc;
-                width: 100%;
-                height: 22px;
-                position: relative;
+    .summary-scales {
+        width: 80%;
+        margin-left: 10%;
 
-                .scale-section-one {
-                    background-color: #f6ffed;
-                    width: 25%;
-                    height: 20px;
-                    float: left;
-                    box-shadow: inset -1px 0 0 #ccc;
-                }
+        .summary-scale-container {
+            border: solid 1px #ccc;
+            width: 100%;
+            height: 22px;
+            position: relative;
 
-                .scale-section-two {
-                    background-color: #f6ffed;
-                    width: 25%;
-                    height: 20px;
-                    float: left;
-                    box-shadow: inset -1px 0 0 #ccc;
-                }
-
-                .scale-section-three {
-                    background-color: #fff9ed;
-                    width: 25%;
-                    height: 20px;
-                    float: left;
-                    box-shadow: inset -1px 0 0 #ccc;
-                }
-
-                .scale-section-four {
-                    background-color: #fce3e3;
-                    width: 25%;
-                    height: 20px;
-                    float: left;
-                }
-
-                .marker {
-                    width: 10px;
-                    height: 10px;
-                    border-radius: 5px;
-                    position: absolute;
-                    left: 0;
-                    top: 5px;
-                }
+            .scale-section-one {
+                background-color: #f6ffed;
+                width: 25%;
+                height: 20px;
+                float: left;
+                box-shadow: inset -1px 0 0 #ccc;
             }
 
-            .average-number {
-                display: inline-block;
-                width: 30px;
+            .scale-section-two {
+                background-color: #f6ffed;
+                width: 25%;
+                height: 20px;
+                float: left;
+                box-shadow: inset -1px 0 0 #ccc;
+            }
 
-                p {
-                    text-align: center;
-                }
+            .scale-section-three {
+                background-color: #fff9ed;
+                width: 25%;
+                height: 20px;
+                float: left;
+                box-shadow: inset -1px 0 0 #ccc;
+            }
+
+            .scale-section-four {
+                background-color: #fce3e3;
+                width: 25%;
+                height: 20px;
+                float: left;
+            }
+
+            .marker {
+                width: 10px;
+                height: 10px;
+                border-radius: 5px;
+                position: absolute;
+                left: 0;
+                top: 5px;
+            }
+        }
+
+        .average-number {
+            display: inline-block;
+            width: 30px;
+
+            p {
+                text-align: center;
             }
         }
     }
@@ -755,6 +767,70 @@
         .save-warning-new-tab {
             margin-right: 0px;
             margin-left: 10px;
+        }
+    }
+
+    .export-content {
+        display: none;
+    }
+
+    .export-details {
+        position: relative;
+        overflow: hidden;
+    }
+
+    #word-modal {
+        .modal-dialog {
+            width: 90%;
+
+            .modal-content {
+                .word-preview-title {
+                    background-color: #f6f6f6;
+                    padding: 20px;
+                    position: relative;
+                    overflow: hidden;
+                    text-align: center;
+
+                    .word-download {
+                        background-color: #c7281a;
+                        border-radius: 3px;
+                        color: #fff;
+                        border: none;
+                        text-transform: uppercase;
+                        padding: 7px 30px;
+                        font-size: 12px;
+                        position: absolute;
+                        left: 20px;
+                    }
+
+                    .word-preview-title-text {
+                        font-size: 24px;
+                        display: inline-block;
+                        line-height: 34px;
+                    }
+
+                    .render-percent {
+                        position: absolute;
+                        left: 250px;
+                        top: 28px;
+                        font-size: 10px;
+                        color: #333;
+                    }
+
+                    .close {
+                        position: absolute;
+                        right: 20px;
+                    }
+                }
+
+                .word-modal {
+                    padding: 20px;
+                }
+
+                .export-comments {
+                    font-size: 10px;
+                }
+            }
         }
     }
 }

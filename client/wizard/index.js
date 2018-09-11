@@ -1,4 +1,6 @@
 const _ = require('lodash');
+const FileSaver = require('file-saver');
+const html2canvas = require('html2canvas');
 const Promise = require('bluebird');
 const warpjsUtils = require('@warp-works/warpjs-utils');
 
@@ -431,9 +433,8 @@ const template = require('./../template.hbs');
                             });
                         };
 
-                        const summarySetup = () => {
-                            $('.ipt-body').html(questionnaireSummaryTemplate({values: summaryValues()}));
-                            $('.summary .marker').each((index, element) => {
+                        const summaryCalculations = () => {
+                            $('.marker').each((index, element) => {
                                 const score = $(element).data('score');
                                 const offset = (score - 1) / 4 * 100 + 12.5;
                                 const colorScore = Math.round(score);
@@ -445,11 +446,23 @@ const template = require('./../template.hbs');
                                 }
                                 $(element).css('left', 'calc(' + offset + '% - 5px)').css('background-color', color);
                             });
-                            $('.summary .average-number').each((index, element) => {
+                            $('.average-number').each((index, element) => {
                                 const score = $(element).data('score');
                                 const offset = (score - 1) / 4 * 100 + 12.5;
                                 $(element).css('margin-left', 'calc(' + offset + '% - 15px)');
                             });
+                        };
+
+                        const summarySetup = () => {
+                            const details = {
+                                questionnaire: result.data._embedded.questionnaires[0].name,
+                                name: result.data.projectName,
+                                contact: result.data.mainContact,
+                                status: result.data.projectStatus,
+                                data: detailsValues()
+                            };
+                            $('.ipt-body').html(questionnaireSummaryTemplate({values: summaryValues(), title: result.data.projectName, details: details}));
+                            summaryCalculations();
                         };
 
                         const detailsValues = () => {
@@ -599,7 +612,7 @@ const template = require('./../template.hbs');
                                 status: result.data.projectStatus,
                                 data: detailsValues()
                             };
-                            $('.ipt-body').html(questionnaireDetailsTemplate({details: details}));
+                            $('.ipt-body').html(questionnaireDetailsTemplate({details: details, values: summaryValues(), title: result.data.projectName}));
                             $('.has-comments').append('<a class="has-comments-after" data-toggle="modal" data-target="#comments-modal"></a>');
                             $(document).on('click', '.has-comments-after', (event) => {
                                 const comment = $(event.target).parent().data('comments');
@@ -932,6 +945,223 @@ const template = require('./../template.hbs');
 
                         $(document).on('click', '.save-warning-new-tab', () => {
                             window.open($('.content-link').data('url'), '_blank');
+                        });
+
+                        $(document).on('click', '.word-download2', () => {
+                            if (!window.Blob) {
+                                alert('Your legacy browser does not support this action.');
+                                return;
+                            }
+                            var html, link, blob, url, css;
+                            // EU A4 use: size: 841.95pt 595.35pt;
+                            // US Letter use: size:11.0in 8.5in;
+
+                            css = (
+                                '<style>' +
+                                '@page buttons{size: 841.95pt 595.35pt;mso-page-orientation: landscape;}' +
+                                'div.buttons {page: buttons;}' +
+                                'table{border-collapse:collapse;}td{border:1px gray solid;width:5em;padding:2px;}' +
+                                '</style>'
+                            );
+
+                            html = $('.summary-content').prop('innerHTML');
+                            blob = new Blob(['\ufeff', css + html], {
+                                type: 'application/msword'
+                            });
+                            url = URL.createObjectURL(blob);
+                            link = document.createElement('A');
+                            link.href = url;
+                            // Set default file name.
+                            // Word will append file extension - do not add an extension here.
+                            link.download = 'Document';
+                            document.body.appendChild(link);
+                            if (navigator.msSaveOrOpenBlob) {
+                                navigator.msSaveOrOpenBlob(blob, 'Document.doc'); // IE10-11
+                            } else {
+                                link.click(); // other browsers
+                            }
+                            document.body.removeChild(link);
+                        });
+
+                        $.fn.wordExport = function(fileName) {
+                            fileName = typeof fileName !== 'undefined' ? fileName : "jQuery-Word-Export";
+                            const statics = {
+                                mhtml: {
+                                    top: "Mime-Version: 1.0\nContent-Base: " + location.href + "\nContent-Type: Multipart/related; boundary=\"NEXT.ITEM-BOUNDARY\";type=\"text/html\"\n\n--NEXT.ITEM-BOUNDARY\nContent-Type: text/html; charset=\"utf-8\"\nContent-Location: " + location.href + "\n\n<!DOCTYPE html>\n<html xmlns:office=\"urn:schemas-microsoft-com:office:office\" xmlns:word=\"urn:schemas-microsoft-com:office:word\" xmlns=\"http://www.w3.org/TR/REC-html40\">\n_html_</html>",
+                                    head: "<head>\n<xml>\n<word:WordDocument>\n<word:View>Print</word:View>\n<word:Zoom>90</word:Zoom>\n<word:DoNotOptimizeForBrowser/>\n</word:WordDocument>\n</xml><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n<style>_styles_</style>\n</head>\n",
+                                    body: "<body>_body_</body>"
+                                }
+                            };
+                            const options = {
+                                maxWidth: 624
+                            };
+                            const markup = $(this).clone();
+                            markup.each((element) => {
+                                var self = $(element);
+                                if (self.is(':hidden')) {
+                                    self.remove();
+                                }
+                            });
+
+                            var images = [];
+                            var img = markup.find('img');
+                            for (var i = 0; i < img.length; i++) {
+                                var w = Math.min(img[i].width, options.maxWidth);
+                                var h = img[i].height * (w / img[i].width);
+                                var canvas = document.createElement("CANVAS");
+                                canvas.width = w;
+                                canvas.height = h;
+                                var context = canvas.getContext('2d');
+                                context.imageSmoothingEnabled = false;
+                                context.drawImage(img[i], 0, 0, w, h);
+                                var uri = canvas.toDataURL("image/png");
+                                $(img[i]).attr("src", img[i].src);
+                                img[i].width = w;
+                                img[i].height = h;
+                                images[i] = {
+                                    type: uri.substring(uri.indexOf(":") + 1, uri.indexOf(";")),
+                                    encoding: uri.substring(uri.indexOf(";") + 1, uri.indexOf(",")),
+                                    location: $(img[i]).attr("src"),
+                                    data: uri.substring(uri.indexOf(",") + 1)
+                                };
+                            }
+
+                            let mhtmlBottom = "\n";
+                            for (let j = 0; j < images.length; j++) {
+                                mhtmlBottom += "--NEXT.ITEM-BOUNDARY\n";
+                                mhtmlBottom += "Content-Location: " + images[j].location + "\n";
+                                mhtmlBottom += "Content-Type: " + images[j].type + "\n";
+                                mhtmlBottom += "Content-Transfer-Encoding: " + images[j].encoding + "\n\n";
+                                mhtmlBottom += images[j].data + "\n\n";
+                            }
+                            mhtmlBottom += "--NEXT.ITEM-BOUNDARY--";
+
+                            const styles = "p, h1, h2, h3, h4, h5, h6 {font-family: Arial, Helvetica, sans-serif;}" +
+                            ".form-details {" +
+                                "font-weight: bold;" +
+                            "}.summary-category {" +
+                                "font-weight: bold;" +
+                                "font-size: 16px;" +
+                                "margin-top: 40px;" +
+                                "position: relative;" +
+                            "}.summary-iteration {" +
+                                "font-weight: bold;" +
+                                "margin-top: 25px;" +
+                            "}.sub-category-name {" +
+                                "margin-top: 10px;" +
+                                "font-size: 12px;" +
+                                "margin-bottom: 5px;" +
+                            "}" +
+                            ".export-comments {" +
+                                "font-size: 10px;" +
+                            "}";
+
+                            const fileContent = statics.mhtml.top.replace("_html_", statics.mhtml.head.replace("_styles_", styles) + statics.mhtml.body.replace("_body_", markup.html())) + mhtmlBottom;
+                            const blob = new Blob([fileContent], {
+                                type: "application/msword;charset=utf-8"
+                            });
+
+                            FileSaver.saveAs(blob, fileName + ".doc");
+                        };
+
+                        $(document).on('click', '.word-modal', () => {
+                            summaryCalculations();
+                        });
+
+                        $(document).on('click', '.word-download', () => {
+                            const numberOfRenders = $('.export-summary .summary-scales, .details-segment .question-block').length;
+                            let numberRendered = 0;
+                            $('.export-summary-results').empty();
+                            Promise.each($('.export-summary .summary-scales'), (element, index) => {
+                                return Promise.resolve()
+                                    .then(() => $(element))
+                                    .then((categoryElement) => Promise.resolve()
+                                        .then(() => $('<div>', {class: 'category-container-' + index}))
+                                        .then((div) => $('.export-summary-results').append(div))
+                                        .then(() => {
+                                            $('.category-container-' + index).append($(categoryElement).find('.summary-category-title').clone());
+                                        })
+                                        .then(() => html2canvas(categoryElement.find('.summary-content').get(0), {
+                                            scale: 1
+                                        }))
+                                        .then((canvas) => {
+                                            var img = new Image();
+                                            img.src = canvas.toDataURL();
+
+                                            numberRendered += 1;
+                                            const percentRendered = Math.round((numberRendered / numberOfRenders) * 100);
+                                            $('.render-percent').html('Rendering... ' + percentRendered + '%');
+
+                                            $('.category-container-' + index).append(img);
+                                            $('.category-container-' + index).append('<br />');
+                                        })
+                                    )
+                                ;
+                            }).then(() => {
+                                $('.export-details-results').empty();
+                            }).then(() => Promise.each($('.details-segment'), (element, index) => {
+                                return Promise.resolve()
+                                    .then(() => $(element))
+                                    .then((categoryElement) => Promise.resolve()
+                                        .then(() => $('<div>', {class: 'export-details-' + index}))
+                                        .then((div) => $('.export-details-results').append(div))
+                                        .then(() => $('.export-details-' + index).append($(categoryElement).find($('.summary-category')).clone()))
+                                        .then(() => {
+                                            if ($(categoryElement).children('.export-comments')) {
+                                                $('.export-details-' + index).append($(categoryElement).children('.export-comments').clone());
+                                            }
+                                        })
+                                        .then(() => Promise.each($(categoryElement).find('.iteration-segment'), (iteration, iterationIndex) => {
+                                            return Promise.resolve()
+                                                .then(() => $(iteration))
+                                                .then((iterationElement) => Promise.resolve()
+                                                    .then(() => $('<div>', {class: 'export-details-iteration-' + iterationIndex}))
+                                                    .then((div) => $('.export-details-' + index).append(div))
+                                                    .then(() => $('.export-details-' + index + ' .export-details-iteration-' + iterationIndex).append($(iterationElement).find($('.summary-iteration')).clone()))
+                                                    .then(() => Promise.each($(iterationElement).find('.question-block, .sub-category-name'), (question, questionIndex) => {
+                                                        return Promise.resolve()
+                                                            .then(() => $('<div>', {class: 'export-details-question-' + questionIndex}))
+                                                            .then((div) => $('.export-details-iteration-' + iterationIndex).append(div))
+                                                            .then(() => $(question))
+                                                            .then((questionElement) => {
+                                                                if ($(questionElement).hasClass('question-block')) {
+                                                                    return Promise.resolve()
+                                                                        .then(() => html2canvas(questionElement.get(0), {
+                                                                            scale: 1
+                                                                        }))
+                                                                        .then((canvas) => {
+                                                                            var img = new Image();
+                                                                            img.src = canvas.toDataURL();
+                                                                            numberRendered += 1;
+                                                                            const percentRendered = Math.round((numberRendered / numberOfRenders) * 100);
+                                                                            $('.render-percent').html('Rendering... ' + percentRendered + '%');
+                                                                            $('.export-details-' + index + ' .export-details-iteration-' + iterationIndex + ' .export-details-question-' + questionIndex).append(img);
+                                                                            $('.export-details-' + index + ' .export-details-iteration-' + iterationIndex + ' .export-details-question-' + questionIndex).append('<br /><br />');
+                                                                        })
+                                                                    ;
+                                                                } else if ($(questionElement).hasClass('sub-category-name') || $(questionElement).hasClass('export-comments')) {
+                                                                    return Promise.resolve()
+                                                                        .then(() => $('.export-details-' + index + ' .export-details-iteration-' + iterationIndex + ' .export-details-question-' + questionIndex).append($(questionElement).clone()))
+                                                                    ;
+                                                                }
+                                                            }).then(() => {
+                                                                if ($(question).next().is('.export-comments')) {
+                                                                    return Promise.resolve()
+                                                                        .then(() => $('.export-details-' + index + ' .export-details-iteration-' + iterationIndex + ' .export-details-question-' + questionIndex).append($(question).next().clone()))
+                                                                    ;
+                                                                }
+                                                            })
+                                                        ;
+                                                    }))
+                                                )
+                                            ;
+                                        }))
+                                    )
+                                ;
+                            })).then(() => {
+                                $('.render-percent').empty();
+                                $('.export-content').wordExport();
+                            });
                         });
                     })
                 ;
