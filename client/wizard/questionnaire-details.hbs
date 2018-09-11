@@ -4,6 +4,11 @@
       <h2 class="ipt-title results-title faded">Summary</h2>
       <h2 class="ipt-title results-title">Details</h2>
       <h2 class="ipt-title results-title faded">Related Readings</h2>
+      <form class="word-download-form" action="{{url}}/docx" method="post">
+        <input type="hidden" id="data" name="data" value="{{data}}">
+        <input type="hidden" id="title" name="title" value="{{title}}">
+        <input type="submit" class="word-download" value="Download as Word File">
+      </form>
     </div>
   </div>
   <div class="row">
@@ -40,7 +45,7 @@
                 <span class="summary-selection">{{option}}</span>
               </div>
             {{else}}
-              <p class="sub-category-name">{{name}}</p>
+              <p class="sub-category-name{{#if comments}} has-comments{{/if}}" data-comments="{{comments}}">{{name}}</p>
             {{/if}}
           {{/each}}
         {{/each}}

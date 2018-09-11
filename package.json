@@ -6,7 +6,9 @@
   "scripts": {
     "prepublish": "grunt && npm -s test",
     "grunt": "grunt",
-    "test": ""
+    "test": "",
+    "start": "NODE_ENV=production node_modules/.bin/babel-node --presets 'es2015' src/server.js",
+    "build": "NODE_ENV=production node_modules/.bin/webpack -p"
   },
   "repository": {
     "type": "git",
@@ -74,10 +76,16 @@
   },
   "dependencies": {
     "@warp-works/warpjs-action-plugin": "1.2",
+    "babel-cli": "^6.11.4",
+    "babel-core": "^6.13.2",
+    "babel-loader": "^6.2.5",
+    "babel-plugin-transform-es2015-modules-umd": "^6.24.1",
+    "babel-preset-es2015": "^6.13.2",
     "bluebird": "3.5.1",
     "debug": "3.1.0",
     "grunt-contrib-copy": "^1.0.0",
     "lodash": "4.17.x",
+    "officegen": "^0.4.5",
     "uuid": "^3.3.x"
   }
 }

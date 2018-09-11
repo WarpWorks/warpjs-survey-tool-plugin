@@ -429,9 +429,8 @@ const template = require('./../template.hbs');
                             });
                         };
 
-                        const summarySetup = () => {
-                            $('.ipt-body').html(questionnaireSummaryTemplate({values: summaryValues()}));
-                            $('.summary .marker').each((index, element) => {
+                        const summaryCalculations = () => {
+                            $('.marker').each((index, element) => {
                                 const score = $(element).data('score');
                                 const offset = (score - 1) / 4 * 100 + 12.5;
                                 const colorScore = Math.round(score);
@@ -443,11 +442,38 @@ const template = require('./../template.hbs');
                                 }
                                 $(element).css('left', 'calc(' + offset + '% - 5px)').css('background-color', color);
                             });
-                            $('.summary .average-number').each((index, element) => {
+                            $('.average-number').each((index, element) => {
                                 const score = $(element).data('score');
                                 const offset = (score - 1) / 4 * 100 + 12.5;
                                 $(element).css('margin-left', 'calc(' + offset + '% - 15px)');
                             });
+                        };
+
+                        const summarySetup = () => {
+                            const details = {
+                                questionnaire: result.data._embedded.questionnaires[0].name,
+                                name: result.data.projectName,
+                                contact: result.data.mainContact,
+                                status: result.data.projectStatus,
+                                data: detailsValues()
+                            };
+                            const values = summaryValues();
+                            $('.ipt-body').html(
+                                questionnaireSummaryTemplate(
+                                    {
+                                        values: values,
+                                        title: result.data.projectName,
+                                        url: result.data._links.self.href,
+                                        data: JSON.stringify(
+                                            {
+                                                details: details,
+                                                values: values
+                                            }
+                                        )
+                                    }
+                                )
+                            );
+                            summaryCalculations();
                         };
 
                         const detailsValues = () => {
@@ -597,7 +623,24 @@ const template = require('./../template.hbs');
                                 status: result.data.projectStatus,
                                 data: detailsValues()
                             };
-                            $('.ipt-body').html(questionnaireDetailsTemplate({details: details}));
+
+                            const values = summaryValues();
+                            $('.ipt-body').html(
+                                questionnaireDetailsTemplate(
+                                    {
+                                        details: details,
+                                        values: values,
+                                        title: result.data.projectName,
+                                        url: result.data._links.self.href,
+                                        data: JSON.stringify(
+                                            {
+                                                details: details,
+                                                values: values
+                                            }
+                                        )
+                                    }
+                                )
+                            );
                             $('.has-comments').append('<a class="has-comments-after" data-toggle="modal" data-target="#comments-modal"></a>');
                             $(document).on('click', '.has-comments-after', (event) => {
                                 const comment = $(event.target).parent().data('comments');
