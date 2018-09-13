@@ -94,9 +94,15 @@ const template = require('./../template.hbs');
                             $("input[name='questionnaire-level'][value='" + detailLevel + "']").attr('checked', 'checked');
                         };
 
-                        if (result.data.projectName) {
-                            $('.progress-label').html('Progress for ' + result.data.projectName);
-                        }
+                        const updateProgressLabel = () => {
+                            if (result.data.projectName) {
+                                $('.progress-label').html('Progress for ' + result.data.projectName);
+                            } else {
+                                $('.progress-label').html('Progress');
+                            }
+                        };
+
+                        updateProgressLabel();
 
                         const descriptionOnLeave = (direction) => {
                             if ($('#project-name').val()) {
@@ -106,6 +112,7 @@ const template = require('./../template.hbs');
                                 $('.progress-label').html('Progress for ' + result.data.projectName); ;
                                 updateQuestions();
                                 updatePointers(direction);
+                                updateProgressLabel();
                             } else {
                                 $('#project-name').addClass('is-invalid');
                                 $('.invalid-feedback').css('display', 'block');
@@ -750,6 +757,7 @@ const template = require('./../template.hbs');
                                     result.data.projectName = $('#project-name').val();
                                     result.data.mainContact = $('#main-contact').val();
                                     result.data.projectStatus = $('#project-status').val();
+                                    updateProgressLabel();
                                     $('.progress-label').html('Progress for ' + result.data.projectName);
                                 } else {
                                     $('#project-name').addClass('is-invalid');
@@ -881,7 +889,7 @@ const template = require('./../template.hbs');
                             if (categories[categoryPointer].isRepeatable) {
                                 questionPointer = -1;
                             }
-
+                            updateProgressLabel();
                             updateQuestionContent('');
                         };
 
