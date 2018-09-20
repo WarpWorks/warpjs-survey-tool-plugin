@@ -1136,7 +1136,7 @@ const template = require('./../template.hbs');
                             FileSaver.saveAs(blob, fileName + ".doc");
                         };
 
-                        $(document).on('click', '.word-modal', () => {
+                        $(document).on('click', '.word-download', () => {
                             summaryCalculations();
                             $('.table-summary-scale-container').each((index, scale) => {
                                 const score = $(scale).data('score');
@@ -1147,9 +1147,6 @@ const template = require('./../template.hbs');
                             $('.table-position-display.selected-position1 .table-position1, .table-position-display.selected-position2 .table-position2').css('color', '#5ca81e');
                             $('.table-position-display.selected-position3 .table-position3').css('color', '#fcb830');
                             $('.table-position-display.selected-position4 .table-position4').css('color', '#de2a2d');
-                        });
-
-                        $(document).on('click', '.word-download', () => {
                             wordExport($('.export-content'));
                         });
                     })
