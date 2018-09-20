@@ -471,6 +471,55 @@
             }
         }
 
+        .table-summary-scale-container {
+            border-collapse: collapse;
+            width: 100%;
+
+            .table-scale-section-one {
+                background-color: #f6ffed;
+                height: 20px;
+                border: solid 1px #ccc;
+                text-align: center;
+                font-size: 34px;
+                line-height: 34px;
+                color: #7eba41;
+                width: 25%;
+            }
+
+            .table-scale-section-two {
+                background-color: #f6ffed;
+                height: 20px;
+                border: solid 1px #ccc;
+                text-align: center;
+                font-size: 34px;
+                line-height: 34px;
+                color: #7eba41;
+                width: 25%;
+            }
+
+            .table-scale-section-three {
+                background-color: #fff9ed;
+                height: 20px;
+                border: solid 1px #ccc;
+                text-align: center;
+                font-size: 34px;
+                line-height: 34px;
+                color: #fcb830;
+                width: 25%;
+            }
+
+            .table-scale-section-four {
+                background-color: #fce3e3;
+                height: 20px;
+                border: solid 1px #ccc;
+                text-align: center;
+                font-size: 34px;
+                line-height: 34px;
+                color: #de2a2d;
+                width: 25%;
+            }
+        }
+
         .average-number {
             display: inline-block;
             width: 30px;
@@ -478,6 +527,91 @@
             p {
                 text-align: center;
             }
+        }
+
+        .scale-label td {
+            text-align: center;
+        }
+    }
+
+    .table-question-block {
+        background-color: #f0f0f0;
+        border: solid 1px #e0e0e0;
+        margin-bottom: 5px;
+        width: 100%;
+
+        .table-position-display {
+            width: 14%;
+            padding: 0px 0px 0px 10px;
+
+            .table-position1 {
+                font-size: 30px;
+                line-height: 22px;
+                color: #f6ffed;
+                vertical-align: text-bottom;
+                margin-top: -10px;
+                display: inline-block;
+            }
+
+            .table-position2 {
+                font-size: 30px;
+                line-height: 22px;
+                color: #f6ffed;
+                vertical-align: text-bottom;
+                margin-top: -10px;
+                display: inline-block;
+            }
+
+            .table-position3 {
+                font-size: 30px;
+                line-height: 22px;
+                color: #fff9ed;
+                vertical-align: text-bottom;
+                margin-top: -10px;
+                display: inline-block;
+            }
+
+            .table-position4 {
+                font-size: 30px;
+                line-height: 22px;
+                color: #fce3e3;
+                vertical-align: text-bottom;
+                margin-top: -10px;
+                display: inline-block;
+            }
+
+            &.selected-position1 .table-position1 {
+                color: #5ca81e;
+            }
+
+            &.selected-position2 .table-position2 {
+                color: #5ca81e;
+            }
+
+            &.selected-position3 .table-position3 {
+                color: #fcb830;
+            }
+
+            &.selected-position4 .table-position4 {
+                color: #de2a2d;
+            }
+        }
+
+        .table-question-text {
+            width: 42%;
+            padding: 5px 10px;
+
+            .summary-question {
+                padding-left: 10px;
+                vertical-align: middle;
+                line-height: 30px;
+            }
+        }
+
+        .table-question-right {
+            text-align: right;
+            width: 42%;
+            padding: 5px 10px;
         }
     }
 
@@ -502,6 +636,9 @@
             margin-top: 10px;
             font-size: 12px;
             margin-bottom: 5px;
+            position: relative;
+            float: left;
+            width: 100%;
         }
 
         .has-comments-after {
@@ -832,6 +969,11 @@
                 }
             }
         }
+    }
+
+    .word-modal .summary-scales {
+        width: 100%;
+        margin-left: 0;
     }
 }
 
