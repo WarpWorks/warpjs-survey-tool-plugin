@@ -4,6 +4,7 @@
       <h2 class="ipt-title results-title faded">Summary</h2>
       <h2 class="ipt-title results-title">Details</h2>
       <h2 class="ipt-title results-title faded">Related Readings</h2>
+      <button class="word-download">Download as Word File</button>
     </div>
   </div>
   <div class="row">
@@ -40,7 +41,7 @@
                 <span class="summary-selection">{{option}}</span>
               </div>
             {{else}}
-              <p class="sub-category-name">{{name}}</p>
+              <p class="sub-category-name{{#if comments}} has-comments{{/if}}" data-comments="{{comments}}">{{name}}</p>
             {{/if}}
           {{/each}}
         {{/each}}
@@ -57,4 +58,5 @@
     </div>
   </div>
 </div>
+{{> word values=values title=title details=details}}
 {{> comments}}
