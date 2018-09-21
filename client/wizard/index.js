@@ -582,7 +582,7 @@ const template = require('./../template.hbs');
                                     hasIteration = true;
                                 }
                             });
-                            if (hasIteration) {
+                            if (hasIteration || direction === 'back') {
                                 updateIterations();
                                 updatePointers(direction);
                             } else {
