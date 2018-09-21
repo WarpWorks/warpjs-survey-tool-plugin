@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const FileSaver = require('file-saver');
+const html2canvas = require('html2canvas');
 const Promise = require('bluebird');
 const warpjsUtils = require('@warp-works/warpjs-utils');
 
@@ -947,7 +948,8 @@ const template = require('./../template.hbs');
                         });
 
                         const wordExport = (element) => {
-                            const fileName = "Word-Export";
+                            const date = formatDate(new Date());
+                            const fileName = 'Word-Export-' + date;
                             const statics = {
                                 mhtml: {
                                     top: "Mime-Version: 1.0\nContent-Base: " + location.href + "\nContent-Type: Multipart/related; boundary=\"NEXT.ITEM-BOUNDARY\";type=\"text/html\"\n\n--NEXT.ITEM-BOUNDARY\nContent-Type: text/html; charset=\"utf-8\"\nContent-Location: " + location.href + "\n\n<!DOCTYPE html>\n<html xmlns:office=\"urn:schemas-microsoft-com:office:office\" xmlns:word=\"urn:schemas-microsoft-com:office:word\" xmlns=\"http://www.w3.org/TR/REC-html40\">\n_html_</html>",
@@ -955,9 +957,7 @@ const template = require('./../template.hbs');
                                     body: "<body>_body_</body>"
                                 }
                             };
-                            const options = {
-                                maxWidth: 624
-                            };
+
                             const markup = $(element).clone();
                             markup.each((element) => {
                                 var self = $(element);
@@ -967,173 +967,169 @@ const template = require('./../template.hbs');
                             });
 
                             let images = [];
-                            const imgs = markup.find('img');
-                            $.each(imgs, (index, img) => {
-                                const w = Math.min(img.width, options.maxWidth);
-                                const h = img.height * (w / img.width);
-                                const canvas = document.createElement("CANVAS");
-                                canvas.width = w;
-                                canvas.height = h;
-                                let context = canvas.getContext('2d');
-                                context.imageSmoothingEnabled = false;
-                                context.drawImage(img, 0, 0, w, h);
-                                const uri = canvas.toDataURL("image/png");
-                                $(img).attr("src", img.src);
-                                img.width = w;
-                                img.height = h;
-                                images[index] = {
-                                    type: uri.substring(uri.indexOf(":") + 1, uri.indexOf(";")),
-                                    encoding: uri.substring(uri.indexOf(";") + 1, uri.indexOf(",")),
-                                    location: $(img).attr("src"),
-                                    data: uri.substring(uri.indexOf(",") + 1)
-                                };
-                            });
+                            const imgs = $(element).find('img');
+                            Promise.each(imgs, (img, index) => {
+                                return Promise.resolve()
+                                    .then(() => html2canvas($(img).get(0), {
+                                        scale: 1
+                                    }).then((canvas) => {
+                                        const uri = canvas.toDataURL("image/png");
+                                        // $(img).attr("src", img.src);
+                                        images[index] = {
+                                            type: uri.substring(uri.indexOf(":") + 1, uri.indexOf(";")),
+                                            encoding: uri.substring(uri.indexOf(";") + 1, uri.indexOf(",")),
+                                            location: uri,
+                                            data: uri.substring(uri.indexOf(",") + 1)
+                                        };
+                                    }))
+                                ;
+                            }).then(() => {
+                                let mhtmlBottom = "\n";
+                                $.each(images, (index, image) => {
+                                    mhtmlBottom += "--NEXT.ITEM-BOUNDARY\n";
+                                    mhtmlBottom += "Content-Location: " + image.location + "\n";
+                                    mhtmlBottom += "Content-Type: " + image.type + "\n";
+                                    mhtmlBottom += "Content-Transfer-Encoding: " + image.encoding + "\n\n";
+                                    mhtmlBottom += image.data + "\n\n";
+                                });
+                                mhtmlBottom += "--NEXT.ITEM-BOUNDARY--";
+                                const styles = [
+                                    "p, span, h1, h2, h3, h4, h5, h6 {",
+                                    "    font-family: Arial, Helvetica, sans-serif;",
+                                    "}",
+                                    ".form-details {",
+                                    "font-weight: bold;",
+                                    "}",
+                                    ".summary-category {",
+                                    "font-weight: bold;",
+                                    "font-size: 16px;",
+                                    "margin-top: 40px;",
+                                    "position: relative;",
+                                    "}",
+                                    ".summary-iteration {",
+                                    "font-weight: bold;",
+                                    "margin-top: 25px;",
+                                    "}",
+                                    ".sub-category-name {",
+                                    "margin-top: 10px;",
+                                    "font-size: 12px;",
+                                    "margin-bottom: 5px;",
+                                    "}",
+                                    ".export-comments {",
+                                    "font-size: 12px;",
+                                    "}",
+                                    ".table-summary-scale-container {",
+                                    "border-collapse: collapse;",
+                                    "width: 100%;",
+                                    "}",
+                                    ".table-scale-section-one {",
+                                    "background-color: #f6ffed;",
+                                    "height: 20px;",
+                                    "border: solid 1px #ccc;",
+                                    "color: #7eba41;",
+                                    "text-align: center;",
+                                    "font-size: 34px;",
+                                    "line-height: 34px;",
+                                    "width: 25%;",
+                                    "}",
+                                    ".table-scale-section-two {",
+                                    "background-color: #f6ffed;",
+                                    "height: 20px;",
+                                    "border: solid 1px #ccc;",
+                                    "color: #7eba41;",
+                                    "text-align: center;",
+                                    "font-size: 34px;",
+                                    "line-height: 34px;",
+                                    "width: 25%;",
+                                    "}",
+                                    ".table-scale-section-three {",
+                                    "background-color: #fff9ed;",
+                                    "height: 20px;",
+                                    "border: solid 1px #ccc;",
+                                    "text-align: center;",
+                                    "font-size: 34px;",
+                                    "line-height: 34px;",
+                                    "color: #fcb830;",
+                                    "width: 25%;",
+                                    "}",
+                                    ".table-scale-section-four {",
+                                    "background-color: #fce3e3;",
+                                    "height: 20px;",
+                                    "border: solid 1px #ccc;",
+                                    "color: #de2a2d;",
+                                    "text-align: center;",
+                                    "font-size: 34px;",
+                                    "line-height: 34px;",
+                                    "width: 25%;",
+                                    "}",
+                                    ".table-question-block {",
+                                    "background-color: #f0f0f0;",
+                                    "border: solid 1px #e0e0e0;",
+                                    "margin-bottom: 5px;",
+                                    "width: 100%;",
+                                    "}",
+                                    ".table-position-display {",
+                                    "width: 16%;",
+                                    "padding: 0px 0px 5px 10px;",
+                                    "}",
+                                    ".table-question-text {",
+                                    "width: 42%;",
+                                    "padding: 0px 0px 0px 10px;",
+                                    "}",
+                                    ".table-position1 {",
+                                    "font-size: 30px;",
+                                    "line-height: 22px;",
+                                    "color: #f6ffed;",
+                                    "vertical-align: text-bottom;",
+                                    "margin-top: -10px;",
+                                    "display: inline-block;",
+                                    "}",
+                                    ".table-position2 {",
+                                    "font-size: 30px;",
+                                    "line-height: 22px;",
+                                    "color: #f6ffed;",
+                                    "vertical-align: text-bottom;",
+                                    "margin-top: -10px;",
+                                    "display: inline-block;",
+                                    "}",
+                                    ".table-position3 {",
+                                    "font-size: 30px;",
+                                    "line-height: 22px;",
+                                    "color: #fff9ed;",
+                                    "vertical-align: text-bottom;",
+                                    "margin-top: -10px;",
+                                    "display: inline-block;",
+                                    "}",
+                                    ".table-position4 {",
+                                    "font-size: 30px;",
+                                    "line-height: 22px;",
+                                    "color: #fce3e3;",
+                                    "vertical-align: text-bottom;",
+                                    "margin-top: -10px;",
+                                    "display: inline-block;",
+                                    "}",
+                                    ".summary-question {",
+                                    "padding-left: 10px;",
+                                    "vertical-align: middle;",
+                                    "line-height: 30px;",
+                                    "}",
+                                    ".table-question-right {",
+                                    "text-align: right;",
+                                    "width: 42%;",
+                                    "padding: 5px 10px;",
+                                    "}",
+                                    ".scale-label td {",
+                                    "text-align: center;",
+                                    "}"
+                                ].join('\n');
 
-                            let mhtmlBottom = "\n";
-                            $.each(images, (index, image) => {
-                                mhtmlBottom += "--NEXT.ITEM-BOUNDARY\n";
-                                mhtmlBottom += "Content-Location: " + image.location + "\n";
-                                mhtmlBottom += "Content-Type: " + image.type + "\n";
-                                mhtmlBottom += "Content-Transfer-Encoding: " + image.encoding + "\n\n";
-                                mhtmlBottom += image.data + "\n\n";
-                            });
-                            mhtmlBottom += "--NEXT.ITEM-BOUNDARY--";
-                            const styles = [
-                                "p, span, h1, h2, h3, h4, h5, h6 {",
-                                "    font-family: Arial, Helvetica, sans-serif;",
-                                "}",
-                                ".form-details {",
-                                "font-weight: bold;",
-                                "}",
-                                ".summary-category {",
-                                "font-weight: bold;",
-                                "font-size: 16px;",
-                                "margin-top: 40px;",
-                                "position: relative;",
-                                "}",
-                                ".summary-iteration {",
-                                "font-weight: bold;",
-                                "margin-top: 25px;",
-                                "}",
-                                ".sub-category-name {",
-                                "margin-top: 10px;",
-                                "font-size: 12px;",
-                                "margin-bottom: 5px;",
-                                "}",
-                                ".export-comments {",
-                                "font-size: 12px;",
-                                "}",
-                                ".table-summary-scale-container {",
-                                "border-collapse: collapse;",
-                                "width: 100%;",
-                                "}",
-                                ".table-scale-section-one {",
-                                "background-color: #f6ffed;",
-                                "height: 20px;",
-                                "border: solid 1px #ccc;",
-                                "color: #7eba41;",
-                                "text-align: center;",
-                                "font-size: 34px;",
-                                "line-height: 34px;",
-                                "width: 25%;",
-                                "}",
-                                ".table-scale-section-two {",
-                                "background-color: #f6ffed;",
-                                "height: 20px;",
-                                "border: solid 1px #ccc;",
-                                "color: #7eba41;",
-                                "text-align: center;",
-                                "font-size: 34px;",
-                                "line-height: 34px;",
-                                "width: 25%;",
-                                "}",
-                                ".table-scale-section-three {",
-                                "background-color: #fff9ed;",
-                                "height: 20px;",
-                                "border: solid 1px #ccc;",
-                                "text-align: center;",
-                                "font-size: 34px;",
-                                "line-height: 34px;",
-                                "color: #fcb830;",
-                                "width: 25%;",
-                                "}",
-                                ".table-scale-section-four {",
-                                "background-color: #fce3e3;",
-                                "height: 20px;",
-                                "border: solid 1px #ccc;",
-                                "color: #de2a2d;",
-                                "text-align: center;",
-                                "font-size: 34px;",
-                                "line-height: 34px;",
-                                "width: 25%;",
-                                "}",
-                                ".table-question-block {",
-                                "background-color: #f0f0f0;",
-                                "border: solid 1px #e0e0e0;",
-                                "margin-bottom: 5px;",
-                                "width: 100%;",
-                                "}",
-                                ".table-position-display {",
-                                "width: 16%;",
-                                "padding: 0px 0px 5px 10px;",
-                                "}",
-                                ".table-question-text {",
-                                "width: 42%;",
-                                "padding: 0px 0px 0px 10px;",
-                                "}",
-                                ".table-position1 {",
-                                "font-size: 30px;",
-                                "line-height: 22px;",
-                                "color: #f6ffed;",
-                                "vertical-align: text-bottom;",
-                                "margin-top: -10px;",
-                                "display: inline-block;",
-                                "}",
-                                ".table-position2 {",
-                                "font-size: 30px;",
-                                "line-height: 22px;",
-                                "color: #f6ffed;",
-                                "vertical-align: text-bottom;",
-                                "margin-top: -10px;",
-                                "display: inline-block;",
-                                "}",
-                                ".table-position3 {",
-                                "font-size: 30px;",
-                                "line-height: 22px;",
-                                "color: #fff9ed;",
-                                "vertical-align: text-bottom;",
-                                "margin-top: -10px;",
-                                "display: inline-block;",
-                                "}",
-                                ".table-position4 {",
-                                "font-size: 30px;",
-                                "line-height: 22px;",
-                                "color: #fce3e3;",
-                                "vertical-align: text-bottom;",
-                                "margin-top: -10px;",
-                                "display: inline-block;",
-                                "}",
-                                ".summary-question {",
-                                "padding-left: 10px;",
-                                "vertical-align: middle;",
-                                "line-height: 30px;",
-                                "}",
-                                ".table-question-right {",
-                                "text-align: right;",
-                                "width: 42%;",
-                                "padding: 5px 10px;",
-                                "}",
-                                ".scale-label td {",
-                                "text-align: center;",
-                                "}"
-                            ].join('\n');
+                                const fileContent = statics.mhtml.top.replace("_html_", statics.mhtml.head.replace("_styles_", styles) + statics.mhtml.body.replace("_body_", markup.html())) + mhtmlBottom;
+                                const blob = new Blob([fileContent], {
+                                    type: "application/msword;charset=utf-8"
+                                });
 
-                            const fileContent = statics.mhtml.top.replace("_html_", statics.mhtml.head.replace("_styles_", styles) + statics.mhtml.body.replace("_body_", markup.html())) + mhtmlBottom;
-                            const blob = new Blob([fileContent], {
-                                type: "application/msword;charset=utf-8"
+                                FileSaver.saveAs(blob, fileName + ".doc");
                             });
-
-                            FileSaver.saveAs(blob, fileName + ".doc");
                         };
 
                         $(document).on('click', '.word-download', () => {
