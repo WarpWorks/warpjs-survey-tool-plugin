@@ -33,7 +33,7 @@
     "@quoin/expressjs-routes-info": "latest",
     "@quoin/node-test-helpers": "latest",
     "@warp-works/warpjs-plugins": "^1.2.5",
-    "@warp-works/warpjs-utils": "release-1.2",
+    "@warp-works/warpjs-utils": "1.2",
     "babel-core": "6.26.x",
     "babel-loader": "7.1.x",
     "babel-preset-env": "1.7.x",
@@ -56,12 +56,14 @@
     "grunt-webpack": "3.1.x",
     "handlebars": "4.0.11",
     "handlebars-loader": "1.7.x",
+    "http-server": "^0.9.0",
     "load-grunt-config": "0.19.2",
     "mocha": "5.2.x",
     "nyc": "12.0.x",
     "svg.js": "2.6.x",
     "time-grunt": "1.4.0",
-    "webpack": "2.7.0"
+    "webpack": "2.7.0",
+    "webpack-dev-server": "^2.4.0"
   },
   "peerDependencies": {
     "@quoin/expressjs-routes-info": ">=0.2.0",

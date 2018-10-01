@@ -1,6 +1,5 @@
 const _ = require('lodash');
 const Promise = require('bluebird');
-const warpjsUtils = require('@warp-works/warpjs-utils');
 
 const constants = require('./../constants');
 const errorTemplate = require('./../error.hbs');
@@ -16,7 +15,7 @@ const questionnaireRelatedDetailsTemplate = require('./questionnaire-related-rea
 const template = require('./../template.hbs');
 
 (($) => $(document).ready(() => {
-    const loader = warpjsUtils.toast.loading($, "Page is loading");
+    const loader = window.WarpJS.toast.loading($, "Page is loading");
     const placeholder = $('#warpjs-content-placeholder');
     placeholder.html(template());
 
@@ -54,7 +53,7 @@ const template = require('./../template.hbs');
         });
     };
 
-    return warpjsUtils.getCurrentPageHAL($)
+    return window.WarpJS.getCurrentPageHAL($)
         .then((result) => {
             let categoryPointer = 0;
             let iterationPointer = 0;
@@ -82,12 +81,11 @@ const template = require('./../template.hbs');
 
             updateProgressTotal();
 
-            warpjsUtils.toast.close($, loader);
+            window.WarpJS.toast.close($, loader);
             if (result.error) {
                 placeholder.html(errorTemplate(result.data));
             } else {
                 return Promise.resolve()
-                    .then(() => warpjsUtils.documentReady($))
                     .then(() => {
                         const assignDetailLevelSelected = () => {
                             const detailLevel = result.data.detailLevel !== '' ? result.data.detailLevel : 2;
