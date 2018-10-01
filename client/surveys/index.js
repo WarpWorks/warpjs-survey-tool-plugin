@@ -5,11 +5,15 @@ const deleteAction = require('./delete-action');
 const errorTemplate = require('./../error.hbs');
 const fetchAssessments = require('./fetch-assessments');
 const shared = require('./../shared');
+const Storage = require('./../storage');
 const template = require('./template.hbs');
 
 (($) => $(document).ready(() => {
     const loader = window.WarpJS.toast.loading($, "Page is loading");
     const placeholder = shared.preRender($);
+
+    const storage = new Storage();
+    storage.setCurrent();
 
     return Promise.resolve()
         .then(() => window.WarpJS.getCurrentPageHAL($))
