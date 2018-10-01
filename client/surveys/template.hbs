@@ -1,10 +1,12 @@
 {{#if page._embedded.questionnaires.length}}
-  <div class="container-fluid survey-tool-section">
+  <div class="container-fluid survey-tool-section"
+    data-survey-tool-url="{{page._links.self.href}}"
+    data-survey-tool-assessment-template-url="{{page._links.assessmentTemplate.href}}"
+    >
     {{#each page._embedded.questionnaires as |questionnaire|}}
       <div class="container-fluid survey-tool-item"
         data-survey-tool-name="{{questionnaire.name}}"
         data-survey-tool-id="{{questionnaire.id}}"
-        data-survey-tool-url="{{questionnaire._links.self.href}}"
         >
         <div class="row">
           <div class="col-xs-12 survey-tool-item-name">{{questionnaire.name}}</div>

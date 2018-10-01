@@ -28,11 +28,11 @@ class Storage {
     }
 
     getAssessments(surveyId) {
-        return JSON.parse(window.localStorage.getItem(this.storageKey(surveyId)) || "[]");
+        return JSON.parse(this.storage.getItem(this.storageKey(surveyId)) || "[]");
     }
 
     setAssessments(surveyId, assessments) {
-        window.localStorage.setItem(this.storageKey(surveyId), JSON.stringify(assessments));
+        this.storage.setItem(this.storageKey(surveyId), JSON.stringify(assessments));
     }
 
     getAssessment(surveyId, assessmentId) {
@@ -50,6 +50,14 @@ class Storage {
         const assessments = this.getAssessments(surveyId);
         const filtered = assessments.filter((assessment) => assessment.assessmentId !== assessmentId);
         this.setAssessments(surveyId, filtered.concat(assessment));
+    }
+
+    setCurrent(surveyId, assessmentId) {
+        this.storage.setItem(`${STORAGE_KEY}-current`, JSON.stringify({ surveyId, assessmentId }));
+    }
+
+    getCurrent() {
+        return JSON.parse(this.storage.getItem(`${STORAGE_KEY}-current`) || "{}");
     }
 }
 

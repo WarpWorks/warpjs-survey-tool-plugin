@@ -16,7 +16,7 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
     },
 
     [warpjsUtils.constants.HAL_CONTENT_TYPE]: async () => {
-        const { id, assessmentId } = req.params;
+        const { surveyId, assessmentId } = req.params;
 
         const pluginConfig = req.app.get(constants.appKeys.pluginConfig);
         const domain = pluginConfig.domainName;
@@ -28,16 +28,16 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
 
         const resource = warpjsUtils.createResource(req, {
             domain,
-            id,
+            surveyId,
             assessmentId
         });
 
         try {
             const domainModel = await warpCore.getDomainByName(domain);
             const questionnaireEntity = domainModel.getEntityByName(pluginConfig.schema.questionnaire);
-            const instance = await questionnaireEntity.getInstance(persistence, id);
+            const instance = await questionnaireEntity.getInstance(persistence, surveyId);
             if (!instance.id) {
-                throw new Error(`Cannot find Survey Tool id: ${id}`);
+                throw new Error(`Cannot find Survey Tool id: ${surveyId}`);
             }
             const questionnaire = new Questionnaire(questionnaireEntity, instance);
             const hal = await questionnaire.toHalFull(domain, pluginConfig, persistence);

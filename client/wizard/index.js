@@ -863,87 +863,30 @@ const template = require('./../template.hbs');
                             }
                         });
 
-                        const download = (content, fileName, contentType) => {
-                            var a = document.createElement('a');
-                            a.style = "display: none";
-                            var file = new Blob([content], {type: "application/octet-stream"});
-                            var url = window.URL.createObjectURL(file);
-                            a.href = url;
-                            a.download = fileName;
-                            document.body.appendChild(a);
-                            a.click();
-                            setTimeout(function() {
-                                document.body.removeChild(a);
-                                window.URL.revokeObjectURL(url);
-                            }, 0);
-                        };
+                        // const onReaderLoad = (event) => {
+                        //     var obj = JSON.parse(event.target.result);
+                        //     result.data.projectName = obj.projectName;
+                        //     result.data.mainContact = obj.mainContact;
+                        //     result.data.projectStatus = obj.projectStatus;
+                        //     result.data.detailLevel = obj.detailLevel;
+                        //     result.data._embedded.answers = obj.answers;
 
-                        const formatDate = (value) => {
-                            const month = value.getMonth() + 1;
-                            return value.getDate() + "-" + month + "-" + value.getFullYear();
-                        };
+                        //     categoryPointer = 0;
+                        //     iterationPointer = 0;
+                        //     questionPointer = 0;
+                        //     iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
+                        //         return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
+                        //     });
+                        //     questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
+                        //         return question.detailLevel <= result.data.detailLevel;
+                        //     }) : [];
 
-                        $(document).on('click', '.download-json', () => {
-                            const jsonData = JSON.stringify({
-                                projectName: result.data.projectName,
-                                mainContact: result.data.mainContact,
-                                projectStatus: result.data.projectStatus,
-                                detailLevel: result.data.detailLevel,
-                                id: result.data.id,
-                                solutionCanvas: result.data.solutionCanvas,
-                                answers: result.data._embedded.answers
-                            });
-                            const date = formatDate(new Date());
-                            const formattedTitle = result.data.projectName.replace(/[^a-zA-Z0-9_ ]/g, "").toLowerCase().replace(/ /g, "_");
-
-                            download(jsonData, 'ipt-' + formattedTitle + '-' + date + '.txt', 'text/plain');
-                        });
-
-                        $('#inputFile').change((event) => {
-                            onJsonSelect(event);
-                        });
-
-                        const onJsonSelect = (event) => {
-                            var reader = new FileReader();
-                            reader.onload = onReaderLoad;
-                            reader.readAsText(event.target.files[0]);
-                        };
-
-                        const onReaderLoad = (event) => {
-                            var obj = JSON.parse(event.target.result);
-                            result.data.projectName = obj.projectName;
-                            result.data.mainContact = obj.mainContact;
-                            result.data.projectStatus = obj.projectStatus;
-                            result.data.detailLevel = obj.detailLevel;
-                            result.data._embedded.answers = obj.answers;
-
-                            categoryPointer = 0;
-                            iterationPointer = 0;
-                            questionPointer = 0;
-                            categories = _.filter(result.data._embedded.answers[0]._embedded.categories, (progressCategory) => {
-                                const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
-                                    return progressQuestion.detailLevel <= result.data.detailLevel;
-                                });
-                                return questionDetailLevels.length > 0;
-                            });
-                            iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
-                                return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
-                            });
-                            questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                return question.detailLevel <= result.data.detailLevel;
-                            }) : [];
-
-                            if (categories[categoryPointer].isRepeatable) {
-                                questionPointer = -1;
-                            }
-
-                            updateProgressLabel();
-                            updateQuestionContent('');
-                        };
-
-                        $(document).on('click', '.load-json', () => {
-                            $('#inputFile').trigger('click');
-                        });
+                        //     if (categories[categoryPointer].isRepeatable) {
+                        //         questionPointer = -1;
+                        //     }
+                        //     updateProgressLabel();
+                        //     updateQuestionContent('');
+                        // };
 
                         $(document).on('change keyup paste', '.comment-text', (event) => {
                             if ($(event.target).val().length) {

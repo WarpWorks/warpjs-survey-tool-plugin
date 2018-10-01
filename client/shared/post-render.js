@@ -1,6 +1,12 @@
+const loadAssessment = require('./load-assessment');
+
 module.exports = ($) => {
-    $('[data-toggle="tooltip"]').tooltip({
+    const placeholder = $('#warpjs-content-placeholder');
+
+    $('[data-toggle="tooltip"]', placeholder).tooltip({
         container: 'body',
         trigger: 'click'
     });
+
+    loadAssessment($, placeholder);
 };

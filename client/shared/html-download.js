@@ -9,11 +9,11 @@ module.exports = ($, content, filename, contentType) => {
     document.body.appendChild(a);
     a.click();
 
-    // setTimeout(
-    //     () => {
-    //         document.body.removeChild(a);
-    //         window.URL.revokeObjectURL(url);
-    //     },
-    //     0
-    // );
+    setTimeout(
+        () => {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        },
+        0
+    );
 };

@@ -17,15 +17,15 @@ const Storage = require('./../storage');
                 $('.ipt-body', placeholder).html(errorTemplate(result.data));
             } else {
                 const storage = new Storage();
-                const assessment = storage.getAssessment(result.data.id, result.data.assessmentId);
+                const assessment = storage.getAssessment(result.data.surveyId, result.data.assessmentId);
                 if (assessment) {
                     $('.ipt-body', placeholder).html("TODO: display questionnaire...");
-                    saveAssessment($, placeholder, result.data.id, result.data.assessmentId);
+                    storage.setCurrent(result.data.surveyId, result.data.assessmentId);
+                    saveAssessment($, placeholder, result.data.surveyId, result.data.assessmentId);
                 } else {
                     $('.ipt-body', placeholder).html(cannotFindAssessmentTemplate({ assessmentId: result.data.assessmentId }));
                 }
             }
-            shared.postRender($);
         })
         .then(() => shared.postRender($))
         .finally(() => window.WarpJS.toast.close($, loader))

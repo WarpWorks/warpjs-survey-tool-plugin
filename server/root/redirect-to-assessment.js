@@ -4,16 +4,15 @@ const warpjsUtils = require('@warp-works/warpjs-utils');
 const { routes } = require('./../../lib/constants');
 
 module.exports = (req, res) => {
-    const { id } = req.params;
-    const { assessmentId } = req.body;
+    const { surveyId, assessmentId } = req.body;
 
     const resource = warpjsUtils.createResource(req, {
         title: `New assessment`,
-        id,
+        surveyId,
         assessmentId
     });
 
-    resource.link('redirect', RoutesInfo.expand(routes.assessment, { id, assessmentId }));
+    resource.link('redirect', RoutesInfo.expand(routes.assessment, { surveyId, assessmentId }));
 
     warpjsUtils.wrapWith406(res, {
         [warpjsUtils.constants.HAL_CONTENT_TYPE]: () => {
