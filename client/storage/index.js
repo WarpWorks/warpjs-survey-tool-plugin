@@ -20,7 +20,13 @@ class Storage {
             surveyId,
             assessmentId,
             name: `Untitled ${assessmentId}`,
-            data: {}
+            data: {
+                levelOfDetail: 1,
+                projectName: '',
+                mainContact: '',
+                projectStatus: '',
+                solutionCanvas: ''
+            }
         };
 
         this.updateAssessment(surveyId, assessmentId, assessment);
@@ -28,7 +34,10 @@ class Storage {
     }
 
     getAssessments(surveyId) {
-        return JSON.parse(this.storage.getItem(this.storageKey(surveyId)) || "[]");
+        return JSON.parse(this.storage.getItem(this.storageKey(surveyId)) || "[]").map((assessment) => {
+            assessment.name = assessment.data.projectName || `Untitled ${assessment.assessmentId}`;
+            return assessment;
+        });
     }
 
     setAssessments(surveyId, assessments) {

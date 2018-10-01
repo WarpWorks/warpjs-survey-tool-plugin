@@ -4,8 +4,7 @@ const warpjsUtils = require('@warp-works/warpjs-utils');
 
 const constants = require('./../../lib/constants');
 const Questionnaire = require('./../../lib/models/questionnaire');
-const sendErrorHal = require('./../utils/send-error-hal');
-const sendHal = require('./../utils/send-hal');
+const utils = require('./../utils');
 
 module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
     html: () => {
@@ -35,10 +34,10 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
             const questionnaireInstances = questionnaireDocuments.map((questionnaireDocument) => new Questionnaire(questionnaireEntity, questionnaireDocument));
             const questionnairesHAL = questionnaireInstances.map((questionnaireInstance) => questionnaireInstance.toHal());
             resource.embed('questionnaires', questionnairesHAL);
-            await sendHal(req, res, resource, RoutesInfo);
+            await utils.sendHal(req, res, resource);
         } catch (err) {
             console.error("server/root/get-all-questionnaires: err:", err);
-            await sendErrorHal(req, res, resource, err, RoutesInfo);
+            await utils.sendErrorHal(req, res, resource, err);
         } finally {
             await persistence.close();
         }

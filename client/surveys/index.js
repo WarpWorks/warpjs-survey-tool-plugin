@@ -19,10 +19,10 @@ const template = require('./template.hbs');
         .then(() => window.WarpJS.getCurrentPageHAL($))
         .then((result) => {
             if (result.error) {
-                $('.ipt-body', placeholder).html(errorTemplate(result.data));
+                shared.setSurveyContent($, placeholder, errorTemplate(result.data));
             } else {
                 const content = template({ page: result.data });
-                $('.ipt-body', placeholder).html(content);
+                shared.setSurveyContent($, placeholder, content);
             }
             shared.postRender($);
             fetchAssessments($, placeholder);

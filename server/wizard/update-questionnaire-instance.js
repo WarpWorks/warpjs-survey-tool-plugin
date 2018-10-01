@@ -4,9 +4,11 @@ const warpjsUtils = require('@warp-works/warpjs-utils');
 
 const constants = require('./../../lib/constants');
 const Questionnaire = require('./../../lib/models/questionnaire');
+const utils = require('./../utils');
 
 module.exports = (req, res) => {
     const {domain, isatId} = req.params;
+
     const pluginConfig = req.app.get(constants.appKeys.pluginConfig);
     const Persistence = require(pluginConfig.persistence.module);
     const persistence = new Persistence(pluginConfig.persistence.host, domain);
@@ -34,7 +36,7 @@ module.exports = (req, res) => {
                         const href = RoutesInfo.expand(constants.routes.wizard, {domain: domain, wizardId: attemptId});
                         return warpjsUtils.createResource(href, questionnaireAttempt);
                     })
-                    .then((resource) => warpjsUtils.sendHal(req, res, resource, RoutesInfo))
+                    .then((resource) => utils.sendHal(req, res, resource))
                 )
             )
         )

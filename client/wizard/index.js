@@ -12,6 +12,7 @@ const questionnaireSummaryTemplate = require('./questionnaire-summary.hbs');
 const questionnaireDetailsTemplate = require('./questionnaire-details.hbs');
 const questionnaireRelatedReadingTemplate = require('./questionnaire-related-readings.hbs');
 const questionnaireRelatedDetailsTemplate = require('./questionnaire-related-reading-detail.hbs');
+const shared = require('./../shared');
 const template = require('./../template.hbs');
 
 (($) => $(document).ready(() => {
@@ -429,8 +430,11 @@ const template = require('./../template.hbs');
                             });
                         };
 
+
                         const summaryCalculations = () => {
+                            shared.setSurveyContent($, placeholder, questionnaireSummaryTemplate({values: summaryValues()}));
                             $('.marker').each((index, element) => {
+
                                 const score = $(element).data('score');
                                 const offset = (score - 1) / 4 * 100 + 12.5;
                                 const colorScore = Math.round(score);
@@ -549,7 +553,7 @@ const template = require('./../template.hbs');
                                 }
                             } else if (questionPointer === -1) {
                                 const values = templateValues();
-                                $('.ipt-body').html(questionnaireIterationTemplate({category: values.category, iterations: categories[categoryPointer]._embedded.iterations, image: values.image}));
+                                shared.setSurveyContent($, placeholder, questionnaireIterationTemplate({category: values.category, iterations: categories[categoryPointer]._embedded.iterations, image: values.image}));
                                 if (values.imageMap) {
                                     createImageMapElements(values.imageMap);
                                 }
@@ -559,16 +563,16 @@ const template = require('./../template.hbs');
                                         return question.id === questions[questionPointer].id;
                                     }));
                                     if (currentQuestion.name === constants.specializedTemplates.description) {
-                                        $('.ipt-body').html(questionnaireDescriptionTemplate({projectName: result.data.projectName, projectStatus: result.data.projectStatus, mainContact: result.data.mainContact, question: currentQuestion}));
+                                        shared.setSurveyContent($, placeholder, questionnaireDescriptionTemplate({projectName: result.data.projectName, projectStatus: result.data.projectStatus, mainContact: result.data.mainContact, question: currentQuestion}));
                                     } else if (currentQuestion.name === constants.specializedTemplates.details) {
-                                        $('.ipt-body').html(questionnaireLevelsTemplate({level: result.data.detailLevel, question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null}));
+                                        shared.setSurveyContent($, placeholder, questionnaireLevelsTemplate({level: result.data.detailLevel, question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null}));
                                         assignDetailLevelSelected();
                                     } else {
-                                        $('.ipt-body').html(questionnaireIntroTemplate(introTemplateValues()));
+                                        shared.setSurveyContent($, placeholder, questionnaireIntroTemplate(introTemplateValues()));
                                     }
                                 } else {
                                     const values = templateValues();
-                                    $('.ipt-body').html(questionnaireTemplate(values));
+                                    shared.setSurveyContent($, placeholder, questionnaireTemplate(values));
                                     if (values.imageMap) {
                                         createImageMapElements(values.imageMap);
                                     }
@@ -625,22 +629,18 @@ const template = require('./../template.hbs');
                             };
 
                             const values = summaryValues();
-                            $('.ipt-body').html(
-                                questionnaireDetailsTemplate(
+                            shared.setSurveyContent($, placeholder, questionnaireDetailsTemplate({
+                                details: details,
+                                values: values,
+                                title: result.data.projectName,
+                                url: result.data._links.self.href,
+                                data: JSON.stringify(
                                     {
                                         details: details,
-                                        values: values,
-                                        title: result.data.projectName,
-                                        url: result.data._links.self.href,
-                                        data: JSON.stringify(
-                                            {
-                                                details: details,
-                                                values: values
-                                            }
-                                        )
+                                        values: values
                                     }
                                 )
-                            );
+                            }));
                             $('.has-comments').append('<a class="has-comments-after" data-toggle="modal" data-target="#comments-modal"></a>');
                             $(document).on('click', '.has-comments-after', (event) => {
                                 const comment = $(event.target).parent().data('comments');
@@ -702,7 +702,7 @@ const template = require('./../template.hbs');
                                 resultSet.recommendationName = recommendation ? recommendation.name : null;
                             });
 
-                            $('.ipt-body').html(questionnaireRelatedReadingTemplate({readings: result.data._embedded.questionnaires[0]._embedded.resultSets}));
+                            shared.setSurveyContent($, placeholder, questionnaireRelatedReadingTemplate({readings: result.data._embedded.questionnaires[0]._embedded.resultSets}));
                         };
 
                         if (result.data._embedded.answers[0]._embedded.categories[categoryPointer].isRepeatable === true) {
@@ -775,7 +775,7 @@ const template = require('./../template.hbs');
                                 contentDocumentHref = relatedResultSet.recommendation._embedded.contents[0]._links.self.href;
                             }
 
-                            $('.ipt-body').html(questionnaireRelatedDetailsTemplate({resultSet: relatedResultSet, contentPreview: contentPreview, href: contentDocumentHref}));
+                            shared.setSurveyContent($, placeholder, questionnaireRelatedDetailsTemplate({resultSet: relatedResultSet, contentPreview: contentPreview, href: contentDocumentHref}));
                         });
 
                         $(document).on('click', '.releated-details-back', () => {

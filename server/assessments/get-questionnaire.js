@@ -1,4 +1,3 @@
-// const debug = require('debug')('W2:plugin:survey-tool:assessment/wizard');
 const RoutesInfo = require('@quoin/expressjs-routes-info');
 const warpjsUtils = require('@warp-works/warpjs-utils');
 
@@ -15,15 +14,15 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
             `${req.app.get('base-url')}/assets/${constants.assets.css}`
         );
     },
-
     [warpjsUtils.constants.HAL_CONTENT_TYPE]: async () => {
-        const { surveyId, assessmentId } = req.params;
+        const { surveyId } = req.params;
+
         const pluginInfo = utils.getPluginInfo(req);
 
         const resource = warpjsUtils.createResource(req, {
+            title: `Domain ${pluginInfo.domain} - Survey Tool`,
             domain: pluginInfo.domain,
-            surveyId,
-            assessmentId
+            surveyId
         });
 
         try {
@@ -37,10 +36,10 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
             const hal = await questionnaire.toHalFull(pluginInfo.domain, pluginInfo.config, pluginInfo.persistence);
             resource.embed('questionnaires', hal);
 
-            await utils.sendHal(req, res, resource, RoutesInfo);
+            await utils.sendHal(req, res, resource);
         } catch (err) {
-            console.error("server/assessment/wizard: err:", err);
-            await utils.sendErrorHal(req, res, resource, err, RoutesInfo);
+            console.error("server/assessments/get-questionnaire: err:", err);
+            await utils.sendErrorHal(req, res, resource, err);
         } finally {
             await pluginInfo.persistence.close();
         }

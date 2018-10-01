@@ -14,16 +14,22 @@ const Storage = require('./../storage');
         .then(() => window.WarpJS.getCurrentPageHAL($))
         .then((result) => {
             if (result.error) {
-                $('.ipt-body', placeholder).html(errorTemplate(result.data));
+                shared.setSurveyContent($, placeholder, errorTemplate(result.data));
             } else {
                 const storage = new Storage();
-                const assessment = storage.getAssessment(result.data.surveyId, result.data.assessmentId);
-                if (assessment) {
-                    $('.ipt-body', placeholder).html("TODO: display questionnaire...");
-                    storage.setCurrent(result.data.surveyId, result.data.assessmentId);
-                    saveAssessment($, placeholder, result.data.surveyId, result.data.assessmentId);
+
+                if (result.data.assessmentId) {
+                    const assessment = storage.getAssessment(result.data.surveyId, result.data.assessmentId);
+                    if (assessment) {
+                        shared.setSurveyContent($, placeholder, "TODO: display questionnaire at slide 3.");
+                        storage.setCurrent(result.data.surveyId, result.data.assessmentId);
+                        saveAssessment($, placeholder, result.data.surveyId, result.data.assessmentId);
+                    } else {
+                        shared.setSurveyContent($, placeholder, cannotFindAssessmentTemplate({ assessmentId: result.data.assessmentId }));
+                    }
                 } else {
-                    $('.ipt-body', placeholder).html(cannotFindAssessmentTemplate({ assessmentId: result.data.assessmentId }));
+                    storage.setCurrent(result.data.surveyId);
+                    shared.setSurveyContent($, placeholder, 'TODO: Display questionnaire at slide 1.');
                 }
             }
         })
