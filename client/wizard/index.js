@@ -877,6 +877,12 @@ const template = require('./../template.hbs');
                             categoryPointer = 0;
                             iterationPointer = 0;
                             questionPointer = 0;
+                            categories = _.filter(result.data._embedded.answers[0]._embedded.categories, (progressCategory) => {
+                                const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
+                                    return progressQuestion.detailLevel <= result.data.detailLevel;
+                                });
+                                return questionDetailLevels.length > 0;
+                            });
                             iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
                                 return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                             });
@@ -887,6 +893,7 @@ const template = require('./../template.hbs');
                             if (categories[categoryPointer].isRepeatable) {
                                 questionPointer = -1;
                             }
+
                             updateProgressLabel();
                             updateQuestionContent('');
                         };
