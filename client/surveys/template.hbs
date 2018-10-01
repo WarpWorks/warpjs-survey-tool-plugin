@@ -1,0 +1,21 @@
+{{#if page._embedded.questionnaires.length}}
+  <div class="container-fluid survey-tool-section">
+    {{#each page._embedded.questionnaires as |questionnaire|}}
+      <div class="container-fluid survey-tool-item"
+        data-survey-tool-name="{{questionnaire.name}}"
+        data-survey-tool-id="{{questionnaire.id}}"
+        data-survey-tool-url="{{questionnaire._links.self.href}}"
+        >
+        <div class="container-fluid survey-tool-item-name">{{questionnaire.name}}</div>
+        <div class="container-fluid survey-tool-item-assessments"></div>
+        <div class="container-fluid survey-tool-actions">
+          {{> ./create-new}}
+        </div>
+      </div>
+
+      {{#unless @last}}<hr>{{/unless}}
+    {{/each}}
+  </div>
+{{else}}
+  TODO: NO surveys available.
+{{/if}}

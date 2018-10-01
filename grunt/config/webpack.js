@@ -9,10 +9,7 @@ module.exports = {
     build: {
         target: 'web',
         devtool: 'source-map',
-        entry: {
-            [constants.versionedName]: './client/index.js',
-            [constants.versionedNameWizard]: './client/wizard/index.js'
-        },
+        entry: constants.getWebpackEntryPoints(),
         externals: {
             jquery: true
         },
