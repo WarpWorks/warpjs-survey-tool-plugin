@@ -18,15 +18,15 @@
         </div>
         <div class="col-sm-3">
           <div class="blue-button-container">
-            <button class="blue-button download-json">Save</button>
+            <button class="blue-button" data-survey-tool-action="download-json">Save</button>
             <button class="blue-button load-json">Load</button>
             <input type="file" id="inputFile" value="Import" />
             <button class="blue-button copyright tooltip-wide" data-toggle="tooltip" data-html="true" title="{{> copyright}}" data-placement="bottom">&copy;</button>
           </div>
         </div>
       </div>
-      <div class="container-fluid">
-        <div class="container-fluid ipt-body">
+      <div class="row">
+        <div class="col-xs-12 ipt-body">
           {{> loading}}
         </div>
       </div>
