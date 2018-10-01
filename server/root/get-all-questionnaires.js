@@ -18,7 +18,7 @@ module.exports = (req, res) => {
 
     warpjsUtils.wrapWith406(res, {
         html: () => {
-            warpjsUtils.sendIndex(res, 'Ipt',
+            warpjsUtils.sendIndex(req, res, RoutesInfo, 'Ipt',
                 [
                     `${req.app.get('base-url')}/assets/${constants.assets.js}`
                 ],
