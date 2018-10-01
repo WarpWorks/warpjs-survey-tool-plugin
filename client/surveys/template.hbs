@@ -6,7 +6,9 @@
         data-survey-tool-id="{{questionnaire.id}}"
         data-survey-tool-url="{{questionnaire._links.self.href}}"
         >
-        <div class="container-fluid survey-tool-item-name">{{questionnaire.name}}</div>
+        <div class="row">
+          <div class="col-xs-12 survey-tool-item-name">{{questionnaire.name}}</div>
+        </div>
         <div class="container-fluid survey-tool-item-assessments"></div>
         <div class="container-fluid survey-tool-actions">
           {{> ./create-new}}

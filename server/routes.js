@@ -13,8 +13,6 @@ module.exports = (baseUrl) => {
     routesInfo.route(routes.questionnaire, '/{id}', questionnaire);
     routesInfo.route(routes.assessment, '/{id}/{assessmentId}', assessment);
 
-    // routesInfo.route(routes.root, '/{domain}', root);
-    // routesInfo.route(routes.newQuestionnaire, '/{domain}/ipt-isat/{isatId}', root);
     // routesInfo.route(routes.wizard, '/{domain}/wizard/{wizardId}', wizard);
 
     return routesInfo;
