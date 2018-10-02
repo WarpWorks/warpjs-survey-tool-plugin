@@ -4,3 +4,4 @@
 /node_modules
 /npm-debug.log*
 /reports
+/package-lock.json
