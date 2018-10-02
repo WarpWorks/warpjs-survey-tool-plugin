@@ -41,7 +41,7 @@ module.exports = ($, cache, result) => Promise.resolve()
             progress = total_question_position / total_questions * 100;
             $('[data-warpjs-modal="ipt"] .progress-bar').css('width', progress + '%');
 
-            console.log('total questions:', total_questions, total_question_position / total_questions * 100);
+            // console.log('total questions:', total_questions, total_question_position / total_questions * 100);
             $('[data-warpjs-modal="ipt"] .category-' + category_num + ' .question-' + question_num).removeClass('show-item');
             if (question_num + 1 < questions_in_cat) {
                 question_num += 1;

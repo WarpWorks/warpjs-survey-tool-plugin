@@ -4,7 +4,7 @@ const cannotFindAssessmentTemplate = require('./cannot-find-assessment.hbs');
 const errorTemplate = require('./../error.hbs');
 const saveAssessment = require('./save-assessment');
 const shared = require('./../shared');
-const Storage = require('./../storage');
+const storage = require('./../storage');
 
 (($) => $(document).ready(() => {
     const loader = window.WarpJS.toast.loading($, "Page is loading");
@@ -16,7 +16,7 @@ const Storage = require('./../storage');
             if (result.error) {
                 shared.setSurveyContent($, placeholder, errorTemplate(result.data));
             } else {
-                const storage = new Storage();
+                shared.postRender($, result.data);
 
                 if (result.data.assessmentId) {
                     const assessment = storage.getAssessment(result.data.surveyId, result.data.assessmentId);
@@ -33,7 +33,6 @@ const Storage = require('./../storage');
                 }
             }
         })
-        .then(() => shared.postRender($))
         .finally(() => window.WarpJS.toast.close($, loader))
     ;
 }))(jQuery);

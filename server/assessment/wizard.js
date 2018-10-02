@@ -37,10 +37,11 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
             const hal = await questionnaire.toHalFull(pluginInfo.domain, pluginInfo.config, pluginInfo.persistence);
             resource.embed('questionnaires', hal);
 
-            await utils.sendHal(req, res, resource, RoutesInfo);
+            await utils.sendHal(req, res, resource);
         } catch (err) {
+            // eslint-disable-next-line no-console
             console.error("server/assessment/wizard: err:", err);
-            await utils.sendErrorHal(req, res, resource, err, RoutesInfo);
+            await utils.sendErrorHal(req, res, resource, err);
         } finally {
             await pluginInfo.persistence.close();
         }

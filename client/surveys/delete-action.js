@@ -1,5 +1,5 @@
 const noAssessmentsTemplate = require('./no-assessments.hbs');
-const Storage = require('./../storage');
+const storage = require('./../storage');
 
 module.exports = ($, placeholder) => {
     placeholder.on('click', '[data-survey-tool-action="delete-assessment"]', function() {
@@ -15,7 +15,6 @@ module.exports = ($, placeholder) => {
         const assessment = $(this).closest('.survey-tool-assessment');
         const container = $(this).closest('.survey-tool-item-assessments');
 
-        const storage = new Storage();
         storage.removeAssessment(assessment.data('surveyToolSurveyId'), assessment.data('surveyToolAssessmentId'));
 
         assessment.remove();

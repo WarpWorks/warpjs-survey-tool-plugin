@@ -38,6 +38,7 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
 
             await utils.sendHal(req, res, resource);
         } catch (err) {
+            // eslint-disable-next-line no-console
             console.error("server/assessments/get-questionnaire: err:", err);
             await utils.sendErrorHal(req, res, resource, err);
         } finally {

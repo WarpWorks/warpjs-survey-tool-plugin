@@ -41,6 +41,7 @@ module.exports = (req, res) => {
             )
         )
         .catch((err) => {
+            // eslint-disable-next-line no-console
             console.error("server/root/get-all-questionnaires: err:", err);
             throw err;
         })

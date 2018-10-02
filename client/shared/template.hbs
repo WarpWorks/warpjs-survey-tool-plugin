@@ -1,4 +1,7 @@
-<div class="ipt">
+<div class="ipt"
+  data-survey-tool-url="{{page._links.self.href}}"
+  data-survey-tool-assessment-template-url="{{page._links.assessmentTemplate.href}}"
+  >
   <div class="container">
     <div class="ipt-container">
       <div class="row title-section">
@@ -20,7 +23,6 @@
           <div class="blue-button-container">
             <button class="blue-button" data-survey-tool-action="download-json">Export</button>
             <button class="blue-button" data-survey-tool-action="load-json">Import</button>
-            <input type="file" id="inputFile" value="Import" />
             <button class="blue-button copyright tooltip-wide" data-toggle="tooltip" data-html="true" title="{{> copyright}}" data-placement="bottom">&copy;</button>
           </div>
         </div>

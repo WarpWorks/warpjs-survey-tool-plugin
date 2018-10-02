@@ -79,13 +79,26 @@
                 }
             }
 
-            #inputFile {
-                width: 0.1px;
-                height: 0.1px;
-                opacity: 0;
-                overflow: hidden;
+            .survey-tool-load-assessment-popup {
                 position: absolute;
-                z-index: -1;
+                font-size: 11px;
+                line-height: 1.4em;
+                background-color: rgba(0, 0, 0, 0.9);
+                top: 0;
+                right: 0;
+                color: white;
+                padding: 12px;
+                z-index: 2000;
+
+                .survey-tool-load-assessment-popup-message {
+                    margin-bottom: 6px;
+                    text-align: left;
+                }
+
+                button {
+                    font-size: 11px;
+                    line-height: 1.4em;
+                }
             }
         }
     }

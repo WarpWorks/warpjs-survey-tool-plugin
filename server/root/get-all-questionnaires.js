@@ -36,6 +36,7 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
             resource.embed('questionnaires', questionnairesHAL);
             await utils.sendHal(req, res, resource);
         } catch (err) {
+            // eslint-disable-next-line no-console
             console.error("server/root/get-all-questionnaires: err:", err);
             await utils.sendErrorHal(req, res, resource, err);
         } finally {

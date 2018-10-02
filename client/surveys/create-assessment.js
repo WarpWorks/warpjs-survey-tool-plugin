@@ -1,4 +1,4 @@
-const Storage = require('./../storage');
+const storage = require('./../storage');
 
 module.exports = ($, placeholder) => {
     placeholder.on('click', '[data-survey-tool-action="create-new-assessment"]', function() {
@@ -6,7 +6,6 @@ module.exports = ($, placeholder) => {
         const surveyId = item.data('surveyToolId');
         const assessmentTemplateUrl = $(this).closest('.survey-tool-section').data('surveyToolAssessmentTemplateUrl');
 
-        const storage = new Storage();
         const assessmentId = storage.createAssessment(surveyId);
 
         const redirectUrl = window.WarpJS.expandUrlTemplate(assessmentTemplateUrl, { surveyId, assessmentId });
