@@ -1,3 +1,4 @@
+const exportAssessement = require('./export-assessment');
 const loadAssessment = require('./load-assessment');
 
 module.exports = ($, data) => {
@@ -13,5 +14,6 @@ module.exports = ($, data) => {
         trigger: 'click'
     });
 
+    exportAssessement($, placeholder);
     loadAssessment($, placeholder);
 };

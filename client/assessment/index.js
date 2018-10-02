@@ -3,7 +3,6 @@ const Promise = require('bluebird');
 
 // const cannotFindAssessmentTemplate = require('./cannot-find-assessment.hbs');
 const errorTemplate = require('./../error.hbs');
-const saveAssessment = require('./save-assessment');
 const shared = require('./../shared');
 const storage = require('./../storage');
 
@@ -75,7 +74,6 @@ const questionnaireRelatedDetailsTemplate = require('../wizard/questionnaire-rel
                         // shared.setSurveyContent($, placeholder, "TODO: display questionnaire at slide 3.");
                         questionPointer = 2;
                         storage.setCurrent(result.data.surveyId, result.data.assessmentId);
-                        saveAssessment($, placeholder, result.data.surveyId, result.data.assessmentId);
                     } else {
                         // shared.setSurveyContent($, placeholder, cannotFindAssessmentTemplate({ assessmentId: result.data.assessmentId }));
                     }
