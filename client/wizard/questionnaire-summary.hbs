@@ -4,6 +4,11 @@
       <h2 class="ipt-title results-title">Summary</h2>
       <h2 class="ipt-title results-title faded">Details</h2>
       <h2 class="ipt-title results-title faded">Related Readings</h2>
+      <form class="word-download-form" action="{{url}}/docx" method="post">
+        <input type="hidden" id="data" name="data" value="{{data}}">
+        <input type="hidden" id="title" name="title" value="{{title}}">
+        <input type="submit" class="word-download" value="Download as Word File">
+      </form>
     </div>
   </div>
   <div class="row">
@@ -16,16 +21,18 @@
       <h3 class="summary-title">Summary Project Assessment</h3>
       {{#each values}}
         <div class="summary-scales">
-          <h3>{{category}}</h3>
-          <div class="summary-scale-container">
-            <div class="scale-section-one"></div>
-            <div class="scale-section-two"></div>
-            <div class="scale-section-three"></div>
-            <div class="scale-section-four"></div>
-            <div class="marker" data-score="{{answerAverage}}"></div>
-          </div>
-          <div class="average-number" data-score="{{answerAverage}}">
-            <p>{{answerAverage}}</p>
+          <h3 class="summary-category-title">{{category}}</h3>
+          <div class="summary-content">
+            <div class="summary-scale-container">
+              <div class="scale-section-one"></div>
+              <div class="scale-section-two"></div>
+              <div class="scale-section-three"></div>
+              <div class="scale-section-four"></div>
+              <div class="marker" data-score="{{answerAverage}}"></div>
+            </div>
+            <div class="average-number" data-score="{{answerAverage}}">
+              <p>{{answerAverage}}</p>
+            </div>
           </div>
         </div>
       {{/each}}
