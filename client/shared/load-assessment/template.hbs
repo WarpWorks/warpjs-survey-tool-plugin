@@ -1,0 +1,19 @@
+<div class="survey-tool-load-assessment-popup">
+  {{#if exportProperties}}
+    <div class="export-properties">
+      <div class="export-title">Export properties:</div>
+      <div class="export-name">Name: {{exportProperties.name}}</div>
+      <div class="export-revision">Revision: {{exportProperties.revision}}</div>
+      <div class="export-description">Description: {{exportProperties.description}}</div>
+    </div>
+  {{/if}}
+
+  <div class="survey-tool-load-assessment-popup-message">{{message}}</div>
+  <div class="btn-group">
+    {{#each buttons as |button|}}
+      <button type="button" class="btn btn-{{button.btnClass}}"
+        data-survey-tool-action="{{button.action}}"
+        >{{button.label}}</button>
+    {{/each}}
+  </div>
+</div>

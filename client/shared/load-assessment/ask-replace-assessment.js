@@ -1,9 +1,9 @@
-const askGotoAssessment = require('./ask-goto-assessment');
+const gotoAssessment = require('./goto-assessment');
 const loadAssessmentPopup = require('./load-assessment-popup');
 const storage = require('./../../storage');
 
 module.exports = ($, placeholder, obj) => {
-    const div = loadAssessmentPopup($, placeholder, "Assessment ID already defined.", [
+    const div = loadAssessmentPopup($, placeholder, "Assessment ID already defined.", obj, [
         { btnClass: 'danger', action: 'load-replace', label: "Replace" },
         { btnClass: 'primary', action: 'load-clone', label: "Clone" },
         { btnClass: 'default', action: 'load-cancel', label: "Cancel" }
@@ -17,13 +17,12 @@ module.exports = ($, placeholder, obj) => {
         const assessmentId = storage.createAssessment(obj.surveyId);
         obj.assessmentId = assessmentId;
         storage.updateAssessment(obj.surveyId, obj.assessmentId, obj);
-        div.remove();
-        askGotoAssessment($, placeholder, obj);
+        gotoAssessment($, placeholder, obj);
     });
 
     $('[data-survey-tool-action="load-replace"]', div).on('click', function() {
         storage.updateAssessment(obj.surveyId, obj.assessmentId, obj);
         div.remove();
-        askGotoAssessment($, placeholder, obj);
+        gotoAssessment($, placeholder, obj);
     });
 };

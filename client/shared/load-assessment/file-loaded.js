@@ -34,7 +34,6 @@ module.exports = ($, placeholder, event) => {
     }
 
     const stored = storage.getAssessment(obj.surveyId, obj.assessmentId);
-    // console.log("found stored?", stored);
 
     if (current.assessmentId) {
         // Survey in progress.
