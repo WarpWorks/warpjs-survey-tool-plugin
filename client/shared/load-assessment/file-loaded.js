@@ -16,21 +16,21 @@ module.exports = ($, placeholder, event) => {
         // Assume current survey to be default for old format.
         obj.surveyId = current.surveyId || current.surveyToolDefaultSurveyId;
 
-        obj.data = {
-            answers: obj.answers,
-            detailLevel: obj.detailLevel,
-            mainContact: obj.mainContact,
-            projectName: obj.projectName,
-            projectStatus: obj.projectStatus,
-            solutionCanvas: obj.solutionCanvas
-        };
+        // obj.data = {
+        //     answers: obj.answers,
+        //     detailLevel: obj.detailLevel,
+        //     mainContact: obj.mainContact,
+        //     projectName: obj.projectName,
+        //     projectStatus: obj.projectStatus,
+        //     solutionCanvas: obj.solutionCanvas
+        // };
 
-        delete obj.answers;
-        delete obj.detailLevel;
-        delete obj.mainContact;
-        delete obj.projectName;
-        delete obj.projectStatus;
-        delete obj.solutionCanvas;
+        // delete obj.answers;
+        // delete obj.detailLevel;
+        // delete obj.mainContact;
+        // delete obj.projectName;
+        // delete obj.projectStatus;
+        // delete obj.solutionCanvas;
     }
 
     const stored = storage.getAssessment(obj.surveyId, obj.assessmentId);

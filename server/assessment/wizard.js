@@ -19,7 +19,8 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
     },
 
     [warpjsUtils.constants.HAL_CONTENT_TYPE]: async () => {
-        const { surveyId, assessmentId } = req.params;
+        const { surveyId } = req.params;
+        const { assessmentId } = req.query;
         const pluginInfo = utils.getPluginInfo(req);
 
         const resource = warpjsUtils.createResource(req, {

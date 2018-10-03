@@ -58,6 +58,8 @@ const questionnaireRelatedDetailsTemplate = require('../wizard/questionnaire-rel
     return Promise.resolve()
         .then(() => window.WarpJS.getCurrentPageHAL($))
         .then((result) => {
+            console.log('result:::: ', result);
+            $('#warpjs-content-placeholder').data('defaultAnswers', result.data._embedded.answers[0]);
             if (result.error) {
                 shared.setSurveyContent($, placeholder, errorTemplate(result.data));
             } else {
@@ -71,32 +73,32 @@ const questionnaireRelatedDetailsTemplate = require('../wizard/questionnaire-rel
                 if (result.data.assessmentId) {
                     const assessment = storage.getAssessment(result.data.surveyId, result.data.assessmentId);
                     if (assessment) {
-                        // shared.setSurveyContent($, placeholder, "TODO: display questionnaire at slide 3.");
                         questionPointer = 2;
                         storage.setCurrent($, 'surveyId', result.data.surveyId);
                         storage.setCurrent($, 'assessmentId', result.data.assessmentId);
                     } else {
-                        // shared.setSurveyContent($, placeholder, cannotFindAssessmentTemplate({ assessmentId: result.data.assessmentId }));
+                        shared.setSurveyContent($, placeholder, cannotFindAssessmentTemplate({ assessmentId: result.data.assessmentId }));
                     }
                 } else {
                     storage.setCurrent($, 'surveyId', result.data.surveyId);
-                    shared.setSurveyContent($, placeholder, 'TODO: Display questionnaire at slide 1.');
                 }
-
+                result.data.detailLevel = 1;
                 let categories = _.filter(result.data._embedded.answers[0]._embedded.categories, (progressCategory) => {
                     const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
                         return progressQuestion.detailLevel <= result.data.detailLevel;
                     });
                     return questionDetailLevels.length > 0;
                 });
-                let iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
+                let iterations = categories && categories[categoryPointer] ? _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
                     return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
-                });
+                }) : [];
                 let questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
                     return question.detailLevel <= result.data.detailLevel;
                 }) : [];
 
                 let progressFilteredCategories = [];
+
+                console.log("categories", categories, "iterations", iterations, "questions", questions);
 
                 const updateProgressTotal = () => {
                     progressFilteredCategories = _.cloneDeep(categories);
@@ -107,7 +109,7 @@ const questionnaireRelatedDetailsTemplate = require('../wizard/questionnaire-rel
                 if (result.error) {
                     placeholder.html(errorTemplate(result.data));
                 } else {
-                    Promise.resolve()
+                    return Promise.resolve()
                         .then(() => {
                             const assignDetailLevelSelected = () => {
                                 const detailLevel = result.data.detailLevel !== '' ? result.data.detailLevel : 2;
@@ -253,9 +255,9 @@ const questionnaireRelatedDetailsTemplate = require('../wizard/questionnaire-rel
                             };
 
                             const templateValues = () => {
-                                const currentCategory = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
+                                const currentCategory = categories[categoryPointer] ? _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
                                     return category.id === categories[categoryPointer].id;
-                                });
+                                }) : null;
                                 currentCategory.comments = categories[categoryPointer].comments;
                                 const currentQuestion = questions[questionPointer] ? _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
                                     return question.id === questions[questionPointer].id;
@@ -271,7 +273,7 @@ const questionnaireRelatedDetailsTemplate = require('../wizard/questionnaire-rel
 
                                 if (currentQuestion && currentQuestion.imageUrl) {
                                     values.image = currentQuestion.imageUrl;
-                                } else if (currentCategory.imageUrl) {
+                                } else if (currentCategory && currentCategory.imageUrl) {
                                     values.image = currentCategory.imageUrl;
                                 }
 
@@ -290,9 +292,9 @@ const questionnaireRelatedDetailsTemplate = require('../wizard/questionnaire-rel
                                     imageArea = currentCategory.imageArea;
                                 }
 
-                                const currentImglib = currentImageLibrary ? _.find(result.data._embedded.questionnaires[0]._embedded.imageLibraries, (imageLibrary) => {
+                                const currentImglib = _.find(result.data._embedded.questionnaires[0]._embedded.imageLibraries, (imageLibrary) => {
                                     return imageLibrary.id === currentImageLibrary;
-                                }) : null;
+                                });
 
                                 const currentImageArea = imageArea ? _.find(currentImglib && currentImglib._embedded.images ? currentImglib._embedded.images[0]._embedded.imageMaps : null, (imageMap) => {
                                     return imageMap && imageMap.title === imageArea;
@@ -307,18 +309,18 @@ const questionnaireRelatedDetailsTemplate = require('../wizard/questionnaire-rel
                             };
 
                             const introTemplateValues = () => {
-                                const currentCategory = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
+                                const currentCategory = categories[categoryPointer] ? _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
                                     return category.id === categories[categoryPointer].id;
-                                });
-                                const currentQuestion = _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
+                                }) : null;
+                                const currentQuestion = questions[questionPointer] ? _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
                                     return question.id === questions[questionPointer].id;
-                                }));
+                                })) : null;
                                 let values = {category: currentCategory, question: currentQuestion};
                                 if (questionPointer) {
                                     values.notFirst = true;
                                 }
 
-                                if (currentQuestion.imageUrl) {
+                                if (currentQuestion && currentQuestion.imageUrl) {
                                     values.image = currentQuestion.imageUrl;
                                 }
 
@@ -429,9 +431,9 @@ const questionnaireRelatedDetailsTemplate = require('../wizard/questionnaire-rel
                                                 const categoryQ = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (questionCategory) => {
                                                     return questionCategory.id === category.id;
                                                 });
-                                                const questionQ = _.find(categoryQ._embedded.questions, (questionQuestion) => {
+                                                const questionQ = question ? _.find(categoryQ._embedded.questions, (questionQuestion) => {
                                                     return questionQuestion.id === question.id;
-                                                });
+                                                }) : null;
                                                 const option = _.find(questionQ._embedded.options, (option) => {
                                                     return option.id === question.answer;
                                                 });
@@ -507,9 +509,9 @@ const questionnaireRelatedDetailsTemplate = require('../wizard/questionnaire-rel
                                     const answersList = _.map(category._embedded.iterations, (iteration) => {
                                         const iterationQ = _.map(iteration._embedded.questions, (question) => {
                                             if (question.detailLevel <= result.data.detailLevel) {
-                                                const questionQ = _.find(categoryQ._embedded.questions, (questionQuestion) => {
+                                                const questionQ = question ? _.find(categoryQ._embedded.questions, (questionQuestion) => {
                                                     return questionQuestion.id === question.id;
-                                                });
+                                                }) : null;
                                                 const option = _.find(questionQ._embedded.options, (option) => {
                                                     return option.id === question.answer;
                                                 });
@@ -555,13 +557,13 @@ const questionnaireRelatedDetailsTemplate = require('../wizard/questionnaire-rel
                             };
 
                             const updateQuestionContent = (outOfBounds = '') => {
-                                const progressPosition = _.findIndex(progressFilteredCategories, function(o) {
+                                const progressPosition = categories[categoryPointer] ? _.findIndex(progressFilteredCategories, function(o) {
                                     return o.id && o.id === categories[categoryPointer].id;
-                                });
+                                }) : null;
                                 progress = (progressPosition + 1) / progressFilteredCategories.length * 100;
-                                const currentCategory = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
+                                const currentCategory = categories[categoryPointer] ? _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
                                     return category.id === categories[categoryPointer].id;
-                                });
+                                }) : null;
 
                                 if (outOfBounds !== '') {
                                     if (outOfBounds === 'front') {
@@ -578,12 +580,12 @@ const questionnaireRelatedDetailsTemplate = require('../wizard/questionnaire-rel
                                     }
                                 } else {
                                     if (currentCategory.name === constants.specializedTemplates.introCategory) {
-                                        const currentQuestion = _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
+                                        const currentQuestion = questions[questionPointer] ? _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
                                             return question.id === questions[questionPointer].id;
-                                        }));
-                                        if (currentQuestion.name === constants.specializedTemplates.description) {
+                                        })) : null;
+                                        if (currentQuestion && currentQuestion.name === constants.specializedTemplates.description) {
                                             shared.setSurveyContent($, placeholder, questionnaireDescriptionTemplate({projectName: result.data.projectName, projectStatus: result.data.projectStatus, mainContact: result.data.mainContact, question: currentQuestion}));
-                                        } else if (currentQuestion.name === constants.specializedTemplates.details) {
+                                        } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.details) {
                                             shared.setSurveyContent($, placeholder, questionnaireLevelsTemplate({level: result.data.detailLevel, question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null}));
                                             assignDetailLevelSelected();
                                         } else {
@@ -675,9 +677,9 @@ const questionnaireRelatedDetailsTemplate = require('../wizard/questionnaire-rel
                                     _.each(rCategory._embedded.iterations, (rIteration) => {
                                         _.each(rIteration._embedded.questions, (rQuestion) => {
                                             if (rQuestion.detailLevel <= result.data.detailLevel && rQuestion.answer) {
-                                                const questionCategory = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (qCategory) => {
+                                                const questionCategory = rCategory ? _.find(result.data._embedded.questionnaires[0]._embedded.categories, (qCategory) => {
                                                     return qCategory.id === rCategory.id;
-                                                });
+                                                }) : null;
                                                 const questionQuestion = questionCategory ? _.find(questionCategory._embedded.questions, (qQuestion) => {
                                                     return qQuestion.id === rQuestion.id;
                                                 }) : null;
@@ -700,16 +702,16 @@ const questionnaireRelatedDetailsTemplate = require('../wizard/questionnaire-rel
                                     _.each(resultSet._embedded.results, (result) => {
                                         result.points = 0;
                                         _.each(result._embedded.relevantHighs, (relevantHigh) => {
-                                            _.each(_.filter(flattenedAnswers, (aQuestion) => {
+                                            _.each(relevantHigh ? _.filter(flattenedAnswers, (aQuestion) => {
                                                 return aQuestion.id === relevantHigh.id;
-                                            }), (aQuestion) => {
+                                            }) : null, (aQuestion) => {
                                                 result.points += parseInt(aQuestion.answer, 10);
                                             });
                                         });
                                         _.each(result._embedded.relevantLows, (relevantLow) => {
-                                            _.each(_.filter(flattenedAnswers, (aQuestion) => {
+                                            _.each(relevantLow ? _.filter(flattenedAnswers, (aQuestion) => {
                                                 return aQuestion.id === relevantLow.id;
-                                            }), (aQuestion) => {
+                                            }) : null, (aQuestion) => {
                                                 result.points += 5 - parseInt(aQuestion.answer, 10);
                                             });
                                         });
