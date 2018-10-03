@@ -6,7 +6,7 @@ const storage = require('./../../storage');
 module.exports = ($, placeholder, event) => {
     const obj = JSON.parse(event.target.result);
 
-    const current = storage.getCurrent();
+    const current = storage.getCurrent($);
 
     if (obj.id) {
         // Convert old format.
@@ -14,7 +14,7 @@ module.exports = ($, placeholder, event) => {
         delete obj.id;
 
         // Assume current survey to be default for old format.
-        obj.surveyId = current.surveyId || placeholder.data('surveyToolDefaultSurveyId');
+        obj.surveyId = current.surveyId || current.surveyToolDefaultSurveyId;
 
         obj.data = {
             answers: obj.answers,

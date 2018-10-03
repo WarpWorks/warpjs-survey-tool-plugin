@@ -12,7 +12,8 @@ const template = require('./template.hbs');
     const loader = window.WarpJS.toast.loading($, "Page is loading");
     const placeholder = shared.preRender($);
 
-    storage.setCurrent();
+    storage.setCurrent($, 'surveyId', undefined);
+    storage.setCurrent($, 'assessmentId', undefined);
 
     return Promise.resolve()
         .then(() => window.WarpJS.getCurrentPageHAL($))

@@ -1,11 +1,10 @@
 const generateFilename = require('./generate-filename');
-const getCurrent = require('./../get-current');
 const htmlDownload = require('./../html-download');
 const storage = require('./../../storage');
 const askProperties = require('./ask-properties');
 
 module.exports = ($, placeholder) => {
-    const { surveyId, assessmentId } = getCurrent($, placeholder);
+    const { surveyId, assessmentId } = storage.getCurrent($);
 
     if (assessmentId) {
         $('[data-survey-tool-action="download-json"]', placeholder).show();

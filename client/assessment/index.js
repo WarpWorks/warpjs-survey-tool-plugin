@@ -73,12 +73,13 @@ const questionnaireRelatedDetailsTemplate = require('../wizard/questionnaire-rel
                     if (assessment) {
                         // shared.setSurveyContent($, placeholder, "TODO: display questionnaire at slide 3.");
                         questionPointer = 2;
-                        storage.setCurrent(result.data.surveyId, result.data.assessmentId);
+                        storage.setCurrent($, 'surveyId', result.data.surveyId);
+                        storage.setCurrent($, 'assessmentId', result.data.assessmentId);
                     } else {
                         // shared.setSurveyContent($, placeholder, cannotFindAssessmentTemplate({ assessmentId: result.data.assessmentId }));
                     }
                 } else {
-                    storage.setCurrent(result.data.surveyId);
+                    storage.setCurrent($, 'surveyId', result.data.surveyId);
                     shared.setSurveyContent($, placeholder, 'TODO: Display questionnaire at slide 1.');
                 }
 

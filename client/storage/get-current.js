@@ -1,3 +1,4 @@
-const store = require('./store');
-
-module.exports = () => store.get('current') || {};
+module.exports = ($, key) => {
+    const placeholder = $('#warpjs-content-placeholder');
+    return placeholder.data(key);
+};
