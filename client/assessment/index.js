@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const Promise = require('bluebird');
 
-// const cannotFindAssessmentTemplate = require('./cannot-find-assessment.hbs');
+const cannotFindAssessmentTemplate = require('./cannot-find-assessment.hbs');
 const errorTemplate = require('./../error.hbs');
 const shared = require('./../shared');
 const storage = require('./../storage');
@@ -12,10 +12,10 @@ const questionnaireIntroTemplate = require('../wizard/questionnaire-intro.hbs');
 const questionnaireDescriptionTemplate = require('../wizard/questionnaire-description.hbs');
 const questionnaireLevelsTemplate = require('../wizard/questionnaire-levels.hbs');
 const questionnaireIterationTemplate = require('../wizard/questionnaire-iterations.hbs');
-const questionnaireSummaryTemplate = require('../wizard/questionnaire-summary.hbs');
-const questionnaireDetailsTemplate = require('../wizard/questionnaire-details.hbs');
-const questionnaireRelatedReadingTemplate = require('../wizard/questionnaire-related-readings.hbs');
-const questionnaireRelatedDetailsTemplate = require('../wizard/questionnaire-related-reading-detail.hbs');
+const questionnaireSummaryTemplate = require('./results/questionnaire-summary.hbs');
+const questionnaireDetailsTemplate = require('./results/questionnaire-details.hbs');
+const questionnaireRelatedReadingTemplate = require('./results/questionnaire-related-readings.hbs');
+const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-related-reading-detail.hbs');
 
 (($) => $(document).ready(() => {
     const loader = window.WarpJS.toast.loading($, "Page is loading");
@@ -58,8 +58,7 @@ const questionnaireRelatedDetailsTemplate = require('../wizard/questionnaire-rel
     return Promise.resolve()
         .then(() => window.WarpJS.getCurrentPageHAL($))
         .then((result) => {
-            console.log('result:::: ', result);
-            $('#warpjs-content-placeholder').data('defaultAnswers', result.data._embedded.answers[0]);
+            storage.setCurrent($, 'defaultAnswers', result.data._embedded.answers[0]);
             if (result.error) {
                 shared.setSurveyContent($, placeholder, errorTemplate(result.data));
             } else {
@@ -97,8 +96,6 @@ const questionnaireRelatedDetailsTemplate = require('../wizard/questionnaire-rel
                 }) : [];
 
                 let progressFilteredCategories = [];
-
-                console.log("categories", categories, "iterations", iterations, "questions", questions);
 
                 const updateProgressTotal = () => {
                     progressFilteredCategories = _.cloneDeep(categories);
@@ -883,31 +880,6 @@ const questionnaireRelatedDetailsTemplate = require('../wizard/questionnaire-rel
                                     updateQuestionContent('');
                                 }
                             });
-
-                            // const onReaderLoad = (event) => {
-                            //     var obj = JSON.parse(event.target.result);
-                            //     result.data.projectName = obj.projectName;
-                            //     result.data.mainContact = obj.mainContact;
-                            //     result.data.projectStatus = obj.projectStatus;
-                            //     result.data.detailLevel = obj.detailLevel;
-                            //     result.data._embedded.answers = obj.answers;
-
-                            //     categoryPointer = 0;
-                            //     iterationPointer = 0;
-                            //     questionPointer = 0;
-                            //     iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
-                            //         return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
-                            //     });
-                            //     questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                            //         return question.detailLevel <= result.data.detailLevel;
-                            //     }) : [];
-
-                            //     if (categories[categoryPointer].isRepeatable) {
-                            //         questionPointer = -1;
-                            //     }
-                            //     updateProgressLabel();
-                            //     updateQuestionContent('');
-                            // };
 
                             $(document).on('change keyup paste', '.comment-text', (event) => {
                                 if ($(event.target).val().length) {
