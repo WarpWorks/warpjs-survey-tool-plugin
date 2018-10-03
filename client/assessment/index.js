@@ -7,11 +7,11 @@ const shared = require('./../shared');
 const storage = require('./../storage');
 
 const constants = require('./../constants');
-const questionnaireTemplate = require('../wizard/questionnaire.hbs');
-const questionnaireIntroTemplate = require('../wizard/questionnaire-intro.hbs');
-const questionnaireDescriptionTemplate = require('../wizard/questionnaire-description.hbs');
-const questionnaireLevelsTemplate = require('../wizard/questionnaire-levels.hbs');
-const questionnaireIterationTemplate = require('../wizard/questionnaire-iterations.hbs');
+const questionnaireTemplate = require('./questionnaire.hbs');
+const questionnaireIntroTemplate = require('./questionnaire-intro.hbs');
+const questionnaireDescriptionTemplate = require('./questionnaire-description.hbs');
+const questionnaireLevelsTemplate = require('./questionnaire-levels.hbs');
+const questionnaireIterationTemplate = require('./questionnaire-iterations.hbs');
 const questionnaireSummaryTemplate = require('./results/questionnaire-summary.hbs');
 const questionnaireDetailsTemplate = require('./results/questionnaire-details.hbs');
 const questionnaireRelatedReadingTemplate = require('./results/questionnaire-related-readings.hbs');
@@ -319,6 +319,10 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
 
                                 if (currentQuestion && currentQuestion.imageUrl) {
                                     values.image = currentQuestion.imageUrl;
+                                }
+                                console.log('currentQuestion', currentQuestion, 'constants.specializedTemplates.create', constants.specializedTemplates.create, currentQuestion.name === constants.specializedTemplates.create, storage.getCurrent($, 'assessmentId'));
+                                if (currentQuestion.name === constants.specializedTemplates.create && !storage.getCurrent($, 'assessmentId')) {
+                                    values.showCreate = true;
                                 }
 
                                 return values;

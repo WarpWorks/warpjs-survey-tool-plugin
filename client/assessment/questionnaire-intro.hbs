@@ -21,7 +21,11 @@
       {{/if}}
     </div>
     <div class="col-sm-4 col-sm-push-4">
-      <button class="question-next">NEXT</button>
+      {{#if showCreate}}
+        <button class="question-assessment-create">CREATE</button>
+      {{else}}
+        <button class="question-next">NEXT</button>
+      {{/if}}
     </div>
   </div>
 </div>
