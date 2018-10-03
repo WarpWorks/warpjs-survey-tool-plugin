@@ -430,11 +430,9 @@ const template = require('./../template.hbs');
                             });
                         };
 
-
                         const summaryCalculations = () => {
                             shared.setSurveyContent($, placeholder, questionnaireSummaryTemplate({values: summaryValues()}));
                             $('.marker').each((index, element) => {
-
                                 const score = $(element).data('score');
                                 const offset = (score - 1) / 4 * 100 + 12.5;
                                 const colorScore = Math.round(score);
