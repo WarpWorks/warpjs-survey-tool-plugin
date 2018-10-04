@@ -472,7 +472,6 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                             };
 
                             const summaryCalculations = () => {
-                                shared.setSurveyContent($, placeholder, questionnaireSummaryTemplate({values: summaryValues()}));
                                 $('.marker').each((index, element) => {
                                     const score = $(element).data('score');
                                     const offset = (score - 1) / 4 * 100 + 12.5;
@@ -557,7 +556,7 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                                 };
                                 const values = summaryValues();
 
-                                console.log('URL for details: ', result.data._embedded.questionnaires[0]._links.docx.href);
+                                console.log('URL for summary: ', result.data._embedded.questionnaires[0]._links.docx.href);
                                 shared.setSurveyContent($, placeholder, questionnaireSummaryTemplate({
                                     details: details,
                                     values: values,
@@ -571,6 +570,7 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                                     )
                                 }));
                                 summaryCalculations();
+                                console.log('URL for summary: ', result.data._embedded.questionnaires[0]._links.docx.href);
                             };
 
                             const updateQuestionContent = (outOfBounds = '') => {
