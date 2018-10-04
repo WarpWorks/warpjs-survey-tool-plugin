@@ -132,7 +132,7 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                             $('.ipt-title').html(assessment.projectName);
 
                             const descriptionOnLeave = (direction) => {
-                                if ($('#project-name').val()) {
+                                if ($('#project-name').val() || direction === 'back') {
                                     getAssessment();
                                     assessment.projectName = $('#project-name').val();
                                     assessment.mainContact = $('#main-contact').val();
