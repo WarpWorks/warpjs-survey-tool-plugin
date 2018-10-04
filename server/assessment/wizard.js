@@ -1,5 +1,6 @@
 // const debug = require('debug')('W2:plugin:survey-tool:assessment/wizard');
 const _ = require('lodash');
+const Promise = require('bluebird');
 const RoutesInfo = require('@quoin/expressjs-routes-info');
 const uuid = require('uuid');
 const warpjsUtils = require('@warp-works/warpjs-utils');
@@ -30,14 +31,16 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
         });
 
         try {
-            const domainModel = await pluginInfo.warpCore.getDomainByName(pluginInfo.domain);
-            const questionnaireEntity = domainModel.getEntityByName(pluginInfo.config.schema.questionnaire);
-            const instance = await questionnaireEntity.getInstance(pluginInfo.persistence, surveyId);
+            const domain = await pluginInfo.warpCore.getDomainByName(pluginInfo.domain);
+            const entity = domain.getEntityByName(pluginInfo.config.schema.questionnaire);
+            const instance = await entity.getInstance(pluginInfo.persistence, surveyId);
             if (!instance.id) {
                 throw new Error(`Cannot find Survey Tool id: ${surveyId}`);
             }
-            const questionnaire = new Questionnaire(questionnaireEntity, instance);
-            const hal = await questionnaire.toHalFull(pluginInfo.domain, pluginInfo.config, pluginInfo.persistence);
+            const questionnaire = new Questionnaire();
+            await questionnaire.fromPersistence(Promise, pluginInfo, entity, instance);
+
+            const hal = await questionnaire.toHal(warpjsUtils, RoutesInfo, constants.routes);
             resource.embed('questionnaires', hal);
 
             // create answers resource

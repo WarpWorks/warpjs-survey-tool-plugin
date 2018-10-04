@@ -1,4 +1,5 @@
 // const debug = require('debug')('W2:plugin:survey-tool:root/get-all-questionnaires');
+const Promise = require('bluebird');
 const RoutesInfo = require('@quoin/expressjs-routes-info');
 const warpjsUtils = require('@warp-works/warpjs-utils');
 
@@ -16,23 +17,27 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
         );
     },
     [warpjsUtils.constants.HAL_CONTENT_TYPE]: async () => {
-        const pluginConfig = req.app.get(constants.appKeys.pluginConfig);
-        const domain = pluginConfig.domainName;
-
-        const Persistence = require(pluginConfig.persistence.module);
-        const persistence = new Persistence(pluginConfig.persistence.host, domain);
+        const pluginInfo = utils.getPluginInfo(req);
 
         const resource = warpjsUtils.createResource(req, {
-            title: `Domain ${domain} - Survey Tool`,
-            domain
+            title: `Domain ${pluginInfo.domain} - Survey Tool`,
+            domain: pluginInfo.domain
         });
 
         try {
-            const domainModel = await req.app.get(constants.appKeys.warpCore).getDomainByName(domain);
-            const questionnaireEntity = await domainModel.getEntityByName(pluginConfig.schema.questionnaire);
-            const questionnaireDocuments = await questionnaireEntity.getDocuments(persistence);
-            const questionnaireInstances = questionnaireDocuments.map((questionnaireDocument) => new Questionnaire(questionnaireEntity, questionnaireDocument));
-            const questionnairesHAL = questionnaireInstances.map((questionnaireInstance) => questionnaireInstance.toHal());
+            const domainModel = await pluginInfo.warpCore.getDomainByName(pluginInfo.domain);
+            const questionnaireEntity = await domainModel.getEntityByName(pluginInfo.config.schema.questionnaire);
+            const questionnaireDocuments = await questionnaireEntity.getDocuments(pluginInfo.persistence);
+            const questionnaireInstances = await Promise.map(
+                questionnaireDocuments,
+                async (questionnaireDocument) => {
+                    const questionnaire = new Questionnaire();
+                    await questionnaire.fromPersistence(Promise, pluginInfo, questionnaireEntity, questionnaireDocument);
+                    return questionnaire;
+                }
+            );
+
+            const questionnairesHAL = questionnaireInstances.map((questionnaireInstance) => questionnaireInstance.toBaseHal(warpjsUtils, RoutesInfo, constants.routes));
             resource.embed('questionnaires', questionnairesHAL);
             await utils.sendHal(req, res, resource);
         } catch (err) {
@@ -40,7 +45,7 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
             console.error("server/root/get-all-questionnaires: err:", err);
             await utils.sendErrorHal(req, res, resource, err);
         } finally {
-            await persistence.close();
+            await pluginInfo.persistence.close();
         }
     }
 });
