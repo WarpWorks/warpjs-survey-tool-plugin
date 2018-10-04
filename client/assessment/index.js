@@ -129,15 +129,7 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                                 $("input[name='questionnaire-level'][value='" + detailLevel + "']").attr('checked', 'checked');
                             };
 
-                            const updateProgressLabel = () => {
-                                if (assessment.projectName) {
-                                    $('.progress-label').html('Progress for ' + assessment.projectName);
-                                } else {
-                                    $('.progress-label').html('Progress');
-                                }
-                            };
-
-                            updateProgressLabel();
+                            $('.ipt-title').html(assessment.projectName);
 
                             const descriptionOnLeave = (direction) => {
                                 if ($('#project-name').val()) {
@@ -145,11 +137,10 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                                     assessment.projectName = $('#project-name').val();
                                     assessment.mainContact = $('#main-contact').val();
                                     assessment.projectStatus = $('#project-status').val();
-                                    $('.progress-label').html('Progress for ' + assessment.projectName); ;
                                     updateQuestions();
                                     updatePointers(direction);
-                                    updateProgressLabel();
                                     updateAssessment();
+                                    $('.ipt-title').html(assessment.projectName);
                                 } else {
                                     $('#project-name').addClass('is-invalid');
                                     $('.invalid-feedback').css('display', 'block');
@@ -636,10 +627,8 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
 
                             const updateQuestions = () => {
                                 if (questions && questions[questionPointer]) {
-                                    getAssessment();
                                     questions[questionPointer].answer = $("input[name='question-options'][checked='checked']").val();
                                     questions[questionPointer].comments = $('textarea.comment-text').val();
-                                    updateAssessment();
                                 }
                             };
 
@@ -764,12 +753,16 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                             updateQuestionContent();
 
                             $(document).on('click', '.question-next', () => {
+                                getAssessment();
                                 updateQuestions();
                                 updatePointers('next');
+                                updateAssessment();
                             });
                             $(document).on('click', '.question-back', () => {
+                                getAssessment();
                                 updateQuestions();
                                 updatePointers('back');
+                                updateAssessment();
                             });
                             $(document).on('click', '.iteration-next', () => {
                                 iterationClick('next');
@@ -836,14 +829,17 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                                 const selectedCategoryIndex = (Math.ceil((progressPercent / 100) * progressFilteredCategories.length) - 1);
 
                                 if ($('.questionnaire.question').length) {
+                                    getAssessment();
                                     updateQuestions();
+                                    updateAssessment();
                                 } else if ($('.questionnaire.description').length) {
                                     if ($('#project-name').val()) {
+                                        getAssessment();
                                         assessment.projectName = $('#project-name').val();
                                         assessment.mainContact = $('#main-contact').val();
                                         assessment.projectStatus = $('#project-status').val();
-                                        updateProgressLabel();
-                                        $('.progress-label').html('Progress for ' + assessment.projectName);
+                                        updateAssessment();
+                                        $('.ipt-title').html(assessment.projectName);
                                     } else {
                                         $('#project-name').addClass('is-invalid');
                                         $('.invalid-feedback').css('display', 'block');
@@ -859,7 +855,9 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                                         }
                                     });
                                     if (hasIteration) {
+                                        getAssessment();
                                         updateIterations();
+                                        updateAssessment();
                                     } else {
                                         $('.iteration-form input[type="text"]').first().addClass('is-invalid');
                                         $('.invalid-feedback').css('display', 'block');
