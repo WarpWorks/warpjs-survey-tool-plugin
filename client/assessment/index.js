@@ -72,6 +72,7 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
 
                 if (result.data.assessmentId) {
                     assessment = storage.getAssessment(result.data.surveyId, result.data.assessmentId);
+                    console.log('assessment:', assessment);
                     if (assessment) {
                         questionPointer = 2;
                         storage.setCurrent($, 'surveyId', result.data.surveyId);
@@ -336,7 +337,7 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                                 if (currentQuestion && currentQuestion.imageUrl) {
                                     values.image = currentQuestion.imageUrl;
                                 }
-
+                                console.log('currentQuestion', currentQuestion, 'constants.specializedTemplates.create', constants.specializedTemplates.create, currentQuestion.name === constants.specializedTemplates.create, storage.getCurrent($, 'assessmentId'));
                                 if (currentQuestion.name === constants.specializedTemplates.create && !storage.getCurrent($, 'assessmentId')) {
                                     values.showCreate = true;
                                 }
@@ -556,10 +557,12 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                                 };
                                 const values = summaryValues();
 
+                                console.log('URL for details: ', result.data._embedded.questionnaires[0]._links.docx.href);
                                 shared.setSurveyContent($, placeholder, questionnaireSummaryTemplate({
+                                    details: details,
                                     values: values,
                                     title: assessment.projectName,
-                                    url: result.data._links.self.href.split('?')[0] + 'docx',
+                                    url: result.data._embedded.questionnaires[0]._links.docx.href,
                                     data: JSON.stringify(
                                         {
                                             details: details,
@@ -668,11 +671,12 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                                 };
 
                                 const values = summaryValues();
+                                console.log('URL for details: ', result.data._embedded.questionnaires[0]._links.docx.href);
                                 shared.setSurveyContent($, placeholder, questionnaireDetailsTemplate({
                                     details: details,
                                     values: values,
                                     title: assessment.projectName,
-                                    url: result.data._links.self.href.split('?')[0] + 'docx',
+                                    url: result.data._embedded.questionnaires[0]._links.docx.href,
                                     data: JSON.stringify(
                                         {
                                             details: details,
