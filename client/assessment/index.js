@@ -20,7 +20,7 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
 (($) => $(document).ready(() => {
     const loader = window.WarpJS.toast.loading($, "Page is loading");
     const placeholder = shared.preRender($);
-
+    $('.progress-container', placeholder).css('display', 'block');
     $('[data-toggle="tooltip"]').tooltip({
         container: 'body',
         trigger: 'click'
@@ -68,32 +68,48 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                 let iterationPointer = 0;
                 let questionPointer = 0;
                 let progress = 0;
+                let assessment = null;
 
                 if (result.data.assessmentId) {
-                    const assessment = storage.getAssessment(result.data.surveyId, result.data.assessmentId);
+                    assessment = storage.getAssessment(result.data.surveyId, result.data.assessmentId);
+                    console.log('assessment:', assessment);
                     if (assessment) {
                         questionPointer = 2;
                         storage.setCurrent($, 'surveyId', result.data.surveyId);
                         storage.setCurrent($, 'assessmentId', result.data.assessmentId);
                     } else {
                         shared.setSurveyContent($, placeholder, cannotFindAssessmentTemplate({ assessmentId: result.data.assessmentId }));
+                        return;
                     }
                 } else {
                     storage.setCurrent($, 'surveyId', result.data.surveyId);
                 }
                 result.data.detailLevel = 1;
-                let categories = _.filter(result.data._embedded.answers[0]._embedded.categories, (progressCategory) => {
-                    const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
-                        return progressQuestion.detailLevel <= result.data.detailLevel;
+                let categories = [];
+                let iterations = [];
+                let questions = [];
+
+                const getAssessment = () => {
+                    assessment = storage.getAssessment(storage.getCurrent($, 'surveyId'), storage.getCurrent($, 'assessmentId'));
+                    categories = _.filter(assessment.answers[0]._embedded.categories, (progressCategory) => {
+                        const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
+                            return progressQuestion.detailLevel <= result.data.detailLevel;
+                        });
+                        return questionDetailLevels.length > 0;
                     });
-                    return questionDetailLevels.length > 0;
-                });
-                let iterations = categories && categories[categoryPointer] ? _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
-                    return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
-                }) : [];
-                let questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                    return question.detailLevel <= result.data.detailLevel;
-                }) : [];
+                    iterations = categories && categories[categoryPointer] ? _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
+                        return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
+                    }) : [];
+                    questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
+                        return question.detailLevel <= result.data.detailLevel;
+                    }) : [];
+                };
+
+                const updateAssessment = () => {
+                    storage.updateAssessment(storage.getCurrent($, 'surveyId'), storage.getCurrent($, 'assessmentId'), assessment);
+                };
+
+                getAssessment();
 
                 let progressFilteredCategories = [];
 
@@ -125,13 +141,15 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
 
                             const descriptionOnLeave = (direction) => {
                                 if ($('#project-name').val()) {
-                                    result.data.projectName = $('#project-name').val();
-                                    result.data.mainContact = $('#main-contact').val();
-                                    result.data.projectStatus = $('#project-status').val();
+                                    getAssessment();
+                                    assessment.projectName = $('#project-name').val();
+                                    assessment.mainContact = $('#main-contact').val();
+                                    assessment.projectStatus = $('#project-status').val();
                                     $('.progress-label').html('Progress for ' + result.data.projectName); ;
                                     updateQuestions();
                                     updatePointers(direction);
                                     updateProgressLabel();
+                                    updateAssessment();
                                 } else {
                                     $('#project-name').addClass('is-invalid');
                                     $('.invalid-feedback').css('display', 'block');
@@ -146,7 +164,7 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                             });
                             $(document).on('click', '.levels-back', () => {
                                 result.data.detailLevel = $("input[name='questionnaire-level'][checked='checked']").val();
-                                categories = _.filter(result.data._embedded.answers[0]._embedded.categories, (progressCategory) => {
+                                categories = _.filter(assessment.answers[0]._embedded.categories, (progressCategory) => {
                                     const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
                                         return progressQuestion.detailLevel <= result.data.detailLevel;
                                     });
@@ -156,7 +174,7 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                             });
                             $(document).on('click', '.levels-next', () => {
                                 result.data.detailLevel = $("input[name='questionnaire-level'][checked='checked']").val();
-                                categories = _.filter(result.data._embedded.answers[0]._embedded.categories, (progressCategory) => {
+                                categories = _.filter(assessment.answers[0]._embedded.categories, (progressCategory) => {
                                     const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
                                         return progressQuestion.detailLevel <= result.data.detailLevel;
                                     });
@@ -421,7 +439,7 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                             };
 
                             const summaryValues = () => {
-                                return _.filter(_.map(result.data._embedded.answers[0]._embedded.categories, (category) => {
+                                return _.filter(_.map(assessment.answers[0]._embedded.categories, (category) => {
                                     const categoryQ = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (questionCategory) => {
                                         return questionCategory.id === category.id;
                                     });
@@ -475,35 +493,8 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                                 });
                             };
 
-                            const summarySetup = () => {
-                                const details = {
-                                    questionnaire: result.data._embedded.questionnaires[0].name,
-                                    name: result.data.projectName,
-                                    contact: result.data.mainContact,
-                                    status: result.data.projectStatus,
-                                    data: detailsValues()
-                                };
-                                const values = summaryValues();
-                                $('.ipt-body').html(
-                                    questionnaireSummaryTemplate(
-                                        {
-                                            values: values,
-                                            title: result.data.projectName,
-                                            url: result.data._links.self.href,
-                                            data: JSON.stringify(
-                                                {
-                                                    details: details,
-                                                    values: values
-                                                }
-                                            )
-                                        }
-                                    )
-                                );
-                                summaryCalculations();
-                            };
-
                             const detailsValues = () => {
-                                return _.filter(_.map(result.data._embedded.answers[0]._embedded.categories, (category) => {
+                                return _.filter(_.map(assessment.answers[0]._embedded.categories, (category) => {
                                     const categoryQ = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (questionCategory) => {
                                         return questionCategory.id === category.id;
                                     });
@@ -557,6 +548,31 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                                 });
                             };
 
+                            const summarySetup = () => {
+                                const details = {
+                                    questionnaire: result.data._embedded.questionnaires[0].name,
+                                    name: result.data.projectName,
+                                    contact: result.data.mainContact,
+                                    status: result.data.projectStatus,
+                                    data: detailsValues()
+                                };
+                                const values = summaryValues();
+
+                                console.log('URL for summary: ', result.data._links.self.href.split('?')[0] + 'docx');
+                                shared.setSurveyContent($, placeholder, questionnaireSummaryTemplate({
+                                    values: values,
+                                    title: result.data.projectName,
+                                    url: result.data._links.self.href.split('?')[0] + 'docx',
+                                    data: JSON.stringify(
+                                        {
+                                            details: details,
+                                            values: values
+                                        }
+                                    )
+                                }));
+                                summaryCalculations();
+                            };
+
                             const updateQuestionContent = (outOfBounds = '') => {
                                 const progressPosition = categories[categoryPointer] ? _.findIndex(progressFilteredCategories, function(o) {
                                     return o.id && o.id === categories[categoryPointer].id;
@@ -608,7 +624,7 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                             };
 
                             const updateIterations = () => {
-                                const category = result.data._embedded.answers[0]._embedded.categories[categoryPointer];
+                                const category = assessment.answers[0]._embedded.categories[categoryPointer];
                                 category._embedded.iterations[0].name = $('input#iteration1').val();
                                 category._embedded.iterations[1].name = $('input#iteration2').val();
                                 category._embedded.iterations[2].name = $('input#iteration3').val();
@@ -651,11 +667,12 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                                 };
 
                                 const values = summaryValues();
+                                console.log('URL for details: ', result.data._links.self.href.split('?')[0] + 'docx');
                                 shared.setSurveyContent($, placeholder, questionnaireDetailsTemplate({
                                     details: details,
                                     values: values,
                                     title: result.data.projectName,
-                                    url: result.data._links.self.href,
+                                    url: result.data._links.self.href.split('?')[0] + 'docx',
                                     data: JSON.stringify(
                                         {
                                             details: details,
@@ -671,10 +688,11 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                                     $('.comment-text-not-editable').html(comment);
                                 });
                             };
+
                             let flattenedAnswers = [];
                             const relatedReadingSetup = () => {
                                 flattenedAnswers = [];
-                                _.each(result.data._embedded.answers[0]._embedded.categories, (rCategory) => {
+                                _.each(assessment.answers[0]._embedded.categories, (rCategory) => {
                                     _.each(rCategory._embedded.iterations, (rIteration) => {
                                         _.each(rIteration._embedded.questions, (rQuestion) => {
                                             if (rQuestion.detailLevel <= result.data.detailLevel && rQuestion.answer) {
@@ -727,11 +745,11 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                                 shared.setSurveyContent($, placeholder, questionnaireRelatedReadingTemplate({readings: result.data._embedded.questionnaires[0]._embedded.resultSets}));
                             };
 
-                            if (result.data._embedded.answers[0]._embedded.categories[categoryPointer].isRepeatable === true) {
+                            if (assessment.answers[0]._embedded.categories[categoryPointer].isRepeatable === true) {
                                 questionPointer = -1;
                             }
 
-                            categories = result.data._embedded.answers[0]._embedded.categories;
+                            categories = assessment.answers[0]._embedded.categories;
                             iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
                                 return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                             });
@@ -829,7 +847,7 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                                     }
                                 } else if ($('.questionnaire.levels').length) {
                                     result.data.detailLevel = $("input[name='questionnaire-level'][checked='checked']").val();
-                                    categories = _.filter(result.data._embedded.answers[0]._embedded.categories, (progressCategory) => {
+                                    categories = _.filter(assessment.answers[0]._embedded.categories, (progressCategory) => {
                                         const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
                                             return progressQuestion.detailLevel <= result.data.detailLevel;
                                         });

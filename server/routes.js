@@ -11,7 +11,7 @@ module.exports = (baseUrl) => {
 
     routesInfo.route(routes.root, '/', root);
     routesInfo.route(routes.assessment, '/{surveyId}/{?assessmentId}', assessment);
-    routesInfo.route(routes.docx, '/{surveyId}/{assessmentId}/docx', docx);
+    routesInfo.route(routes.docx, '/{surveyId}/docx', docx);
     // routesInfo.route(routes.questionnaire, '/{id}', questionnaire);
     // routesInfo.route(routes.wizard, '/{domain}/wizard/{wizardId}', wizard);
 
