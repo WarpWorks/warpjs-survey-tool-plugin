@@ -1,7 +1,7 @@
 <div class="questionnaire">
   <div class="row">
     <div class="col-12">
-      <h2 class="ipt-title">{{question.name}}</h2>
+      <h2 class="ipt-title-question">{{question.name}}</h2>
       <p>{{{question.content}}}</p>
     </div>
   </div>
@@ -17,14 +17,14 @@
   <div class="buttons row">
     <div class="col-sm-4">
       {{#if notFirst}}
-        <button class="question-back">back</button>
+        <button class="question-back-intro">back</button>
       {{/if}}
     </div>
     <div class="col-sm-4 col-sm-push-4">
       {{#if showCreate}}
-        <button class="question-assessment-create">CREATE</button>
+        <button class="question-assessment-create" data-survey-tool-action="create-new-assessment">CREATE</button>
       {{else}}
-        <button class="question-next">NEXT</button>
+        <button class="question-next-intro">NEXT</button>
       {{/if}}
     </div>
   </div>

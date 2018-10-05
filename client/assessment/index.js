@@ -4,6 +4,7 @@ const uuid = require('uuid/v4');
 
 const cannotFindAssessmentTemplate = require('./cannot-find-assessment.hbs');
 const constants = require('./../constants');
+const createAssessment = require('./../surveys/create-assessment');
 const errorTemplate = require('./../error.hbs');
 const mockWarpjsUtils = require('./../mock-warpjs-utils');
 const Questionnaire = require('./../../lib/models/questionnaire');
@@ -74,6 +75,7 @@ const storage = require('./../storage');
             if (result.error) {
                 shared.setSurveyContent($, placeholder, errorTemplate(result.data));
             } else {
+                createAssessment($, placeholder);
                 shared.postRender($, result.data);
 
                 let categoryPointer = 0;
@@ -84,7 +86,6 @@ const storage = require('./../storage');
 
                 if (result.data.assessmentId) {
                     assessment = storage.getAssessment(result.data.surveyId, result.data.assessmentId);
-                    // console.log('assessment:', assessment);
                     if (assessment) {
                         questionPointer = 2;
                         storage.setCurrent($, 'surveyId', result.data.surveyId);
@@ -101,13 +102,11 @@ const storage = require('./../storage');
                     delete assessment._embedded.answers;
                 }
 
-                // console.log("WORKING ASSESSMENT:", assessment);
                 let categories = [];
                 let iterations = [];
                 let questions = [];
 
-                const getAssessment = () => {
-                    assessment = storage.getAssessment(storage.getCurrent($, 'surveyId'), storage.getCurrent($, 'assessmentId'));
+                const filterContent = () => {
                     categories = _.filter(assessment.answers[0]._embedded.categories, (progressCategory) => {
                         const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
                             return progressQuestion.detailLevel <= assessment.detailLevel;
@@ -120,6 +119,14 @@ const storage = require('./../storage');
                     questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
                         return question.detailLevel <= assessment.detailLevel;
                     }) : [];
+                };
+
+                filterContent();
+                progress = 1 / categories.length * 100;
+
+                const getAssessment = () => {
+                    assessment = storage.getAssessment(storage.getCurrent($, 'surveyId'), storage.getCurrent($, 'assessmentId'));
+                    filterContent();
                 };
 
                 const updateAssessment = () => {
@@ -146,22 +153,6 @@ const storage = require('./../storage');
 
                             $('.ipt-title').html(assessment.projectName);
 
-                            const descriptionOnLeave = (direction) => {
-                                if ($('#project-name').val() || direction === 'back') {
-                                    getAssessment();
-                                    assessment.projectName = $('#project-name').val();
-                                    assessment.mainContact = $('#main-contact').val();
-                                    assessment.projectStatus = $('#project-status').val();
-                                    updateQuestions();
-                                    updatePointers(direction);
-                                    updateAssessment();
-                                    $('.ipt-title').html(assessment.projectName);
-                                } else {
-                                    $('#project-name').addClass('is-invalid');
-                                    $('.invalid-feedback').css('display', 'block');
-                                }
-                            };
-
                             const levelsOnLeave = () => {
                                 getAssessment();
                                 assessment.detailLevel = $("input[name='questionnaire-level'][checked='checked']").val();
@@ -175,16 +166,24 @@ const storage = require('./../storage');
                                 updateAssessment();
                             };
 
-                            $(document).on('click', '.description-back', () => {
-                                descriptionOnLeave('back');
+                            $(document).on('click', '.description-back, .description-next', (event) => {
+                                const direction = $(event.target).hasClass('description-back') ? 'back' : 'next';
+                                if ($('#project-name').val() || $(event.target).hasClass('description-back')) {
+                                    getAssessment();
+                                    assessment.projectName = $('#project-name').val();
+                                    assessment.mainContact = $('#main-contact').val();
+                                    assessment.projectStatus = $('#project-status').val();
+                                    updateQuestions();
+                                    updatePointers(direction);
+                                    updateAssessment();
+                                    $('.ipt-title').html(assessment.projectName);
+                                } else {
+                                    $('#project-name').addClass('is-invalid');
+                                    $('.invalid-feedback').css('display', 'block');
+                                }
                             });
-                            $(document).on('click', '.description-next', () => {
-                                descriptionOnLeave('next');
-                            });
-                            $(document).on('click', '.levels-back', () => {
-                                levelsOnLeave();
-                            });
-                            $(document).on('click', '.levels-next', () => {
+
+                            $(document).on('click', '.levels-back, .levels-next', () => {
                                 levelsOnLeave();
                             });
 
@@ -343,7 +342,7 @@ const storage = require('./../storage');
                                 if (currentQuestion && currentQuestion.imageUrl) {
                                     values.image = currentQuestion.imageUrl;
                                 }
-                                // console.log('currentQuestion', currentQuestion, 'constants.specializedTemplates.create', constants.specializedTemplates.create, currentQuestion.name === constants.specializedTemplates.create, storage.getCurrent($, 'assessmentId'));
+
                                 if (currentQuestion.name === constants.specializedTemplates.create && !storage.getCurrent($, 'assessmentId')) {
                                     values.showCreate = true;
                                 }
@@ -562,12 +561,11 @@ const storage = require('./../storage');
                                 };
                                 const values = summaryValues();
 
-                                // console.log('URL for summary: ', result.data._embedded.questionnaires[0]._links.docx.href);
                                 shared.setSurveyContent($, placeholder, questionnaireSummaryTemplate({
                                     details: details,
                                     values: values,
                                     title: assessment.projectName,
-                                    url: result.data._embedded.questionnaires[0]._links.docx.href,
+                                    url: result.data._links.docx.href,
                                     data: JSON.stringify(
                                         {
                                             details: details,
@@ -576,7 +574,6 @@ const storage = require('./../storage');
                                     )
                                 }));
                                 summaryCalculations();
-                                // console.log('URL for summary: ', result.data._embedded.questionnaires[0]._links.docx.href);
                             };
 
                             const updateQuestionContent = (outOfBounds = '') => {
@@ -675,12 +672,11 @@ const storage = require('./../storage');
                                 };
 
                                 const values = summaryValues();
-                                // console.log('URL for details: ', result.data._embedded.questionnaires[0]._links.docx.href);
                                 shared.setSurveyContent($, placeholder, questionnaireDetailsTemplate({
                                     details: details,
                                     values: values,
                                     title: assessment.projectName,
-                                    url: result.data._embedded.questionnaires[0]._links.docx.href,
+                                    url: result.data._links.docx.href,
                                     data: JSON.stringify(
                                         {
                                             details: details,
@@ -778,6 +774,10 @@ const storage = require('./../storage');
                                 updateQuestions();
                                 updatePointers('back');
                                 updateAssessment();
+                            });
+                            $(document).on('click', '.question-next-intro, .question-back-intro', (event) => {
+                                const direction = $(event.target).hasClass('question-back-intro') ? 'back' : 'next';
+                                updatePointers(direction);
                             });
                             $(document).on('click', '.iteration-next', () => {
                                 iterationClick('next');
