@@ -611,7 +611,6 @@ const storage = require('./../storage');
                                                 assessment.href = window.WarpJS.expandUrlTemplate(assessmentTemplateUrl, {surveyId: storage.getCurrent($, 'surveyId'), assessmentId: assessment.assessmentId});
                                                 return assessment;
                                             });
-                                            console.log('assessments', assessments);
                                             shared.setSurveyContent($, placeholder, questionnaireDescriptionTemplate({projectName: assessment.projectName, projectStatus: assessment.projectStatus, mainContact: assessment.mainContact, question: currentQuestion, showCreate: showCreate, assessments: assessments}));
                                         } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.details) {
                                             shared.setSurveyContent($, placeholder, questionnaireLevelsTemplate({level: assessment.detailLevel, question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null}));
