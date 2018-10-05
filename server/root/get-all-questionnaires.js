@@ -37,7 +37,7 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
                 }
             );
 
-            const questionnairesHAL = questionnaireInstances.map((questionnaireInstance) => questionnaireInstance.toBaseHal(warpjsUtils, RoutesInfo, constants.routes));
+            const questionnairesHAL = questionnaireInstances.map((questionnaireInstance) => questionnaireInstance.toHal(warpjsUtils, RoutesInfo, constants.routes));
             resource.embed('questionnaires', questionnairesHAL);
             await utils.sendHal(req, res, resource);
         } catch (err) {

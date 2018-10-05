@@ -2,19 +2,20 @@ const uuid = require('uuid/v4');
 
 const updateAssessment = require('./update-assessment');
 
-module.exports = (surveyId) => {
+module.exports = (surveyId, questionnaire) => {
     const assessmentId = uuid();
+
+    const answers = [questionnaire.generateDefaultAnswer(uuid)];
 
     const assessment = {
         surveyId,
         assessmentId,
-        data: {
-            levelOfDetail: 1,
-            projectName: '',
-            mainContact: '',
-            projectStatus: '',
-            solutionCanvas: ''
-        }
+        detailLevel: 1,
+        mainContact: "",
+        projectName: "",
+        projectStatus: "",
+        solutionCanvas: "",
+        answers
     };
 
     updateAssessment(surveyId, assessmentId, assessment);
