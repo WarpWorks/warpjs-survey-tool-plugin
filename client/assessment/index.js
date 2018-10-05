@@ -1,12 +1,12 @@
 const _ = require('lodash');
 const Promise = require('bluebird');
+const uuid = require('uuid/v4');
 
 const cannotFindAssessmentTemplate = require('./cannot-find-assessment.hbs');
-const errorTemplate = require('./../error.hbs');
-const shared = require('./../shared');
-const storage = require('./../storage');
-
 const constants = require('./../constants');
+const errorTemplate = require('./../error.hbs');
+const mockWarpjsUtils = require('./../mock-warpjs-utils');
+const Questionnaire = require('./../../lib/models/questionnaire');
 const questionnaireTemplate = require('./questionnaire.hbs');
 const questionnaireIntroTemplate = require('./questionnaire-intro.hbs');
 const questionnaireDescriptionTemplate = require('./questionnaire-description.hbs');
@@ -16,6 +16,8 @@ const questionnaireSummaryTemplate = require('./results/questionnaire-summary.hb
 const questionnaireDetailsTemplate = require('./results/questionnaire-details.hbs');
 const questionnaireRelatedReadingTemplate = require('./results/questionnaire-related-readings.hbs');
 const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-related-reading-detail.hbs');
+const shared = require('./../shared');
+const storage = require('./../storage');
 
 (($) => $(document).ready(() => {
     const loader = window.WarpJS.toast.loading($, "Page is loading");
@@ -59,6 +61,16 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
         .then(() => window.WarpJS.getCurrentPageHAL($))
         .then((result) => {
             storage.setCurrent($, 'defaultAnswers', result.data._embedded.answers[0]);
+            if (result.data && result.data._embedded && result.data._embedded.questionnaires) {
+                storage.setCurrent($, 'surveyToolQuestionnaires', result.data._embedded.questionnaires.reduce(
+                    (cumulator, questionnaire) => {
+                        cumulator[questionnaire.id] = Questionnaire.fromHal(questionnaire);
+                        return cumulator;
+                    },
+                    {}
+                ));
+            }
+
             if (result.error) {
                 shared.setSurveyContent($, placeholder, errorTemplate(result.data));
             } else {
@@ -68,7 +80,7 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                 let iterationPointer = 0;
                 let questionPointer = 0;
                 let progress = 0;
-                let assessment = null;
+                let assessment;
 
                 if (result.data.assessmentId) {
                     assessment = storage.getAssessment(result.data.surveyId, result.data.assessmentId);
@@ -83,8 +95,13 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                     }
                 } else {
                     storage.setCurrent($, 'surveyId', result.data.surveyId);
+                    const questionnaire = storage.getCurrent($, 'surveyToolQuestionnaires')[storage.getCurrent($, 'surveyId')];
+                    assessment = questionnaire.generateDefaultAssessment(uuid, 'foobar').toHal(mockWarpjsUtils).toJSON();
+                    assessment.answers = assessment._embedded.answers;
+                    delete assessment._embedded.answers;
                 }
-                assessment.detailLevel = 1;
+
+                // console.log("WORKING ASSESSMENT:", assessment);
                 let categories = [];
                 let iterations = [];
                 let questions = [];
@@ -108,8 +125,6 @@ const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-rel
                 const updateAssessment = () => {
                     storage.updateAssessment(storage.getCurrent($, 'surveyId'), storage.getCurrent($, 'assessmentId'), assessment);
                 };
-
-                getAssessment();
 
                 let progressFilteredCategories = [];
 

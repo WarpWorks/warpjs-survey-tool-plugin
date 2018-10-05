@@ -29,6 +29,8 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
             assessmentId
         });
 
+        resource.link('docx', RoutesInfo.expand(constants.routes.docx, {}));
+
         try {
             const domain = await pluginInfo.warpCore.getDomainByName(pluginInfo.domain);
             const entity = domain.getEntityByName(pluginInfo.config.schema.questionnaire);
