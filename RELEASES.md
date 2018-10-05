@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.22 - 2018-10-05
+
+- #35: Fix display and creation of new assessment.
+
 ## 1.2.21 - 2018-10-04
 
 - #35: Import files.
