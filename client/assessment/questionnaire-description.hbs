@@ -20,7 +20,12 @@
       <button class="back description-back">back</button>
     </div>
     <div class="col-sm-4 col-sm-push-4">
-      <button class="next description-next">NEXT</button>
+      {{#if showCreate}}
+        <button class="question-assessment-create" data-survey-tool-action="create-new-assessment">CREATE</button>
+      {{else}}
+        <button class="description-next">NEXT</button>
+      {{/if}}
+      {{> dropdown assessments=assessments}}
     </div>
   </div>
 </div>

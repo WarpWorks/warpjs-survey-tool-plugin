@@ -302,10 +302,12 @@
             .question-next,
             .iteration-next,
             .question-next-intro,
+            .description-next,
             .end-next,
             .summary-next,
             .details-next,
-            .question-assessment-create {
+            .question-assessment-create,
+            .assessment-dropup {
                 background-color: #c7281a;
                 border-radius: 3px;
                 color: #fff;
@@ -314,6 +316,10 @@
                 padding: 7px 30px;
                 font-size: 12px;
                 float: right;
+            }
+
+            .assessment-dropup {
+                background-color: #5296b3;
             }
 
             .comments {
@@ -782,6 +788,24 @@
             float: right;
         }
     }
+
+    .assessment-menu-dropdown {
+        max-height: 80vh;
+        width: 280px;
+        overflow-y: scroll;
+        .dropdown-item {
+            padding: 10px;
+            display: block;
+
+            &:nth-child(even) {
+                background-color: #f3f3f3;
+            }
+        }
+
+        .question-assessment-create {
+            margin:10px;
+        }
+    }
 }
 
 .tooltip-inner {
@@ -806,3 +830,70 @@
 
 @import './export-assessment/style.less';
 @import './load-assessment/style.less';
+
+@mixin caret-down {
+  border-top: $caret-width solid;
+  border-right: $caret-width solid transparent;
+  border-bottom: 0;
+  border-left: $caret-width solid transparent;
+}
+
+@mixin caret-up {
+  border-top: 0;
+  border-right: $caret-width solid transparent;
+  border-bottom: $caret-width solid;
+  border-left: $caret-width solid transparent;
+}
+
+@mixin caret-right {
+  border-top: $caret-width solid transparent;
+  border-bottom: $caret-width solid transparent;
+  border-left: $caret-width solid;
+}
+
+@mixin caret-left {
+  border-top: $caret-width solid transparent;
+  border-right: $caret-width solid;
+  border-bottom: $caret-width solid transparent;
+}
+
+@mixin caret($direction: down) {
+  @if $enable-caret {
+    &::after {
+      display: inline-block;
+      width: 0;
+      height: 0;
+      margin-left: $caret-width * .85;
+      vertical-align: $caret-width * .85;
+      content: "";
+      @if $direction == down {
+        @include caret-down;
+      } @else if $direction == up {
+        @include caret-up;
+      } @else if $direction == right {
+        @include caret-right;
+      }
+    }
+
+    @if $direction == left {
+      &::after {
+        display: none;
+      }
+
+      &::before {
+        display: inline-block;
+        width: 0;
+        height: 0;
+        margin-right: $caret-width * .85;
+        vertical-align: $caret-width * .85;
+        content: "";
+        @include caret-left;
+      }
+    }
+
+    &:empty::after {
+      margin-left: 0;
+    }
+  }
+}
+

@@ -173,9 +173,12 @@ const storage = require('./../storage');
                                     assessment.projectName = $('#project-name').val();
                                     assessment.mainContact = $('#main-contact').val();
                                     assessment.projectStatus = $('#project-status').val();
+                                    console.log('assessment', assessment);
                                     updateQuestions();
                                     updatePointers(direction);
                                     updateAssessment();
+
+                                    console.log('assessment after', assessment);
                                     $('.ipt-title').html(assessment.projectName);
                                 } else {
                                     $('#project-name').addClass('is-invalid');
@@ -341,10 +344,6 @@ const storage = require('./../storage');
 
                                 if (currentQuestion && currentQuestion.imageUrl) {
                                     values.image = currentQuestion.imageUrl;
-                                }
-
-                                if (currentQuestion.name === constants.specializedTemplates.create && !storage.getCurrent($, 'assessmentId')) {
-                                    values.showCreate = true;
                                 }
 
                                 return values;
@@ -604,7 +603,16 @@ const storage = require('./../storage');
                                             return question.id === questions[questionPointer].id;
                                         })) : null;
                                         if (currentQuestion && currentQuestion.name === constants.specializedTemplates.description) {
-                                            shared.setSurveyContent($, placeholder, questionnaireDescriptionTemplate({projectName: assessment.projectName, projectStatus: assessment.projectStatus, mainContact: assessment.mainContact, question: currentQuestion}));
+                                            const showCreate = !storage.getCurrent($, 'assessmentId');
+                                            const surveyId = storage.getCurrent($, 'surveyId');
+
+                                            const assessmentTemplateUrl = storage.getCurrent($, 'surveyToolAssessmentTemplateUrl');
+                                            const assessments = storage.getAssessments(surveyId).map((assessment) => {
+                                                assessment.href = window.WarpJS.expandUrlTemplate(assessmentTemplateUrl, {surveyId: storage.getCurrent($, 'surveyId'), assessmentId: assessment.assessmentId});
+                                                return assessment;
+                                            });
+                                            console.log('assessments', assessments);
+                                            shared.setSurveyContent($, placeholder, questionnaireDescriptionTemplate({projectName: assessment.projectName, projectStatus: assessment.projectStatus, mainContact: assessment.mainContact, question: currentQuestion, showCreate: showCreate, assessments: assessments}));
                                         } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.details) {
                                             shared.setSurveyContent($, placeholder, questionnaireLevelsTemplate({level: assessment.detailLevel, question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null}));
                                             assignDetailLevelSelected();
