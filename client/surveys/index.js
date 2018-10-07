@@ -1,5 +1,6 @@
 const Promise = require('bluebird');
 
+const assessmentName = require('./assessment-name');
 const createAssessment = require('./create-assessment');
 const deleteAction = require('./delete-action');
 const errorTemplate = require('./../error.hbs');
@@ -37,6 +38,7 @@ const template = require('./template.hbs');
             }
             shared.postRender($, result.data);
             fetchAssessments($, placeholder);
+            assessmentName($, placeholder);
             createAssessment($, placeholder);
             deleteAction($, placeholder);
         })

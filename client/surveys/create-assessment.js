@@ -1,8 +1,8 @@
 const storage = require('./../storage');
 
 module.exports = ($, placeholder) => {
-    placeholder.on('click', '[data-survey-tool-action="create-new-assessment"]', function() {
-        const surveyId = storage.getCurrent($, 'surveyId');
+    placeholder.on('click', '[data-survey-tool-action="create-new-assessment"]', (event) => {
+        const surveyId = $(event.target).closest('.survey-tool-item').data('surveyToolSurveyId');
         const assessmentTemplateUrl = storage.getCurrent($, 'surveyToolAssessmentTemplateUrl');
         const questionnaires = storage.getCurrent($, 'surveyToolQuestionnaires');
         const questionnaire = questionnaires[surveyId];
@@ -11,6 +11,6 @@ module.exports = ($, placeholder) => {
 
         const redirectUrl = window.WarpJS.expandUrlTemplate(assessmentTemplateUrl, { surveyId, assessmentId });
 
-        location.href = redirectUrl;
+        document.location.href = redirectUrl;
     });
 };
