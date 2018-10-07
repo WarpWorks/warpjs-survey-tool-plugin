@@ -4,7 +4,7 @@ const uuid = require('uuid/v4');
 
 const cannotFindAssessmentTemplate = require('./cannot-find-assessment.hbs');
 const constants = require('./../constants');
-const createAssessment = require('./../surveys/create-assessment');
+const createAssessment = require('./create-assessment');
 const errorTemplate = require('./../error.hbs');
 const mockWarpjsUtils = require('./../mock-warpjs-utils');
 const Questionnaire = require('./../../lib/models/questionnaire');
