@@ -9,6 +9,27 @@
         color: #65636e;
     }
 
+    .btn {
+        color: white;
+        border: none;
+        text-transform: uppercase;
+        padding: 7px 30px;
+        font-size: 12px;
+        background-image: none;
+
+        &.btn-primary {
+            background-color: #5296b3;
+        }
+
+        &.btn-danger {
+            background-color: #c7281a
+        }
+
+        > span {
+            color: inherit;
+        }
+    }
+
     .container-fluid {
         padding-left: 0;
         padding-right: 0;
@@ -789,23 +810,6 @@
         }
     }
 
-    .assessment-menu-dropdown {
-        max-height: 80vh;
-        width: 280px;
-        overflow-y: scroll;
-        .dropdown-item {
-            padding: 10px;
-            display: block;
-
-            &:nth-child(even) {
-                background-color: #f3f3f3;
-            }
-        }
-
-        .question-assessment-create {
-            margin:10px;
-        }
-    }
 }
 
 .tooltip-inner {

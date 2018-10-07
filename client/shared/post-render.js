@@ -5,6 +5,8 @@ const storage = require('./../storage');
 module.exports = ($, data) => {
     const placeholder = $('#warpjs-content-placeholder');
 
+    storage.setCurrent($, 'warpjsUser', data.warpjsUser);
+
     storage.setCurrent($, 'surveyToolUrl', data._links.self.href);
     storage.setCurrent($, 'surveyToolAssessmentTemplateUrl', data._links.assessmentTemplate.href);
     storage.setCurrent($, 'surveyToolDefaultSurveyId', data.defaultSurveyId);
