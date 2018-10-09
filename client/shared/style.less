@@ -839,8 +839,21 @@
 
 }
 
-.tooltip-inner {
-    max-width: 800px;
+.tooltip {
+    z-index: 20001;
+
+    .tooltip-inner {
+        max-width: 800px;
+
+        .close-copyright {
+            background: transparent;
+            position: absolute;
+            border: none;
+            font-size: 18px;
+            right: 5px;
+            top: 7px;
+        }
+    }
 }
 
 .progress-container {
