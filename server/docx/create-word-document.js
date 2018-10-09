@@ -163,7 +163,7 @@ module.exports = (req, res) => {
 
             if (detail.comments) {
                 let categoryComment = docx.createP();
-                categoryComment.addText('My comment: ' + detail.comments, {font_face: 'Arial', font_size: 12});
+                categoryComment.addText('Comment: ' + detail.comments, {font_face: 'Arial', font_size: 12});
             }
 
             detail.iterations.forEach((iteration) => {
@@ -268,7 +268,7 @@ module.exports = (req, res) => {
 
                         if (question.comments) {
                             let questionComment = docx.createP();
-                            questionComment.addText('My comment: ' + question.comments, {font_face: 'Arial', font_size: 12});
+                            questionComment.addText('Comment: ' + question.comments, {font_face: 'Arial', font_size: 12});
                         }
                     });
                 }
