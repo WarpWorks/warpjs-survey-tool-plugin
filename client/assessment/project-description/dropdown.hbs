@@ -7,7 +7,9 @@
   </button>
   <div class="dropdown-menu assessment-menu-dropdown">
     {{#each assessments as |assessment|}}
-      <a class="dropdown-item" href="{{assessment.href}}">{{assessment.projectName}}</a>
+      <a class="dropdown-item" href="{{assessment.href}}">
+        {{assessment.projectName}}
+      </a>
     {{else}}
       No assessments yet.
     {{/each}}
@@ -18,6 +20,7 @@
         data-survey-tool-action="delete-assessment"
         data-survey-tool-survey-id="{{assessment.surveyId}}"
         data-survey-tool-assessment-id="{{assessment.assessmentId}}"
+        data-url="{{rootUrl}}"
         >DELETE '{{assessment.projectName}}'</button>
     {{/unless}}
 

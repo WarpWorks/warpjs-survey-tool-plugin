@@ -6,7 +6,7 @@ const template = require('./template.hbs');
 
 let initialized = false;
 
-module.exports = ($, placeholder, assessment, currentQuestion) => {
+module.exports = ($, placeholder, assessment, currentQuestion, rootUrl) => {
     const showCreate = !storage.getCurrent($, 'assessmentId');
     const surveyId = storage.getCurrent($, 'surveyId');
     const assessmentTemplateUrl = storage.getCurrent($, 'surveyToolAssessmentTemplateUrl');
@@ -24,7 +24,8 @@ module.exports = ($, placeholder, assessment, currentQuestion) => {
         showCreate,
         assessment,
         assessments,
-        question: currentQuestion
+        question: currentQuestion,
+        rootUrl: rootUrl
     });
     shared.setSurveyContent($, placeholder, content);
 
