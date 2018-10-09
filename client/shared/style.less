@@ -46,12 +46,6 @@
             line-height: 18px;
         }
 
-        .ipt-title {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-
         .title-section {
             margin-bottom: 10px;
             position: relative;
@@ -514,14 +508,31 @@
     }
 
     .details {
-        .form-details {
-            font-weight: bold;
+        .details-form-data {
+            background-color: #f0f0f0;
+            border: solid 1px #e0e0e0;
+            margin-bottom: 5px;
+            position: relative;
+            overflow: hidden;
+
+            p {
+                color: #65636e;
+                margin: 5px 0px;
+            }
+
+            .form-details {
+                font-weight: bold;
+                text-align: right;
+            }
+        }
+
+        h4 {
+            margin-top: 30px;
         }
 
         .summary-category {
             font-weight: bold;
             font-size: 16px;
-            margin-top: 40px;
             position: relative;
         }
 
