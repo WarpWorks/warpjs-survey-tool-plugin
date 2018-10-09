@@ -1,16 +1,12 @@
 <div class="questionnaire details">
-  <div class="row">
-    <div class="col-sm-12">
-      <h2 class="ipt-title results-title faded">Summary</h2>
-      <h2 class="ipt-title results-title">Details</h2>
-      <h2 class="ipt-title results-title faded">Related Readings</h2>
-      <form class="word-download-form" action="{{url}}" method="post">
-        <input type="hidden" id="data" name="data" value="{{data}}">
-        <input type="hidden" id="title" name="title" value="{{title}}">
-        <input type="submit" class="word-download" value="Download Draft RFP">
-      </form>
-    </div>
-  </div>
+  <h2 class="ipt-title results-title faded">Summary</h2>
+  <h2 class="ipt-title results-title">Details</h2>
+  <h2 class="ipt-title results-title faded">Related Readings</h2>
+  <form class="word-download-form" action="{{url}}" method="post">
+    <input type="hidden" id="data" name="data" value="{{data}}">
+    <input type="hidden" id="title" name="title" value="{{title}}">
+    <input type="submit" class="word-download" value="Download Draft RFP">
+  </form>
   <div class="row">
     <div class="col-sm-10 col-sm-push-1">
       <h3 class="ipt-name">{{details.questionnaire}}</h3>
