@@ -601,7 +601,9 @@ const storage = require('./../storage');
                                             return question.id === questions[questionPointer].id;
                                         })) : null;
                                         if (currentQuestion && currentQuestion.name === constants.specializedTemplates.description) {
-                                            projectDescription($, placeholder, assessment, currentQuestion, result.data._links.surveyToolHomepage.href);
+                                            const questionnaire = _.find(result.data._embedded.questionnaires, ['id', result.data.surveyId]);
+                                            const questionnaireUrl = questionnaire ? questionnaire._links.self.href : '';
+                                            projectDescription($, placeholder, assessment, currentQuestion, questionnaireUrl);
                                         } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.details) {
                                             shared.setSurveyContent($, placeholder, questionnaireLevelsTemplate({level: assessment.detailLevel, question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null}));
                                             assignDetailLevelSelected();

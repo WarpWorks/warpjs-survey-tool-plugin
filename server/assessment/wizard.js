@@ -30,7 +30,6 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
         });
 
         resource.link('docx', RoutesInfo.expand(constants.routes.docx, {}));
-        resource.link('surveyToolHomepage', RoutesInfo.expand(constants.routes.root, {}));
 
         try {
             const domain = await pluginInfo.warpCore.getDomainByName(pluginInfo.domain);
@@ -42,7 +41,7 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
             const questionnaire = new Questionnaire();
             await questionnaire.fromPersistence(Promise, pluginInfo, entity, instance);
 
-            const hal = await questionnaire.toHal(warpjsUtils, RoutesInfo, constants.routes);
+            const hal = await questionnaire.toHal(warpjsUtils, RoutesInfo, constants.routes, pluginInfo.domain);
             resource.embed('questionnaires', hal);
 
             // create answers resource

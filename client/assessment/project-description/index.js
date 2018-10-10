@@ -19,7 +19,7 @@ module.exports = ($, placeholder, assessment, currentQuestion, rootUrl) => {
         const warpjsUser = storage.getCurrent($, 'warpjsUser');
         assessment.mainContact = warpjsUser ? warpjsUser.Name : '';
     }
-
+    console.log('in dropdown url: ', rootUrl);
     const content = template({
         showCreate,
         assessment,
