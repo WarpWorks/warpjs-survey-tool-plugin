@@ -49,11 +49,11 @@ module.exports = (req, res) => {
                     val: "●",
                     opts: {
                         b: true,
-                        color: "f6ffed",
+                        color: "d5f5b3",
                         align: "center",
                         sz: '30',
                         shd: {
-                            fill: "f6ffed",
+                            fill: "d5f5b3",
                             line: "cccccc"
                         }
                     }
@@ -181,7 +181,7 @@ module.exports = (req, res) => {
                                         val: "●",
                                         opts: {
                                             b: true,
-                                            color: "f6ffed",
+                                            color: "d5f5b3",
                                             align: "center",
                                             sz: '40',
                                             cellColWidth: 42,
