@@ -49,26 +49,28 @@ module.exports = async (req, res) => {
         }
     };
 
-    createText(customMessages.SurveytoolWord1, {font_face: 'Arial', bold: true, font_size: 28});
-    createText(customMessages.SurveytoolWord2, {font_face: 'Arial', italic: true, font_size: 11});
-    createText(customMessages.SurveytoolWord3, {font_face: 'Arial', color: '3277b3', font_size: 16});
-    createText(customMessages.SurveytoolWord4, {font_face: 'Arial', font_size: 11});
-    createText(customMessages.SurveytoolWord5, {font_face: 'Arial', color: '3277b3', font_size: 16});
-    createText(customMessages.SurveytoolWord6, {font_face: 'Arial', font_size: 11});
-    createText(customMessages.SurveytoolWord7, {font_face: 'Arial', color: '3277b3', font_size: 16});
-    createText(customMessages.SurveytoolWord8, {font_face: 'Arial', font_size: 11});
-    createText(customMessages.SurveytoolWord9, {font_face: 'Arial', color: '3277b3', font_size: 16});
-    createText(customMessages.SurveytoolWord10, {font_face: 'Arial', font_size: 11});
-    createText(customMessages.SurveytoolWord11, {font_face: 'Arial', color: '3277b3', font_size: 16});
-    createText(customMessages.SurveytoolWord12, {font_face: 'Arial', font_size: 11});
-    createText(customMessages.SurveytoolWord13, {font_face: 'Arial', color: '3277b3', font_size: 16});
-    createText(customMessages.SurveytoolWord14, {font_face: 'Arial', font_size: 11});
-    createText(customMessages.SurveytoolWord15, {font_face: 'Arial', color: '3277b3', font_size: 16});
-    createText(customMessages.SurveytoolWord16, {font_face: 'Arial', font_size: 11});
-    createText(customMessages.SurveytoolWord17, {font_face: 'Arial', color: '3277b3', font_size: 16});
-    createText(customMessages.SurveytoolWord18, {font_face: 'Arial', font_size: 11});
-    createText(customMessages.SurveytoolWord19, {font_face: 'Arial', color: '3277b3', font_size: 16});
-    createText(customMessages.SurveytoolWord20, {font_face: 'Arial', font_size: 11});
+    if (customMessages && Object.keys(customMessages).length) {
+        createText(customMessages.SurveytoolWord1, {font_face: 'Arial', bold: true, font_size: 28});
+        createText(customMessages.SurveytoolWord2, {font_face: 'Arial', italic: true, font_size: 11});
+        createText(customMessages.SurveytoolWord3, {font_face: 'Arial', color: '3277b3', font_size: 16});
+        createText(customMessages.SurveytoolWord4, {font_face: 'Arial', font_size: 11});
+        createText(customMessages.SurveytoolWord5, {font_face: 'Arial', color: '3277b3', font_size: 16});
+        createText(customMessages.SurveytoolWord6, {font_face: 'Arial', font_size: 11});
+        createText(customMessages.SurveytoolWord7, {font_face: 'Arial', color: '3277b3', font_size: 16});
+        createText(customMessages.SurveytoolWord8, {font_face: 'Arial', font_size: 11});
+        createText(customMessages.SurveytoolWord9, {font_face: 'Arial', color: '3277b3', font_size: 16});
+        createText(customMessages.SurveytoolWord10, {font_face: 'Arial', font_size: 11});
+        createText(customMessages.SurveytoolWord11, {font_face: 'Arial', color: '3277b3', font_size: 16});
+        createText(customMessages.SurveytoolWord12, {font_face: 'Arial', font_size: 11});
+        createText(customMessages.SurveytoolWord13, {font_face: 'Arial', color: '3277b3', font_size: 16});
+        createText(customMessages.SurveytoolWord14, {font_face: 'Arial', font_size: 11});
+        createText(customMessages.SurveytoolWord15, {font_face: 'Arial', color: '3277b3', font_size: 16});
+        createText(customMessages.SurveytoolWord16, {font_face: 'Arial', font_size: 11});
+        createText(customMessages.SurveytoolWord17, {font_face: 'Arial', color: '3277b3', font_size: 16});
+        createText(customMessages.SurveytoolWord18, {font_face: 'Arial', font_size: 11});
+        createText(customMessages.SurveytoolWord19, {font_face: 'Arial', color: '3277b3', font_size: 16});
+        createText(customMessages.SurveytoolWord20, {font_face: 'Arial', font_size: 11});
+    }
 
     let logo = docx.createP();
     logo.addImage(path.resolve(repoRoot, 'assets', 'images', 'IIC-logo.png'), {cy: 40, cx: 98});
