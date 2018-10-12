@@ -18,7 +18,8 @@ module.exports = ($, placeholder) => {
             assessment.exportProperties = {
                 name: $('.survey-tool-export-assessment-properties [name="name"]', placeholder).val(),
                 revision: $('.survey-tool-export-assessment-properties [name="revision"]', placeholder).val(),
-                description: $('.survey-tool-export-assessment-properties [name="description"]', placeholder).val()
+                description: $('.survey-tool-export-assessment-properties [name="description"]', placeholder).val(),
+                timestamp: Date.now()
             };
 
             const filename = generateFilename(assessment);

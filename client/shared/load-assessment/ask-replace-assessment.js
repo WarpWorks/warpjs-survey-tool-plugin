@@ -2,11 +2,9 @@ const gotoAssessment = require('./goto-assessment');
 const loadAssessmentPopup = require('./load-assessment-popup');
 const storage = require('./../../storage');
 
-module.exports = ($, placeholder, obj) => {
-    const { surveyId, assessmentId } = storage.getCurrent($);
-    const assessment = storage.getAssessment(surveyId, assessmentId);
-    const div = loadAssessmentPopup($, placeholder, "Warning: A project with the same ID already exists in this browser (‘" + assessment.projectName + "’)!", obj, [
-        { btnClass: 'danger', action: 'load-replace', label: "Overwrite ‘" + assessment.projectName + "’" },
+module.exports = ($, placeholder, obj, stored) => {
+    const div = loadAssessmentPopup($, placeholder, "Warning: A project with the same ID already exists in this browser (‘" + stored.projectName + "’)!", obj, [
+        { btnClass: 'danger', action: 'load-replace', label: "Overwrite ‘" + stored.projectName + "’" },
         { btnClass: 'primary', action: 'load-clone', label: "Open ‘" + obj.projectName + "’ as a new project." },
         { btnClass: 'default', action: 'load-cancel', label: "Cancel" }
     ]);
@@ -16,7 +14,9 @@ module.exports = ($, placeholder, obj) => {
     });
 
     $('[data-survey-tool-action="load-clone"]', div).on('click', function() {
-        const assessmentId = storage.createAssessment(obj.surveyId);
+        const questionnaires = storage.getCurrent($, 'surveyToolQuestionnaires');
+        const questionnaire = questionnaires[obj.surveyId];
+        const assessmentId = storage.createAssessment(obj.surveyId, questionnaire);
         obj.assessmentId = assessmentId;
         storage.updateAssessment(obj.surveyId, obj.assessmentId, obj);
         gotoAssessment($, placeholder, obj);
