@@ -1,0 +1,73 @@
+<div class="questionnaire details">
+  <h2 class="ipt-title results-title faded">Summary</h2>
+  <h2 class="ipt-title results-title">Details</h2>
+  <h2 class="ipt-title results-title faded">Related Readings</h2>
+  <form class="word-download-form" action="{{url}}" method="post">
+    <input type="hidden" id="data" name="data" value="{{data}}">
+    <input type="hidden" id="title" name="title" value="{{title}}">
+    <input type="submit" class="word-download" value="Download Draft RFP">
+  </form>
+  <div class="row">
+    <div class="col-sm-10 col-sm-push-1">
+      <h3 class="ipt-name">{{details.questionnaire}}</h3>
+      <h4>Project Description</h4>
+      <div class="details-form-data">
+        <div class="col-sm-6">
+          <p>Solution / Testbed Name</p>
+        </div>
+        <div class="col-sm-6">
+          <p class="form-details">{{details.name}}</p>
+        </div>
+      </div>
+      <div class="details-form-data">
+        <div class="col-sm-6">
+          <p>Main Contact</p>
+        </div>
+        <div class="col-sm-6">
+          <p class="form-details">{{details.contact}}</p>
+        </div>
+      </div>
+      <div class="details-form-data">
+        <div class="col-sm-6">
+          <p>Project Status</p>
+        </div>
+        <div class="col-sm-6">
+          <p class="form-details">{{details.status}}</p>
+        </div>
+      </div>
+      <h4>Project Assessment Details</h4>
+      {{#each details.data}}
+        <p class="summary-category {{#if comments}} has-comments{{/if}}" data-comments="{{comments}}">{{category}}</p>
+        {{#each iterations}}
+          {{#if name}}<p class="summary-iteration">{{name}}</p>{{/if}}
+          {{#each questions}}
+            {{#if hasOptions}}
+              <div class="question-block {{#if comments}} has-comments{{/if}}" data-comments="{{comments}}">
+                <div class="position-display selected-position{{position}}">
+                  <div class="position1"></div>
+                  <div class="position2"></div>
+                  <div class="position3"></div>
+                  <div class="position4"></div>
+                </div>
+                <span class="summary-question">{{name}}</span>
+                <span class="summary-selection">{{option}}</span>
+              </div>
+            {{else}}
+              <p class="sub-category-name{{#if comments}} has-comments{{/if}}" data-comments="{{comments}}">{{name}}</p>
+            {{/if}}
+          {{/each}}
+        {{/each}}
+      {{/each}}
+    </div>
+  </div>
+
+  <div class="buttons row">
+    <div class="col-sm-4">
+      <button class="details-back">back</button>
+    </div>
+    <div class="col-sm-4 col-sm-push-4">
+      <button class="details-next">Next</button>
+    </div>
+  </div>
+</div>
+{{> ../comments}}

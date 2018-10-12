@@ -5,6 +5,7 @@ const warpjsUtils = require('@warp-works/warpjs-utils');
 
 const constants = require('./../../lib/constants');
 const Questionnaire = require('./../../lib/models/questionnaire');
+const utils = require('./../utils');
 
 module.exports = (req, res) => {
     const {domain, wizardId} = req.params;
@@ -77,10 +78,11 @@ module.exports = (req, res) => {
                             .then((answersCategories) => answersResource.embed('categories', answersCategories))
                             .then((answersHAL) => resource.embed('answers', answersHAL))
                         )
-                        .then(() => warpjsUtils.sendHal(req, res, resource, RoutesInfo))
+                        .then(() => utils.sendHal(req, res, resource))
                     )
                 )
                 .catch((err) => {
+                    // eslint-disable-next-line no-console
                     console.error("server/root/get-all-questionnaires: err:", err);
                     throw err;
                 })

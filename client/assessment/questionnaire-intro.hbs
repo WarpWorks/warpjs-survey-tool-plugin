@@ -1,0 +1,27 @@
+<div class="questionnaire">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="ipt-title-question">{{question.name}}</h2>
+      <p>{{{question.content}}}</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      {{#if image}}
+        <div class="intro-image">
+          <img src="{{image}}">
+        </div>
+      {{/if}}
+    </div>
+  </div>
+  <div class="buttons row">
+    <div class="col-sm-4">
+      {{#if notFirst}}
+        <button class="question-back-intro">back</button>
+      {{/if}}
+    </div>
+    <div class="col-sm-4 col-sm-push-4">
+      <button class="question-next-intro">NEXT</button>
+    </div>
+  </div>
+</div>

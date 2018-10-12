@@ -1,10 +1,10 @@
 {
-  "name": "@warp-works/warpjs-ipt-plugin",
-  "version": "1.2.21",
-  "description": "Plugin to set up IPT questionnaires",
+  "name": "@warp-works/warpjs-survey-tool-plugin",
+  "version": "1.2.25",
+  "description": "Plugin to set up survey",
   "main": "index.js",
   "scripts": {
-    "prepublish": "grunt && npm -s test",
+    "prepare": "grunt",
     "grunt": "grunt",
     "test": "",
     "start": "NODE_ENV=production node_modules/.bin/babel-node --presets 'es2015' src/server.js",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/WarpWorks/warpjs-ipt-plugin.git"
+    "url": "git+https://github.com/WarpWorks/warpjs-survey-tool-plugin.git"
   },
   "keywords": [
     "warpjs",
@@ -27,19 +27,19 @@
   },
   "license": "SEE LICENSE IN LICENSE",
   "bugs": {
-    "url": "https://github.com/WarpWorks/warpjs-ipt-plugin/issues"
+    "url": "https://github.com/WarpWorks/warpjs-survey-tool-plugin/issues"
   },
-  "homepage": "https://github.com/WarpWorks/warpjs-ipt-plugin#readme",
+  "homepage": "https://github.com/WarpWorks/warpjs-survey-tool-plugin#readme",
   "devDependencies": {
     "@quoin/eslint-config-quoin": "latest",
     "@quoin/expressjs-routes-info": "latest",
-    "@quoin/node-test-helpers": "latest",
     "@warp-works/warpjs-plugins": "^1.2.5",
-    "@warp-works/warpjs-utils": "1.2",
+    "@warp-works/warpjs-utils": "~1.2.51",
     "babel-core": "6.26.x",
     "babel-loader": "7.1.x",
     "babel-preset-env": "1.7.x",
-    "babel-preset-stage-0": "6.24.1",
+    "babel-preset-stage-0": "~6.24.1",
+    "babel-preset-stage-2": "~6.24.1",
     "body-parser": "1.18.x",
     "cookie-parser": "1.4.3",
     "eslint": "5.0.x",
@@ -54,14 +54,12 @@
     "grunt": "^1.0.1",
     "grunt-contrib-clean": "1.1.0",
     "grunt-contrib-less": "2.0.x",
-    "grunt-eslint": "20.0.x",
+    "grunt-eslint": "~21.0.0",
     "grunt-webpack": "3.1.x",
     "handlebars": "4.0.11",
     "handlebars-loader": "1.7.x",
     "http-server": "^0.9.0",
     "load-grunt-config": "0.19.2",
-    "mocha": "5.2.x",
-    "nyc": "12.0.x",
     "svg.js": "2.6.x",
     "time-grunt": "1.4.0",
     "webpack": "2.7.0",
@@ -69,23 +67,18 @@
   },
   "peerDependencies": {
     "@quoin/expressjs-routes-info": ">=0.2.0",
-    "@warp-works/warpjs-utils": ">=1.2.8",
+    "@warp-works/warpjs-utils": ">=1.2.51",
     "body-parser": ">=1.17.0",
     "cookie-parser": ">=1.4.0",
     "express": ">=4.0.0"
   },
   "dependencies": {
     "@warp-works/warpjs-action-plugin": "1.2",
-    "babel-cli": "^6.11.4",
-    "babel-core": "^6.13.2",
-    "babel-loader": "^6.2.5",
-    "babel-plugin-transform-es2015-modules-umd": "^6.24.1",
-    "babel-preset-es2015": "^6.13.2",
-    "bluebird": "3.5.1",
-    "debug": "3.1.0",
-    "grunt-contrib-copy": "^1.0.0",
-    "lodash": "4.17.x",
+    "bluebird": "~3.5.2",
+    "debug": "~3.1.0",
+    "grunt-contrib-copy": "~1.0.0",
+    "lodash": "~4.17.x",
     "officegen": "^0.4.5",
-    "uuid": "^3.3.x"
+    "uuid": "~3.3.x"
   }
 }

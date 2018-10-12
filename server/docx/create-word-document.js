@@ -1,13 +1,26 @@
+const cloneDeep = require('lodash');
 const officegen = require('officegen');
 const path = require('path');
+const warpjsUtils = require('@warp-works/warpjs-utils');
 
+const constants = require('./../../lib/constants');
 const repoRoot = path.dirname(require.resolve('../../package.json'));
+const utils = require('./../utils');
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
     const data = JSON.parse(req.body.data);
     const details = data.details;
     const values = data.values;
     const title = req.body.title;
+    const pluginInfo = utils.getPluginInfo(req);
+    const domainModel = await req.app.get(constants.appKeys.warpCore).getDomainByName(pluginInfo.domain);
+    const config = cloneDeep(pluginInfo.config);
+    // TODO: Don't hard code adminConfig
+    config.adminConfig = {
+        type: "AdminConfiguration",
+        id: "5ba9ca96ffe8c80011f1993f"
+    };
+    const customMessages = await warpjsUtils.server.getCustomMessagesByPrefix(pluginInfo.persistence, config, domainModel, 'Surveytool');
 
     res.writeHead(200, {
         "Content-Type": "application/vnd.openxmlformats-officedocument.documentml.document",
@@ -23,6 +36,41 @@ module.exports = (req, res) => {
     docx.on('error', (err) => {
         console.log(err);
     });
+
+    const createText = (string, css) => {
+        let customMessage = docx.createP();
+        string = string.replace(/&ldquo;|&rdquo;|&lsquo;|&rsquo;/g, '`');
+        string = string.replace(/&nbsp;/g, ' ');
+        string = string.replace(/&middot;/g, '●');
+        const split = string.split("<br />");
+        for (var x of split) {
+            customMessage.addText(x, css);
+            customMessage.addLineBreak();
+        }
+    };
+
+    if (customMessages && Object.keys(customMessages).length) {
+        createText(customMessages.SurveytoolWord1, {font_face: 'Arial', bold: true, font_size: 28});
+        createText(customMessages.SurveytoolWord2, {font_face: 'Arial', italic: true, font_size: 11});
+        createText(customMessages.SurveytoolWord3, {font_face: 'Arial', color: '3277b3', font_size: 16});
+        createText(customMessages.SurveytoolWord4, {font_face: 'Arial', font_size: 11});
+        createText(customMessages.SurveytoolWord5, {font_face: 'Arial', color: '3277b3', font_size: 16});
+        createText(customMessages.SurveytoolWord6, {font_face: 'Arial', font_size: 11});
+        createText(customMessages.SurveytoolWord7, {font_face: 'Arial', color: '3277b3', font_size: 16});
+        createText(customMessages.SurveytoolWord8, {font_face: 'Arial', font_size: 11});
+        createText(customMessages.SurveytoolWord9, {font_face: 'Arial', color: '3277b3', font_size: 16});
+        createText(customMessages.SurveytoolWord10, {font_face: 'Arial', font_size: 11});
+        createText(customMessages.SurveytoolWord11, {font_face: 'Arial', color: '3277b3', font_size: 16});
+        createText(customMessages.SurveytoolWord12, {font_face: 'Arial', font_size: 11});
+        createText(customMessages.SurveytoolWord13, {font_face: 'Arial', color: '3277b3', font_size: 16});
+        createText(customMessages.SurveytoolWord14, {font_face: 'Arial', font_size: 11});
+        createText(customMessages.SurveytoolWord15, {font_face: 'Arial', color: '3277b3', font_size: 16});
+        createText(customMessages.SurveytoolWord16, {font_face: 'Arial', font_size: 11});
+        createText(customMessages.SurveytoolWord17, {font_face: 'Arial', color: '3277b3', font_size: 16});
+        createText(customMessages.SurveytoolWord18, {font_face: 'Arial', font_size: 11});
+        createText(customMessages.SurveytoolWord19, {font_face: 'Arial', color: '3277b3', font_size: 16});
+        createText(customMessages.SurveytoolWord20, {font_face: 'Arial', font_size: 11});
+    }
 
     let logo = docx.createP();
     logo.addImage(path.resolve(repoRoot, 'assets', 'images', 'IIC-logo.png'), {cy: 40, cx: 98});
@@ -49,11 +97,11 @@ module.exports = (req, res) => {
                     val: "●",
                     opts: {
                         b: true,
-                        color: "f6ffed",
+                        color: "d5f5b3",
                         align: "center",
                         sz: '30',
                         shd: {
-                            fill: "f6ffed",
+                            fill: "d5f5b3",
                             line: "cccccc"
                         }
                     }
@@ -163,7 +211,7 @@ module.exports = (req, res) => {
 
             if (detail.comments) {
                 let categoryComment = docx.createP();
-                categoryComment.addText('My comment: ' + detail.comments, {font_face: 'Arial', font_size: 12});
+                categoryComment.addText('Comment: ' + detail.comments, {font_face: 'Arial', font_size: 12});
             }
 
             detail.iterations.forEach((iteration) => {
@@ -181,7 +229,7 @@ module.exports = (req, res) => {
                                         val: "●",
                                         opts: {
                                             b: true,
-                                            color: "f6ffed",
+                                            color: "d5f5b3",
                                             align: "center",
                                             sz: '40',
                                             cellColWidth: 42,
@@ -268,7 +316,7 @@ module.exports = (req, res) => {
 
                         if (question.comments) {
                             let questionComment = docx.createP();
-                            questionComment.addText('My comment: ' + question.comments, {font_face: 'Arial', font_size: 12});
+                            questionComment.addText('Comment: ' + question.comments, {font_face: 'Arial', font_size: 12});
                         }
                     });
                 }

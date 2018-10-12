@@ -1,0 +1,19 @@
+<div class="survey-tool-load-assessment-popup">
+  {{#if exportProperties}}
+    <div class="export-properties">
+      <div class="export-title">Importing ‘{{projectName}}’ from PC to browser:</div>
+      <div class="export-revision">Version: {{exportProperties.revision}}</div>
+      <div class="export-name">Created by: {{exportProperties.name}}</div>
+      <div class="export-description">Description of this version: {{exportProperties.description}}</div>
+    </div>
+  {{/if}}
+
+  <div class="survey-tool-load-assessment-popup-message">{{message}}</div>
+  <div class="btn-group">
+    {{#each buttons as |button|}}
+      <button type="button" class="btn btn-{{button.btnClass}}"
+        data-survey-tool-action="{{button.action}}"
+        >{{button.label}}</button>
+    {{/each}}
+  </div>
+</div>

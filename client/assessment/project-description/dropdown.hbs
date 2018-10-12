@@ -1,0 +1,47 @@
+<div class="btn-group dropup">
+  <button type="button" class="btn btn-secondary dropdown-toggle assessment-dropup"
+    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+    >
+    Select {{#unless showCreate}}/ Delete{{/unless}} / Add New
+    <span class="caret"></span>
+  </button>
+  <div class="dropdown-menu assessment-menu-dropdown">
+    {{#each assessments as |assessment|}}
+      <a class="dropdown-item" href="{{assessment.href}}">
+        {{assessment.projectName}}
+      </a>
+    {{else}}
+      No assessments yet.
+    {{/each}}
+    <div class="dropdown-divider"></div>
+
+    {{#unless showCreate}}
+      <div class="dropdown-delete-actions">
+        <button type="button" class="btn btn-danger dropdown-delete">DELETE '{{assessment.projectName}}'</button>
+        <div class="delete-confirmation">
+          <div class="confirmation-label">Do you want to permanently delete ‘{{assessment.projectName}}’ from this browser?</div>
+          <div class="delete-confirm-buttons">
+            <div class="col-sm-6">
+              <button type="button" class="btn btn-danger"
+                data-survey-tool-action="delete-assessment"
+                data-survey-tool-survey-id="{{assessment.surveyId}}"
+                data-survey-tool-assessment-id="{{assessment.assessmentId}}"
+                data-url="{{rootUrl}}"
+                >Yes</button>
+            </div>
+            <div class="col-sm-6">
+              <button type="button" class="btn btn-default"
+                data-survey-tool-action="cancel-delete"
+                >No</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    {{/unless}}
+
+    <button type="button" class="btn btn-primary"
+      data-survey-tool-action="create-new-assessment"
+      data-survey-tool-context="dropdown"
+      >CREATE</button>
+  </div>
+</div>

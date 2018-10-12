@@ -1,0 +1,30 @@
+{{#each assessments as |assessment|}}
+  <div class="row survey-tool-assessment">
+    <div class="col-xs-8 survey-tool-assessment-name"
+      data-survey-tool-url="{{assessment.href}}"
+      >
+      {{assessment.projectName}}
+    </div>
+    <div class="col-xs-4 survey-tool-assessment-actions">
+      <div class="delete-icon">
+        <button type="button" class="btn btn-default"
+          data-survey-tool-action="delete-assessment"
+          ><span class="glyphicon glyphicon-trash"></span></button>
+      </div>
+      <div class="delete-confirmation">
+        <div class="confirmation-label">Delete?</div>
+        <button type="button" class="btn btn-danger"
+          data-survey-tool-action="confirm-delete"
+          data-survey-tool-survey-id="{{assessment.surveyId}}"
+          data-survey-tool-assessment-id="{{assessment.assessmentId}}"
+          >Yes</button>
+        <button type="button" class="btn btn-default"
+          data-survey-tool-action="cancel-delete"
+          >No</button>
+      </div>
+    </div>
+  </div>
+{{else}}
+  {{> no-assessments}}
+{{/each}}
+

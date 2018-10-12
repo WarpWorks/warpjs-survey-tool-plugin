@@ -1,20 +1,16 @@
 const RoutesInfo = require('@quoin/expressjs-routes-info');
+const { routes } = require('./../lib/constants');
 
-const constants = require('./../lib/constants');
+const assessment = require('./assessment');
 const docx = require('./docx');
-const wizard = require('./wizard');
 const root = require('./root');
 
 module.exports = (baseUrl) => {
     const routesInfo = new RoutesInfo('/', baseUrl);
 
-    routesInfo.route(constants.routes.root, '/{domain}', root);
-    routesInfo.route(constants.routes.newQuestionnaire, '/{domain}/ipt-isat/{isatId}', root);
-    routesInfo.route(constants.routes.wizard, '/{domain}/wizard/{wizardId}', wizard);
-    routesInfo.route(constants.routes.docx, '/{domain}/wizard/{wizardId}/docx', docx);
-
-    // routesInfo.route(constants.routes.root, '/{domain}', root);
-    // routesInfo.route(constants.routes.root, '/{domain}/{type}/{id}', root);
+    routesInfo.route(routes.root, '/', root);
+    routesInfo.route(routes.assessment, '/{surveyId}{?assessmentId}', assessment);
+    routesInfo.route(routes.docx, '/export/docx', docx);
 
     return routesInfo;
 };

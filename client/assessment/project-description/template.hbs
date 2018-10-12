@@ -1,0 +1,39 @@
+<div class="questionnaire description">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="ipt-title-question">
+        {{#if showCreate}}
+          Create new project
+        {{else}}
+          {{question.name}}
+        {{/if}}
+      </h2>
+      <form class="project-description">
+        <label for="project-name">Project Name</label>
+        <input type="text" class="form-control" id="project-name" value="{{assessment.projectName}}" required/>
+        <div class="invalid-feedback">
+          Project Name is required.
+        </div>
+        <label for="main-contact">Main Contact</label>
+        <input type="text" class="form-control" id="main-contact" value="{{assessment.mainContact}}"/>
+        <label for="project-status">Project Status</label>
+        <input type="text" class="form-control" id="project-status" value="{{assessment.projectStatus}}"/>
+      </form>
+    </div>
+  </div>
+  <div class="buttons row">
+    <div class="col-sm-4">
+      <button class="back description-back">back</button>
+    </div>
+    <div class="col-sm-4">
+      {{> dropdown assessments=assessments rootUrl=rootUrl}}
+    </div>
+    <div class="col-sm-4">
+      {{#if showCreate}}
+        <button class="question-assessment-create" data-survey-tool-action="create-new-assessment">CREATE</button>
+      {{else}}
+        <button class="description-next">NEXT</button>
+      {{/if}}
+    </div>
+  </div>
+</div>
