@@ -10,9 +10,8 @@ module.exports = ($, placeholder) => {
         $('[data-survey-tool-action="download-json"]', placeholder).show();
 
         $('[data-survey-tool-action="download-json"]', placeholder).on('click', function() {
-            askProperties($, placeholder);
+            askProperties($, placeholder, storage.getAssessment(surveyId, assessmentId));
         });
-
         placeholder.on('click', '.survey-tool-export-assessment-properties [data-survey-tool-action="export"]', function() {
             const assessment = storage.getAssessment(surveyId, assessmentId);
 

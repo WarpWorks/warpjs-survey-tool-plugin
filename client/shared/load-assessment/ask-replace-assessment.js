@@ -3,9 +3,11 @@ const loadAssessmentPopup = require('./load-assessment-popup');
 const storage = require('./../../storage');
 
 module.exports = ($, placeholder, obj) => {
-    const div = loadAssessmentPopup($, placeholder, "Assessment ID already defined.", obj, [
-        { btnClass: 'danger', action: 'load-replace', label: "Replace" },
-        { btnClass: 'primary', action: 'load-clone', label: "Clone" },
+    const { surveyId, assessmentId } = storage.getCurrent($);
+    const assessment = storage.getAssessment(surveyId, assessmentId);
+    const div = loadAssessmentPopup($, placeholder, "Warning: A project with the same ID already exists in this browser (‘" + assessment.projectName + "’)!", obj, [
+        { btnClass: 'danger', action: 'load-replace', label: "Overwrite ‘" + assessment.projectName + "’" },
+        { btnClass: 'primary', action: 'load-clone', label: "Open ‘" + obj.projectName + "’ as a new project." },
         { btnClass: 'default', action: 'load-cancel', label: "Cancel" }
     ]);
 

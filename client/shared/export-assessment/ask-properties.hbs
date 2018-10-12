@@ -1,12 +1,12 @@
 <div class="survey-tool-export-assessment-properties">
   <div class="survey-tool-export-message">
-    Information about this assessement export.
+    Export a copy of ‘{{name}}’ from the browser to your PC:
   </div>
 
   <div class="form">
-    <input type="text" class="form-control" name="name" placeholder="Name" />
-    <input type="text" class="form-control" name="revision" placeholder="Revision" />
-    <textarea class="form-control" name="description" placeholder="Description"></textarea>
+    <input type="text" class="form-control" name="name" value="{{exportName}}" placeholder="Name" />
+    <input type="text" class="form-control" name="revision" value="{{exportRevision}}" placeholder="Revision" />
+    <textarea class="form-control" name="description" placeholder="Description">{{exportDescription}}</textarea>
 
     <div class="btn-group pull-right">
       <button type="button" class="btn btn-primary" data-survey-tool-action="export">Export</button>
