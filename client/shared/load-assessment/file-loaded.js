@@ -3,8 +3,8 @@ const askReplaceAssessment = require('./ask-replace-assessment');
 const gotoAssessment = require('./goto-assessment');
 const storage = require('./../../storage');
 
-module.exports = ($, placeholder, event) => {
-    const obj = JSON.parse(event.target.result);
+module.exports = ($, placeholder, result) => {
+    const obj = JSON.parse(result);
 
     const current = storage.getCurrent($);
 

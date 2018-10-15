@@ -1,4 +1,5 @@
 const createAssessment = require('./create-assessment');
+const createDefaultAssessment = require('./create-default-assessment');
 const deleteAssessment = require('./delete-assessment');
 const shared = require('./../../shared');
 const storage = require('./../../storage');
@@ -34,5 +35,6 @@ module.exports = ($, placeholder, assessment, currentQuestion, rootUrl) => {
         initialized = true;
         createAssessment($, placeholder);
         deleteAssessment($, placeholder);
+        createDefaultAssessment($, placeholder);
     }
 };

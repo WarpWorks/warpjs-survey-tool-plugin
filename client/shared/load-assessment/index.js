@@ -6,7 +6,7 @@ module.exports = ($, placeholder) => {
         inputFile.on('change', function(event) {
             if (event && event.target && event.target.files && event.target.files.length) {
                 const reader = new FileReader();
-                reader.onload = (evt) => fileLoaded($, placeholder, evt);
+                reader.onload = (event) => fileLoaded($, placeholder, event.target.result);
                 reader.readAsText(event.target.files[0]);
             }
         });

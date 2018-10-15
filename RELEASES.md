@@ -1,4 +1,8 @@
 # Release Notes
+## 1.2.30 - 2018-10-15
+
+-#80: Load default content button.
+
 ## 1.2.29 - 2018-10-15
 
 - #79: Bug fix for related readings read more links.
