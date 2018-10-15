@@ -1,12 +1,16 @@
 # Release Notes
 
+## 1.2.32 - 2018-10-15
+
+- text color of default content button.
+
 ## 1.2.31 - 2018-10-15
 
--#81: New placeholder text for export form.
+- #81: New placeholder text for export form.
 
 ## 1.2.30 - 2018-10-15
 
--#80: Load default content button.
+- #80: Load default content button.
 
 ## 1.2.29 - 2018-10-15
 
