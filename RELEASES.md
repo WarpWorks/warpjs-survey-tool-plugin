@@ -1,4 +1,9 @@
 # Release Notes
+
+## 1.2.31 - 2018-10-15
+
+-#81: New placeholder text for export form.
+
 ## 1.2.30 - 2018-10-15
 
 -#80: Load default content button.
