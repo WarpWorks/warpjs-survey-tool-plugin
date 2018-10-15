@@ -1,4 +1,7 @@
 # Release Notes
+## 1.2.29 - 2018-10-15
+
+- #79: Bug fix for related readings read more links.
 
 ## 1.2.22 - 2018-10-05
 
