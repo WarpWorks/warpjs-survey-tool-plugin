@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.34 - 2018-10-16
+
+- #84 Export button width.
+
 ## 1.2.33 - 2018-10-16
 
 - #78 Error handling for import.
