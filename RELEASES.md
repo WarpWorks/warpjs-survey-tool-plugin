@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.34 - 2018-10-16
+
+- #78 Error handling for import.
+
 ## 1.2.32 - 2018-10-15
 
 - text color of default content button.
