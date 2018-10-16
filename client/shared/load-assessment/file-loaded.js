@@ -47,10 +47,6 @@ module.exports = ($, placeholder, result) => {
             gotoAssessment($, placeholder, obj);
         }
     } catch (error) {
-        if (error instanceof SyntaxError) {
-            gotoError($, placeholder, error, true);
-        } else {
-            gotoError($, placeholder, error, false);
-        }
+        gotoError($, placeholder);
     }
 };
