@@ -1,4 +1,5 @@
 // const askGotoAssessment = require('./ask-goto-assessment');
+const convertFormat = require('./../convert-format');
 const askReplaceAssessment = require('./ask-replace-assessment');
 const gotoAssessment = require('./goto-assessment');
 const gotoError = require('./goto-error');
@@ -26,6 +27,8 @@ module.exports = ($, placeholder, result) => {
                 }
             ]};
         }
+
+        convertFormat($, obj);
 
         const stored = storage.getAssessment(obj.surveyId, obj.assessmentId);
 

@@ -4,9 +4,9 @@
   </div>
 
   <div class="form">
-    <input type="text" class="form-control" name="name" value="{{exportName}}" placeholder="Author of this version" />
-    <input type="text" class="form-control" name="revision" value="{{exportRevision}}" placeholder="Revision" />
-    <textarea class="form-control" name="description" placeholder="Description of this version">{{exportDescription}}</textarea>
+    <input type="text" class="form-control" name="name" value="{{assessmentMeta.exportName}}" placeholder="Author of this version" />
+    <input type="text" class="form-control" name="revision" value="{{assessmentMeta.exportRevision}}" placeholder="Revision" />
+    <textarea class="form-control" name="description" placeholder="Description of this version">{{assessmentMeta.exportDescription}}</textarea>
 
     <div class="btn-group">
       <button type="button" class="btn btn-primary" data-survey-tool-action="export">Export</button>
