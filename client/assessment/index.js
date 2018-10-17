@@ -150,6 +150,8 @@ const storage = require('./../storage');
                             };
 
                             $('.ipt-title').html(assessment.projectName);
+                            const version = assessment._meta && assessment._meta.history && assessment._meta.history.length ? 'version ' + assessment._meta.history[assessment._meta.history.length - 1].revision : '';
+                            $('.ipt-version').html(version);
 
                             const levelsOnLeave = () => {
                                 getAssessment();
@@ -178,6 +180,8 @@ const storage = require('./../storage');
 
                                     // console.log('assessment after', assessment);
                                     $('.ipt-title').html(assessment.projectName);
+                                    const version = assessment._meta && assessment._meta.history && assessment._meta.history.length ? 'version ' + assessment._meta.history[assessment._meta.history.length - 1].revision : '';
+                                    $('.ipt-version').html(version);
                                 } else {
                                     $('#project-name').addClass('is-invalid');
                                     $('.invalid-feedback').css('display', 'block');
