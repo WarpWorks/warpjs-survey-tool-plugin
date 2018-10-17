@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.36 - 2018-10-17
+
+- Add missing version label.
+
 ## 1.2.35 - 2018-10-17
 
 - #76 Save version history on import/export.
