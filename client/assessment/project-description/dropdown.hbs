@@ -9,6 +9,10 @@
     {{#each assessments as |assessment|}}
       <a class="dropdown-item" href="{{assessment.href}}">
         {{assessment.projectName}}
+        {{#if assessment.revision}}
+          <br/>
+          <span class="version">{{assessment.revision}}</span>
+        {{/if}}
       </a>
     {{else}}
       No projects yet.

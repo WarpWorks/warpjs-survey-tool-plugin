@@ -5,6 +5,7 @@ const uuid = require('uuid/v4');
 const cannotFindAssessmentTemplate = require('./cannot-find-assessment.hbs');
 const constants = require('./../constants');
 const errorTemplate = require('./../error.hbs');
+const getVersion = require('./get-version');
 const mockWarpjsUtils = require('./../mock-warpjs-utils');
 const projectDescription = require('./project-description');
 const Questionnaire = require('./../../lib/models/questionnaire');
@@ -150,7 +151,7 @@ const storage = require('./../storage');
                             };
 
                             $('.ipt-title').html(assessment.projectName);
-                            const version = assessment._meta && assessment._meta.history && assessment._meta.history.length ? 'version ' + assessment._meta.history[assessment._meta.history.length - 1].revision : '';
+                            const version = getVersion(assessment);
                             $('.ipt-version').html(version);
 
                             const levelsOnLeave = () => {
@@ -180,7 +181,7 @@ const storage = require('./../storage');
 
                                     // console.log('assessment after', assessment);
                                     $('.ipt-title').html(assessment.projectName);
-                                    const version = assessment._meta && assessment._meta.history && assessment._meta.history.length ? 'version ' + assessment._meta.history[assessment._meta.history.length - 1].revision : '';
+                                    const version = getVersion(assessment);
                                     $('.ipt-version').html(version);
                                 } else {
                                     $('#project-name').addClass('is-invalid');

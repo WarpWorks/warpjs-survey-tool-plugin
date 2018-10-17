@@ -1,6 +1,7 @@
 const createAssessment = require('./create-assessment');
 const createDefaultAssessment = require('./create-default-assessment');
 const deleteAssessment = require('./delete-assessment');
+const getVersion = require('./../get-version');
 const shared = require('./../../shared');
 const storage = require('./../../storage');
 const template = require('./template.hbs');
@@ -11,7 +12,7 @@ module.exports = ($, placeholder, assessment, currentQuestion, rootUrl) => {
     const showCreate = !storage.getCurrent($, 'assessmentId');
     const surveyId = storage.getCurrent($, 'surveyId');
     const assessmentTemplateUrl = storage.getCurrent($, 'surveyToolAssessmentTemplateUrl');
-    const assessments = storage.getAssessments(surveyId).map((assessment) => {
+    let assessments = storage.getAssessments(surveyId).map((assessment) => {
         assessment.href = window.WarpJS.expandUrlTemplate(assessmentTemplateUrl, { surveyId, assessmentId: assessment.assessmentId });
         return assessment;
     });
@@ -20,6 +21,10 @@ module.exports = ($, placeholder, assessment, currentQuestion, rootUrl) => {
         const warpjsUser = storage.getCurrent($, 'warpjsUser');
         assessment.mainContact = warpjsUser ? warpjsUser.Name : '';
     }
+
+    $.each(assessments, (index, item) => {
+        item.revision = getVersion(item);
+    });
 
     const content = template({
         showCreate,
