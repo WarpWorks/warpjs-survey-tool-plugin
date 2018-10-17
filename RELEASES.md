@@ -1,5 +1,10 @@
 # Release Notes
 
+## 1.2.35 - 2018-10-17
+
+- #76 Save version history on import/export.
+- #86 Title ellipsis, version number under title (same in dropup).
+
 ## 1.2.34 - 2018-10-16
 
 - #84 Export button width.
