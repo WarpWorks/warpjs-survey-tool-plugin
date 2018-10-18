@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.37 - 2018-10-17
+
+- #54 Link logo to homepage.
+
 ## 1.2.36 - 2018-10-17
 
 - Add missing version label.
