@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.38 - 2018-10-17
+
+- #87 Remove logo, title, and subtitle from word download file.
+
 ## 1.2.37 - 2018-10-17
 
 - #54 Link logo to homepage.

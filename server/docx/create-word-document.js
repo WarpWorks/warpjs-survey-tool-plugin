@@ -1,10 +1,10 @@
 const cloneDeep = require('lodash');
 const officegen = require('officegen');
-const path = require('path');
+// const path = require('path');
 const warpjsUtils = require('@warp-works/warpjs-utils');
 
 const constants = require('./../../lib/constants');
-const repoRoot = path.dirname(require.resolve('../../package.json'));
+// const repoRoot = path.dirname(require.resolve('../../package.json'));
 const utils = require('./../utils');
 
 module.exports = async (req, res) => {
@@ -72,12 +72,12 @@ module.exports = async (req, res) => {
         createText(customMessages.SurveytoolWord20, {font_face: 'Arial', font_size: 11});
     }
 
-    let logo = docx.createP();
-    logo.addImage(path.resolve(repoRoot, 'assets', 'images', 'IIC-logo.png'), {cy: 40, cx: 98});
-    let mainTitle = docx.createP();
-    mainTitle.addText('IIC Project Explorer', {font_face: 'Arial', bold: true, font_size: 28});
-    let projectTitle = docx.createP();
-    projectTitle.addText(title, {font_face: 'Arial', bold: true, font_size: 26});
+    // let logo = docx.createP();
+    // logo.addImage(path.resolve(repoRoot, 'assets', 'images', 'IIC-logo.png'), {cy: 40, cx: 98});
+    // let mainTitle = docx.createP();
+    // mainTitle.addText('IIC Project Explorer', {font_face: 'Arial', bold: true, font_size: 28});
+    // let projectTitle = docx.createP();
+    // projectTitle.addText(title, {font_face: 'Arial', bold: true, font_size: 26});
     let projectDescription = docx.createP();
     projectDescription.addText('This summary shows how your project is rated in the main IPT categories. For each category, the average score is shown. In general, low score means few problems to be expected, high score means that in this category has a very high level of complexity and potential risks.', {font_face: 'Arial', font_size: 12});
 
