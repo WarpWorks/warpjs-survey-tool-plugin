@@ -1,0 +1,148 @@
+.survey-tool-assessment-base {
+    height: 42px;
+    font-size: 14px;
+    line-height: 42px;
+}
+
+.survey-tool-section {
+    .survey-tool-item {
+        .survey-tool-item-name {
+            font-size: 24px;
+            margin-bottom: 12px;
+            line-height: 1.4em;
+        }
+
+        .survey-tool-item-assessments {
+            margin-bottom: 18px;
+
+            .survey-tool-assessment {
+
+                &:nth-child(even) {
+                    background-color: #eeeeee;
+                }
+
+                .survey-tool-assessment-name {
+                    .survey-tool-assessment-base();
+
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    cursor: pointer;
+                }
+
+                .survey-tool-assessment-actions {
+                    .survey-tool-assessment-base();
+
+                    .delete-icon {
+                        .survey-tool-assessment-base();
+                        display: table-cell;
+                        vertical-align: middle;
+
+                        button {
+                            span {
+                                color: @survey-tool-red;
+                            }
+                        }
+                    }
+
+                    .delete-confirmation {
+                        display: none;
+
+                        .confirmation-label {
+                            font-size: 14px;
+                        }
+                    }
+
+                    &.survey-tool-assessment-actions-confirmation {
+                        .confirmation-label {
+                            display: inline-block;
+                        }
+
+                        .delete-icon {
+                            display: none;
+                        }
+
+                        .delete-confirmation {
+                            display: inline-block;
+                        }
+                    }
+                }
+            }
+        }
+
+        .survey-tool-actions {
+        }
+    }
+}
+
+.word-download-form {
+    float: right;
+
+    .word-download {
+        background-color: #c7281a;
+        border-radius: 3px;
+        color: #fff;
+        border: none;
+        text-transform: uppercase;
+        padding: 7px 30px;
+        font-size: 12px;
+        float: right;
+    }
+}
+
+.results-container {
+    overflow: hidden;
+    position: relative;
+
+    .results {
+        width: calc(100% - 200px);
+        margin-left: 200px;
+        overflow-x: scroll;
+        overflow-y: visible;
+        border-right: 1px solid grey;
+        border-top: 1px solid grey;
+
+        table.feedback {
+            tr {
+                height: 68px;
+                border-bottom: 1px solid grey;
+
+                &:last-child .headcol {
+                    border-bottom: 1px solid grey;
+                }
+
+                td {
+                    margin: 0;
+                    white-space: nowrap;
+                    height: 68px;
+
+                    &.headcol {
+                        padding: 10px;
+                        position: absolute;
+                        width: 200px;
+                        left: 0;
+                        top: auto;
+                        border-left: 1px solid grey;
+                        border-top: 1px solid grey;
+                        margin-top: -1px;
+                        height: 70px;
+                    }
+
+                    &.long {
+                        padding: 4px 2px;
+
+                        .card {
+                            background: #d6d6d6;
+                            border-radius: 5px;
+                            color: #ffffff;
+                            text-transform: uppercase;
+                            font-weight: bold;
+                            padding: 7px;
+                            height: 60px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,56 @@
+{{#if page._embedded.items.length}}
+  <div class="container-fluid survey-tool-section"
+    data-survey-tool-url="{{page._links.self.href}}"
+    data-survey-tool-assessment-template-url="{{page._links.assessmentTemplate.href}}"
+    >
+    {{#each page._embedded.items as |item|}}
+      <div class="container-fluid survey-tool-item"
+        data-survey-tool-name="{{item.name}}"
+        data-survey-tool-survey-id="{{item.id}}"
+      >
+        <div class="row">
+          <div class="col-xs-12 survey-tool-item-name">
+            {{item.name}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <button class="user-feedback-toggle">Hide User Feedback</button>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="results-container">
+              <div class="results">
+                <table class="feedback">
+                  {{#each item._embedded.results as |result|}}
+                    <tr>
+                      <td class="headcol">{{result.name}}</td>
+                      {{#each result._embedded.relevantHighs as |high|}}
+                        <td class="long">
+                          <div class="card">
+                            {{high.name}}
+                          </div>
+                        </td>
+                      {{/each}}
+                      {{#each result._embedded.relevantLows as |low|}}
+                        <td class="long">
+                          <div class="card">
+                            {{low.name}}
+                          </div>
+                        </td>
+                      {{/each}}
+                    </tr>
+                  {{/each}}
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {{#unless @last}}<hr>{{/unless}}
+    {{/each}}
+  </div>
+{{else}}
+  TODO: NO surveys available.
+{{/if}}
