@@ -7,9 +7,6 @@ const resultsetTemplate = require('./resultset.hbs');
 (($) => $(document).ready(() => {
     const loader = window.WarpJS.toast.loading($, "Page is loading");
     const placeholder = shared.preRender($);
-    const typeTemplate = {
-        resultset: resultsetTemplate
-    };
 
     return Promise.resolve()
         .then(() => window.WarpJS.getCurrentPageHAL($))
@@ -17,7 +14,7 @@ const resultsetTemplate = require('./resultset.hbs');
             if (result.error) {
                 shared.setSurveyContent($, placeholder, errorTemplate(result.data));
             } else {
-                const content = typeTemplate[result.data.type]({ page: result.data });
+                const content = resultsetTemplate({ page: result.data });
                 shared.setSurveyContent($, placeholder, content);
             }
             shared.postRender($, result.data);
