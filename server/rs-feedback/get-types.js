@@ -4,7 +4,6 @@ const RoutesInfo = require('@quoin/expressjs-routes-info');
 const warpjsUtils = require('@warp-works/warpjs-utils');
 
 const constants = require('./../../lib/constants');
-// const Questionnaire = require('./../../lib/models/questionnaire');
 const ResultSet = require('./../../lib/models/result-set');
 const utils = require('./../utils');
 
@@ -33,10 +32,10 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
             const typeModel = new ResultSet();
             await typeModel.fromPersistence(Promise, pluginInfo, typeEntity, typeInstance);
             const typeHAL = await typeModel.toHal(warpjsUtils, RoutesInfo, constants.routes, pluginInfo.domain);
+
             resource.embed('items', typeHAL);
             await utils.sendHal(req, res, resource);
         } catch (err) {
-            // eslint-disable-next-line no-console
             console.error("server/root/get-types: err:", err);
             await utils.sendErrorHal(req, res, resource, err);
         } finally {

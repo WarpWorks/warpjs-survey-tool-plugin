@@ -1,80 +1,3 @@
-.survey-tool-assessment-base {
-    height: 42px;
-    font-size: 14px;
-    line-height: 42px;
-}
-
-.survey-tool-section {
-    .survey-tool-item {
-        .survey-tool-item-name {
-            font-size: 24px;
-            margin-bottom: 12px;
-            line-height: 1.4em;
-        }
-
-        .survey-tool-item-assessments {
-            margin-bottom: 18px;
-
-            .survey-tool-assessment {
-
-                &:nth-child(even) {
-                    background-color: #eeeeee;
-                }
-
-                .survey-tool-assessment-name {
-                    .survey-tool-assessment-base();
-
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    cursor: pointer;
-                }
-
-                .survey-tool-assessment-actions {
-                    .survey-tool-assessment-base();
-
-                    .delete-icon {
-                        .survey-tool-assessment-base();
-                        display: table-cell;
-                        vertical-align: middle;
-
-                        button {
-                            span {
-                                color: @survey-tool-red;
-                            }
-                        }
-                    }
-
-                    .delete-confirmation {
-                        display: none;
-
-                        .confirmation-label {
-                            font-size: 14px;
-                        }
-                    }
-
-                    &.survey-tool-assessment-actions-confirmation {
-                        .confirmation-label {
-                            display: inline-block;
-                        }
-
-                        .delete-icon {
-                            display: none;
-                        }
-
-                        .delete-confirmation {
-                            display: inline-block;
-                        }
-                    }
-                }
-            }
-        }
-
-        .survey-tool-actions {
-        }
-    }
-}
-
 .word-download-form {
     float: right;
 
@@ -113,7 +36,7 @@
 
         table.feedback {
             tr {
-                height: 68px;
+                height: 78px;
                 border-bottom: 1px solid grey;
 
                 &:last-child .headcol {
@@ -123,7 +46,7 @@
                 td {
                     margin: 0;
                     white-space: nowrap;
-                    height: 68px;
+                    height: 78px;
 
                     &.headcol {
                         padding: 10px;
@@ -134,7 +57,7 @@
                         border-left: 1px solid grey;
                         border-top: 1px solid grey;
                         margin-top: -1px;
-                        height: 70px;
+                        height: 80px;
                         white-space: normal;
                         font-size: 12px;
                         line-height: 1.3em;
@@ -146,11 +69,47 @@
                         .card {
                             background: #d6d6d6;
                             border-radius: 5px;
-                            color: #ffffff;
                             text-transform: uppercase;
                             font-weight: bold;
                             padding: 7px;
-                            height: 60px;
+                            height: 70px;
+
+                            &.bg-negative {
+                                background: #d4290f;
+                            }
+
+                            &.bg-positive {
+                                background: #699c2f;
+                            }
+
+                            &.bg-tie {
+                                background: #d49f50;
+                            }
+
+                            p {
+                                color: #ffffff;
+                            }
+
+                            .thumb-container {
+                                position: relative;
+
+                                .thumb {
+                                    border-radius: 5px;
+                                    color: #ffffff;
+                                    padding: 3px;
+                                    margin-right: 5px;
+                                    display: inline-block;
+                                    border: none;
+
+                                    &.thumbsup {
+                                        background: #3f6b0d;
+                                    }
+
+                                    &.thumbsdown {
+                                        background: #871200;
+                                    }
+                                }
+                            }
                         }
                     }
                 }

@@ -1,0 +1,11 @@
+<div class="row">
+  <div class="col-sm-12 warpjs-list-container">
+    <h2>{{res._embedded.feedbackQuestions.[0].name}}</h2>
+    {{#each res._embedded.feedbackQuestions.[0]._embedded.feedbacks as |feedback|}}
+      <div>
+        <p class="feedback-date">{{feedback.date}}</p>
+        <p class="feeback-comment">{{feedback.comment}}</p>
+      </div>
+    {{/each}}
+  </div>
+</div>

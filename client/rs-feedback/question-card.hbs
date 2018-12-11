@@ -1,0 +1,13 @@
+<td class="long">
+  <div class="card bg-{{card.commentResult}}">
+    <p>{{card.name}}</p>
+    <div class="thumb-container">
+    {{#if card.thumbsUp}}
+      <button class="thumb thumbsup" data-warpjs-url="{{card._links.thumbsup.href}}">X{{card.thumbsUp}}</button>
+    {{/if}}
+    {{#if card.thumbsDown}}
+      <button class="thumb thumbsdown" data-warpjs-url="{{card._links.thumbsdown.href}}">X{{card.thumbsDown}}</button>
+    {{/if}}
+    </div>
+  </div>
+</td>

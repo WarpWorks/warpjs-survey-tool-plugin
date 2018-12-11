@@ -29,18 +29,10 @@
                     <tr>
                       <td class="headcol">{{result.name}}</td>
                       {{#each result._embedded.relevantHighs as |high|}}
-                        <td class="long">
-                          <div class="card">
-                            {{high.name}}
-                          </div>
-                        </td>
+                        {{> question-card card=high resultId=result.id}}
                       {{/each}}
                       {{#each result._embedded.relevantLows as |low|}}
-                        <td class="long">
-                          <div class="card">
-                            {{low.name}}
-                          </div>
-                        </td>
+                        {{> question-card card=low resultId=result.id}}
                       {{/each}}
                     </tr>
                   {{/each}}
