@@ -582,78 +582,6 @@
         }
     }
 
-    .question-block {
-        background-color: #f0f0f0;
-        border: solid 1px #e0e0e0;
-        padding: 10px;
-        margin-bottom: 5px;
-        position: relative;
-        float: left;
-        width: 100%;
-
-
-        .position-display {
-            display: inline-block;
-            height: 16px;
-            margin-right: 10px;
-
-            div {
-                height: 16px;
-                width: 16px;
-                border-radius: 8px;
-                display: inline-block;
-                margin-right: 5px;
-
-            }
-
-            .position1 {
-                background-color: #d5f5b3;
-            }
-
-            .position2 {
-                background-color: #f6ffed;
-            }
-
-            .position3 {
-                background-color: #fff9ed;
-            }
-
-            .position4 {
-                background-color: #fce3e3;
-            }
-
-            &.selected-position1 .position1 {
-                background-color: #5ca81e;
-            }
-
-            &.selected-position2 .position2 {
-                background-color: #5ca81e;
-            }
-
-            &.selected-position3 .position3 {
-                background-color: #fcb830;
-            }
-
-            &.selected-position4 .position4 {
-                background-color: #de2a2d;
-            }
-        }
-
-        .summary-question {
-            color: #87868f;
-            display: inline-block;
-            max-width: calc(50% - 68px);
-        }
-
-        .summary-selection {
-            color: #171717;
-            font-weight: bold;
-            display:block;
-            float: right;
-            max-width: calc(50% - 68px);
-        }
-    }
-
     .modal-content {
         border-radius: 0px;
         box-shadow: none;
@@ -845,6 +773,120 @@
             padding: 7px 30px;
             font-size: 12px;
             float: right;
+        }
+    }
+}
+
+.question-block {
+    background-color: #f0f0f0;
+    border: solid 1px #e0e0e0;
+    padding: 10px;
+    margin-bottom: 5px;
+    position: relative;
+    float: left;
+    width: 100%;
+
+
+    .position-display {
+        display: inline-block;
+        height: 16px;
+        margin-right: 10px;
+
+        div {
+            height: 16px;
+            width: 16px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-right: 5px;
+
+        }
+
+        .position1 {
+            background-color: #d5f5b3;
+        }
+
+        .position2 {
+            background-color: #f6ffed;
+        }
+
+        .position3 {
+            background-color: #fff9ed;
+        }
+
+        .position4 {
+            background-color: #fce3e3;
+        }
+
+        &.selected-position1 .position1 {
+            background-color: #5ca81e;
+        }
+
+        &.selected-position2 .position2 {
+            background-color: #5ca81e;
+        }
+
+        &.selected-position3 .position3 {
+            background-color: #fcb830;
+        }
+
+        &.selected-position4 .position4 {
+            background-color: #de2a2d;
+        }
+    }
+
+    .summary-question {
+        color: #87868f;
+        display: inline-block;
+        max-width: calc(50% - 68px);
+    }
+
+    .summary-selection {
+        color: #171717;
+        font-weight: bold;
+        display:block;
+        float: right;
+        max-width: calc(50% - 134px);
+    }
+
+    .related-question-feedback-button {
+        border-radius: 5px;
+        border: solid 1px grey;
+        background-color: #ffffff;
+        padding: 0px;
+        height: 27px;
+        margin-left: 10px;
+        float: right;
+        cursor: pointer;
+
+        div {
+            border-radius: 4px;
+            width: 26px;
+            height: 25px;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: 80%;
+            display: inline-block;
+        }
+
+        .thumbs-up {
+            background-image: url(images/thumbs-up.jpg);
+            background-color: #ffffff;
+
+            &.selected {
+                background-color: #4889a3;
+                background-image: url(images/thumbs-up-selected.jpg);
+            }
+        }
+
+        .thumbs-down {
+            background-image: url(images/thumbs-down.jpg);
+            background-color: #ffffff;
+            margin-right: -1px;
+
+            &.selected {
+                background-color: #4889a3;
+                background-image: url(images/thumbs-down-selected.jpg);
+            }
         }
     }
 }

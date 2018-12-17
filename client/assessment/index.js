@@ -7,6 +7,7 @@ const constants = require('./../constants');
 const errorTemplate = require('./../error.hbs');
 const getVersion = require('./get-version');
 const mockWarpjsUtils = require('./../mock-warpjs-utils');
+const openRelatedFeedbackModal = require('./feedback/open-related-feedback-modal.js');
 const projectDescription = require('./project-description');
 const Questionnaire = require('./../../lib/models/questionnaire');
 const questionnaireTemplate = require('./questionnaire.hbs');
@@ -952,6 +953,15 @@ const storage = require('./../storage');
 
                             $(document).on('click', '.save-warning-new-tab', () => {
                                 window.open($('.content-link').data('url'), '_blank');
+                            });
+
+                            $(document).on('click', '.related-question-feedback-button', (event) => {
+                                const element = $(event.target).closest('.related-question-feedback-button');
+                                const questionId = element.data('warpjsQuestionId');
+                                const answerName = element.data('warpjsQuestionAnswerName');
+                                const answerNum = element.data('warpjsQuestionAnswer');
+                                const questionName = element.data('warpjsQuestionName');
+                                openRelatedFeedbackModal($, questionId, answerName, answerNum, questionName);
                             });
                         })
                     ;

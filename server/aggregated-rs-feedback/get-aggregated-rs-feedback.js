@@ -4,6 +4,7 @@ const RoutesInfo = require('@quoin/expressjs-routes-info');
 const warpjsUtils = require('@warp-works/warpjs-utils');
 
 const constants = require('./../../lib/constants');
+// const middlewares = require('./middlewares');
 const ResultSet = require('./../../lib/models/result-set');
 const utils = require('./../utils');
 
@@ -11,7 +12,7 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
     html: () => {
         warpjsUtils.sendIndex(req, res, RoutesInfo, 'Ipt',
             [
-                `${req.app.get('base-url')}/assets/${constants.assets.rsFeedback}`
+                `${req.app.get('base-url')}/assets/${constants.assets.aggregatedRsFeedback}`
             ],
             `${req.app.get('base-url')}/assets/${constants.assets.css}`
         );
