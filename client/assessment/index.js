@@ -175,12 +175,10 @@ const storage = require('./../storage');
                                     assessment.projectName = $('#project-name').val();
                                     assessment.mainContact = $('#main-contact').val();
                                     assessment.projectStatus = $('#project-status').val();
-                                    // console.log('assessment', assessment);
                                     updateQuestions();
                                     updatePointers(direction);
                                     updateAssessment();
 
-                                    // console.log('assessment after', assessment);
                                     $('.ipt-title').html(assessment.projectName);
                                     const version = getVersion(assessment);
                                     $('.ipt-version').html(version);
@@ -729,18 +727,16 @@ const storage = require('./../storage');
                                     resultSet.recommendation = null;
                                     _.each(resultSet._embedded.results, (result) => {
                                         result.points = 0;
-                                        _.each(result._embedded.relevantHighs, (relevantHigh) => {
-                                            _.each(relevantHigh ? _.filter(flattenedAnswers, (aQuestion) => {
-                                                return aQuestion.id === relevantHigh.id;
+
+                                        _.each(result._embedded.relevantQuestions, (relevantQuestion) => {
+                                            _.each(relevantQuestion ? _.filter(flattenedAnswers, (aQuestion) => {
+                                                return aQuestion.id === relevantQuestion.id;
                                             }) : null, (aQuestion) => {
-                                                result.points += parseInt(aQuestion.answer, 10);
-                                            });
-                                        });
-                                        _.each(result._embedded.relevantLows, (relevantLow) => {
-                                            _.each(relevantLow ? _.filter(flattenedAnswers, (aQuestion) => {
-                                                return aQuestion.id === relevantLow.id;
-                                            }) : null, (aQuestion) => {
-                                                result.points += 5 - parseInt(aQuestion.answer, 10);
+                                                if (relevantQuestion.relevance === 'high') {
+                                                    result.points += parseInt(aQuestion.answer, 10);
+                                                } else if (relevantQuestion.relevance === 'low') {
+                                                    result.points += 5 - parseInt(aQuestion.answer, 10);
+                                                }
                                             });
                                         });
                                     });
