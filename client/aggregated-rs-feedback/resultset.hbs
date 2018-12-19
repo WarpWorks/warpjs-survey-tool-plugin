@@ -18,22 +18,24 @@
             <div class="col-xs-12">
               <div class="blue-button-container feedback-toggle-container">
                 <button class="user-feedback-toggle blue-button">Hide User Feedback</button>
+                <select class="select-detail-level">
+                  <option value="detail-level-3">Show only dimensions visible on level 3</option>
+                  <option value="detail-level-2">Show only dimensions visible on level 2</option>
+                  <option value="detail-level-1">Show only dimensions visible on level 1</option>
+                </select>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col-xs-12">
-              <div class="results-container">
+              <div class="results-container" data-detail-level="detail-level-3">
                 <div class="results">
                   <table class="feedback">
                     {{#each item._embedded.results as |result|}}
                       <tr>
                         <td class="headcol">{{result.name}}</td>
-                        {{#each result._embedded.relevantHighs as |high|}}
-                          {{> question-card card=high resultId=result.id}}
-                        {{/each}}
-                        {{#each result._embedded.relevantLows as |low|}}
-                          {{> question-card card=low resultId=result.id}}
+                        {{#each result._embedded.relevantQuestions as |question|}}
+                          {{> question-card card=question resultId=result.id}}
                         {{/each}}
                       </tr>
                     {{/each}}

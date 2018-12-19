@@ -15,6 +15,7 @@ const openModal = require('./open-modal');
             if (result.error) {
                 shared.setSurveyContent($, placeholder, errorTemplate(result.data));
             } else {
+                console.log('result: ', result.data);
                 const content = resultsetTemplate({ page: result.data, detailedEnabled: result.data.warpjsUser !== null });
                 shared.setSurveyContent($, placeholder, content);
             }
@@ -37,6 +38,11 @@ const openModal = require('./open-modal');
                         .finally(() => window.WarpJS.toast.close($, toastLoading))
                     )
                 ;
+            });
+
+            placeholder.on('change', '.select-detail-level', (event) => {
+                const value = $(event.target).val();
+                $('.results-container').attr('data-detail-level', value);
             });
         })
         .finally(() => window.WarpJS.toast.close($, loader))

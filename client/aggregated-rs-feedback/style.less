@@ -7,9 +7,19 @@
     }
 }
 
+.select-detail-level {
+    float: right;
+}
+
 .results-container {
     overflow: hidden;
     position: relative;
+
+    &[data-detail-level="detail-level-2"] .detail-level-3,
+    &[data-detail-level="detail-level-1"] .detail-level-3,
+    &[data-detail-level="detail-level-1"] .detail-level-2 {
+        display: none;
+    }
 
     .results {
         width: calc(100% - 200px);
