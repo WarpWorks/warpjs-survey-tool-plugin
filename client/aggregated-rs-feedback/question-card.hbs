@@ -3,11 +3,21 @@
     <p>{{card.name}}</p>
     <div class="thumb-container">
     {{#if card.thumbsUp}}
-      <button class="thumb thumbsup" data-warpjs-url="{{card._links.thumbsup.href}}">X{{card.thumbsUp}}</button>
+      <button class="thumb thumbsup" data-warpjs-url="{{card._links.thumbsup.href}}">
+        {{card.thumbsUp}}
+        <span class="glyphicon glyphicon-thumbs-up"></span>
+      </button>
     {{/if}}
     {{#if card.thumbsDown}}
-      <button class="thumb thumbsdown" data-warpjs-url="{{card._links.thumbsdown.href}}">X{{card.thumbsDown}}</button>
+      <button class="thumb thumbsdown" data-warpjs-url="{{card._links.thumbsdown.href}}">
+        {{card.thumbsDown}}
+        <span class="glyphicon glyphicon-thumbs-down"></span>
+      </button>
     {{/if}}
+    <div class="relevance {{card.relevance}}">
+      <span class="relevance-high glyphicon glyphicon-arrow-up"></span>
+      <span class="relevance-low glyphicon glyphicon-arrow-down"></span>
+    </div>
     </div>
   </div>
 </td>
