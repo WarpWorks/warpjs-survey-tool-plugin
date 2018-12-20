@@ -1,3 +1,5 @@
+const Promise = require('bluebird');
+
 const template = require('./related-feedback-modal.hbs');
 
 const styleThumbRadio = () => {
@@ -8,7 +10,7 @@ const styleThumbRadio = () => {
     });
 };
 
-module.exports = ($, questionId, answerName, answerNum, questionName) => {
+module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl) => {
     const modal = window.WarpJS.modal($, questionId, 'Feedback on recommendation', [
         { label: 'Close' }
     ]);
@@ -43,18 +45,17 @@ module.exports = ($, questionId, answerName, answerNum, questionName) => {
             questionName, $("input[name='thumb-value']:checked").val(), $('#feedback-reason').val()
         );
 
-        // const url = $(event.target).data('warpjsUrl');
-        // Promise.resolve()
-        //     .then(() => window.WarpJS.toast.loading($, "Loading data...", "Loading"))
-        //     .then((toastLoading) => Promise.resolve()
-        //         .then(() => window.WarpJS.proxy.get($, $(event.target).data('warpjsUrl')))
-        //         .then((res) => openModal($, event.target, res))
-        //         .catch((err) => {
-        //             console.error("Error:", err);
-        //             window.WarpJS.toast.error($, err.message, "Error getting data");
-        //         })
-        //         .finally(() => window.WarpJS.toast.close($, toastLoading))
-        //     )
-        // ;
+        Promise.resolve()
+            .then(() => window.WarpJS.toast.loading($, "Loading data...", "Loading"))
+            .then((toastLoading) => Promise.resolve()
+                .then(() => window.WarpJS.proxy.post($, submitUrl))
+                .then((res) => console.log('got to here: ', res))
+                .catch((err) => {
+                    console.error("Error:", err);
+                    window.WarpJS.toast.error($, err.message, "Error getting data");
+                })
+                .finally(() => window.WarpJS.toast.close($, toastLoading))
+            )
+        ;
     });
 };

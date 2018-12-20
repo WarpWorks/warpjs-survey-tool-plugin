@@ -23,14 +23,11 @@ const openModal = require('./open-modal');
         })
         .then(() => {
             placeholder.on('click', '.thumb', (event) => {
-                const url = $(event.target).data('warpjsUrl');
-                console.log('data: ', url);
-
                 Promise.resolve()
                     .then(() => window.WarpJS.toast.loading($, "Loading data...", "Loading"))
                     .then((toastLoading) => Promise.resolve()
-                        .then(() => window.WarpJS.proxy.get($, $(event.target).data('warpjsUrl')))
-                        .then((res) => openModal($, event.target, res))
+                        .then(() => window.WarpJS.proxy.get($, $(event.currentTarget).data('warpjsUrl')))
+                        .then((res) => openModal($, event.currentTarget, res))
                         .catch((err) => {
                             console.error("Error:", err);
                             window.WarpJS.toast.error($, err.message, "Error getting data");

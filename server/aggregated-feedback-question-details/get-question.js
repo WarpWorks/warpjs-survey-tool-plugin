@@ -25,7 +25,7 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
             const questionModel = new Question();
             await questionModel.fromPersistence(Promise, pluginInfo, questionEntity, questionInstance);
             const questionHAL = await questionModel.toHalResultFeedbackSpecific(warpjsUtils, RoutesInfo, constants.routes, resultId, thumbDirection);
-            resource.embed('feedbackQuestions', questionHAL);
+            await resource.embed('feedbackQuestions', questionHAL);
             await utils.sendHal(req, res, resource);
         } catch (err) {
             console.error("server/root/get-questions: err:", err);

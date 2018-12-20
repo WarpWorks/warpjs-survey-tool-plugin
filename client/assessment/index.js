@@ -727,7 +727,6 @@ const storage = require('./../storage');
                                     resultSet.recommendation = null;
                                     _.each(resultSet._embedded.results, (result) => {
                                         result.points = 0;
-
                                         _.each(result._embedded.relevantQuestions, (relevantQuestion) => {
                                             _.each(relevantQuestion ? _.filter(flattenedAnswers, (aQuestion) => {
                                                 return aQuestion.id === relevantQuestion.id;
@@ -737,6 +736,8 @@ const storage = require('./../storage');
                                                 } else if (relevantQuestion.relevance === 'low') {
                                                     result.points += 5 - parseInt(aQuestion.answer, 10);
                                                 }
+
+                                                aQuestion.feedbackLink = relevantQuestion._links ? relevantQuestion._links.submitFeedback.href : null;
                                             });
                                         });
                                     });
@@ -809,14 +810,11 @@ const storage = require('./../storage');
                                     return resultSet.id === resultSetId;
                                 });
                                 relatedResultSet.recommendation.questions = _.filter(flattenedAnswers, (flat) => {
-                                    const foundHigh = _.find(relatedResultSet.recommendation._embedded.relevantHighs, (relevantHigh) => {
-                                        return relevantHigh.id === flat.id;
-                                    });
-                                    const foundLow = _.find(relatedResultSet.recommendation._embedded.relevantLows, (relevantLow) => {
-                                        return relevantLow.id === flat.id;
+                                    const found = _.find(relatedResultSet.recommendation._embedded.relevantQuestions, (relevantQuestion) => {
+                                        return relevantQuestion.id === flat.id;
                                     });
 
-                                    return foundHigh || foundLow;
+                                    return found;
                                 });
                                 let contentPreview = null;
                                 let contentDocumentHref = null;
@@ -957,7 +955,8 @@ const storage = require('./../storage');
                                 const answerName = element.data('warpjsQuestionAnswerName');
                                 const answerNum = element.data('warpjsQuestionAnswer');
                                 const questionName = element.data('warpjsQuestionName');
-                                openRelatedFeedbackModal($, questionId, answerName, answerNum, questionName);
+                                const submitUrl = element.data('warjpsSubmitUrl');
+                                openRelatedFeedbackModal($, questionId, answerName, answerNum, questionName, submitUrl);
                             });
                         })
                     ;
