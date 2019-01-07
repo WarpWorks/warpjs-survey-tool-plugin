@@ -1,7 +1,6 @@
 const template = require('./modal.hbs');
 
 module.exports = ($, element, res) => {
-    console.log('res');
     if (res._embedded.feedbackQuestions) {
         const modal = window.WarpJS.modal($, res._embedded.feedbackQuestions[0].id, res._embedded.feedbackQuestions[0].name, [
             { label: 'Close' }

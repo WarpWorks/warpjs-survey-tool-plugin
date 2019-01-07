@@ -736,8 +736,6 @@ const storage = require('./../storage');
                                                 } else if (relevantQuestion.relevance === 'low') {
                                                     result.points += 5 - parseInt(aQuestion.answer, 10);
                                                 }
-
-                                                aQuestion.feedbackLink = relevantQuestion._links ? relevantQuestion._links.submitFeedback.href : null;
                                             });
                                         });
                                     });
@@ -816,6 +814,19 @@ const storage = require('./../storage');
 
                                     return found;
                                 });
+
+                                if (relatedResultSet.recommendation) {
+                                    const result = _.find(relatedResultSet._embedded.results, (result) => {
+                                        return result.id === relatedResultSet.recommendation.id;
+                                    });
+                                    _.each(relatedResultSet.recommendation.questions, (recommendationQuestion) => {
+                                        const question = _.find(result._embedded.relevantQuestions, (relevantQuestion) => {
+                                            return relevantQuestion.id === recommendationQuestion.id;
+                                        });
+                                        recommendationQuestion.feedbackLink = question && question._links && question._links.submitFeedback ? question._links.submitFeedback.href : 'test';
+                                    });
+                                }
+
                                 let contentPreview = null;
                                 let contentDocumentHref = null;
                                 if (relatedResultSet.recommendation && relatedResultSet.recommendation._embedded.contents[0] && relatedResultSet.recommendation._embedded.contents[0]._embedded.overviews) {
@@ -955,8 +966,10 @@ const storage = require('./../storage');
                                 const answerName = element.data('warpjsQuestionAnswerName');
                                 const answerNum = element.data('warpjsQuestionAnswer');
                                 const questionName = element.data('warpjsQuestionName');
-                                const submitUrl = element.data('warjpsSubmitUrl');
-                                openRelatedFeedbackModal($, questionId, answerName, answerNum, questionName, submitUrl);
+                                const submitUrl = element.data('warpjsSubmitUrl');
+                                const resultsetId = $('.related-reading-details').data('warpjsResultsetId');
+                                const resultId = $('.related-reading-details').data('warpjsResultId');
+                                openRelatedFeedbackModal($, questionId, answerName, answerNum, questionName, submitUrl, resultsetId, resultId);
                             });
                         })
                     ;
