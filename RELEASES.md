@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.39 - 2019-1-8
+
+- #89 result question feedback save, prepopulate, and update.
+
 ## 1.2.38 - 2018-10-17
 
 - #87 Remove logo, title, and subtitle from word download file.
