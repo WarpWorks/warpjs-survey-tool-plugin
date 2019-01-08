@@ -1,4 +1,3 @@
-// const Promise = require('bluebird');
 const _ = require('lodash');
 const Promise = require('bluebird');
 
@@ -15,25 +14,6 @@ const styleThumbRadio = () => {
 
 module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl, resultsetId, resultId) => {
     let assessment;
-    console.log('compare values:', submitUrl, questionId, resultId, resultsetId);
-
-    Promise.resolve()
-        .then(() => window.WarpJS.toast.loading($, "Loading data...", "Loading"))
-        .then((toastLoading) => Promise.resolve()
-            .then(() => window.WarpJS.proxy.get($, submitUrl))
-            .then((res) => console.log('res:::', res))
-            .catch((err) => {
-                console.error("Error:", err);
-                window.WarpJS.toast.error($, err.message, "Error getting data");
-            })
-            .finally(() => window.WarpJS.toast.close($, toastLoading))
-        )
-    ;
-
-    // Promise.resolve()
-    //     .then(() => window.WarpJS.toast.loading($, "Loading data...", "Loading"))
-    //     .then((toastLoading) => Promise.resolve()
-    //         .then(() => window.WarpJS.proxy.get($, submitUrl))
     const modal = window.WarpJS.modal($, questionId, 'Feedback on recommendation');
     $('> .modal-dialog > .modal-content > .modal-body', modal).html(template({
         questionId,
@@ -65,6 +45,17 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
         storage.updateAssessment(storage.getCurrent($, 'surveyId'), storage.getCurrent($, 'assessmentId'), assessment);
     };
 
+    getAssessment();
+
+    const existingFeedback = _.find(assessment.resultsetFeedback, (feedback) => {
+        return feedback.resultsetId === resultsetId && feedback.resultId === resultId && feedback.questionId === questionId;
+    });
+
+    if (existingFeedback) {
+        $(modal).find("input[name='thumb-value'][value='" + existingFeedback.thumbValue + "'] + .radio-thumb").click();
+        $(modal).find('#feedback-reason').val(existingFeedback.comment);
+    }
+
     $(modal).on('click', '.related-feedback-submit', function(event) {
         const data = {
             questionnaireId: storage.getCurrent($, 'surveyId'),
@@ -72,7 +63,8 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
             resultsetId: resultsetId,
             resultId: resultId,
             thumbValue: $(modal).find("input[name='thumb-value']:checked").val(),
-            comment: $(modal).find('#feedback-reason').val()
+            comment: $(modal).find('#feedback-reason').val(),
+            feedbackId: existingFeedback ? existingFeedback.feedbackId : null
         };
 
         // update database
@@ -89,13 +81,16 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
 
                     const foundFeedback = _.find(assessment.resultsetFeedback, {resultId: resultId, resultsetId: resultsetId, questionId: questionId});
                     if (foundFeedback) {
-                        console.log('foundFeedback', foundFeedback);
+                        foundFeedback.comment = data.comment;
+                        foundFeedback.thumbValue = data.thumbValue;
                     } else {
                         assessment.resultsetFeedback.push({
-                            feedbackId: res.id,
+                            feedbackId: res.feedbackId,
                             questionId: questionId,
                             resultsetId: resultsetId,
-                            resultId: resultId
+                            resultId: resultId,
+                            comment: data.comment,
+                            thumbValue: data.thumbValue
                         });
                     }
 

@@ -16,47 +16,74 @@ module.exports = (req, res) => {
 
     return Promise.resolve()
         .then(() => req.app.get(constants.appKeys.warpCore).getDomainByName(domain))
-        .then((domainModel) => domainModel.getEntityByName(pluginConfig.schema.questionnaire))
-        .then((questionnaireEntity) => Promise.resolve()
-            .then(() => questionnaireEntity.getDocuments(persistence, {_id: questionnaireId}, true))
-            .then((questionnaireDocument) => new Questionnaire(questionnaireEntity, questionnaireDocument[0]))
-            .then((questionnaire) => Promise.resolve()
-                .then(() => {
-                    return {
-                        id: uuid(),
-                        questionId: req.body.questionId,
-                        resultId: req.body.resultId,
-                        resultsetId: req.body.resultsetId,
-                        thumbValue: req.body.thumbValue,
-                        comment: req.body.comment
-                    };
-                })
-                .then((resultQuestionFeedback) => Promise.resolve()
-                    .then(() => questionnaire.newResultQuestionFeedback(resultQuestionFeedback.id, resultQuestionFeedback.questionId, resultQuestionFeedback.resultId, resultQuestionFeedback.resultsetId, resultQuestionFeedback.thumbValue, resultQuestionFeedback.comment))
-                    .then((feedback) => Promise.resolve()
-                        .then(() => questionnaireEntity.getRelationshipByName('SurveyToolFeedback'))
-                        .then((SurveyToolFeedbackRelationship) => SurveyToolFeedbackRelationship.getTargetEntity())
-                        .then((SurveyToolFeedbackEntity) => Promise.resolve()
-                            .then(() => SurveyToolFeedbackEntity.getRelationshipByName('Result'))
-                            .then((ResultRelationship) => ResultRelationship.addAssociation(feedback, {
-                                id: resultQuestionFeedback.resultId,
-                                type: 'Result'
-                            }))
-                            .then(() => SurveyToolFeedbackEntity.getRelationshipByName('ResultSet'))
-                            .then((ResultRelationship) => ResultRelationship.addAssociation(feedback, {
-                                id: resultQuestionFeedback.resultsetId,
-                                type: 'ResultSet'
-                            }))
-                            .then(() => SurveyToolFeedbackEntity.getRelationshipByName('DimensionQ'))
-                            .then((ResultRelationship) => ResultRelationship.addAssociation(feedback, {
-                                id: resultQuestionFeedback.questionId,
-                                type: 'DimensionQ'
-                            }))
-                            .then(() => feedback.save(Promise, persistence, questionnaireId))
-                        )
+        .then((domainModel) => Promise.resolve()
+            .then(() => domainModel.getEntityByName(pluginConfig.schema.questionnaire))
+            .then((questionnaireEntity) => Promise.resolve()
+                .then(() => questionnaireEntity.getDocuments(persistence, {_id: questionnaireId}, true))
+                .then((questionnaireDocument) => new Questionnaire(questionnaireEntity, questionnaireDocument[0]))
+                .then((questionnaire) => Promise.resolve()
+                    .then(() => {
+                        return {
+                            id: uuid(),
+                            questionId: req.body.questionId,
+                            resultId: req.body.resultId,
+                            resultsetId: req.body.resultsetId,
+                            thumbValue: req.body.thumbValue,
+                            comment: req.body.comment,
+                            feedbackId: req.body.feedbackId
+                        };
+                    })
+                    .then((resultQuestionFeedback) => Promise.resolve()
+                        .then(() => {
+                            if (resultQuestionFeedback.feedbackId) {
+                                return Promise.resolve()
+                                    .then(() => domainModel.getEntityByName('SurveyToolFeedback'))
+                                    .then((feedbackEntity) => Promise.resolve()
+                                        .then(() => feedbackEntity.getInstance(persistence, resultQuestionFeedback.feedbackId))
+                                        .then((feedbackInstance) => {
+                                            feedbackInstance.Comment = resultQuestionFeedback.comment;
+                                            feedbackInstance.ThumbValue = resultQuestionFeedback.thumbValue;
+
+                                            return feedbackInstance;
+                                        })
+                                        .then((feedbackInstance) => feedbackEntity.updateDocument(persistence, feedbackInstance))
+                                    )
+                                ;
+                            } else {
+                                return Promise.resolve()
+                                    .then(() => questionnaire.newResultQuestionFeedback(resultQuestionFeedback.id, resultQuestionFeedback.questionId, resultQuestionFeedback.resultId, resultQuestionFeedback.resultsetId, resultQuestionFeedback.thumbValue, resultQuestionFeedback.comment))
+                                    .then((feedback) => Promise.resolve()
+                                        .then(() => questionnaireEntity.getRelationshipByName('SurveyToolFeedback'))
+                                        .then((SurveyToolFeedbackRelationship) => SurveyToolFeedbackRelationship.getTargetEntity())
+                                        .then((SurveyToolFeedbackEntity) => Promise.resolve()
+                                            .then(() => SurveyToolFeedbackEntity.getRelationshipByName('Result'))
+                                            .then((ResultRelationship) => ResultRelationship.addAssociation(feedback, {
+                                                id: resultQuestionFeedback.resultId,
+                                                type: 'Result'
+                                            }))
+                                            .then(() => SurveyToolFeedbackEntity.getRelationshipByName('ResultSet'))
+                                            .then((ResultRelationship) => ResultRelationship.addAssociation(feedback, {
+                                                id: resultQuestionFeedback.resultsetId,
+                                                type: 'ResultSet'
+                                            }))
+                                            .then(() => SurveyToolFeedbackEntity.getRelationshipByName('DimensionQ'))
+                                            .then((ResultRelationship) => ResultRelationship.addAssociation(feedback, {
+                                                id: resultQuestionFeedback.questionId,
+                                                type: 'DimensionQ'
+                                            }))
+                                            .then(() => feedback)
+                                        )
+                                    )
+                                    .then((feedback) => feedback.save(Promise, persistence, questionnaireId))
+                                    .then((feedbackId) => {
+                                        resultQuestionFeedback.feedbackId = feedbackId;
+                                    })
+                                ;
+                            }
+                        })
+                        .then(() => warpjsUtils.createResource('', resultQuestionFeedback))
+                        .then((resource) => utils.sendHal(req, res, resource))
                     )
-                    .then(() => warpjsUtils.createResource('', resultQuestionFeedback))
-                    .then((resource) => utils.sendHal(req, res, resource))
                 )
             )
         )

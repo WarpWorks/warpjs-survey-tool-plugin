@@ -823,7 +823,7 @@ const storage = require('./../storage');
                                         const question = _.find(result._embedded.relevantQuestions, (relevantQuestion) => {
                                             return relevantQuestion.id === recommendationQuestion.id;
                                         });
-                                        recommendationQuestion.feedbackLink = question && question._links && question._links.submitFeedback ? question._links.submitFeedback.href : 'test';
+                                        recommendationQuestion.feedbackLink = question && question._links && question._links.submitFeedback ? question._links.submitFeedback.href : null;
                                     });
                                 }
 
