@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.40 - 2019-01-10
+
+- #90 Pull in real feedback in aggregated feedback page.
+
 ## 1.2.39 - 2019-1-8
 
 - #89 result question feedback save, prepopulate, and update.
