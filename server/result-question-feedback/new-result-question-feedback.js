@@ -42,7 +42,7 @@ module.exports = (req, res) => {
                                         .then(() => feedbackEntity.getInstance(persistence, resultQuestionFeedback.feedbackId))
                                         .then((feedbackInstance) => {
                                             feedbackInstance.Comment = resultQuestionFeedback.comment;
-                                            feedbackInstance.ThumbValue = resultQuestionFeedback.thumbValue;
+                                            feedbackInstance.ThumbDirection = resultQuestionFeedback.thumbValue;
 
                                             return feedbackInstance;
                                         })

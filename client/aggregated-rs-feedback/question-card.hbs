@@ -2,15 +2,15 @@
   <div class="card bg-{{card.commentResult}}">
     <p>{{card.name}}</p>
     <div class="thumb-container">
-    {{#if card.thumbsUp}}
+    {{#if card.ThumbsUp}}
       <button class="thumb thumbsup" data-warpjs-url="{{card._links.thumbsup.href}}">
-        {{card.thumbsUp}}
+        {{card.ThumbsUp}}
         <span class="glyphicon glyphicon-thumbs-up"></span>
       </button>
     {{/if}}
-    {{#if card.thumbsDown}}
+    {{#if card.ThumbsDown}}
       <button class="thumb thumbsdown" data-warpjs-url="{{card._links.thumbsdown.href}}">
-        {{card.thumbsDown}}
+        {{card.ThumbsDown}}
         <span class="glyphicon glyphicon-thumbs-down"></span>
       </button>
     {{/if}}
