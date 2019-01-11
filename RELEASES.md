@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.41 - 2019-01-11
+
+- #88 Fix the next button to the bottom of the results detail view.
+
 ## 1.2.40 - 2019-01-10
 
 - #90 Pull in real feedback in aggregated feedback page.
