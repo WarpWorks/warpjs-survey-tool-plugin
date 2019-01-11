@@ -30,7 +30,8 @@ module.exports = (req, res) => {
                             resultsetId: req.body.resultsetId,
                             thumbValue: req.body.thumbValue,
                             comment: req.body.comment,
-                            feedbackId: req.body.feedbackId
+                            feedbackId: req.body.feedbackId,
+                            feedbackType: req.body.feedbackType
                         };
                     })
                     .then((resultQuestionFeedback) => Promise.resolve()
@@ -51,7 +52,7 @@ module.exports = (req, res) => {
                                 ;
                             } else {
                                 return Promise.resolve()
-                                    .then(() => questionnaire.newResultQuestionFeedback(resultQuestionFeedback.id, resultQuestionFeedback.questionId, resultQuestionFeedback.resultId, resultQuestionFeedback.resultsetId, resultQuestionFeedback.thumbValue, resultQuestionFeedback.comment))
+                                    .then(() => questionnaire.newResultFeedback(resultQuestionFeedback.id, resultQuestionFeedback.thumbValue, resultQuestionFeedback.comment, resultQuestionFeedback.feedbackType))
                                     .then((feedback) => Promise.resolve()
                                         .then(() => questionnaireEntity.getRelationshipByName('SurveyToolFeedback'))
                                         .then((SurveyToolFeedbackRelationship) => SurveyToolFeedbackRelationship.getTargetEntity())

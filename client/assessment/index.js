@@ -742,10 +742,19 @@ const storage = require('./../storage');
                                     const recommendation = _.orderBy(_.filter(resultSet._embedded.results, (result) => {
                                         return result.points > 0;
                                     }), ['points'], ['desc'])[0];
+
+                                    const existingFeedback = _.find(assessment.resultsetFeedback, (feedback) => {
+                                        return feedback.resultsetId === resultSet.id && feedback.resultId === recommendation.id && feedback.feedbackType === 'result';
+                                    });
+
+                                    if (existingFeedback) {
+                                        console.log('found feedback! result');
+                                        recommendation.thumbValue = existingFeedback.thumbValue.toLowerCase();
+                                    }
+
                                     resultSet.recommendation = recommendation;
                                     resultSet.recommendationName = recommendation ? recommendation.name : null;
                                 });
-
                                 shared.setSurveyContent($, placeholder, questionnaireRelatedReadingTemplate({readings: result.data._embedded.questionnaires[0]._embedded.resultSets}));
                             };
 
@@ -802,6 +811,7 @@ const storage = require('./../storage');
                             });
 
                             $(document).on('click', '.releated-read-more', (event) => {
+                                getAssessment();
                                 $('.progress-container, .blue-button-container').css('display', 'none');
                                 const resultSetId = $(event.target).data('result-set');
                                 const relatedResultSet = _.find(result.data._embedded.questionnaires[0]._embedded.resultSets, (resultSet) => {
@@ -827,7 +837,6 @@ const storage = require('./../storage');
                                         const existingFeedback = _.find(assessment.resultsetFeedback, (feedback) => {
                                             return feedback.resultsetId === relatedResultSet.id && feedback.resultId === result.id && feedback.questionId === question.id;
                                         });
-                                        console.log('existingFeedback:::', existingFeedback);
 
                                         recommendationQuestion.feedbackLink = question && question._links && question._links.submitFeedback ? question._links.submitFeedback.href : null;
                                         if (existingFeedback) {
@@ -969,16 +978,18 @@ const storage = require('./../storage');
                                 window.open($('.content-link').data('url'), '_blank');
                             });
 
-                            $(document).on('click', '.related-question-feedback-button', (event) => {
-                                const element = $(event.target).closest('.related-question-feedback-button');
+                            $(document).on('click', '.related-question-feedback-button, .result-feedback-button', (event) => {
+                                const element = $(event.target).closest('.related-question-feedback-button, .result-feedback-button');
                                 const questionId = element.data('warpjsQuestionId');
                                 const answerName = element.data('warpjsQuestionAnswerName');
                                 const answerNum = element.data('warpjsQuestionAnswer');
                                 const questionName = element.data('warpjsQuestionName');
                                 const submitUrl = element.data('warpjsSubmitUrl');
-                                const resultsetId = $('.related-reading-details').data('warpjsResultsetId');
-                                const resultId = $('.related-reading-details').data('warpjsResultId');
-                                openRelatedFeedbackModal($, questionId, answerName, answerNum, questionName, submitUrl, resultsetId, resultId);
+                                const resultsetId = $('.related-reading-details').length ? $('.related-reading-details').data('warpjsResultsetId') : element.data('warpjsResultsetId');
+                                const resultId = $('.related-reading-details').length ? $('.related-reading-details').data('warpjsResultId') : element.data('warpjsResultId');
+                                const feedbackType = element.data('warpjsFeedbackType');
+                                console.log('got to index', feedbackType, resultsetId, resultId);
+                                openRelatedFeedbackModal($, questionId, answerName, answerNum, questionName, submitUrl, resultsetId, resultId, feedbackType);
                             });
                         })
                     ;

@@ -847,68 +847,74 @@
         float: right;
         max-width: calc(50% - 134px);
     }
+}
 
-    .related-question-feedback-button {
-        border-radius: 5px;
-        border: solid 1px grey;
+.related-question-feedback-button,
+.result-feedback-button {
+    border-radius: 5px;
+    border: solid 1px grey;
+    background-color: #ffffff;
+    padding: 0px;
+    height: 27px;
+    margin-left: 10px;
+    float: right;
+    cursor: pointer;
+
+    div {
+        border-radius: 4px;
+        width: 26px;
+        height: 25px;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: 80%;
+        display: inline-block;
+        padding: 4px;
+    }
+
+    .thumbs-up {
         background-color: #ffffff;
-        padding: 0px;
-        height: 27px;
-        margin-left: 10px;
-        float: right;
-        cursor: pointer;
 
-        div {
-            border-radius: 4px;
-            width: 26px;
-            height: 25px;
-            background-position: center center;
-            background-repeat: no-repeat;
-            background-size: 80%;
-            display: inline-block;
-            padding: 4px;
+        span {
+            color: #979797;
+            font-size: 18px;
         }
+    }
 
-        .thumbs-up {
-            background-color: #ffffff;
+    .thumbs-down {
+        background-color: #ffffff;
+        margin-right: -1px;
 
-            span {
-                color: #979797;
-                font-size: 18px;
-            }
+        span {
+            color: #979797;
+            font-size: 18px;
         }
+    }
 
-        .thumbs-down {
-            background-color: #ffffff;
-            margin-right: -1px;
+    &.thumbsup .thumbs-up {
+        background-color: #4889a3;
 
-            span {
-                color: #979797;
-                font-size: 18px;
-            }
+        span {
+            color: #ffffff;
         }
+    }
 
-        &.thumbsup .thumbs-up {
-            background-color: #4889a3;
+    &.thumbsdown .thumbs-down {
+        background-color: #4889a3;
 
-            span {
-                color: #ffffff;
-            }
-        }
-
-        &.thumbsdown .thumbs-down {
-            background-color: #4889a3;
-
-            span {
-                color: #ffffff;
-            }
+        span {
+            color: #ffffff;
         }
     }
 }
 
+.result-feedback-button {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+}
+
 .btn-default {
     color: #333;
-
 }
 
 .tooltip {

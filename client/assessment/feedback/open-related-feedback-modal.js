@@ -2,7 +2,8 @@ const _ = require('lodash');
 const Promise = require('bluebird');
 
 const storage = require('./../../storage');
-const template = require('./related-feedback-modal.hbs');
+const questionTemplate = require('./related-question-feedback-modal.hbs');
+const resultTemplate = require('./related-feedback-modal.hbs');
 
 const styleThumbRadio = () => {
     $('.thumbs-container input:radio').hide().each(function() {
@@ -12,15 +13,21 @@ const styleThumbRadio = () => {
     });
 };
 
-module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl, resultsetId, resultId) => {
+module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl, resultsetId, resultId, feedbackType) => {
+    console.log('got to modal', feedbackType, resultsetId, resultId);
+    const modalId = feedbackType === 'result' ? resultsetId : questionId;
     let assessment;
-    const modal = window.WarpJS.modal($, questionId, 'Feedback on recommendation');
-    $('> .modal-dialog > .modal-content > .modal-body', modal).html(template({
-        questionId,
-        answerName,
-        answerNum,
-        questionName
-    }));
+    const modal = window.WarpJS.modal($, modalId, 'Feedback on recommendation');
+    if (feedbackType === 'result') {
+        $('> .modal-dialog > .modal-content > .modal-body', modal).html(resultTemplate());
+    } else if (feedbackType === 'resultQuestion') {
+        $('> .modal-dialog > .modal-content > .modal-body', modal).html(questionTemplate({
+            questionId,
+            answerName,
+            answerNum,
+            questionName
+        }));
+    }
 
     modal.modal('show');
 
@@ -46,10 +53,17 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
     };
 
     getAssessment();
+    let existingFeedback;
 
-    const existingFeedback = _.find(assessment.resultsetFeedback, (feedback) => {
-        return feedback.resultsetId === resultsetId && feedback.resultId === resultId && feedback.questionId === questionId;
-    });
+    if (feedbackType === 'result') {
+        existingFeedback = _.find(assessment.resultsetFeedback, (feedback) => {
+            return feedback.resultsetId === resultsetId && feedback.resultId === resultId && feedbackType === 'result';
+        });
+    } else if (feedbackType === 'resultQuestion') {
+        existingFeedback = _.find(assessment.resultsetFeedback, (feedback) => {
+            return feedback.resultsetId === resultsetId && feedback.resultId === resultId && feedbackType === 'resultQuestion' && feedback.questionId === questionId;
+        });
+    }
 
     if (existingFeedback) {
         $(modal).find("input[name='thumb-value'][value='" + existingFeedback.thumbValue + "'] + .radio-thumb").click();
@@ -64,7 +78,8 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
             resultId: resultId,
             thumbValue: $(modal).find("input[name='thumb-value']:checked").val(),
             comment: $(modal).find('#feedback-reason').val(),
-            feedbackId: existingFeedback ? existingFeedback.feedbackId : null
+            feedbackId: existingFeedback ? existingFeedback.feedbackId : null,
+            feedbackType: feedbackType
         };
 
         // update database
@@ -78,8 +93,13 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
                     if (!assessment.resultsetFeedback) {
                         assessment.resultsetFeedback = [];
                     }
+                    let foundFeedback;
+                    if (feedbackType === 'result') {
+                        foundFeedback = _.find(assessment.resultsetFeedback, {resultId: resultId, resultsetId: resultsetId, feedbackType: feedbackType});
+                    } else {
+                        foundFeedback = _.find(assessment.resultsetFeedback, {resultId: resultId, resultsetId: resultsetId, questionId: questionId, feedbackType: feedbackType});
+                    }
 
-                    const foundFeedback = _.find(assessment.resultsetFeedback, {resultId: resultId, resultsetId: resultsetId, questionId: questionId});
                     if (foundFeedback) {
                         foundFeedback.comment = data.comment;
                         foundFeedback.thumbValue = data.thumbValue;
@@ -90,14 +110,20 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
                             resultsetId: resultsetId,
                             resultId: resultId,
                             comment: data.comment,
-                            thumbValue: data.thumbValue
+                            thumbValue: data.thumbValue,
+                            feedbackType: feedbackType
                         });
                     }
 
                     updateAssessment();
 
                     $(modal).modal('toggle');
-                    const feedbackThumbButton = $(".related-question-feedback-button[data-warpjs-question-id='" + questionId + "']");
+                    let feedbackThumbButton = $(".related-question-feedback-button[data-warpjs-question-id='" + questionId + "']");
+
+                    if (feedbackType === 'result') {
+                        feedbackThumbButton = $(".result-feedback-button[data-warpjs-resultset-id='" + resultsetId + "']");
+                    }
+
                     feedbackThumbButton.removeClass('thumbsup');
                     feedbackThumbButton.removeClass('thumbsdown');
                     feedbackThumbButton.addClass(data.thumbValue.toLowerCase());

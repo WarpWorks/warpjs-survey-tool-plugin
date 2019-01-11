@@ -6,7 +6,7 @@ const docx = require('./docx');
 const root = require('./root');
 const aggregatedRsFeedback = require('./aggregated-rs-feedback');
 const aggregatedFeedbackQuestionDetails = require('./aggregated-feedback-question-details');
-const resultQuestionFeedback = require('./result-question-feedback');
+const resultFeedback = require('./result-feedback');
 
 module.exports = (baseUrl) => {
     const routesInfo = new RoutesInfo('/', baseUrl);
@@ -14,7 +14,8 @@ module.exports = (baseUrl) => {
     routesInfo.route(routes.root, '/', root);
     routesInfo.route(routes.aggregatedRsFeedback, '/aggregated-feedback/resultset/{surveyId}/{typeId}', aggregatedRsFeedback);
     routesInfo.route(routes.aggregatedFeedbackQuestionDetails, '/aggregated-feedback/question-details/{surveyId}/{resultsetId}/{resultId}/{questionId}/{thumbDirection}', aggregatedFeedbackQuestionDetails);
-    routesInfo.route(routes.resultQuestionFeedback, '/result-feedback/result-question/{surveyId}/{resultsetId}/{resultId}/{questionId}', resultQuestionFeedback);
+    routesInfo.route(routes.resultQuestionFeedback, '/result-feedback/result-question/{surveyId}/{resultsetId}/{resultId}/{questionId}', resultFeedback);
+    routesInfo.route(routes.resultFeedback, '/result-feedback/result/{surveyId}/{resultsetId}/{resultId}/', resultFeedback);
     routesInfo.route(routes.assessment, '/{surveyId}{?assessmentId}', assessment);
     routesInfo.route(routes.docx, '/export/docx', docx);
     return routesInfo;

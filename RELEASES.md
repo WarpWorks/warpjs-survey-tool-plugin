@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.44 - 2019-01-16
+
+- #91 Result feedback.
+
 ## 1.2.43 - 2019-01-14
 
 - #93 Add CreatedDate to new feedback, update thumb value on detail view after submit.

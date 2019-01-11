@@ -16,6 +16,20 @@
             <div class="related-reading-image"></div>
             <h2>{{recommendationName}}</h2>
             <a class="releated-read-more" data-result-set="{{id}}">Read more</a>
+            <div
+              class="result-feedback-button {{recommendation.thumbValue}}"
+              data-warpjs-feedback-type="result"
+              data-warpjs-resultset-id="{{id}}"
+              data-warpjs-result-id="{{recommendation.id}}"
+              data-warpjs-submit-url="{{recommendation._links.submitFeedback.href}}"
+            >
+              <div class="thumbs-up">
+                <span class="glyphicon glyphicon-thumbs-up"></span>
+              </div>
+              <div class="thumbs-down">
+                <span class="glyphicon glyphicon-thumbs-down"></span>
+              </div>
+            </div>
           </div>
         </div>
       {{/if}}
