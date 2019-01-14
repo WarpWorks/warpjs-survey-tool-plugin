@@ -97,6 +97,10 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
                     updateAssessment();
 
                     $(modal).modal('toggle');
+                    const feedbackThumbButton = $(".related-question-feedback-button[data-warpjs-question-id='" + questionId + "']");
+                    feedbackThumbButton.removeClass('thumbsup');
+                    feedbackThumbButton.removeClass('thumbsdown');
+                    feedbackThumbButton.addClass(data.thumbValue.toLowerCase());
                 })
                 .catch((err) => {
                     console.error("Error:", err);
