@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.43 - 2019-01-14
+
+- #93 Add CreatedDate to new feedback, update thumb value on detail view after submit.
+
 ## 1.2.42 - 2019-01-14
 
 - #92 select thumb icon for related reading detail feedback buttons.
