@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.42 - 2019-01-14
+
+- #92 select thumb icon for related reading detail feedback buttons.
+
 ## 1.2.41 - 2019-01-11
 
 - #88 Fix the next button to the bottom of the results detail view.
