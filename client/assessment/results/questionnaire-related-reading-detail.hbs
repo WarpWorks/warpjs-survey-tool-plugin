@@ -40,15 +40,19 @@
           </div>
           <span class="summary-question">{{questionName}}</span>
           <div
-            class="related-question-feedback-button"
+            class="related-question-feedback-button {{thumbValue}}"
             data-warpjs-question-id="{{id}}"
             data-warpjs-question-answer-name="{{answerName}}"
             data-warpjs-question-answer="{{answer}}"
             data-warpjs-question-name="{{questionName}}"
             data-warpjs-submit-url="{{feedbackLink}}"
           >
-            <div class="thumbs-up"></div>
-            <div class="thumbs-down"></div>
+            <div class="thumbs-up">
+              <span class="glyphicon glyphicon-thumbs-up"></span>
+            </div>
+            <div class="thumbs-down">
+              <span class="glyphicon glyphicon-thumbs-down"></span>
+            </div>
           </div>
           <span class="summary-selection">{{answerName}}</span>
         </div>

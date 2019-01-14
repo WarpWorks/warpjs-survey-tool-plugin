@@ -819,11 +819,20 @@ const storage = require('./../storage');
                                     const result = _.find(relatedResultSet._embedded.results, (result) => {
                                         return result.id === relatedResultSet.recommendation.id;
                                     });
+
                                     _.each(relatedResultSet.recommendation.questions, (recommendationQuestion) => {
                                         const question = _.find(result._embedded.relevantQuestions, (relevantQuestion) => {
                                             return relevantQuestion.id === recommendationQuestion.id;
                                         });
+                                        const existingFeedback = _.find(assessment.resultsetFeedback, (feedback) => {
+                                            return feedback.resultsetId === relatedResultSet.id && feedback.resultId === result.id && feedback.questionId === question.id;
+                                        });
+                                        console.log('existingFeedback:::', existingFeedback);
+
                                         recommendationQuestion.feedbackLink = question && question._links && question._links.submitFeedback ? question._links.submitFeedback.href : null;
+                                        if (existingFeedback) {
+                                            recommendationQuestion.thumbValue = existingFeedback.thumbValue.toLowerCase();
+                                        }
                                     });
                                 }
 
