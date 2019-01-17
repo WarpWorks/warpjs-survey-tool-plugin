@@ -14,8 +14,7 @@ module.exports = (baseUrl) => {
     routesInfo.route(routes.root, '/', root);
     routesInfo.route(routes.aggregatedRsFeedback, '/aggregated-feedback/resultset/{surveyId}/{typeId}', aggregatedRsFeedback);
     routesInfo.route(routes.aggregatedFeedbackQuestionDetails, '/aggregated-feedback/question-details/{surveyId}/{resultsetId}/{resultId}/{questionId}/{thumbDirection}', aggregatedFeedbackQuestionDetails);
-    routesInfo.route(routes.resultQuestionFeedback, '/result-feedback/result-question/{surveyId}/{resultsetId}/{resultId}/{questionId}', resultFeedback);
-    routesInfo.route(routes.resultFeedback, '/result-feedback/result/{surveyId}/{resultsetId}/{resultId}/', resultFeedback);
+    routesInfo.route(routes.resultFeedback, '/result-feedback/result', resultFeedback);
     routesInfo.route(routes.assessment, '/{surveyId}{?assessmentId}', assessment);
     routesInfo.route(routes.docx, '/export/docx', docx);
     return routesInfo;

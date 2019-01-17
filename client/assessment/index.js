@@ -988,9 +988,15 @@ const storage = require('./../storage');
                                 const resultsetId = $('.related-reading-details').length ? $('.related-reading-details').data('warpjsResultsetId') : element.data('warpjsResultsetId');
                                 const resultId = $('.related-reading-details').length ? $('.related-reading-details').data('warpjsResultId') : element.data('warpjsResultId');
                                 const feedbackType = element.data('warpjsFeedbackType');
-                                console.log('got to index', feedbackType, resultsetId, resultId);
                                 openRelatedFeedbackModal($, questionId, answerName, answerNum, questionName, submitUrl, resultsetId, resultId, feedbackType);
                             });
+
+                            // $(document).on('click', '#survey-tool-feedback-button', (event) => {
+                            //     const element = $(event.target).closest('#survey-tool-feedback-button');
+                            //     const submitUrl = element.data('warpjsSubmitUrl');
+                            //     const feedbackType = 'survey';
+                            //     openSurveyFeedbackModal($, submitUrl, feedbackType);
+                            // });
                         })
                     ;
                 }
