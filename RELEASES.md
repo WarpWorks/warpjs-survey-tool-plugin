@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.45 - 2019-01-17
+
+- #95 Aggregated feedback page hide feedback button functionality.
+
 ## 1.2.44 - 2019-01-16
 
 - #91 Result feedback.

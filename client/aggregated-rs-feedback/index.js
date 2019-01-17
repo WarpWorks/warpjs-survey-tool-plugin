@@ -37,6 +37,10 @@ const openModal = require('./open-modal');
                 ;
             });
 
+            placeholder.on('click', '.user-feedback-toggle', (event) => {
+                $('.results-container').toggleClass('hide-feedback');
+            });
+
             placeholder.on('change', '.select-detail-level', (event) => {
                 const value = $(event.target).val();
                 $('.results-container').attr('data-detail-level', value);
