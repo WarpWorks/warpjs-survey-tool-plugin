@@ -151,6 +151,8 @@ const storage = require('./../storage');
                                 $("input[name='questionnaire-level'][value='" + detailLevel + "']").attr('checked', 'checked');
                             };
 
+                            const feedbackUrl = result.data._links.submitFeedback.href;
+
                             $('.ipt-title').html(assessment.projectName);
                             const version = getVersion(assessment);
                             $('.ipt-version').html(version);
@@ -566,6 +568,7 @@ const storage = require('./../storage');
                                     details: details,
                                     values: values,
                                     title: assessment.projectName,
+                                    feedbackUrl: feedbackUrl,
                                     url: result.data._links.docx.href,
                                     data: JSON.stringify(
                                         {
@@ -680,6 +683,7 @@ const storage = require('./../storage');
                                     values: values,
                                     title: assessment.projectName,
                                     url: result.data._links.docx.href,
+                                    feedbackUrl: feedbackUrl,
                                     data: JSON.stringify(
                                         {
                                             details: details,
@@ -755,7 +759,7 @@ const storage = require('./../storage');
                                     resultSet.recommendation = recommendation;
                                     resultSet.recommendationName = recommendation ? recommendation.name : null;
                                 });
-                                shared.setSurveyContent($, placeholder, questionnaireRelatedReadingTemplate({readings: result.data._embedded.questionnaires[0]._embedded.resultSets}));
+                                shared.setSurveyContent($, placeholder, questionnaireRelatedReadingTemplate({readings: result.data._embedded.questionnaires[0]._embedded.resultSets, feedbackUrl: feedbackUrl}));
                             };
 
                             if (assessment.answers[0]._embedded.categories[categoryPointer].isRepeatable === true) {
@@ -855,7 +859,7 @@ const storage = require('./../storage');
                                     contentDocumentHref = relatedResultSet.recommendation._embedded.contents[0]._links.self.href;
                                 }
 
-                                shared.setSurveyContent($, placeholder, questionnaireRelatedDetailsTemplate({resultSet: relatedResultSet, contentPreview: contentPreview, href: contentDocumentHref}));
+                                shared.setSurveyContent($, placeholder, questionnaireRelatedDetailsTemplate({resultSet: relatedResultSet, contentPreview: contentPreview, href: contentDocumentHref, feedbackUrl: feedbackUrl}));
                             });
 
                             $(document).on('click', '.releated-details-back', () => {
@@ -991,12 +995,12 @@ const storage = require('./../storage');
                                 openRelatedFeedbackModal($, questionId, answerName, answerNum, questionName, submitUrl, resultsetId, resultId, feedbackType);
                             });
 
-                            // $(document).on('click', '#survey-tool-feedback-button', (event) => {
-                            //     const element = $(event.target).closest('#survey-tool-feedback-button');
-                            //     const submitUrl = element.data('warpjsSubmitUrl');
-                            //     const feedbackType = 'survey';
-                            //     openSurveyFeedbackModal($, submitUrl, feedbackType);
-                            // });
+                            $(document).on('click', '#survey-tool-feedback-button', (event) => {
+                                const element = $(event.target).closest('#survey-tool-feedback-button');
+                                const submitUrl = element.data('warpjsSubmitUrl');
+                                const feedbackType = 'survey';
+                                openRelatedFeedbackModal($, null, null, null, null, submitUrl, null, null, feedbackType);
+                            });
                         })
                     ;
                 }

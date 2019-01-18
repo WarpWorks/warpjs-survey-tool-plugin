@@ -4,6 +4,7 @@ const Promise = require('bluebird');
 const storage = require('./../../storage');
 const questionTemplate = require('./related-question-feedback-modal.hbs');
 const resultTemplate = require('./related-feedback-modal.hbs');
+const surveyTemplate = require('./survey-feedback-modal.hbs');
 
 const styleThumbRadio = () => {
     $('.thumbs-container input:radio').hide().each(function() {
@@ -14,10 +15,16 @@ const styleThumbRadio = () => {
 };
 
 module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl, resultsetId, resultId, feedbackType) => {
-    console.log('got to modal', feedbackType, resultsetId, resultId);
-    const modalId = feedbackType === 'result' ? resultsetId : questionId;
+    let modalId = questionId;
+    let modalTitle = 'Feedback on recommendation';
+    if (feedbackType === 'result') {
+        modalId = resultsetId;
+    } else if (feedbackType === 'survey') {
+        modalId = 'survey-modal';
+        modalTitle = 'My feedback is based on:';
+    }
     let assessment;
-    const modal = window.WarpJS.modal($, modalId, 'Feedback on recommendation');
+    const modal = window.WarpJS.modal($, modalId, modalTitle);
     if (feedbackType === 'result') {
         $('> .modal-dialog > .modal-content > .modal-body', modal).html(resultTemplate());
     } else if (feedbackType === 'resultQuestion') {
@@ -27,6 +34,8 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
             answerNum,
             questionName
         }));
+    } else if (feedbackType === 'survey') {
+        $('> .modal-dialog > .modal-content > .modal-body', modal).html(surveyTemplate());
     }
 
     modal.modal('show');
@@ -53,21 +62,26 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
     };
 
     getAssessment();
-    let existingFeedback;
+    let existingFeedback = null;
 
     if (feedbackType === 'result') {
         existingFeedback = _.find(assessment.resultsetFeedback, (feedback) => {
-            return feedback.resultsetId === resultsetId && feedback.resultId === resultId && feedbackType === 'result';
+            return feedback.resultsetId === resultsetId && feedback.resultId === resultId && feedback.feedbackType === 'result';
         });
     } else if (feedbackType === 'resultQuestion') {
         existingFeedback = _.find(assessment.resultsetFeedback, (feedback) => {
-            return feedback.resultsetId === resultsetId && feedback.resultId === resultId && feedbackType === 'resultQuestion' && feedback.questionId === questionId;
+            return feedback.resultsetId === resultsetId && feedback.resultId === resultId && feedback.feedbackType === 'resultQuestion' && feedback.questionId === questionId;
+        });
+    } else if (feedbackType === 'survey') {
+        existingFeedback = _.find(assessment.resultsetFeedback, (feedback) => {
+            return feedback.feedbackType === 'survey';
         });
     }
 
     if (existingFeedback) {
         $(modal).find("input[name='thumb-value'][value='" + existingFeedback.thumbValue + "'] + .radio-thumb").click();
         $(modal).find('#feedback-reason').val(existingFeedback.comment);
+        $(modal).find("input[name='based-on'][value='" + existingFeedback.basedOn + "']").attr('checked', 'checked');
     }
 
     $(modal).on('click', '.related-feedback-submit', function(event) {
@@ -77,6 +91,7 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
             resultsetId: resultsetId,
             resultId: resultId,
             thumbValue: $(modal).find("input[name='thumb-value']:checked").val(),
+            basedOn: $(modal).find("input[name='based-on']:checked").val(),
             comment: $(modal).find('#feedback-reason').val(),
             feedbackId: existingFeedback ? existingFeedback.feedbackId : null,
             feedbackType: feedbackType
@@ -96,13 +111,16 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
                     let foundFeedback;
                     if (feedbackType === 'result') {
                         foundFeedback = _.find(assessment.resultsetFeedback, {resultId: resultId, resultsetId: resultsetId, feedbackType: feedbackType});
-                    } else {
+                    } else if (feedbackType === 'resultQuestion') {
                         foundFeedback = _.find(assessment.resultsetFeedback, {resultId: resultId, resultsetId: resultsetId, questionId: questionId, feedbackType: feedbackType});
+                    } else if (feedbackType === 'survey') {
+                        foundFeedback = _.find(assessment.resultsetFeedback, {feedbackType: feedbackType});
                     }
 
                     if (foundFeedback) {
                         foundFeedback.comment = data.comment;
                         foundFeedback.thumbValue = data.thumbValue;
+                        foundFeedback.basedOn = data.basedOn;
                     } else {
                         assessment.resultsetFeedback.push({
                             feedbackId: res.feedbackId,
@@ -111,6 +129,7 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
                             resultId: resultId,
                             comment: data.comment,
                             thumbValue: data.thumbValue,
+                            basedOn: data.basedOn,
                             feedbackType: feedbackType
                         });
                     }
@@ -124,9 +143,11 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
                         feedbackThumbButton = $(".result-feedback-button[data-warpjs-resultset-id='" + resultsetId + "']");
                     }
 
-                    feedbackThumbButton.removeClass('thumbsup');
-                    feedbackThumbButton.removeClass('thumbsdown');
-                    feedbackThumbButton.addClass(data.thumbValue.toLowerCase());
+                    if (feedbackType === 'result' || feedbackType === 'resultQuestion') {
+                        feedbackThumbButton.removeClass('thumbsup');
+                        feedbackThumbButton.removeClass('thumbsdown');
+                        feedbackThumbButton.addClass(data.thumbValue.toLowerCase());
+                    }
                 })
                 .catch((err) => {
                     console.error("Error:", err);

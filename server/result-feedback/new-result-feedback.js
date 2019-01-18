@@ -31,7 +31,8 @@ module.exports = (req, res) => {
                             thumbValue: req.body.thumbValue,
                             comment: req.body.comment,
                             feedbackId: req.body.feedbackId,
-                            feedbackType: req.body.feedbackType
+                            feedbackType: req.body.feedbackType,
+                            basedOn: req.body.basedOn
                         };
                     })
                     .then((resultQuestionFeedback) => Promise.resolve()
@@ -44,6 +45,7 @@ module.exports = (req, res) => {
                                         .then((feedbackInstance) => {
                                             feedbackInstance.Comment = resultQuestionFeedback.comment;
                                             feedbackInstance.ThumbDirection = resultQuestionFeedback.thumbValue;
+                                            feedbackInstance.BasedOn = resultQuestionFeedback.basedOn;
 
                                             return feedbackInstance;
                                         })
@@ -52,7 +54,7 @@ module.exports = (req, res) => {
                                 ;
                             } else {
                                 return Promise.resolve()
-                                    .then(() => questionnaire.newResultFeedback(resultQuestionFeedback.id, resultQuestionFeedback.thumbValue, resultQuestionFeedback.comment, resultQuestionFeedback.feedbackType))
+                                    .then(() => questionnaire.newResultFeedback(resultQuestionFeedback.id, resultQuestionFeedback.thumbValue, resultQuestionFeedback.comment, resultQuestionFeedback.feedbackType, resultQuestionFeedback.basedOn))
                                     .then((feedback) => Promise.resolve()
                                         .then(() => questionnaireEntity.getRelationshipByName('SurveyToolFeedback'))
                                         .then((SurveyToolFeedbackRelationship) => SurveyToolFeedbackRelationship.getTargetEntity())

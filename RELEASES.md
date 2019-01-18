@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.46 - 2019-01-18
+
+- #94 'Feedback based on' modal and button.
+
 ## 1.2.45 - 2019-01-17
 
 - #95 Aggregated feedback page hide feedback button functionality.
