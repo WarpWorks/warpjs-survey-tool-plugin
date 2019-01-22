@@ -1,0 +1,19 @@
+<div class="row">
+  <div class="col-sm-12">
+    <input type="radio" name="question-specific" value='My comment is regarding the current question: "{{questionName}}"' data-direction="thumbsup" checked="checked">
+    <label class="radio-text based-on-label">My comment is regarding the current question: "{{questionName}}"</label>
+  </div>
+  <div class="col-sm-12">
+    <input type="radio" name="question-specific" value="My comment is regarding questions in general" data-direction="thumbsdown">
+    <label class="radio-text based-on-label">My comment is regarding questions in general</label>
+  </div>
+  <div class="col-sm-12">
+    <textarea id="feedback-reason" placeholder="Please describe issues, bugs or leave us your general suggestions."></textarea>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12 buttons">
+    <button class="related-feedback-submit">Submit</button>
+    <button class="related-feedback-close" data-dismiss="modal">Close</button>
+  </div>
+</div>

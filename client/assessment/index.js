@@ -992,14 +992,24 @@ const storage = require('./../storage');
                                 const resultsetId = $('.related-reading-details').length ? $('.related-reading-details').data('warpjsResultsetId') : element.data('warpjsResultsetId');
                                 const resultId = $('.related-reading-details').length ? $('.related-reading-details').data('warpjsResultId') : element.data('warpjsResultId');
                                 const feedbackType = element.data('warpjsFeedbackType');
-                                openRelatedFeedbackModal($, questionId, answerName, answerNum, questionName, submitUrl, resultsetId, resultId, feedbackType);
+                                openRelatedFeedbackModal($, questionId, answerName, answerNum, questionName, submitUrl, resultsetId, resultId, feedbackType, null);
                             });
 
                             $(document).on('click', '#survey-tool-feedback-button', (event) => {
                                 const element = $(event.target).closest('#survey-tool-feedback-button');
                                 const submitUrl = element.data('warpjsSubmitUrl');
                                 const feedbackType = 'survey';
-                                openRelatedFeedbackModal($, null, null, null, null, submitUrl, null, null, feedbackType);
+                                openRelatedFeedbackModal($, null, null, null, null, submitUrl, null, null, feedbackType, null);
+                            });
+
+                            $(document).on('click', '#survey-question-feedback-button', (event) => {
+                                const element = $(event.target).closest('#survey-question-feedback-button');
+                                const submitUrl = element.data('warpjsSubmitUrl');
+                                const questionId = element.data('warpjsQuestionId');
+                                const questionName = element.data('warpjsQuestionName');
+                                const iterationName = element.data('warpjsIterationName=');
+                                const feedbackType = element.data('warpjsFeedbackType');
+                                openRelatedFeedbackModal($, questionId, null, null, questionName, submitUrl, null, null, feedbackType, iterationName);
                             });
                         })
                     ;

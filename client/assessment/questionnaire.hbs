@@ -37,4 +37,13 @@
     <img src="{{image}}"/>
   </div>
 </div>
+<div id="survey-question-feedback-button"
+  data-warpjs-feedback-type="question"
+  data-warpjs-question-id="{{question.id}}"
+  data-warpjs-question-name="{{question.name}}"
+  data-warpjs-iteration-name="{{iteration.name}}"
+  data-warpjs-submit-url="{{question._links.submitFeedback.href}}"
+>
+  Feedback
+</div>
 {{> comments comments=question.comments}}

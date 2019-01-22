@@ -2,9 +2,10 @@ const _ = require('lodash');
 const Promise = require('bluebird');
 
 const storage = require('./../../storage');
-const questionTemplate = require('./related-question-feedback-modal.hbs');
+const resultQuestionTemplate = require('./related-question-feedback-modal.hbs');
 const resultTemplate = require('./related-feedback-modal.hbs');
 const surveyTemplate = require('./survey-feedback-modal.hbs');
+const questionTemplate = require('./question-feedback-modal.hbs');
 
 const styleThumbRadio = () => {
     $('.thumbs-container input:radio').hide().each(function() {
@@ -14,7 +15,7 @@ const styleThumbRadio = () => {
     });
 };
 
-module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl, resultsetId, resultId, feedbackType) => {
+module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl, resultsetId, resultId, feedbackType, iterationName) => {
     let modalId = questionId;
     let modalTitle = 'Feedback on recommendation';
     if (feedbackType === 'result') {
@@ -22,13 +23,16 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
     } else if (feedbackType === 'survey') {
         modalId = 'survey-modal';
         modalTitle = 'My feedback is based on:';
+    } else if (feedbackType === 'question') {
+        modalId = 'question' + questionId;
+        modalTitle = 'Project Explore Feedback Form';
     }
     let assessment;
     const modal = window.WarpJS.modal($, modalId, modalTitle);
     if (feedbackType === 'result') {
         $('> .modal-dialog > .modal-content > .modal-body', modal).html(resultTemplate());
     } else if (feedbackType === 'resultQuestion') {
-        $('> .modal-dialog > .modal-content > .modal-body', modal).html(questionTemplate({
+        $('> .modal-dialog > .modal-content > .modal-body', modal).html(resultQuestionTemplate({
             questionId,
             answerName,
             answerNum,
@@ -36,6 +40,8 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
         }));
     } else if (feedbackType === 'survey') {
         $('> .modal-dialog > .modal-content > .modal-body', modal).html(surveyTemplate());
+    } else if (feedbackType === 'question') {
+        $('> .modal-dialog > .modal-content > .modal-body', modal).html(questionTemplate({questionName: questionName}));
     }
 
     modal.modal('show');
@@ -76,12 +82,17 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
         existingFeedback = _.find(assessment.resultsetFeedback, (feedback) => {
             return feedback.feedbackType === 'survey';
         });
+    } else if (feedbackType === 'question') {
+        existingFeedback = _.find(assessment.resultsetFeedback, (feedback) => {
+            return feedback.feedbackType === 'question' && feedback.questionId === questionId;
+        });
     }
 
     if (existingFeedback) {
         $(modal).find("input[name='thumb-value'][value='" + existingFeedback.thumbValue + "'] + .radio-thumb").click();
         $(modal).find('#feedback-reason').val(existingFeedback.comment);
         $(modal).find("input[name='based-on'][value='" + existingFeedback.basedOn + "']").attr('checked', 'checked');
+        $(modal).find("input[name='question-specific'][value='" + existingFeedback.questionSpecific + "']").attr('checked', 'checked');
     }
 
     $(modal).on('click', '.related-feedback-submit', function(event) {
@@ -94,7 +105,8 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
             basedOn: $(modal).find("input[name='based-on']:checked").val(),
             comment: $(modal).find('#feedback-reason').val(),
             feedbackId: existingFeedback ? existingFeedback.feedbackId : null,
-            feedbackType: feedbackType
+            feedbackType: feedbackType,
+            questionSpecific: $(modal).find("input[name='question-specific']:checked").val()
         };
 
         // update database
@@ -115,12 +127,15 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
                         foundFeedback = _.find(assessment.resultsetFeedback, {resultId: resultId, resultsetId: resultsetId, questionId: questionId, feedbackType: feedbackType});
                     } else if (feedbackType === 'survey') {
                         foundFeedback = _.find(assessment.resultsetFeedback, {feedbackType: feedbackType});
+                    } else if (feedbackType === 'question') {
+                        foundFeedback = _.find(assessment.resultsetFeedback, {questionId: questionId, feedbackType: feedbackType});
                     }
 
                     if (foundFeedback) {
                         foundFeedback.comment = data.comment;
                         foundFeedback.thumbValue = data.thumbValue;
                         foundFeedback.basedOn = data.basedOn;
+                        foundFeedback.questionSpecific = data.questionSpecific;
                     } else {
                         assessment.resultsetFeedback.push({
                             feedbackId: res.feedbackId,
@@ -130,7 +145,8 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
                             comment: data.comment,
                             thumbValue: data.thumbValue,
                             basedOn: data.basedOn,
-                            feedbackType: feedbackType
+                            feedbackType: feedbackType,
+                            questionSpecific: data.questionSpecific
                         });
                     }
 

@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.47 - 2019-01-18
+
+- #96 Feedback for questions.
+
 ## 1.2.46 - 2019-01-18
 
 - #94 'Feedback based on' modal and button.

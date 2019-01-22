@@ -32,7 +32,8 @@ module.exports = (req, res) => {
                             comment: req.body.comment,
                             feedbackId: req.body.feedbackId,
                             feedbackType: req.body.feedbackType,
-                            basedOn: req.body.basedOn
+                            basedOn: req.body.basedOn,
+                            questionSpecific: req.body.questionSpecific
                         };
                     })
                     .then((resultQuestionFeedback) => Promise.resolve()
@@ -46,6 +47,7 @@ module.exports = (req, res) => {
                                             feedbackInstance.Comment = resultQuestionFeedback.comment;
                                             feedbackInstance.ThumbDirection = resultQuestionFeedback.thumbValue;
                                             feedbackInstance.BasedOn = resultQuestionFeedback.basedOn;
+                                            feedbackInstance.QuestionSpecific = resultQuestionFeedback.questionSpecific;
 
                                             return feedbackInstance;
                                         })
@@ -54,26 +56,44 @@ module.exports = (req, res) => {
                                 ;
                             } else {
                                 return Promise.resolve()
-                                    .then(() => questionnaire.newResultFeedback(resultQuestionFeedback.id, resultQuestionFeedback.thumbValue, resultQuestionFeedback.comment, resultQuestionFeedback.feedbackType, resultQuestionFeedback.basedOn))
+                                    .then(() => questionnaire.newResultFeedback(resultQuestionFeedback.id, resultQuestionFeedback.thumbValue, resultQuestionFeedback.comment, resultQuestionFeedback.feedbackType, resultQuestionFeedback.basedOn, resultQuestionFeedback.questionSpecific))
                                     .then((feedback) => Promise.resolve()
                                         .then(() => questionnaireEntity.getRelationshipByName('SurveyToolFeedback'))
                                         .then((SurveyToolFeedbackRelationship) => SurveyToolFeedbackRelationship.getTargetEntity())
                                         .then((SurveyToolFeedbackEntity) => Promise.resolve()
-                                            .then(() => SurveyToolFeedbackEntity.getRelationshipByName('Result'))
-                                            .then((ResultRelationship) => ResultRelationship.addAssociation(feedback, {
-                                                id: resultQuestionFeedback.resultId,
-                                                type: 'Result'
-                                            }))
-                                            .then(() => SurveyToolFeedbackEntity.getRelationshipByName('ResultSet'))
-                                            .then((ResultRelationship) => ResultRelationship.addAssociation(feedback, {
-                                                id: resultQuestionFeedback.resultsetId,
-                                                type: 'ResultSet'
-                                            }))
-                                            .then(() => SurveyToolFeedbackEntity.getRelationshipByName('DimensionQ'))
-                                            .then((ResultRelationship) => ResultRelationship.addAssociation(feedback, {
-                                                id: resultQuestionFeedback.questionId,
-                                                type: 'DimensionQ'
-                                            }))
+                                            .then(() => {
+                                                if (resultQuestionFeedback.resultId) {
+                                                    Promise.resolve()
+                                                        .then(() => SurveyToolFeedbackEntity.getRelationshipByName('Result'))
+                                                        .then((ResultRelationship) => ResultRelationship.addAssociation(feedback, {
+                                                            id: resultQuestionFeedback.resultId,
+                                                            type: 'Result'
+                                                        }))
+                                                    ;
+                                                }
+                                            })
+                                            .then(() => {
+                                                if (resultQuestionFeedback.resultsetId) {
+                                                    Promise.resolve()
+                                                        .then(() => SurveyToolFeedbackEntity.getRelationshipByName('ResultSet'))
+                                                        .then((ResultRelationship) => ResultRelationship.addAssociation(feedback, {
+                                                            id: resultQuestionFeedback.resultsetId,
+                                                            type: 'ResultSet'
+                                                        }))
+                                                    ;
+                                                }
+                                            })
+                                            .then(() => {
+                                                if (resultQuestionFeedback.questionId) {
+                                                    Promise.resolve()
+                                                        .then(() => SurveyToolFeedbackEntity.getRelationshipByName('DimensionQ'))
+                                                        .then((ResultRelationship) => ResultRelationship.addAssociation(feedback, {
+                                                            id: resultQuestionFeedback.questionId,
+                                                            type: 'DimensionQ'
+                                                        }))
+                                                    ;
+                                                }
+                                            })
                                             .then(() => feedback)
                                         )
                                     )
