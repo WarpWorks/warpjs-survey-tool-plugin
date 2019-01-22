@@ -40,7 +40,7 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
 
             const questionnaireEntity = await domainModel.getEntityByName(pluginInfo.config.schema.questionnaire);
             const questionnaireDocument = await questionnaireEntity.getDocuments(persistence, {_id: surveyId}, true);
-            const feedbackRelationship = await questionnaireEntity.getRelationshipByName('SurveyToolFeedback');
+            const feedbackRelationship = await questionnaireEntity.getRelationshipByName(pluginInfo.config.schema.surveyToolFeedback);
             const feedbackDocuments = await feedbackRelationship.getDocuments(persistence, questionnaireDocument[0]);
 
             const getFeedbackByThumbDirection = (thumbDirection, result, question) => {
@@ -84,7 +84,6 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
 
             _.each(typeHAL._embedded.results, (result) => {
                 _.each(result._embedded.relevantQuestions, (question) => {
-                    // console.log('quesiton ids:::', typeHAL.id, result.id, question.id);
                     getFeedbackByThumbDirection('ThumbsUp', result, question);
                     getFeedbackByThumbDirection('ThumbsDown', result, question);
                     question.commentResult = thumbResult(parseInt(question.ThumbsUp, 10), parseInt(question.ThumbsDown, 10));

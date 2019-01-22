@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.48 - 2019-01-23
+
+- #97 Fix feedback type id, move surveytoolfeeback string to rc file.
+
 ## 1.2.47 - 2019-01-18
 
 - #96 Feedback for questions.

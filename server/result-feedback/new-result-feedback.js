@@ -1,5 +1,4 @@
 const Promise = require('bluebird');
-const uuid = require('uuid');
 const warpjsUtils = require('@warp-works/warpjs-utils');
 
 const constants = require('./../../lib/constants');
@@ -24,7 +23,6 @@ module.exports = (req, res) => {
                 .then((questionnaire) => Promise.resolve()
                     .then(() => {
                         return {
-                            id: uuid(),
                             questionId: req.body.questionId,
                             resultId: req.body.resultId,
                             resultsetId: req.body.resultsetId,
@@ -40,7 +38,7 @@ module.exports = (req, res) => {
                         .then(() => {
                             if (resultQuestionFeedback.feedbackId) {
                                 return Promise.resolve()
-                                    .then(() => domainModel.getEntityByName('SurveyToolFeedback'))
+                                    .then(() => domainModel.getEntityByName(pluginInfo.config.schema.surveyToolFeedback))
                                     .then((feedbackEntity) => Promise.resolve()
                                         .then(() => feedbackEntity.getInstance(persistence, resultQuestionFeedback.feedbackId))
                                         .then((feedbackInstance) => {
@@ -56,15 +54,16 @@ module.exports = (req, res) => {
                                 ;
                             } else {
                                 return Promise.resolve()
-                                    .then(() => questionnaire.newResultFeedback(resultQuestionFeedback.id, resultQuestionFeedback.thumbValue, resultQuestionFeedback.comment, resultQuestionFeedback.feedbackType, resultQuestionFeedback.basedOn, resultQuestionFeedback.questionSpecific))
+                                    .then(() => domainModel.getEntityByName(pluginInfo.config.schema.surveyToolFeedback))
+                                    .then((feedbackEntity) => questionnaire.newResultFeedback(feedbackEntity.id, resultQuestionFeedback.thumbValue, resultQuestionFeedback.comment, resultQuestionFeedback.feedbackType, resultQuestionFeedback.basedOn, resultQuestionFeedback.questionSpecific))
                                     .then((feedback) => Promise.resolve()
-                                        .then(() => questionnaireEntity.getRelationshipByName('SurveyToolFeedback'))
+                                        .then(() => questionnaireEntity.getRelationshipByName(pluginInfo.config.schema.surveyToolFeedback))
                                         .then((SurveyToolFeedbackRelationship) => SurveyToolFeedbackRelationship.getTargetEntity())
                                         .then((SurveyToolFeedbackEntity) => Promise.resolve()
                                             .then(() => {
                                                 if (resultQuestionFeedback.resultId) {
                                                     Promise.resolve()
-                                                        .then(() => SurveyToolFeedbackEntity.getRelationshipByName('Result'))
+                                                        .then(() => SurveyToolFeedbackEntity.getRelationshipByName(pluginInfo.config.schema.result))
                                                         .then((ResultRelationship) => ResultRelationship.addAssociation(feedback, {
                                                             id: resultQuestionFeedback.resultId,
                                                             type: 'Result'
@@ -75,7 +74,7 @@ module.exports = (req, res) => {
                                             .then(() => {
                                                 if (resultQuestionFeedback.resultsetId) {
                                                     Promise.resolve()
-                                                        .then(() => SurveyToolFeedbackEntity.getRelationshipByName('ResultSet'))
+                                                        .then(() => SurveyToolFeedbackEntity.getRelationshipByName(pluginInfo.config.schema.resultSet))
                                                         .then((ResultRelationship) => ResultRelationship.addAssociation(feedback, {
                                                             id: resultQuestionFeedback.resultsetId,
                                                             type: 'ResultSet'
@@ -86,7 +85,7 @@ module.exports = (req, res) => {
                                             .then(() => {
                                                 if (resultQuestionFeedback.questionId) {
                                                     Promise.resolve()
-                                                        .then(() => SurveyToolFeedbackEntity.getRelationshipByName('DimensionQ'))
+                                                        .then(() => SurveyToolFeedbackEntity.getRelationshipByName(pluginInfo.config.schema.question))
                                                         .then((ResultRelationship) => ResultRelationship.addAssociation(feedback, {
                                                             id: resultQuestionFeedback.questionId,
                                                             type: 'DimensionQ'

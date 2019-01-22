@@ -15,7 +15,6 @@ const openModal = require('./open-modal');
             if (result.error) {
                 shared.setSurveyContent($, placeholder, errorTemplate(result.data));
             } else {
-                console.log('result: ', result.data);
                 const content = resultsetTemplate({ page: result.data, detailedEnabled: result.data.warpjsUser !== null });
                 shared.setSurveyContent($, placeholder, content);
             }

@@ -726,7 +726,6 @@ const storage = require('./../storage');
                                         });
                                     });
                                 });
-
                                 _.each(result.data._embedded.questionnaires[0]._embedded.resultSets, (resultSet) => {
                                     resultSet.recommendation = null;
                                     _.each(resultSet._embedded.results, (result) => {
