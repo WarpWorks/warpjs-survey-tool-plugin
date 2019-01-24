@@ -8,15 +8,23 @@
           {{question.name}}
         {{/if}}
       </h2>
+      <h2 class="mm-title-question">
+        {{#if showCreate}}
+          Start an IIoT Maturity Analysis
+        {{else}}
+          {{question.name}}
+        {{/if}}
+      </h2>
       <form class="project-description">
-        <label for="project-name">Project Name</label>
+        <label class="ipt-project-name" for="project-name">Project Name</label>
+        <label class="mm-company-name" for="project-name">Company Name</label>
         <input type="text" class="form-control" id="project-name" value="{{assessment.projectName}}" required/>
         <div class="invalid-feedback">
           Project Name is required.
         </div>
         <label for="main-contact">Main Contact</label>
         <input type="text" class="form-control" id="main-contact" value="{{assessment.mainContact}}"/>
-        <label for="project-status">Project Status</label>
+        <label class="project-status-label" for="project-status">Project Status</label>
         <input type="text" class="form-control" id="project-status" value="{{assessment.projectStatus}}"/>
       </form>
     </div>

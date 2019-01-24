@@ -1,9 +1,21 @@
 # Release Notes
 
+<<<<<<< HEAD
 ## 1.2.49 - 2019-01-24
 
 - #98 Add styling for 5 answers per question.
   
+||||||| merged common ancestors
+=======
+## 1.2.50 - 2019-01-25
+
+- #99 labels for Maturity Model.
+
+## 1.2.49 - 2019-01-24
+
+- #98 Add styling for 5 answers per question.
+  
+>>>>>>> warpjs-survey-tool-plugin 98 style for 5 answers in questions
 ## 1.2.48 - 2019-01-23
 
 - #97 Fix feedback type id, move surveytoolfeeback string to rc file.
