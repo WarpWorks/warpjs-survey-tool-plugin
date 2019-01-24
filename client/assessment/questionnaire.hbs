@@ -1,4 +1,4 @@
-<div class="questionnaire question">
+<div class="questionnaire question {{surveyName}}">
   <div class="row">
     <div class="col-12">
       <span class="breadcrumbs">{{category.shortenedName}}{{#if iteration}} <div class="breadcrumb-separator"></div> {{iteration.name}}{{/if}}</span>
@@ -6,9 +6,9 @@
       <p>{{{question.content}}}</p>
     </div>
   </div>
-  <div class="options row">
+  <div class="options row option-number-{{question._embedded.options.length}}">
     {{#each question._embedded.options as |option index|}}
-      <div class="option-container col-sm-3">
+      <div class="option-container">
         <div class="option-level-block block-{{@index}}"></div>
         <p class="radio-text">{{name}}</p>
         <input type="radio" name="question-options" value="{{id}}" {{#if isSelected}}checked="checked"{{/if}}>

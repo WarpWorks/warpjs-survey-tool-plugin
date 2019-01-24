@@ -330,6 +330,7 @@ const storage = require('./../storage');
                                 values.imageMap = currentImageArea ? currentImageArea.coords : null;
                                 values.imageHeight = currentImageHeight;
                                 values.imageWidth = currentImageWidth;
+                                values.surveyName = result.data._embedded.questionnaires[0].name.replace(/\s+/g, '-').toLowerCase();
 
                                 return values;
                             };
@@ -628,7 +629,7 @@ const storage = require('./../storage');
                                     }
                                 }
 
-                                $('.ipt .progress-bar').css('width', progress + '%');
+                                $('.survey-tool .progress-bar').css('width', progress + '%');
                                 styleRadio();
                             };
 

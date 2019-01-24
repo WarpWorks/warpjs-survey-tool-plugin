@@ -579,7 +579,7 @@ const template = require('./../template.hbs');
                                 }
                             }
 
-                            $('.ipt .progress-bar').css('width', progress + '%');
+                            $('.survey-tool .progress-bar').css('width', progress + '%');
                             styleRadio();
                         };
 

@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.49 - 2019-01-24
+
+- #98 Add styling for 5 answers per question.
+  
 ## 1.2.48 - 2019-01-23
 
 - #97 Fix feedback type id, move surveytoolfeeback string to rc file.
