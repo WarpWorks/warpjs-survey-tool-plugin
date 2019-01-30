@@ -1,4 +1,4 @@
-.survey-tool.maturity-model {
+.survey-tool.mm {
     .questionnaire {
         .project-description {
             .ipt-project-name {
@@ -125,5 +125,39 @@
         }
     }
 
+    .word-download-form,
+    .ipt-title.results-title.related-readings-title,
+    .summary-title,
+    .summary-description-ipt {
+        display: none;
+    }
 
+    .summary-title-mm,
+    .summary-description-mm {
+        display: block;
+    }
+
+    .summary .summary-scales .summary-scale-container {
+        .scale-section {
+            width: 20%;
+            height: 20px;
+            float: left;
+            box-shadow: inset -1px 0 0 #ccc;
+        }
+
+        .scale-section-three {
+            background-color: #f7f7f7;
+        }
+
+        .scale-section-four {
+            background-color: #fff9ed;
+            box-shadow: inset -1px 0 0 #ccc;
+        }
+
+        .scale-section-five {
+            display: block;
+            background-color: #fce3e3;
+            box-shadow: none;
+        }
+    }
 }

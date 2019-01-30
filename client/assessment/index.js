@@ -330,7 +330,6 @@ const storage = require('./../storage');
                                 values.imageMap = currentImageArea ? currentImageArea.coords : null;
                                 values.imageHeight = currentImageHeight;
                                 values.imageWidth = currentImageWidth;
-                                values.surveyName = result.data._embedded.questionnaires[0].name.replace(/\s+/g, '-').toLowerCase();
 
                                 return values;
                             };
@@ -452,8 +451,9 @@ const storage = require('./../storage');
                                         return questionCategory.id === category.id;
                                     });
                                     const answersList = _.compact(_.flatten(_.map(category._embedded.iterations, (iteration) => {
-                                        return _.map(iteration._embedded.questions, (question) => {
+                                        return _.flatten(_.map(iteration._embedded.questions, (question) => {
                                             let position = null;
+                                            let positionResult = null;
                                             if (question.detailLevel <= assessment.detailLevel) {
                                                 const categoryQ = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (questionCategory) => {
                                                     return questionCategory.id === category.id;
@@ -465,10 +465,22 @@ const storage = require('./../storage');
                                                     return option.id === question.answer;
                                                 });
                                                 position = option ? option.position : null;
+
+                                                const priority = parseInt(questionQ.priority);
+                                                const positionNumber = parseInt(position);
+                                                let positions = [];
+                                                if (assessment.detailLevel !== '1' && result.data._embedded.questionnaires[0].key === 'mm' && !isNaN(priority)) {
+                                                    for (let i = 0; i < priority; i++) {
+                                                        positions.push(positionNumber);
+                                                    }
+                                                    positionResult = positions;
+                                                } else {
+                                                    positionResult = positionNumber;
+                                                }
                                             }
 
-                                            return parseInt(position);
-                                        });
+                                            return positionResult;
+                                        }));
                                     })));
 
                                     return {
@@ -481,21 +493,31 @@ const storage = require('./../storage');
                             };
 
                             const summaryCalculations = () => {
+                                const key = result.data._embedded.questionnaires[0].key;
+                                const numberOfSections = key === 'mm' ? 5 : 4;
+                                const offsetConstant = key === 'mm' ? 10 : 12.5;
+
                                 $('.marker').each((index, element) => {
                                     const score = $(element).data('score');
-                                    const offset = (score - 1) / 4 * 100 + 12.5;
+                                    const offset = (score - 1) / numberOfSections * 100 + offsetConstant;
                                     const colorScore = Math.round(score);
                                     let color = '#de2a2d';
                                     if (colorScore <= 2) {
                                         color = '#7eba41';
-                                    } else if (colorScore === 3) {
+                                    } else if (colorScore === 3 && numberOfSections === 4) {
                                         color = '#fcb830';
+                                    } else if (colorScore === 3 && numberOfSections === 5) {
+                                        color = '#949494';
+                                    } else if (colorScore === 4 && numberOfSections === 5) {
+                                        color = '#fcb830';
+                                    } else if (colorScore === 5 && numberOfSections === 5) {
+                                        color = '#de2a2d';
                                     }
                                     $(element).css('left', 'calc(' + offset + '% - 5px)').css('background-color', color);
                                 });
                                 $('.average-number').each((index, element) => {
                                     const score = $(element).data('score');
-                                    const offset = (score - 1) / 4 * 100 + 12.5;
+                                    const offset = (score - 1) / numberOfSections * 100 + offsetConstant;
                                     $(element).css('margin-left', 'calc(' + offset + '% - 15px)');
                                 });
                             };
@@ -752,7 +774,6 @@ const storage = require('./../storage');
                                     });
 
                                     if (existingFeedback) {
-                                        console.log('found feedback! result');
                                         recommendation.thumbValue = existingFeedback.thumbValue.toLowerCase();
                                     }
 
@@ -966,6 +987,9 @@ const storage = require('./../storage');
                                         $('.question-next').click();
                                     } else if (event.which === 52) {
                                         $('.questionnaire.question .option-container:nth-child(4)').find('a.radio-fx').click();
+                                        $('.question-next').click();
+                                    } else if (event.which === 53 && $('.questionnaire.question .option-container').length > 4) {
+                                        $('.questionnaire.question .option-container:nth-child(5)').find('a.radio-fx').click();
                                         $('.question-next').click();
                                     } else if (event.which === 48) {
                                         $('.questionnaire.question .radio-checked').parent().click();

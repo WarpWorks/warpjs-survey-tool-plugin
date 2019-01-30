@@ -18,7 +18,7 @@ module.exports = ($, data) => {
         container: 'body',
         trigger: 'manual'
     });
-    $('.survey-tool').addClass(data._embedded.questionnaires[0].name.replace(/\s+/g, '-').toLowerCase());
+    $('.survey-tool').addClass(data._embedded.questionnaires[0].key);
 
     $(document).on('click', '.closed[data-toggle="tooltip"]', (event) => {
         $(event.target).removeClass('closed');
