@@ -536,13 +536,26 @@ const storage = require('./../storage');
                                                 const option = _.find(questionQ._embedded.options, (option) => {
                                                     return option.id === question.answer;
                                                 });
-
+                                                const selectedOption = questionQ._embedded.options.length && option ? option.position : null;
+                                                const preppedPriority = (5 - parseInt(selectedOption, 10)) * parseInt(questionQ.priority, 10);
+                                                let urgency = 'none';
+                                                if (preppedPriority >= 6) {
+                                                    urgency = 'red';
+                                                } else if (preppedPriority <= 3) {
+                                                    urgency = 'green';
+                                                } else if (preppedPriority > 3 && preppedPriority < 6) {
+                                                    urgency = 'yellow';
+                                                }
+                                                console.log('urgency: ', urgency, selectedOption, questionQ.priority, questionQ);
                                                 return {
                                                     name: questionQ.name,
                                                     hasOptions: !!questionQ._embedded.options.length,
-                                                    position: questionQ._embedded.options.length && option ? option.position : null,
-                                                    option: questionQ._embedded.options.length && option ? option.name : null,
-                                                    comments: question.comments
+                                                    position: selectedOption,
+                                                    option: questionQ._embedded.options.length && option ? option : null,
+                                                    comments: question.comments,
+                                                    proiroty: questionQ.priority,
+                                                    moreInformation: questionQ.moreInformation,
+                                                    urgency: urgency
                                                 };
                                             } else {
                                                 return null;

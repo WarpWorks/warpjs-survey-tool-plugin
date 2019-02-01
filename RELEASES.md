@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.53 - 2019-02-01
+
+- #102 Maturity Model results detail view.
+
 ## 1.2.52 - 2019-01-30
 
 - #101 Add feedback page labels for table.
