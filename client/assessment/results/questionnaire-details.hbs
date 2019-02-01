@@ -63,7 +63,9 @@
                   <div class="red"></div>
                 </div>
                 <span class="summary-question">{{name}}</span>
-                <a href="{{moreInformation}}" class="summary-more-info">more information</a>
+                {{#if moreInformation}}
+                  <a href="{{moreInformation}}" class="summary-more-info">more information</a>
+                {{/if}}
                 {{#if option.currentStatus}}
                   <div class="detail-question-status-container">
                     <div class="blue-card current-status {{#unless option.nextLevel}} current-status-center{{/unless}}">

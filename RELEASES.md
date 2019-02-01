@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.54 - 2019-02-01
+
+- Only add more info link if link is present.
+
 ## 1.2.53 - 2019-02-01
 
 - #102 Maturity Model results detail view.
