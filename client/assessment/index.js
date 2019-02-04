@@ -466,10 +466,10 @@ const storage = require('./../storage');
                                                 });
                                                 position = option ? option.position : null;
 
-                                                const priority = parseInt(questionQ.priority);
+                                                const priority = isNaN(parseInt(questionQ.priority, 10)) ? 2 : parseInt(questionQ.priority, 10);
                                                 const positionNumber = parseInt(position);
                                                 let positions = [];
-                                                if (assessment.detailLevel !== '1' && result.data._embedded.questionnaires[0].key === 'mm' && !isNaN(priority)) {
+                                                if (assessment.detailLevel !== '1' && result.data._embedded.questionnaires[0].key === 'mm') {
                                                     for (let i = 0; i < priority; i++) {
                                                         positions.push(positionNumber);
                                                     }
@@ -537,7 +537,8 @@ const storage = require('./../storage');
                                                     return option.id === question.answer;
                                                 });
                                                 const selectedOption = questionQ._embedded.options.length && option ? option.position : null;
-                                                const preppedPriority = (5 - parseInt(selectedOption, 10)) * parseInt(questionQ.priority, 10);
+                                                const priority = isNaN(parseInt(questionQ.priority, 10)) ? 2 : parseInt(questionQ.priority, 10);
+                                                const preppedPriority = (5 - parseInt(selectedOption, 10)) * priority;
                                                 let urgency = 'none';
                                                 if (preppedPriority >= 6) {
                                                     urgency = 'red';
@@ -546,14 +547,14 @@ const storage = require('./../storage');
                                                 } else if (preppedPriority > 3 && preppedPriority < 6) {
                                                     urgency = 'yellow';
                                                 }
-                                                console.log('urgency: ', urgency, selectedOption, questionQ.priority, questionQ);
+
                                                 return {
                                                     name: questionQ.name,
                                                     hasOptions: !!questionQ._embedded.options.length,
                                                     position: selectedOption,
                                                     option: questionQ._embedded.options.length && option ? option : null,
                                                     comments: question.comments,
-                                                    proiroty: questionQ.priority,
+                                                    proiroty: priority,
                                                     moreInformation: questionQ.moreInformation,
                                                     urgency: urgency
                                                 };

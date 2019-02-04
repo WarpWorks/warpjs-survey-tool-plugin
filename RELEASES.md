@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.56 - 2019-02-04
+
+- Set default Priority to 2.
+
 ## 1.2.55 - 2019-02-04
 
 - Right align questions in result details view.
