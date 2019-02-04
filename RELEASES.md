@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.55 - 2019-02-04
+
+- Right align questions in result details view.
+
 ## 1.2.54 - 2019-02-01
 
 - Only add more info link if link is present.
