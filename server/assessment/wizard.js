@@ -33,6 +33,9 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
         resource.link('submitFeedback', RoutesInfo.expand(constants.routes.resultFeedback, {
             domain: pluginInfo.domain
         }));
+        resource.link('submitEmail', RoutesInfo.expand(constants.routes.email, {
+            domain: pluginInfo.domain
+        }));
 
         try {
             const domain = await pluginInfo.warpCore.getDomainByName(pluginInfo.domain);

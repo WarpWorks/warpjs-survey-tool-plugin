@@ -1,5 +1,9 @@
 .survey-tool.mm {
     .questionnaire {
+        &.details .next-to-email-form {
+            display: block;
+        }
+
         .project-description {
             .ipt-project-name {
                 display: none;
@@ -9,10 +13,7 @@
                 display: block;
             }
 
-            #project-status {
-                display: none;
-            }
-
+            #project-status,
             .project-status-label {
                 display: none;
             }
@@ -170,7 +171,7 @@
         }
 
         .survey-name-label-mm,
-        .question-block-mm,
+        .question-block.question-block-mm,
         .sub-category-name-mm {
             display: block;
         }
@@ -286,6 +287,16 @@
                 margin-right: auto;
                 display: block;
             }
+        }
+    }
+
+    .email-form {
+        .email-back-to-details {
+            display: block;
+        }
+
+        .email-back-to-related {
+            display: none;
         }
     }
 }

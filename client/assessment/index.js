@@ -18,6 +18,7 @@ const questionnaireSummaryTemplate = require('./results/questionnaire-summary.hb
 const questionnaireDetailsTemplate = require('./results/questionnaire-details.hbs');
 const questionnaireRelatedReadingTemplate = require('./results/questionnaire-related-readings.hbs');
 const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-related-reading-detail.hbs');
+const emailFormTemplate = require('./results/email-form-template.hbs');
 const shared = require('./../shared');
 const storage = require('./../storage');
 
@@ -836,17 +837,17 @@ const storage = require('./../storage');
                             $(document).on('click', '.summary-back', () => {
                                 updateQuestionContent();
                             });
-                            $(document).on('click', '.summary-next', () => {
-                                detailsSetup();
-                            });
-                            $(document).on('click', '.details-next', () => {
+                            $(document).on('click', '.details-next, .email-back-to-related', () => {
                                 relatedReadingSetup();
                             });
                             $(document).on('click', '.details-back', () => {
                                 summarySetup();
                             });
-                            $(document).on('click', '.related-reading-back', () => {
+                            $(document).on('click', '.summary-next, .related-reading-back, .email-back-to-details', () => {
                                 detailsSetup();
+                            });
+                            $(document).on('click', '.next-to-email-form', () => {
+                                shared.setSurveyContent($, placeholder, emailFormTemplate());
                             });
 
                             $(document).on('click', '.releated-read-more', (event) => {
@@ -1048,6 +1049,33 @@ const storage = require('./../storage');
                                 const iterationName = element.data('warpjsIterationName=');
                                 const feedbackType = element.data('warpjsFeedbackType');
                                 openRelatedFeedbackModal($, questionId, null, null, questionName, submitUrl, null, null, feedbackType, iterationName);
+                            });
+
+                            $(document).on('click', '.email-submit', (event) => {
+                                const data = {
+                                    fullName: $("input#name").val(),
+                                    email: $("input#email").val(),
+                                    questionnaireId: result.data.surveyId
+                                };
+
+                                if (data.fullName || data.email) {
+                                    Promise.resolve()
+                                        .then(() => window.WarpJS.toast.loading($, "Loading data...", "Loading"))
+                                        .then((toastLoading) => Promise.resolve()
+                                            .then(() => window.WarpJS.proxy.post($, result.data._links.submitEmail.href, data))
+                                            .then((res) => {
+                                                window.WarpJS.toast.success($, "Saved successfully.");
+                                                $("input#name").val('');
+                                                $("input#email").val('');
+                                            })
+                                            .catch((err) => {
+                                                console.error("Error:", err);
+                                                window.WarpJS.toast.error($, err.message, "Error getting data");
+                                            })
+                                            .finally(() => window.WarpJS.toast.close($, toastLoading))
+                                        )
+                                    ;
+                                }
                             });
                         })
                     ;

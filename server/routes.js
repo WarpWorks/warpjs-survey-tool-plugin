@@ -7,6 +7,7 @@ const root = require('./root');
 const aggregatedRsFeedback = require('./aggregated-rs-feedback');
 const aggregatedFeedbackQuestionDetails = require('./aggregated-feedback-question-details');
 const resultFeedback = require('./result-feedback');
+const email = require('./email');
 
 module.exports = (baseUrl) => {
     const routesInfo = new RoutesInfo('/', baseUrl);
@@ -17,5 +18,6 @@ module.exports = (baseUrl) => {
     routesInfo.route(routes.resultFeedback, '/result-feedback/result', resultFeedback);
     routesInfo.route(routes.assessment, '/{surveyId}{?assessmentId}', assessment);
     routesInfo.route(routes.docx, '/export/docx', docx);
+    routesInfo.route(routes.email, '/email', email);
     return routesInfo;
 };

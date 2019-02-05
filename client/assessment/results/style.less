@@ -153,4 +153,50 @@
             cursor: pointer;
         }
     }
+
+    .email-form {
+        .email-back-to-details {
+            display: none;
+        }
+    }
+
+    .email-container {
+        max-width: 350px;
+        margin-left: auto;
+        margin-right: auto;
+
+        .email-title {
+            text-align: center;
+            font-size: 34px;
+            margin-bottom: 30px
+        }
+
+        .email-form-label {
+            margin-top: 10px;
+            display: block;
+        }
+
+        input  {
+            width: 100%;
+            background-color: #f0f0f0;
+            border: solid 1px #d4d4d4;
+            margin-bottom: 10px;
+            display: block;
+            padding: 7px;
+
+            &.email-submit {
+                background-color: #c7281a;
+                border-radius: 3px;
+                color: #fff;
+                border: none;
+                text-transform: uppercase;
+                padding: 7px 30px;
+                font-size: 12px;
+                margin-top: 40px;
+                margin-left: auto;
+                margin-right: auto;
+                width: 126px;
+            }
+        }
+    }
 }

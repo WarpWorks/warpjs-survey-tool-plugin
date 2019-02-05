@@ -134,6 +134,10 @@
             }
         }
 
+        &.details .next-to-email-form {
+            display: none;
+        }
+
         .intro-image {
             width: 80%;
             margin: 20px 10% 30px 10%;
@@ -400,7 +404,8 @@
             .summary-next,
             .details-next,
             .question-assessment-create,
-            .assessment-dropup {
+            .assessment-dropup,
+            .next-to-email-form {
                 background-color: #c7281a;
                 border-radius: 3px;
                 color: #fff;
@@ -443,7 +448,9 @@
             .summary-back,
             .details-back,
             .description-back,
-            .related-reading-back {
+            .related-reading-back,
+            .email-back-to-details,
+            .email-back-to-related {
                 font-weight: bold;
                 background: transparent;
                 border: none;
@@ -705,6 +712,9 @@
     float: left;
     width: 100%;
 
+    &.question-block-mm {
+        display: none;
+    }
 
     .position-display {
         display: inline-block;
@@ -869,7 +879,8 @@
     margin: 20px;
 }
 
-#warpjs-feedback-button {
+#warpjs-feedback-button,
+ {
     display: none;
 }
 
