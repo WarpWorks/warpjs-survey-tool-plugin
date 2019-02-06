@@ -1,32 +1,39 @@
 <div class="survey-tool">
-  <div class="container">
-    <div class="ipt-container">
-      <div class="row title-section">
-        <div class="col-sm-2">
-          <a class="warpjs-home-link" href="">
-            <div class="logo"></div>
-          </a>
+  <div class="container-fluid">
+    <div class="row title-section">
+      <div class="col-sm-2">
+        <a class="warpjs-home-link" href="">
+          <div class="logo"></div>
+        </a>
+      </div>
+      <div class="col-sm-3">
+        <div class="survey-type-title-container survey-type-ipt">
+          <div class="title-icon ipt-icon"></div>
+          <h2>IIC Project Explorer</h2>
         </div>
-        <div class="col-sm-3">
-          <h2 class="ipt-title"></h2>
-          <h4 class="ipt-version"></h4>
-        </div>
-        <div class="col-sm-4">
-          <div class="progress-container">
-            <span class="progress-label">Progress</span>
-            <div class="progress-bar-container">
-              <div class="progress-bar"></div>
-            </div>
-          </div>
-        </div>
-        <div class="col-sm-3">
-          <div class="blue-button-container">
-            <button class="blue-button" data-survey-tool-action="download-json">Export</button>
-            <button class="blue-button" data-survey-tool-action="load-json">Import</button>
-            <button class="blue-button copyright tooltip-wide" data-toggle="tooltip" data-html="true" title="{{> copyright}}" data-placement="bottom">&copy;</button>
-          </div>
+        <div class="survey-type-title-container survey-type-mm">
+          <div class="title-icon mm-icon"></div>
+          <h2>Maturity Assessment</h2>
         </div>
       </div>
+      <div class="col-sm-4">
+        <div class="progress-container">
+          <span class="progress-label">Progress</span>
+          <div class="progress-bar-container">
+            <div class="progress-bar"></div>
+          </div>
+          <h3 class="ipt-title"></h3>
+        </div>
+      </div>
+      <div class="col-sm-3">
+        <div class="blue-button-container">
+          <button class="blue-button" data-survey-tool-action="download-json">Export</button>
+          <button class="blue-button" data-survey-tool-action="load-json">Import</button>
+          <button class="blue-button copyright tooltip-wide" data-toggle="tooltip" data-html="true" title="{{> copyright}}" data-placement="bottom">&copy;</button>
+        </div>
+      </div>
+    </div>
+    <div class="ipt-container">
       <div class="row">
         <div class="col-xs-12 ipt-body">
           {{> loading}}

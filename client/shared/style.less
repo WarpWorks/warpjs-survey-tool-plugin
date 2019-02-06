@@ -38,7 +38,7 @@
     .ipt-container {
         background-color: #ffffff;
         margin-bottom: 20px;
-        padding: 15px 30px 40px 30px;
+        padding: 15px 80px 40px 80px;
 
         .ipt-title,
         .ipt-title-question,
@@ -61,60 +61,24 @@
         .ipt-version {
             font-size: 12px;
         }
+    }
 
-        .title-section {
-            margin-bottom: 10px;
-            position: relative;
+    .blue-button-container {
+        padding-top: 12px;
+        text-align: right;
 
-            .logo {
-                background-image: url(images/IIC-logo.png);
-                background-size: contain;
-                background-position: left bottom;
-                background-repeat: no-repeat;
-                height: 40px;
-            }
-        }
+        .blue-button {
+            color: #ffffff;
+            background-color: #5296b3;
+            border: 0px;
+            border-radius: 3px;
+            padding: 3px 7px;
+            margin-left: 10px;
+            text-transform: uppercase;
+            font-size: 11px;
 
-        .progress-container {
-            .progress-label {
-                font-size: 12px;
-                color: #ccc;
-                display: block;
-            }
-
-            .progress-bar-container {
-                height: 12px;
-                background-color: #ccc;
-                border-radius: 6px;
-                width: 100%;
-                background-size: 20% 100%;
-                cursor: pointer;
-
-                .progress-bar {
-                    width: 0px;
-                    height: 12px;
-                    border-radius: 6px;
-                }
-            }
-        }
-
-        .blue-button-container {
-            padding-top: 12px;
-            text-align: right;
-
-            .blue-button {
-                color: #ffffff;
-                background-color: #5296b3;
-                border: 0px;
-                border-radius: 3px;
-                padding: 3px 7px;
-                margin-left: 10px;
-                text-transform: uppercase;
-                font-size: 11px;
-
-                &[data-survey-tool-action="download-json"] {
-                    display: none;
-                }
+            &[data-survey-tool-action="download-json"] {
+                display: none;
             }
         }
     }
@@ -886,19 +850,113 @@
 
 #survey-tool-feedback-button,
 #survey-question-feedback-button {
-  background-color: white;
-  outline-width: 1px;
-  outline-color: #ccc;
-  position: fixed;
-  right: -30px;
-  outline-style: solid;
-  top: 250px;
-  color: black;
-  padding: 8px 18px;
-  transform: rotate(270deg);
-  line-height: 20px;
-  z-index: 20000;
-  cursor: pointer;
+    background-color: white;
+    outline-width: 1px;
+    outline-color: #ccc;
+    position: fixed;
+    right: -30px;
+    outline-style: solid;
+    top: 250px;
+    color: black;
+    padding: 8px 18px;
+    transform: rotate(270deg);
+    line-height: 20px;
+    z-index: 20000;
+    cursor: pointer;
+}
+
+.title-section {
+    margin-bottom: 10px;
+    position: relative;
+    background-color: #f5f3f2;
+    margin-bottom: 0px;
+    padding: 0px 84px;
+    height: 70px;
+
+    .logo {
+        background-image: url(images/IIC-logo.png);
+        background-size: contain;
+        background-position: left bottom;
+        background-repeat: no-repeat;
+        height: 40px;
+        margin-top: 10px;
+    }
+
+    .ipt-title {
+        font-size: 18px;
+        line-height: 18px;
+        padding-bottom: 4px;
+    }
+
+    .progress-container {
+        .progress-label {
+            font-size: 12px;
+            color: #ccc;
+            display: block;
+        }
+
+        .progress-bar-container {
+            height: 12px;
+            background-color: #ccc;
+            border-radius: 6px;
+            width: 100%;
+            background-size: 20% 100%;
+            cursor: pointer;
+
+            .progress-bar {
+                width: 0px;
+                height: 12px;
+                border-radius: 6px;
+            }
+        }
+    }
+
+    .survey-type-title-container {
+        background-color: #5296b3;
+        padding: 5px;
+        height: 100%;
+        display: none;
+
+        &.survey-type-ipt {
+            display: block;
+        }
+
+        .title-icon {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+            margin-top: 6px;
+            background-size: contain;
+            background-position: center center;
+            background-repeat: no-repeat;
+            vertical-align: middle;
+        }
+
+        .ipt-icon {
+            background-image: url(images/compass-icon.svg);
+        }
+
+        .mm-icon {
+            background-image: url(images/maturity-icon.svg);
+        }
+
+        h2 {
+            color: #fff;
+            font-size: 17px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-top: 14px;
+        }
+    }
+
+    .progress-container .ipt-title {
+        margin-top: 5px;
+    }
+
+    .blue-button-container {
+        margin-top: 10px;
+    }
 }
 
 @import './export-assessment/style.less';
