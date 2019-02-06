@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.57 - 2019-02-06
+
+- Email form, remove duplicate details questions.
+
 ## 1.2.56 - 2019-02-04
 
 - Set default Priority to 2.
