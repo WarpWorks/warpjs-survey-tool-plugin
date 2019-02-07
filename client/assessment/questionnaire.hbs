@@ -1,22 +1,39 @@
-<div class="questionnaire question">
-  <div class="row">
-    <div class="col-12">
-      <span class="breadcrumbs">{{category.shortenedName}}{{#if iteration}} <div class="breadcrumb-separator"></div> {{iteration.name}}{{/if}}</span>
-      <h2>{{question.name}}</h2>
-      <p>{{{question.content}}}</p>
+<div class="main-content-overflow">
+  <div class="questionnaire question">
+    <div class="row">
+      <div class="col-12">
+        <span class="breadcrumbs">{{category.shortenedName}}{{#if iteration}} <div class="breadcrumb-separator"></div> {{iteration.name}}{{/if}}</span>
+        <h2>{{question.name}}</h2>
+        <p>{{{question.content}}}</p>
+      </div>
+    </div>
+    <div class="options row option-number-{{question._embedded.options.length}}">
+      {{#each question._embedded.options as |option index|}}
+        <div class="option-container">
+          <div class="option-level-block block-{{@index}}"></div>
+          <p class="radio-text">{{name}}</p>
+          <input type="radio" name="question-options" value="{{id}}" {{#if isSelected}}checked="checked"{{/if}}>
+        </div>
+      {{/each}}
     </div>
   </div>
-  <div class="options row option-number-{{question._embedded.options.length}}">
-    {{#each question._embedded.options as |option index|}}
-      <div class="option-container">
-        <div class="option-level-block block-{{@index}}"></div>
-        <p class="radio-text">{{name}}</p>
-        <input type="radio" name="question-options" value="{{id}}" {{#if isSelected}}checked="checked"{{/if}}>
-      </div>
-    {{/each}}
+  <div class="category-image-map">
+    <div class="image-map-img-container">
+      <img src="{{image}}"/>
+    </div>
   </div>
-
-  <div class="buttons row">
+  <div id="survey-question-feedback-button"
+    data-warpjs-feedback-type="question"
+    data-warpjs-question-id="{{question.id}}"
+    data-warpjs-question-name="{{question.name}}"
+    data-warpjs-iteration-name="{{iteration.name}}"
+    data-warpjs-submit-url="{{question._links.submitFeedback.href}}"
+  >
+    Feedback
+  </div>
+</div>
+<div class="questionnaire question">
+  <div class="buttons row buttons-fixed">
     <div class="col-sm-4">
       <button class="question-back">back</button>
     </div>
@@ -31,19 +48,5 @@
       {{/if}}
     </div>
   </div>
-</div>
-<div class="category-image-map">
-  <div class="image-map-img-container">
-    <img src="{{image}}"/>
-  </div>
-</div>
-<div id="survey-question-feedback-button"
-  data-warpjs-feedback-type="question"
-  data-warpjs-question-id="{{question.id}}"
-  data-warpjs-question-name="{{question.name}}"
-  data-warpjs-iteration-name="{{iteration.name}}"
-  data-warpjs-submit-url="{{question._links.submitFeedback.href}}"
->
-  Feedback
 </div>
 {{> comments comments=question.comments}}
