@@ -1,40 +1,44 @@
-<div class="questionnaire related-readings">
-  <h2 class="ipt-title results-title faded">Summary</h2>
-  <h2 class="ipt-title results-title faded">Details</h2>
-  <h2 class="ipt-title results-title related-readings-title">Related Readings</h2>
-  <div class="row">
-    <div class="col-sm-12">
-      <p>The following contains a list of related readings that directly apply to your project. Using IIC's Actionable Intelligence Algorithms, we were able to create individual matches for you.</p>
+<div class="main-content-overflow">
+  <div class="questionnaire related-readings">
+    <h2 class="ipt-title results-title faded">Summary</h2>
+    <h2 class="ipt-title results-title faded">Details</h2>
+    <h2 class="ipt-title results-title related-readings-title">Related Readings</h2>
+    <div class="row">
+      <div class="col-sm-12">
+        <p>The following contains a list of related readings that directly apply to your project. Using IIC's Actionable Intelligence Algorithms, we were able to create individual matches for you.</p>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    {{#each readings}}
-      {{#if recommendationName}}
-        <div class="col-sm-4">
-          <div class="related-reading">
-            <h3>{{name}}</h3>
-            <div class="related-reading-image"></div>
-            <h2>{{recommendationName}}</h2>
-            <a class="releated-read-more" data-result-set="{{id}}">Read more</a>
-            <div
-              class="result-feedback-button {{recommendation.thumbValue}}"
-              data-warpjs-feedback-type="result"
-              data-warpjs-resultset-id="{{id}}"
-              data-warpjs-result-id="{{recommendation.id}}"
-              data-warpjs-submit-url="{{recommendation._links.submitFeedback.href}}"
-            >
-              <div class="thumbs-up">
-                <span class="glyphicon glyphicon-thumbs-up"></span>
-              </div>
-              <div class="thumbs-down">
-                <span class="glyphicon glyphicon-thumbs-down"></span>
+    <div class="row">
+      {{#each readings}}
+        {{#if recommendationName}}
+          <div class="col-sm-4">
+            <div class="related-reading">
+              <h3>{{name}}</h3>
+              <div class="related-reading-image"></div>
+              <h2>{{recommendationName}}</h2>
+              <a class="releated-read-more" data-result-set="{{id}}">Read more</a>
+              <div
+                class="result-feedback-button {{recommendation.thumbValue}}"
+                data-warpjs-feedback-type="result"
+                data-warpjs-resultset-id="{{id}}"
+                data-warpjs-result-id="{{recommendation.id}}"
+                data-warpjs-submit-url="{{recommendation._links.submitFeedback.href}}"
+              >
+                <div class="thumbs-up">
+                  <span class="glyphicon glyphicon-thumbs-up"></span>
+                </div>
+                <div class="thumbs-down">
+                  <span class="glyphicon glyphicon-thumbs-down"></span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      {{/if}}
-    {{/each}}
+        {{/if}}
+      {{/each}}
+    </div>
   </div>
+</div>
+<div class="questionnaire question buttons-fixed">
   <div class="buttons row">
     <div class="col-sm-4">
       <button class="related-reading-back">back</button>

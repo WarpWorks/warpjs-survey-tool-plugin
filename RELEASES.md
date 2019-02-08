@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.58 - 2019-02-08
+
+- #108 Style updates for survey tool header and footer.
+
 ## 1.2.57 - 2019-02-06
 
 - Email form, remove duplicate details questions.

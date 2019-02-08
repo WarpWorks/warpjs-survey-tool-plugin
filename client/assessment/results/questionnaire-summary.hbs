@@ -1,42 +1,46 @@
-<div class="questionnaire summary">
-  <h2 class="ipt-title results-title">Summary</h2>
-  <h2 class="ipt-title results-title faded">Details</h2>
-  <h2 class="ipt-title results-title faded related-readings-title">Related Readings</h2>
-  <form class="word-download-form" action="{{url}}" method="post">
-    <input type="hidden" id="data" name="data" value="{{data}}">
-    <input type="hidden" id="title" name="title" value="{{title}}">
-    <input type="submit" class="word-download" value="Download Draft RFP">
-  </form>
-  <div class="row">
-    <div class="col-sm-12">
-      <p class="summary-description-ipt">This summary shows how your project is rated in the main IPT categories. For each category, the average score is shown. In general, low score means few problems to be expected, high score means that in this category has a very high level of complexity and potential risks.</p>
-      <p class="summary-description-mm">This summary shows how your company is rated in the main Maturity Model categories. For each category, the average score is shown. In general, low score means few problems to be expected, high score means that in this category has a very high level of complexity and potential risks.</p>
+<div class="main-content-overflow">
+  <div class="questionnaire summary">
+    <h2 class="ipt-title results-title">Summary</h2>
+    <h2 class="ipt-title results-title faded">Details</h2>
+    <h2 class="ipt-title results-title faded related-readings-title">Related Readings</h2>
+    <form class="word-download-form" action="{{url}}" method="post">
+      <input type="hidden" id="data" name="data" value="{{data}}">
+      <input type="hidden" id="title" name="title" value="{{title}}">
+      <input type="submit" class="word-download" value="Download Draft RFP">
+    </form>
+    <div class="row">
+      <div class="col-sm-12">
+        <p class="summary-description-ipt">This summary shows how your project is rated in the main IPT categories. For each category, the average score is shown. In general, low score means few problems to be expected, high score means that in this category has a very high level of complexity and potential risks.</p>
+        <p class="summary-description-mm">This summary shows how your company is rated in the main Maturity Model categories. For each category, the average score is shown. In general, low score means few problems to be expected, high score means that in this category has a very high level of complexity and potential risks.</p>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-12">
-      <h3 class="summary-title summary-title-ipt">Summary Project Assessment</h3>
-      <h3 class="summary-title summary-title-mm">Summary IIoT Maturity Analysis</h3>
-      {{#each values}}
-        <div class="summary-scales">
-          <h3 class="summary-category-title">{{category}}</h3>
-          <div class="summary-content">
-            <div class="summary-scale-container">
-              <div class="scale-section scale-section-one"></div>
-              <div class="scale-section scale-section-two"></div>
-              <div class="scale-section scale-section-three"></div>
-              <div class="scale-section scale-section-four"></div>
-              <div class="scale-section scale-section-five"></div>
-              <div class="marker" data-score="{{answerAverage}}"></div>
-            </div>
-            <div class="average-number" data-score="{{answerAverage}}">
-              <p>{{answerAverage}}</p>
+    <div class="row">
+      <div class="col-sm-12">
+        <h3 class="summary-title summary-title-ipt">Summary Project Assessment</h3>
+        <h3 class="summary-title summary-title-mm">Summary IIoT Maturity Analysis</h3>
+        {{#each values}}
+          <div class="summary-scales">
+            <h3 class="summary-category-title">{{category}}</h3>
+            <div class="summary-content">
+              <div class="summary-scale-container">
+                <div class="scale-section scale-section-one"></div>
+                <div class="scale-section scale-section-two"></div>
+                <div class="scale-section scale-section-three"></div>
+                <div class="scale-section scale-section-four"></div>
+                <div class="scale-section scale-section-five"></div>
+                <div class="marker" data-score="{{answerAverage}}"></div>
+              </div>
+              <div class="average-number" data-score="{{answerAverage}}">
+                <p>{{answerAverage}}</p>
+              </div>
             </div>
           </div>
-        </div>
-      {{/each}}
+        {{/each}}
+      </div>
     </div>
   </div>
+</div>
+<div class="questionnaire question buttons-fixed">
   <div class="buttons row">
     <div class="col-sm-4">
       <button class="summary-back">back</button>

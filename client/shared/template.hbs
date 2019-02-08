@@ -1,22 +1,26 @@
 <div class="survey-tool">
   <div class="container-fluid">
     <div class="row title-section">
-      <div class="col-sm-2">
+      <div class="logo-container">
         <a class="warpjs-home-link" href="">
           <div class="logo"></div>
         </a>
       </div>
-      <div class="col-sm-3">
+      <div class="title-container">
         <div class="survey-type-title-container survey-type-ipt">
           <div class="title-icon ipt-icon"></div>
-          <h2>IIC Project Explorer</h2>
+          <div class="icon-text-right">
+            <h2>IIC Project Explorer</h2>
+          </div>
         </div>
         <div class="survey-type-title-container survey-type-mm">
           <div class="title-icon mm-icon"></div>
-          <h2>Maturity Assessment</h2>
+          <div class="icon-text-right">
+            <h2>Maturity Assessment</h2>
+          </div>
         </div>
       </div>
-      <div class="col-sm-4">
+      <div class="progress-header-container">
         <div class="progress-container">
           <span class="progress-label">Progress</span>
           <div class="progress-bar-container">
@@ -25,7 +29,7 @@
           <h3 class="ipt-title"></h3>
         </div>
       </div>
-      <div class="col-sm-3">
+      <div class="header-buttons-container">
         <div class="blue-button-container">
           <button class="blue-button" data-survey-tool-action="download-json">Export</button>
           <button class="blue-button" data-survey-tool-action="load-json">Import</button>
@@ -34,10 +38,8 @@
       </div>
     </div>
     <div class="ipt-container">
-      <div class="row">
-        <div class="col-xs-12 ipt-body">
-          {{> loading}}
-        </div>
+      <div class="col-xs-12 ipt-body">
+        {{> loading}}
       </div>
     </div>
   </div>

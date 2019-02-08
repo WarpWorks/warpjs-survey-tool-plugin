@@ -1,19 +1,23 @@
-<div class="questionnaire">
-  <div class="row">
-    <div class="col-12">
-      <h2 class="ipt-title-question">{{question.name}}</h2>
-      <p>{{{question.content}}}</p>
+<div class="main-content-overflow">
+  <div class="questionnaire">
+    <div class="row">
+      <div class="col-12">
+        <h2 class="ipt-title-question">{{question.name}}</h2>
+        <p>{{{question.content}}}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        {{#if image}}
+          <div class="intro-image">
+            <img src="{{image}}">
+          </div>
+        {{/if}}
+      </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-12">
-      {{#if image}}
-        <div class="intro-image">
-          <img src="{{image}}">
-        </div>
-      {{/if}}
-    </div>
-  </div>
+</div>
+<div class="questionnaire question buttons-fixed">
   <div class="buttons row">
     <div class="col-sm-4">
       {{#if notFirst}}

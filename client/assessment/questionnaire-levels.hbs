@@ -1,60 +1,64 @@
-<div class="questionnaire levels">
-  <div class="row">
-    <div class="col-12">
-      <h2 class="ipt-title-question">{{question.name}}</h2>
-      <p>{{{question.content}}}</p>
+<div class="main-content-overflow">
+  <div class="questionnaire levels">
+    <div class="row">
+      <div class="col-12">
+        <h2 class="ipt-title-question">{{question.name}}</h2>
+        <p>{{{question.content}}}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <form class="project-levels">
+          <div class="level-container row">
+            <div class="col-sm-1">
+              <input type="radio" name="questionnaire-level" value="1">
+            </div>
+            <div class="col-sm-8 level-description">
+              <h3>Quick Assessment</h3>
+              <p class="radio-text ipt-levels">The quick assessment will help you getting a first, high-level assessment of your project.</p>
+              <p class="radio-text mm-levels">The quick assessment will help you getting a first, high-level assessment of your organization.</p>
+            </div>
+            <div class="col-sm-2 level-timeframe">
+              <p class="ipt-levels">15-30 mins</p>
+              <p class="mm-levels">5 mins</p>
+            </div>
+          </div>
+          <div class="level-container row">
+            <div class="col-sm-1">
+              <input type="radio" name="questionnaire-level" value="2">
+            </div>
+            <div class="col-sm-8 level-description">
+              <h3>Standard Assessment</h3>
+              <p class="radio-text ipt-levels">The standard assessment will provide you with a level that will be sufficient for many project managers as a starting point, e.g. for a vendor RFI/RFP (Request of information/Proposal)</p>
+              <p class="radio-text mm-levels">The standard assessment will provide you with an enhanced understanding of your organization’s current status</p>
+            </div>
+            <div class="col-sm-2 level-timeframe">
+              <p class="ipt-levels">60-120 mins</p>
+              <p class="mm-levels">15 mins</p>
+            </div>
+          </div>
+          <div class="level-container row">
+            <div class="col-sm-1">
+              {{#if detailedEnabled}}
+                <input type="radio" name="questionnaire-level" value="3">
+              {{/if}}
+            </div>
+            <div class="col-sm-8 level-description">
+              <h3>Detailed Assessment</h3>
+              <p class="radio-text ipt-levels">The detailed assessment is in-depth, covering additional technical questions, e.g. as a prerequisite for a detailed solution design. <u>This level is only available to IIC memebers and their customers.</u></p>
+              <p class="radio-text mm-levels">The detailed assessment will walk you through the full detail included in the IIoT Maturity Model. <u>This level is only available to IIC memebers and their customers.</u></p>
+            </div>
+            <div class="col-sm-2 level-timeframe">
+              <p class="ipt-levels">120-180 mins</p>
+              <p class="mm-levels">25 mins</p>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-12">
-      <form class="project-levels">
-        <div class="level-container row">
-          <div class="col-sm-1">
-            <input type="radio" name="questionnaire-level" value="1">
-          </div>
-          <div class="col-sm-8 level-description">
-            <h3>Quick Assessment</h3>
-            <p class="radio-text ipt-levels">The quick assessment will help you getting a first, high-level assessment of your project.</p>
-            <p class="radio-text mm-levels">The quick assessment will help you getting a first, high-level assessment of your organization.</p>
-          </div>
-          <div class="col-sm-2 level-timeframe">
-            <p class="ipt-levels">15-30 mins</p>
-            <p class="mm-levels">5 mins</p>
-          </div>
-        </div>
-        <div class="level-container row">
-          <div class="col-sm-1">
-            <input type="radio" name="questionnaire-level" value="2">
-          </div>
-          <div class="col-sm-8 level-description">
-            <h3>Standard Assessment</h3>
-            <p class="radio-text ipt-levels">The standard assessment will provide you with a level that will be sufficient for many project managers as a starting point, e.g. for a vendor RFI/RFP (Request of information/Proposal)</p>
-            <p class="radio-text mm-levels">The standard assessment will provide you with an enhanced understanding of your organization’s current status</p>
-          </div>
-          <div class="col-sm-2 level-timeframe">
-            <p class="ipt-levels">60-120 mins</p>
-            <p class="mm-levels">15 mins</p>
-          </div>
-        </div>
-        <div class="level-container row">
-          <div class="col-sm-1">
-            {{#if detailedEnabled}}
-              <input type="radio" name="questionnaire-level" value="3">
-            {{/if}}
-          </div>
-          <div class="col-sm-8 level-description">
-            <h3>Detailed Assessment</h3>
-            <p class="radio-text ipt-levels">The detailed assessment is in-depth, covering additional technical questions, e.g. as a prerequisite for a detailed solution design. <u>This level is only available to IIC memebers and their customers.</u></p>
-            <p class="radio-text mm-levels">The detailed assessment will walk you through the full detail included in the IIoT Maturity Model. <u>This level is only available to IIC memebers and their customers.</u></p>
-          </div>
-          <div class="col-sm-2 level-timeframe">
-            <p class="ipt-levels">120-180 mins</p>
-            <p class="mm-levels">25 mins</p>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
+</div>
+<div class="questionnaire question buttons-fixed">
   <div class="buttons row">
     <div class="col-sm-4">
       <button class="back levels-back question-back">back</button>

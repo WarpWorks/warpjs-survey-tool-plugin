@@ -1,63 +1,71 @@
-<div class="questionnaire related-reading-details"
-    data-warpjs-resultset-id="{{resultSet.id}}"
-    data-warpjs-result-id="{{resultSet.recommendation.id}}">
-  <div class="row">
+<div class="main-content-overflow">
+  <div class="questionnaire related-reading-details"
+      data-warpjs-resultset-id="{{resultSet.id}}"
+      data-warpjs-result-id="{{resultSet.recommendation.id}}">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="related-reading-icon"></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <h1 class="related-details-result-name">{{resultSet.name}}: {{resultSet.recommendation.name}}</h1>
+        <h2 class="related-details-why">What is it?</h2>
+        <h3 class="content-heading">{{contentPreview.heading}}</h3>
+        <div class="content-text">{{{contentPreview.content}}}</div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        {{#if href}}
+          <button data-url="{{href}}" class="content-link" data-toggle="modal" data-target="#save-warning-modal">Click here for the full document</button>
+        {{/if}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <h2 class="related-details-why">Why?</h2>
+        <p>Because you provided the following information, we think the "{{resultSet.recommendation.name}}" could be an interesting read for you:</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        {{#each resultSet.recommendation.questions}}
+          <div class="question-block">
+            <div class="position-display selected-position{{answer}}">
+              <div class="position1"></div>
+              <div class="position2"></div>
+              <div class="position3"></div>
+              <div class="position4"></div>
+            </div>
+            <span class="summary-question">{{questionName}}</span>
+            <div
+              class="related-question-feedback-button {{thumbValue}}"
+              data-warpjs-question-id="{{id}}"
+              data-warpjs-question-answer-name="{{answerName}}"
+              data-warpjs-question-answer="{{answer}}"
+              data-warpjs-question-name="{{questionName}}"
+              data-warpjs-submit-url="{{feedbackLink}}"
+              data-warpjs-feedback-type="resultQuestion"
+            >
+              <div class="thumbs-up">
+                <span class="glyphicon glyphicon-thumbs-up"></span>
+              </div>
+              <div class="thumbs-down">
+                <span class="glyphicon glyphicon-thumbs-down"></span>
+              </div>
+            </div>
+            <span class="summary-selection">{{answerName}}</span>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="questionnaire question buttons-fixed">
+  <div class="row buttons">
     <div class="col-sm-12">
       <a class="releated-details-back">Back to Related Readings</a>
-      <div class="related-reading-icon"></div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-12">
-      <h1 class="related-details-result-name">{{resultSet.name}}: {{resultSet.recommendation.name}}</h1>
-      <h2 class="related-details-why">What is it?</h2>
-      <h3 class="content-heading">{{contentPreview.heading}}</h3>
-      <div class="content-text">{{{contentPreview.content}}}</div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-12">
-      {{#if href}}
-        <button data-url="{{href}}" class="content-link" data-toggle="modal" data-target="#save-warning-modal">Click here for the full document</button>
-      {{/if}}
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-12">
-      <h2 class="related-details-why">Why?</h2>
-      <p>Because you provided the following information, we think the "{{resultSet.recommendation.name}}" could be an interesting read for you:</p>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-12">
-      {{#each resultSet.recommendation.questions}}
-        <div class="question-block">
-          <div class="position-display selected-position{{answer}}">
-            <div class="position1"></div>
-            <div class="position2"></div>
-            <div class="position3"></div>
-            <div class="position4"></div>
-          </div>
-          <span class="summary-question">{{questionName}}</span>
-          <div
-            class="related-question-feedback-button {{thumbValue}}"
-            data-warpjs-question-id="{{id}}"
-            data-warpjs-question-answer-name="{{answerName}}"
-            data-warpjs-question-answer="{{answer}}"
-            data-warpjs-question-name="{{questionName}}"
-            data-warpjs-submit-url="{{feedbackLink}}"
-            data-warpjs-feedback-type="resultQuestion"
-          >
-            <div class="thumbs-up">
-              <span class="glyphicon glyphicon-thumbs-up"></span>
-            </div>
-            <div class="thumbs-down">
-              <span class="glyphicon glyphicon-thumbs-down"></span>
-            </div>
-          </div>
-          <span class="summary-selection">{{answerName}}</span>
-        </div>
-      {{/each}}
     </div>
   </div>
 </div>

@@ -1,28 +1,32 @@
-<div class="questionnaire description">
-  <div class="row">
-    <div class="col-12">
-      <h2 class="ipt-title-question">
-        {{#if showCreate}}
-          Create new project
-        {{else}}
-          {{question.name}}
-        {{/if}}
-      </h2>
-      <h2 class="mm-title-question">Start an IIoT Maturity Analysis</h2>
-      <form class="project-description">
-        <label class="ipt-project-name" for="project-name">Project Name</label>
-        <label class="mm-company-name" for="project-name">Company Name</label>
-        <input type="text" class="form-control" id="project-name" value="{{assessment.projectName}}" required/>
-        <div class="invalid-feedback">
-          Project Name is required.
-        </div>
-        <label for="main-contact">Main Contact</label>
-        <input type="text" class="form-control" id="main-contact" value="{{assessment.mainContact}}"/>
-        <label class="project-status-label" for="project-status">Project Status</label>
-        <input type="text" class="form-control" id="project-status" value="{{assessment.projectStatus}}"/>
-      </form>
+<div class="main-content-overflow">
+  <div class="questionnaire description">
+    <div class="row">
+      <div class="col-12">
+        <h2 class="ipt-title-question">
+          {{#if showCreate}}
+            Create new project
+          {{else}}
+            {{question.name}}
+          {{/if}}
+        </h2>
+        <h2 class="mm-title-question">Start an IIoT Maturity Analysis</h2>
+        <form class="project-description">
+          <label class="ipt-project-name" for="project-name">Project Name</label>
+          <label class="mm-company-name" for="project-name">Company Name</label>
+          <input type="text" class="form-control" id="project-name" value="{{assessment.projectName}}" required/>
+          <div class="invalid-feedback">
+            Project Name is required.
+          </div>
+          <label for="main-contact">Main Contact</label>
+          <input type="text" class="form-control" id="main-contact" value="{{assessment.mainContact}}"/>
+          <label class="project-status-label" for="project-status">Project Status</label>
+          <input type="text" class="form-control" id="project-status" value="{{assessment.projectStatus}}"/>
+        </form>
+      </div>
     </div>
   </div>
+</div>
+<div class="questionnaire question buttons-fixed">
   <div class="buttons row">
     <div class="col-sm-4">
       <button class="back description-back">back</button>

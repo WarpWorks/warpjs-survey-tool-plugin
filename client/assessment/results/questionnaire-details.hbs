@@ -1,98 +1,101 @@
-<div class="questionnaire details">
-  <h2 class="ipt-title results-title faded">Summary</h2>
-  <h2 class="ipt-title results-title">Details</h2>
-  <h2 class="ipt-title results-title faded related-readings-title">Related Readings</h2>
-  <form class="word-download-form" action="{{url}}" method="post">
-    <input type="hidden" id="data" name="data" value="{{data}}">
-    <input type="hidden" id="title" name="title" value="{{title}}">
-    <input type="submit" class="word-download" value="Download Draft RFP">
-  </form>
-  <div class="row question-detail-content">
-    <div class="col-sm-10 col-sm-push-1">
-      <h3 class="ipt-name">{{details.questionnaire}}</h3>
-      <h4 class="details-title-ipt">Project Description</h4>
-      <h4 class="details-title-mm">IIoT Maturity Analysis</h4>
-      <div class="details-form-data">
-        <div class="col-sm-6">
-          <p class="survey-name-label-ipt">Solution / Testbed Name</p>
-          <p class="survey-name-label-mm">Analysis</p>
+<div class="main-content-overflow">
+  <div class="questionnaire details">
+    <h2 class="ipt-title results-title faded">Summary</h2>
+    <h2 class="ipt-title results-title">Details</h2>
+    <h2 class="ipt-title results-title faded related-readings-title">Related Readings</h2>
+    <form class="word-download-form" action="{{url}}" method="post">
+      <input type="hidden" id="data" name="data" value="{{data}}">
+      <input type="hidden" id="title" name="title" value="{{title}}">
+      <input type="submit" class="word-download" value="Download Draft RFP">
+    </form>
+    <div class="row question-detail-content">
+      <div class="col-sm-12">
+        <h3 class="ipt-name">{{details.questionnaire}}</h3>
+        <h4 class="details-title-ipt">Project Description</h4>
+        <h4 class="details-title-mm">IIoT Maturity Analysis</h4>
+        <div class="details-form-data">
+          <div class="col-sm-6">
+            <p class="survey-name-label-ipt">Solution / Testbed Name</p>
+            <p class="survey-name-label-mm">Analysis</p>
+          </div>
+          <div class="col-sm-6">
+            <p class="form-details">{{details.name}}</p>
+          </div>
         </div>
-        <div class="col-sm-6">
-          <p class="form-details">{{details.name}}</p>
+        <div class="details-form-data">
+          <div class="col-sm-6">
+            <p>Main Contact</p>
+          </div>
+          <div class="col-sm-6">
+            <p class="form-details">{{details.contact}}</p>
+          </div>
         </div>
-      </div>
-      <div class="details-form-data">
-        <div class="col-sm-6">
-          <p>Main Contact</p>
+        <div class="details-form-data details-form-data-status">
+          <div class="col-sm-6">
+            <p>Project Status</p>
+          </div>
+          <div class="col-sm-6">
+            <p class="form-details">{{details.status}}</p>
+          </div>
         </div>
-        <div class="col-sm-6">
-          <p class="form-details">{{details.contact}}</p>
-        </div>
-      </div>
-      <div class="details-form-data details-form-data-status">
-        <div class="col-sm-6">
-          <p>Project Status</p>
-        </div>
-        <div class="col-sm-6">
-          <p class="form-details">{{details.status}}</p>
-        </div>
-      </div>
-      <h4 class="details-title-ipt">Project Assessment Details</h4>
-      <h4 class="details-title-mm">Analysis Details</h4>
-      {{#each details.data}}
-        <p class="summary-category {{#if comments}} has-comments{{/if}}" data-comments="{{comments}}">{{category}}</p>
-        {{#each iterations}}
-          {{#if name}}<p class="summary-iteration">{{name}}</p>{{/if}}
-          {{#each questions}}
-            {{#if hasOptions}}
-              <div class="question-block question-block-ipt {{#if comments}} has-comments{{/if}}" data-comments="{{comments}}">
-                <div class="position-display selected-position{{position}}">
-                  <div class="position1"></div>
-                  <div class="position2"></div>
-                  <div class="position3"></div>
-                  <div class="position4"></div>
-                </div>
-                <span class="summary-question">{{name}}</span>
-                <span class="summary-selection">{{option.name}}</span>
-              </div>
-
-              <div class="question-block question-block-mm {{#if comments}} has-comments{{/if}}" data-comments="{{comments}}">
-                <div class="position-display selected-{{urgency}}">
-                  <div class="green"></div>
-                  <div class="yellow"></div>
-                  <div class="red"></div>
-                </div>
-                <span class="summary-question">{{name}}</span>
-                {{#if moreInformation}}
-                  <a href="{{moreInformation}}" class="summary-more-info">more information</a>
-                {{/if}}
-                {{#if option.currentStatus}}
-                  <div class="detail-question-status-container">
-                    <div class="blue-card current-status {{#unless option.nextLevel}} current-status-center{{/unless}}">
-                      <p class="blue-card-title">Current Status{{#unless option.nextLevel}} (best possible){{/unless}}</p>
-                      <p>{{option.currentStatus}}</p>
-                    </div>
-                    {{#if option.nextLevel}}
-                      <div class="status-arrow glyphicon glyphicon-arrow-right"></div>
-                      <div class="blue-card next-level">
-                        <p class="blue-card-title">Next Level</p>
-                        <p>{{option.nextLevel}}</p>
-                      </div>
-                    {{/if}}
+        <h4 class="details-title-ipt">Project Assessment Details</h4>
+        <h4 class="details-title-mm">Analysis Details</h4>
+        {{#each details.data}}
+          <p class="summary-category {{#if comments}} has-comments{{/if}}" data-comments="{{comments}}">{{category}}</p>
+          {{#each iterations}}
+            {{#if name}}<p class="summary-iteration">{{name}}</p>{{/if}}
+            {{#each questions}}
+              {{#if hasOptions}}
+                <div class="question-block question-block-ipt {{#if comments}} has-comments{{/if}}" data-comments="{{comments}}">
+                  <div class="position-display selected-position{{position}}">
+                    <div class="position1"></div>
+                    <div class="position2"></div>
+                    <div class="position3"></div>
+                    <div class="position4"></div>
                   </div>
-                {{/if}}
-              </div>
-            {{else}}
-              <p class="sub-category-name sub-category-name-ipt{{#if comments}} has-comments{{/if}}" data-comments="{{comments}}">{{name}}</p>
+                  <span class="summary-question">{{name}}</span>
+                  <span class="summary-selection">{{option.name}}</span>
+                </div>
 
-              <p class="sub-category-name sub-category-name-mm{{#if comments}} has-comments{{/if}}" data-comments="{{comments}}">{{name}}</p>
-            {{/if}}
+                <div class="question-block question-block-mm {{#if comments}} has-comments{{/if}}" data-comments="{{comments}}">
+                  <div class="position-display selected-{{urgency}}">
+                    <div class="green"></div>
+                    <div class="yellow"></div>
+                    <div class="red"></div>
+                  </div>
+                  <span class="summary-question">{{name}}</span>
+                  {{#if moreInformation}}
+                    <a href="{{moreInformation}}" class="summary-more-info">more information</a>
+                  {{/if}}
+                  {{#if option.currentStatus}}
+                    <div class="detail-question-status-container">
+                      <div class="blue-card current-status {{#unless option.nextLevel}} current-status-center{{/unless}}">
+                        <p class="blue-card-title">Current Status{{#unless option.nextLevel}} (best possible){{/unless}}</p>
+                        <p>{{option.currentStatus}}</p>
+                      </div>
+                      {{#if option.nextLevel}}
+                        <div class="status-arrow glyphicon glyphicon-arrow-right"></div>
+                        <div class="blue-card next-level">
+                          <p class="blue-card-title">Next Level</p>
+                          <p>{{option.nextLevel}}</p>
+                        </div>
+                      {{/if}}
+                    </div>
+                  {{/if}}
+                </div>
+              {{else}}
+                <p class="sub-category-name sub-category-name-ipt{{#if comments}} has-comments{{/if}}" data-comments="{{comments}}">{{name}}</p>
+
+                <p class="sub-category-name sub-category-name-mm{{#if comments}} has-comments{{/if}}" data-comments="{{comments}}">{{name}}</p>
+              {{/if}}
+            {{/each}}
           {{/each}}
         {{/each}}
-      {{/each}}
+      </div>
     </div>
   </div>
-
+</div>
+<div class="questionnaire question buttons-fixed details">
   <div class="buttons row">
     <div class="col-sm-4">
       <button class="details-back">back</button>
