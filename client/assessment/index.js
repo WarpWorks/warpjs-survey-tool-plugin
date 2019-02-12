@@ -904,80 +904,82 @@ const storage = require('./../storage');
                             });
 
                             $(document).on('click', '.progress-bar-container', (event) => {
-                                const progressBar = $('.progress-bar-container');
-                                const progressWidth = progressBar.innerWidth();
-                                const offset_l = progressBar.offset().left - $(window).scrollLeft();
-                                const left = Math.round((event.clientX - offset_l));
-                                const progressPercent = Math.round((left / progressWidth) * 100);
-                                const selectedCategoryIndex = (Math.ceil((progressPercent / 100) * progressFilteredCategories.length) - 1);
+                                if (result.data.assessmentId) {
+                                    const progressBar = $('.progress-bar-container');
+                                    const progressWidth = progressBar.innerWidth();
+                                    const offset_l = progressBar.offset().left - $(window).scrollLeft();
+                                    const left = Math.round((event.clientX - offset_l));
+                                    const progressPercent = Math.round((left / progressWidth) * 100);
+                                    const selectedCategoryIndex = (Math.ceil((progressPercent / 100) * progressFilteredCategories.length) - 1);
 
-                                if ($('.questionnaire.question').length) {
-                                    getAssessment();
-                                    updateQuestions();
-                                    updateAssessment();
-                                } else if ($('.questionnaire.description').length) {
-                                    if ($('#project-name').val()) {
+                                    if ($('.questionnaire.question').length) {
                                         getAssessment();
-                                        assessment.projectName = $('#project-name').val();
-                                        assessment.mainContact = $('#main-contact').val();
-                                        assessment.projectStatus = $('#project-status').val();
+                                        updateQuestions();
                                         updateAssessment();
-                                        $('.ipt-title').html(assessment.projectName);
-                                    } else {
-                                        $('#project-name').addClass('is-invalid');
-                                        $('.invalid-feedback').css('display', 'block');
-                                        return;
-                                    }
-                                } else if ($('.questionnaire.levels').length) {
-                                    levelsOnLeave();
-                                } else if ($('.questionnaire.iterations').length) {
-                                    let hasIteration = false;
-                                    $('.iteration-form input[type="text"]').each((index, element) => {
-                                        if ($(element).val()) {
-                                            hasIteration = true;
+                                    } else if ($('.questionnaire.description').length) {
+                                        if ($('#project-name').val()) {
+                                            getAssessment();
+                                            assessment.projectName = $('#project-name').val();
+                                            assessment.mainContact = $('#main-contact').val();
+                                            assessment.projectStatus = $('#project-status').val();
+                                            updateAssessment();
+                                            $('.ipt-title').html(assessment.projectName);
+                                        } else {
+                                            $('#project-name').addClass('is-invalid');
+                                            $('.invalid-feedback').css('display', 'block');
+                                            return;
                                         }
-                                    });
-                                    if (hasIteration) {
-                                        getAssessment();
-                                        updateIterations();
-                                        updateAssessment();
+                                    } else if ($('.questionnaire.levels').length) {
+                                        levelsOnLeave();
+                                    } else if ($('.questionnaire.iterations').length) {
+                                        let hasIteration = false;
+                                        $('.iteration-form input[type="text"]').each((index, element) => {
+                                            if ($(element).val()) {
+                                                hasIteration = true;
+                                            }
+                                        });
+                                        if (hasIteration) {
+                                            getAssessment();
+                                            updateIterations();
+                                            updateAssessment();
+                                        } else {
+                                            $('.iteration-form input[type="text"]').first().addClass('is-invalid');
+                                            $('.invalid-feedback').css('display', 'block');
+                                            return;
+                                        }
+                                    }
+
+                                    if (progressFilteredCategories[selectedCategoryIndex] === 'results') {
+                                        categoryPointer = categories.length - 1;
+                                        iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
+                                            return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
+                                        });
+                                        iterationPointer = iterations.length - 1;
+                                        questions = iterations.length ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
+                                            return question.detailLevel <= assessment.detailLevel;
+                                        }) : [];
+                                        questionPointer = questions.length ? questions.length - 1 : -1;
+
+                                        updatePointers('next');
                                     } else {
-                                        $('.iteration-form input[type="text"]').first().addClass('is-invalid');
-                                        $('.invalid-feedback').css('display', 'block');
-                                        return;
+                                        categoryPointer = _.findIndex(categories, (o) => {
+                                            return o.id && o.id === progressFilteredCategories[selectedCategoryIndex].id;
+                                        });
+                                        iterationPointer = 0;
+                                        questionPointer = 0;
+                                        iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
+                                            return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
+                                        });
+                                        questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
+                                            return question.detailLevel <= assessment.detailLevel;
+                                        }) : [];
+
+                                        if (categories[categoryPointer].isRepeatable) {
+                                            questionPointer = -1;
+                                        }
+
+                                        updateQuestionContent('');
                                     }
-                                }
-
-                                if (progressFilteredCategories[selectedCategoryIndex] === 'results') {
-                                    categoryPointer = categories.length - 1;
-                                    iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
-                                        return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
-                                    });
-                                    iterationPointer = iterations.length - 1;
-                                    questions = iterations.length ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                        return question.detailLevel <= assessment.detailLevel;
-                                    }) : [];
-                                    questionPointer = questions.length ? questions.length - 1 : -1;
-
-                                    updatePointers('next');
-                                } else {
-                                    categoryPointer = _.findIndex(categories, (o) => {
-                                        return o.id && o.id === progressFilteredCategories[selectedCategoryIndex].id;
-                                    });
-                                    iterationPointer = 0;
-                                    questionPointer = 0;
-                                    iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
-                                        return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
-                                    });
-                                    questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                        return question.detailLevel <= assessment.detailLevel;
-                                    }) : [];
-
-                                    if (categories[categoryPointer].isRepeatable) {
-                                        questionPointer = -1;
-                                    }
-
-                                    updateQuestionContent('');
                                 }
                             });
 
