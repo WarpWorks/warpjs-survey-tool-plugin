@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.59 - 2019-02-12
+
+- Bug fixes for word download and progress bar.
+
 ## 1.2.58 - 2019-02-08
 
 - #108 Style updates for survey tool header and footer.

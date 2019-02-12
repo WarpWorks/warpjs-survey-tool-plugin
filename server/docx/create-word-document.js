@@ -290,7 +290,7 @@ module.exports = async (req, res) => {
                                         }
                                     },
                                     {
-                                        val: question.option,
+                                        val: question.option ? question.option.name : '',
                                         opts: {
                                             align: "right",
                                             color: "000000",
@@ -303,7 +303,8 @@ module.exports = async (req, res) => {
                                     }
                                 ]
                             ];
-                            if (question.position) {
+
+                            if (question.option && question.position) {
                                 detailTable[0][question.position - 1]['opts']['color'] = selectedColors[question.position - 1];
                             }
 
