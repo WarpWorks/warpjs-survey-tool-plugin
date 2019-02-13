@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.60 - 2019-02-13
+
+- Bug fix detail view back button and word doc to use dynamic survey id.
+
 ## 1.2.59 - 2019-02-12
 
 - Bug fixes for word download and progress bar.

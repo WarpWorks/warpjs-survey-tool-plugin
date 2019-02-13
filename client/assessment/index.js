@@ -174,7 +174,9 @@ const storage = require('./../storage');
                             $(document).on('click', '.description-back, .description-next', (event) => {
                                 const direction = $(event.target).hasClass('description-back') ? 'back' : 'next';
                                 if ($('#project-name').val() || $(event.target).hasClass('description-back')) {
-                                    getAssessment();
+                                    if (result.data.assessmentId) {
+                                        getAssessment();
+                                    }
                                     assessment.projectName = $('#project-name').val();
                                     assessment.mainContact = $('#main-contact').val();
                                     assessment.projectStatus = $('#project-status').val();
@@ -595,6 +597,7 @@ const storage = require('./../storage');
                             const summarySetup = () => {
                                 const details = {
                                     questionnaire: result.data._embedded.questionnaires[0].name,
+                                    surveyId: result.data.surveyId,
                                     name: assessment.projectName,
                                     contact: assessment.mainContact,
                                     status: assessment.projectStatus,

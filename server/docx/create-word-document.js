@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
     // TODO: Don't hard code adminConfig
     config.adminConfig = {
         type: "AdminConfiguration",
-        id: "5ba9ca96ffe8c80011f1993f"
+        id: data.details.surveyId
     };
     const customMessages = await warpjsUtils.server.getCustomMessagesByPrefix(pluginInfo.persistence, config, domainModel, 'Surveytool');
 
