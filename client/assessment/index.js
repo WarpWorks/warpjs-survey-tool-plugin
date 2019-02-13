@@ -1027,16 +1027,17 @@ const storage = require('./../storage');
                             });
 
                             $(document).on('click', '.related-question-feedback-button, .result-feedback-button', (event) => {
-                                const element = $(event.target).closest('.related-question-feedback-button, .result-feedback-button');
+                                const element = $(event.target).closest('.related-question-feedback-button-container, .result-feedback-button-container');
                                 const questionId = element.data('warpjsQuestionId');
                                 const answerName = element.data('warpjsQuestionAnswerName');
                                 const answerNum = element.data('warpjsQuestionAnswer');
                                 const questionName = element.data('warpjsQuestionName');
                                 const submitUrl = element.data('warpjsSubmitUrl');
+                                const thumbClicked = $(event.currentTarget).hasClass('thumbs-up') ? 'thumbs-up' : 'thumbs-down';
                                 const resultsetId = $('.related-reading-details').length ? $('.related-reading-details').data('warpjsResultsetId') : element.data('warpjsResultsetId');
                                 const resultId = $('.related-reading-details').length ? $('.related-reading-details').data('warpjsResultId') : element.data('warpjsResultId');
                                 const feedbackType = element.data('warpjsFeedbackType');
-                                openRelatedFeedbackModal($, questionId, answerName, answerNum, questionName, submitUrl, resultsetId, resultId, feedbackType, null);
+                                openRelatedFeedbackModal($, questionId, answerName, answerNum, questionName, submitUrl, resultsetId, resultId, feedbackType, null, thumbClicked);
                             });
 
                             $(document).on('click', '#survey-tool-feedback-button', (event) => {

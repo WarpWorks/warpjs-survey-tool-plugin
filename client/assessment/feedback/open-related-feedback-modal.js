@@ -15,7 +15,8 @@ const styleThumbRadio = () => {
     });
 };
 
-module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl, resultsetId, resultId, feedbackType, iterationName) => {
+module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl, resultsetId, resultId, feedbackType, iterationName, thumbClicked) => {
+    console.log('thumbClicked', thumbClicked);
     let modalId = questionId;
     let modalTitle = 'Feedback on recommendation';
     if (feedbackType === 'result') {
@@ -93,6 +94,10 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
         $(modal).find('#feedback-reason').val(existingFeedback.comment);
         $(modal).find("input[name='based-on'][value='" + existingFeedback.basedOn + "']").attr('checked', 'checked');
         $(modal).find("input[name='question-specific'][value='" + existingFeedback.questionSpecific + "']").attr('checked', 'checked');
+    } else if (thumbClicked === 'thumbs-up') {
+        $(modal).find("input[name='thumb-value'][value='ThumbsUp'] + .radio-thumb").click();
+    } else if (thumbClicked === 'thumbs-down') {
+        $(modal).find("input[name='thumb-value'][value='ThumbsDown'] + .radio-thumb").click();
     }
 
     $(modal).on('click', '.related-feedback-submit', function(event) {
@@ -153,10 +158,10 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
                     updateAssessment();
 
                     $(modal).modal('toggle');
-                    let feedbackThumbButton = $(".related-question-feedback-button[data-warpjs-question-id='" + questionId + "']");
+                    let feedbackThumbButton = $(".related-question-feedback-button-container[data-warpjs-question-id='" + questionId + "']");
 
                     if (feedbackType === 'result') {
-                        feedbackThumbButton = $(".result-feedback-button[data-warpjs-resultset-id='" + resultsetId + "']");
+                        feedbackThumbButton = $(".result-feedback-button-container[data-warpjs-resultset-id='" + resultsetId + "']");
                     }
 
                     if (feedbackType === 'result' || feedbackType === 'resultQuestion') {

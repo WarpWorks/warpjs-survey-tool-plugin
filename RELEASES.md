@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.62 - 2019-02-13
+
+- #106 Clicking thumb icon selects thumb on modal.
+
 ## 1.2.61 - 2019-02-13
 
 - Swap order of priority circles in results details view.
