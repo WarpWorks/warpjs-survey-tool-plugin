@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.61 - 2019-02-13
+
+- Swap order of priority circles in results details view.
+
 ## 1.2.60 - 2019-02-13
 
 - Bug fix detail view back button and word doc to use dynamic survey id.
