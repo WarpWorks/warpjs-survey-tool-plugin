@@ -12,10 +12,23 @@
         <div class="option-container">
           <div class="option-level-block block-{{@index}}"></div>
           <p class="radio-text">{{name}}</p>
-          <input type="radio" name="question-options" value="{{id}}" {{#if isSelected}}checked="checked"{{/if}}>
+          <input type="radio" name="question-options" class="question-options" value="{{id}}" {{#if isSelected}}checked="checked"{{/if}}>
         </div>
       {{/each}}
     </div>
+    {{#if question._embedded.options.length}}
+      <div class="priority-wrapper mm-reveal">
+        <div class="priority-container">
+          <span>Priority of this question to you</span>
+          <input type="radio" name="priority-options" id="high-priority" class="priority-options" value="3" {{#if priorityHigh}}checked="checked"{{/if}}>
+          <label for="high-priority">high</label>
+          <input type="radio" name="priority-options" id="medium-priority" class="priority-options" value="2" {{#if priorityMid}}checked="checked"{{/if}}>
+          <label for="medium-priority">medium</label>
+          <input type="radio" name="priority-options" id="low-priority" class="priority-options" value="1" {{#if priorityLow}}checked="checked"{{/if}}>
+          <label for="lowv">low</label>
+        </div>
+      </div>
+    {{/if}}
   </div>
   <div class="category-image-map">
     <div class="image-map-img-container">

@@ -35,10 +35,10 @@ const storage = require('./../storage');
             $(this).attr('data-radio-fx', this.name);
             var label = $("label[for=" + '"' + this.id + '"' + "]").text();
             $('<a ' + (label !== '' ? 'title=" ' + label + ' "' : '') + ' data-radio-fx="' + this.name + '" class="radio-fx" href="#">' +
-                '<span class="radio' + (this.checked ? ' radio-checked' : '') + '"></span></a>').insertAfter(this);
+                '<span class="radio ' + (this.checked ? ' radio-checked' : '') + ' ' + $(this).attr("class") + '"></span></a>').insertAfter(this);
         });
 
-        if ($(":radio[checked='checked']").length) {
+        if ($(":radio.question-options[checked='checked']").length) {
             $('.questionnaire.question .question-next').html('Next Question');
         }
 
@@ -52,9 +52,9 @@ const storage = require('./../storage');
                 $(this).find('span').addClass('radio-checked');
                 $(this).prev('input:radio').attr('checked', true);
             }
-            if ($(":radio[data-radio-fx='" + unique + "'][checked='checked']").length) {
+            if ($(":radio.question-options[data-radio-fx='" + unique + "'][checked='checked']").length) {
                 $('.questionnaire.question .question-next').html('Next Question');
-            } else {
+            } else if ($(this).hasClass('question-options')) {
                 $('.questionnaire.question .question-next').html("Don't know (yet)");
             }
         });
@@ -333,7 +333,11 @@ const storage = require('./../storage');
                                 values.imageMap = currentImageArea ? currentImageArea.coords : null;
                                 values.imageHeight = currentImageHeight;
                                 values.imageWidth = currentImageWidth;
-
+                                // values.priority = currentQuestion.priority;
+                                values.priorityHigh = values.question.priority === '3';
+                                values.priorityMed = values.question.priority === '2';
+                                values.priorityLow = values.question.priority === '1';
+                                console.log('values: ', values);
                                 return values;
                             };
 
@@ -695,6 +699,7 @@ const storage = require('./../storage');
                             const updateQuestions = () => {
                                 if (questions && questions[questionPointer]) {
                                     questions[questionPointer].answer = $("input[name='question-options'][checked='checked']").val();
+                                    questions[questionPointer].priority = $("input[name='priority-options'][checked='checked']").val();
                                     questions[questionPointer].comments = $('textarea.comment-text').val();
                                 }
                             };

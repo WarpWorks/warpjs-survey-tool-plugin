@@ -341,11 +341,23 @@
             height: 30px;
             margin-left: auto;
             margin-right: auto;
+
+            &.priority-options {
+                margin: 0px 3px;
+                display: inline-block;
+                vertical-align: middle;
+            }
         }
 
         .radio-checked {
             background-image: url('images/checkbox-on.svg') !important;
             background-size: 30px;
+        }
+
+        .priority-container label {
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0px 3px;
         }
 
         .buttons {
@@ -418,6 +430,10 @@
                 float: none;
             }
         }
+    }
+
+    .mm-reveal {
+        display: none;
     }
 
     .category-image-map {
