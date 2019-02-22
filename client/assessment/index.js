@@ -551,6 +551,13 @@ const storage = require('./../storage');
                                                     urgency = 'yellow';
                                                 }
 
+                                                const allStatuses = questionQ._embedded.options ? _.map(questionQ._embedded.options, (optionQ) => {
+                                                    return {
+                                                        currentStatus: optionQ.currentStatus,
+                                                        isSelected: optionQ.id === question.answer
+                                                    };
+                                                }) : null;
+
                                                 return {
                                                     name: questionQ.name,
                                                     hasOptions: !!questionQ._embedded.options.length,
@@ -559,7 +566,8 @@ const storage = require('./../storage');
                                                     comments: question.comments,
                                                     proiroty: priority,
                                                     moreInformation: questionQ.moreInformation,
-                                                    urgency: urgency
+                                                    urgency: urgency,
+                                                    allStatuses: allStatuses
                                                 };
                                             } else {
                                                 return null;
@@ -717,7 +725,6 @@ const storage = require('./../storage');
                                     status: assessment.projectStatus,
                                     data: detailsValues()
                                 };
-
                                 const values = summaryValues();
                                 shared.setSurveyContent($, placeholder, questionnaireDetailsTemplate({
                                     details: details,
@@ -738,6 +745,16 @@ const storage = require('./../storage');
                                     $('.comment-text').css('display', 'none');
                                     $('.comment-text-not-editable').css('display', 'block');
                                     $('.comment-text-not-editable').html(comment);
+                                });
+
+                                $('.detail-question-status-container').each(function() {
+                                    const paddingAmount = $(this).innerWidth() - $(this).find('.blue-card').outerWidth(true);
+                                    const containerWidth = $(this).find('.blue-card').length * ($(this).find('.blue-card').outerWidth(true) + 3) + $(this).find('.status-arrow').length * ($(this).find('.status-arrow').outerWidth(true) + 4) + paddingAmount;
+                                    $(this).css('width', containerWidth);
+                                    if ($('.detail-question-status-container').find('.current-status').length && $(this).find('.current-status').position()) {
+                                        const scrollDistance = $(this).find('.current-status').position().left - (paddingAmount / 2);
+                                        $(this).closest('.detail-status-cutoff').scrollLeft(scrollDistance);
+                                    }
                                 });
                             };
 

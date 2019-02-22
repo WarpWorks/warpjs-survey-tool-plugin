@@ -261,41 +261,49 @@
             max-width: calc(50% - 134px);
         }
 
-        .detail-question-status-container {
-            position: relative;
-            overflow: hidden;
-            padding: 0px 20px;
+        .detail-status-cutoff {
+            overflow-x: scroll;
 
-            .blue-card {
-                padding: 20px;
-                background-color: #edfaff;
-                display: inline-block;
-                margin: 15px 0px;
-                width: 45%;
-                vertical-align: middle;
+            .detail-question-status-container {
+                position: relative;
+                overflow: hidden;
+                padding: 0px calc((100% - 35vw) / 2);
 
-                p {
-                    font-size: 11px;
+                .blue-card {
+                    padding: 20px;
+                    background-color: #edfaff;
+                    display: inline-block;
+                    margin: 15px 0px;
+                    width: 35vw;
+                    vertical-align: middle;
+
+                    p {
+                        font-size: 11px;
+                    }
+
+                    .blue-card-title {
+                        font-weight: bold;
+                    }
+
+                    &.next-level {
+                        background-color: #f0f0f0;
+                    }
                 }
 
-                .blue-card-title {
-                    font-weight: bold;
+                .status-arrow {
+                    display: inline-block;
+                    margin: 5px 0px;
+                    width: 6vw;
+                    vertical-align: middle;
+                    font-size: 30;
+                    text-align: center;
                 }
-            }
 
-            .status-arrow {
-                display: inline-block;
-                margin: 5px 0px;
-                width: 8%;
-                vertical-align: middle;
-                font-size: 30;
-                text-align: center;
-            }
-
-            .current-status-center {
-                margin-left: auto;
-                margin-right: auto;
-                display: block;
+                .current-status-center {
+                    margin-left: auto;
+                    margin-right: auto;
+                    display: block;
+                }
             }
         }
     }

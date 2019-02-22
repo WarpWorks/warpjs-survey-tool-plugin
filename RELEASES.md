@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.63 - 2019-02-22
+
+- #110 Maturity Model results show all statuses.
+
 ## 1.2.62 - 2019-02-13
 
 - #106 Clicking thumb icon selects thumb on modal.
