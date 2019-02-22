@@ -342,6 +342,7 @@ const storage = require('./../storage');
                                 values.priorityHigh = priority === 3;
                                 values.priorityMid = priority === 2;
                                 values.priorityLow = priority === 1;
+                                values.showPriority = values.question._embedded.options.length && !isNaN(parseInt(assessment.detailLevel, 10)) && parseInt(assessment.detailLevel, 10) > 1;
                                 return values;
                             };
 

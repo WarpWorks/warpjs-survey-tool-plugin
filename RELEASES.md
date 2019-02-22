@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.65 - 2019-02-22
+
+- Priority radio only shows for detail level 2+.
+
 ## 1.2.64 - 2019-02-22
 
 - #113 User selected priority.
