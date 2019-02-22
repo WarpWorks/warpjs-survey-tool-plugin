@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.64 - 2019-02-22
+
+- #113 User selected priority.
+
 ## 1.2.63 - 2019-02-22
 
 - #110 Maturity Model results show all statuses.

@@ -107,6 +107,10 @@ const storage = require('./../storage');
                 let iterations = [];
                 let questions = [];
 
+                const calculatePriority = (priorityValue) => {
+                    return isNaN(parseInt(priorityValue, 10)) ? 2 : parseInt(priorityValue, 10);
+                };
+
                 const filterContent = () => {
                     categories = _.filter(assessment.answers[0]._embedded.categories, (progressCategory) => {
                         const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
@@ -294,6 +298,7 @@ const storage = require('./../storage');
                                 const updatedQuestion = assignOptionSelected(currentQuestion, questions[questionPointer]);
                                 if (updatedQuestion) {
                                     updatedQuestion.comments = questions[questionPointer].comments;
+                                    updatedQuestion.priority = questions[questionPointer].priority;
                                 }
                                 let values = {category: currentCategory, question: updatedQuestion};
                                 if (iterations[iterationPointer] && iterations[iterationPointer].name !== '') {
@@ -333,11 +338,10 @@ const storage = require('./../storage');
                                 values.imageMap = currentImageArea ? currentImageArea.coords : null;
                                 values.imageHeight = currentImageHeight;
                                 values.imageWidth = currentImageWidth;
-                                // values.priority = currentQuestion.priority;
-                                values.priorityHigh = values.question.priority === '3';
-                                values.priorityMed = values.question.priority === '2';
-                                values.priorityLow = values.question.priority === '1';
-                                console.log('values: ', values);
+                                const priority = calculatePriority(values.question.priority);
+                                values.priorityHigh = priority === 3;
+                                values.priorityMid = priority === 2;
+                                values.priorityLow = priority === 1;
                                 return values;
                             };
 
@@ -473,7 +477,8 @@ const storage = require('./../storage');
                                                 });
                                                 position = option ? option.position : null;
 
-                                                const priority = isNaN(parseInt(questionQ.priority, 10)) ? 2 : parseInt(questionQ.priority, 10);
+                                                const priority = calculatePriority(question.priority);
+                                                console.log('priority at summary:::', priority);
                                                 const positionNumber = parseInt(position);
                                                 let positions = [];
                                                 if (assessment.detailLevel !== '1' && result.data._embedded.questionnaires[0].key === 'mm') {
@@ -544,7 +549,7 @@ const storage = require('./../storage');
                                                     return option.id === question.answer;
                                                 });
                                                 const selectedOption = questionQ._embedded.options.length && option ? option.position : null;
-                                                const priority = isNaN(parseInt(questionQ.priority, 10)) ? 2 : parseInt(questionQ.priority, 10);
+                                                const priority = calculatePriority(question.priority);
                                                 const preppedPriority = (5 - parseInt(selectedOption, 10)) * priority;
                                                 let urgency = 'none';
                                                 if (preppedPriority >= 6) {
@@ -568,7 +573,7 @@ const storage = require('./../storage');
                                                     position: selectedOption,
                                                     option: questionQ._embedded.options.length && option ? option : null,
                                                     comments: question.comments,
-                                                    proiroty: priority,
+                                                    priority: priority,
                                                     moreInformation: questionQ.moreInformation,
                                                     urgency: urgency,
                                                     allStatuses: allStatuses
