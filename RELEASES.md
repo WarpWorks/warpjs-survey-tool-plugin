@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.67 - 2019-02-26
+
+- fix for new recommendation algorithm.
+
 ## 1.2.66 - 2019-02-26
 
 - #109 new Algorithm for recommendations. 

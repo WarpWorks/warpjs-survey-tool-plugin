@@ -800,7 +800,7 @@ const storage = require('./../storage');
                                     });
                                 });
 
-                                weightAdjustment = Math.floor(numberOfOptions / 2);
+                                weightAdjustment = Math.ceil(numberOfOptions / 2);
                                 weightAdjustmentEven = numberOfOptions % 2 === 0;
 
                                 _.each(result.data._embedded.questionnaires[0]._embedded.resultSets, (resultSet) => {
