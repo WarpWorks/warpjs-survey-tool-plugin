@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.66 - 2019-02-26
+
+- #109 new Algorithm for recommendations. 
+
 ## 1.2.65 - 2019-02-22
 
 - Priority radio only shows for detail level 2+.

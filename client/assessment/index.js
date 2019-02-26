@@ -479,7 +479,6 @@ const storage = require('./../storage');
                                                 position = option ? option.position : null;
 
                                                 const priority = calculatePriority(question.priority);
-                                                console.log('priority at summary:::', priority);
                                                 const positionNumber = parseInt(position);
                                                 let positions = [];
                                                 if (assessment.detailLevel !== '1' && result.data._embedded.questionnaires[0].key === 'mm') {
@@ -770,8 +769,12 @@ const storage = require('./../storage');
                             };
 
                             let flattenedAnswers = [];
+                            let weightAdjustment = 0;
+                            let weightAdjustmentEven = false;
+
                             const relatedReadingSetup = () => {
                                 flattenedAnswers = [];
+                                let numberOfOptions = 0;
                                 _.each(assessment.answers[0]._embedded.categories, (rCategory) => {
                                     _.each(rCategory._embedded.iterations, (rIteration) => {
                                         _.each(rIteration._embedded.questions, (rQuestion) => {
@@ -782,6 +785,7 @@ const storage = require('./../storage');
                                                 const questionQuestion = questionCategory ? _.find(questionCategory._embedded.questions, (qQuestion) => {
                                                     return qQuestion.id === rQuestion.id;
                                                 }) : null;
+                                                numberOfOptions = Math.max(numberOfOptions, questionQuestion._embedded.options.length);
                                                 const questionAnswer = questionQuestion ? _.find(questionQuestion._embedded.options, (qOption) => {
                                                     return qOption.id === rQuestion.answer;
                                                 }) : null;
@@ -795,6 +799,10 @@ const storage = require('./../storage');
                                         });
                                     });
                                 });
+
+                                weightAdjustment = Math.floor(numberOfOptions / 2);
+                                weightAdjustmentEven = numberOfOptions % 2 === 0;
+
                                 _.each(result.data._embedded.questionnaires[0]._embedded.resultSets, (resultSet) => {
                                     resultSet.recommendation = null;
                                     _.each(resultSet._embedded.results, (result) => {
@@ -804,17 +812,17 @@ const storage = require('./../storage');
                                                 return aQuestion.id === relevantQuestion.id;
                                             }) : null, (aQuestion) => {
                                                 if (relevantQuestion.relevance === 'high') {
-                                                    result.points += parseInt(aQuestion.answer, 10);
+                                                    result.points += Math.max(0, parseInt(aQuestion.answer, 10) - weightAdjustment);
                                                 } else if (relevantQuestion.relevance === 'low') {
-                                                    result.points += 5 - parseInt(aQuestion.answer, 10);
+                                                    result.points += Math.max(0, (5 - parseInt(aQuestion.answer, 10)) - weightAdjustment);
                                                 }
                                             });
                                         });
+                                        result.points = result._embedded.relevantQuestions.length > 0 ? result.points / result._embedded.relevantQuestions.length : 0;
                                     });
                                     const recommendation = _.orderBy(_.filter(resultSet._embedded.results, (result) => {
                                         return result.points > 0;
                                     }), ['points'], ['desc'])[0];
-
                                     const existingFeedback = _.find(assessment.resultsetFeedback, (feedback) => {
                                         return feedback.resultsetId === resultSet.id && feedback.resultId === recommendation.id && feedback.feedbackType === 'result';
                                     });
@@ -890,9 +898,8 @@ const storage = require('./../storage');
                                 });
                                 relatedResultSet.recommendation.questions = _.filter(flattenedAnswers, (flat) => {
                                     const found = _.find(relatedResultSet.recommendation._embedded.relevantQuestions, (relevantQuestion) => {
-                                        return relevantQuestion.id === flat.id;
+                                        return relevantQuestion.id === flat.id && ((parseInt(flat.answer, 10) > weightAdjustment && relevantQuestion.relevance === 'high') || (((parseInt(flat.answer, 10) <= weightAdjustment && weightAdjustmentEven) || (parseInt(flat.answer, 10) < weightAdjustment && !weightAdjustmentEven)) && relevantQuestion.relevance === 'low'));
                                     });
-
                                     return found;
                                 });
 
