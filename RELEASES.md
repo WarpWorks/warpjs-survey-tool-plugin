@@ -1,12 +1,20 @@
 # Release Notes
 
+## 1.2.69 - 2019-02-28
+
+- Fix recommendation detail lightbulb overlap.
+
+## 1.2.68 - 2019-02-28
+
+- Fix for iteration view.
+
 ## 1.2.67 - 2019-02-26
 
-- fix for new recommendation algorithm.
+- Fix for new recommendation algorithm.
 
 ## 1.2.66 - 2019-02-26
 
-- #109 new Algorithm for recommendations. 
+- #109 New Algorithm for recommendations. 
 
 ## 1.2.65 - 2019-02-22
 
