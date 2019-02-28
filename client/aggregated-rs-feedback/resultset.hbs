@@ -1,6 +1,6 @@
 {{#if detailedEnabled}}
   {{#if page._embedded.items.length}}
-    <div class="container-fluid survey-tool-section"
+    <div class="container survey-tool-section"
       data-survey-tool-url="{{page._links.self.href}}"
       data-survey-tool-assessment-template-url="{{page._links.assessmentTemplate.href}}"
       >
@@ -43,7 +43,23 @@
                   <table class="feedback">
                     {{#each item._embedded.results as |result|}}
                       <tr>
-                        <td class="headcol">{{result.name}}</td>
+                        <td class="headcol">
+                          {{result.name}}
+                          <div class="thumb-container">
+                            {{#if result.ThumbsUp}}
+                              <button class="thumb thumbsup" data-warpjs-url="{{result._links.thumbsup.href}}">
+                                {{result.ThumbsUp}}
+                                <span class="glyphicon glyphicon-thumbs-up"></span>
+                              </button>
+                            {{/if}}
+                            {{#if result.ThumbsDown}}
+                              <button class="thumb thumbsdown" data-warpjs-url="{{result._links.thumbsdown.href}}">
+                                {{result.ThumbsDown}}
+                                <span class="glyphicon glyphicon-thumbs-down"></span>
+                              </button>
+                            {{/if}}
+                          </div>
+                        </td>
                         {{#each result._embedded.relevantQuestions as |question|}}
                           {{> question-card card=question resultId=result.id}}
                         {{/each}}

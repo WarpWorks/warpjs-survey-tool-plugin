@@ -74,6 +74,37 @@
                         white-space: normal;
                         font-size: 12px;
                         line-height: 1.3em;
+
+                        .thumb-container {
+                            position: absolute;
+                            bottom: 4px;
+                        }
+                    }
+
+                    .thumb-container {
+                        position: relative;
+
+                        .thumb {
+                            border-radius: 5px;
+                            color: #ffffff;
+                            padding: 3px;
+                            margin-right: 5px;
+                            display: inline-block;
+                            border: none;
+
+                            &.thumbsup {
+                                background: #3f6b0d;
+                            }
+
+                            &.thumbsdown {
+                                background: #871200;
+                            }
+
+                            .glyphicon-thumbs-up,
+                            .glyphicon-thumbs-down {
+                                color: #ffffff;
+                            }
+                        }
                     }
 
                     &.long {
@@ -101,32 +132,6 @@
 
                             p {
                                 color: #ffffff;
-                            }
-
-                            .thumb-container {
-                                position: relative;
-
-                                .thumb {
-                                    border-radius: 5px;
-                                    color: #ffffff;
-                                    padding: 3px;
-                                    margin-right: 5px;
-                                    display: inline-block;
-                                    border: none;
-
-                                    &.thumbsup {
-                                        background: #3f6b0d;
-                                    }
-
-                                    &.thumbsdown {
-                                        background: #871200;
-                                    }
-
-                                    .glyphicon-thumbs-up,
-                                    .glyphicon-thumbs-down {
-                                        color: #ffffff;
-                                    }
-                                }
                             }
 
                             .relevance {

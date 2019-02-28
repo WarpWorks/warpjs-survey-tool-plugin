@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.70 - 2019-03-01
+
+- #112 Add result feedback to aggregation view.
+
 ## 1.2.69 - 2019-02-28
 
 - Fix recommendation detail lightbulb overlap.

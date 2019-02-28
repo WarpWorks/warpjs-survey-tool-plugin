@@ -2,22 +2,22 @@
   <div class="card bg-{{card.commentResult}}">
     <p>{{card.name}}</p>
     <div class="thumb-container">
-    {{#if card.ThumbsUp}}
-      <button class="thumb thumbsup" data-warpjs-url="{{card._links.thumbsup.href}}">
-        {{card.ThumbsUp}}
-        <span class="glyphicon glyphicon-thumbs-up"></span>
-      </button>
-    {{/if}}
-    {{#if card.ThumbsDown}}
-      <button class="thumb thumbsdown" data-warpjs-url="{{card._links.thumbsdown.href}}">
-        {{card.ThumbsDown}}
-        <span class="glyphicon glyphicon-thumbs-down"></span>
-      </button>
-    {{/if}}
-    <div class="relevance {{card.relevance}}">
-      <span class="relevance-high glyphicon glyphicon-arrow-up"></span>
-      <span class="relevance-low glyphicon glyphicon-arrow-down"></span>
-    </div>
+      {{#if card.ThumbsUp}}
+        <button class="thumb thumbsup" data-warpjs-url="{{card._links.thumbsup.href}}">
+          {{card.ThumbsUp}}
+          <span class="glyphicon glyphicon-thumbs-up"></span>
+        </button>
+      {{/if}}
+      {{#if card.ThumbsDown}}
+        <button class="thumb thumbsdown" data-warpjs-url="{{card._links.thumbsdown.href}}">
+          {{card.ThumbsDown}}
+          <span class="glyphicon glyphicon-thumbs-down"></span>
+        </button>
+      {{/if}}
+      <div class="relevance {{card.relevance}}">
+        <span class="relevance-high glyphicon glyphicon-arrow-up"></span>
+        <span class="relevance-low glyphicon glyphicon-arrow-down"></span>
+      </div>
     </div>
   </div>
 </td>

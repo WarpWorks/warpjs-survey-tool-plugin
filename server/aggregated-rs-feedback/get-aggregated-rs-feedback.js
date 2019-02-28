@@ -44,9 +44,9 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
             const feedbackDocuments = await feedbackRelationship.getDocuments(persistence, questionnaireDocument[0]);
 
             const getFeedbackByThumbDirection = (thumbDirection, result, question) => {
-                const filteredFeedback = _.filter(feedbackDocuments, (document) => {
-                    const matchesThumbDirection = document.ThumbDirection === thumbDirection;
-                    const matchesAssociations = document.associations && document.associations.length === 3 && document.associations[0].data[0]._id === result.id && document.associations[1].data[0]._id === typeHAL.id && document.associations[2].data[0]._id === question.id;
+                const filteredFeedback = _.filter(feedbackDocuments, (feedbackDocument) => {
+                    const matchesThumbDirection = feedbackDocument.ThumbDirection === thumbDirection;
+                    const matchesAssociations = feedbackDocument.associations && feedbackDocument.associations.length === 3 && feedbackDocument.associations[0].data[0]._id === result.id && feedbackDocument.associations[1].data[0]._id === typeHAL.id && feedbackDocument.associations[2].data[0]._id === question.id;
 
                     return matchesThumbDirection && matchesAssociations;
                 });
@@ -67,6 +67,30 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
                 question[thumbDirection] = filteredFeedback.length;
             };
 
+            const getResultFeedbackByThumbDirection = (thumbDirection, result) => {
+                const filteredFeedback = _.filter(feedbackDocuments, (feedbackDocument) => {
+                    const matchesThumbDirection = feedbackDocument.ThumbDirection === thumbDirection;
+                    const matchesAssociations = feedbackDocument.associations && feedbackDocument.associations.length === 2 && feedbackDocument.FeedbackType === 'result' && feedbackDocument.associations[0].data[0]._id === result.id && feedbackDocument.associations[1].data[0]._id === typeHAL.id;
+
+                    return matchesThumbDirection && matchesAssociations;
+                });
+
+                result.embed(thumbDirection, filteredFeedback.map((feedback) => {
+                    const date = new Date(feedback.lastUpdated);
+                    const feedbackResource = warpjsUtils.createResource('', {
+                        id: feedback.id,
+                        comment: feedback.Comment,
+                        thumbDirection: feedback.ThumbDirection,
+                        typeID: feedback.typeID,
+                        parentID: feedback.parentID,
+                        date: date.toString()
+                    });
+
+                    return feedbackResource;
+                }));
+                result[thumbDirection] = filteredFeedback.length;
+            };
+
             const thumbResult = (thumbsUp, thumbsDown) => {
                 let result = 'neutral';
                 if (thumbsUp !== 0 || thumbsDown !== 0) {
@@ -83,6 +107,10 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
             };
 
             _.each(typeHAL._embedded.results, (result) => {
+                getResultFeedbackByThumbDirection('ThumbsUp', result);
+                getResultFeedbackByThumbDirection('ThumbsDown', result);
+                result.commentResult = thumbResult(parseInt(result.ThumbsUp, 10), parseInt(result.ThumbsDown, 10));
+
                 _.each(result._embedded.relevantQuestions, (question) => {
                     getFeedbackByThumbDirection('ThumbsUp', result, question);
                     getFeedbackByThumbDirection('ThumbsDown', result, question);

@@ -16,7 +16,6 @@ const styleThumbRadio = () => {
 };
 
 module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl, resultsetId, resultId, feedbackType, iterationName, thumbClicked) => {
-    console.log('thumbClicked', thumbClicked);
     let modalId = questionId;
     let modalTitle = 'Feedback on recommendation';
     if (feedbackType === 'result') {
