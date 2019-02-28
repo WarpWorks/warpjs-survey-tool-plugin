@@ -338,11 +338,14 @@ const storage = require('./../storage');
                                 values.imageMap = currentImageArea ? currentImageArea.coords : null;
                                 values.imageHeight = currentImageHeight;
                                 values.imageWidth = currentImageWidth;
-                                const priority = calculatePriority(values.question.priority);
-                                values.priorityHigh = priority === 3;
-                                values.priorityMid = priority === 2;
-                                values.priorityLow = priority === 1;
-                                values.showPriority = values.question._embedded.options.length && !isNaN(parseInt(assessment.detailLevel, 10)) && parseInt(assessment.detailLevel, 10) > 1;
+                                if (values.question) {
+                                    const priority = calculatePriority(values.question.priority);
+                                    values.priorityHigh = priority === 3;
+                                    values.priorityMid = priority === 2;
+                                    values.priorityLow = priority === 1;
+                                    values.showPriority = values.question._embedded.options.length && !isNaN(parseInt(assessment.detailLevel, 10)) && parseInt(assessment.detailLevel, 10) > 1;
+                                }
+
                                 return values;
                             };
 
