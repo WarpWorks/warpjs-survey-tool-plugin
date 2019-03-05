@@ -15,11 +15,12 @@ const styleThumbRadio = () => {
     });
 };
 
-module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl, resultsetId, resultId, feedbackType, iterationName, thumbClicked) => {
+module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl, resultsetId, resultId, feedbackType, iterationName, thumbClicked, resultName) => {
     let modalId = questionId;
-    let modalTitle = 'Feedback on recommendation';
+    let modalTitle = 'Feedback on reasons for recommendations';
     if (feedbackType === 'result') {
         modalId = resultsetId;
+        modalTitle = 'Feedback on recommendation';
     } else if (feedbackType === 'survey') {
         modalId = 'survey-modal';
         modalTitle = 'My feedback is based on:';
@@ -36,7 +37,8 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
             questionId,
             answerName,
             answerNum,
-            questionName
+            questionName,
+            resultName
         }));
     } else if (feedbackType === 'survey') {
         $('> .modal-dialog > .modal-content > .modal-body', modal).html(surveyTemplate());

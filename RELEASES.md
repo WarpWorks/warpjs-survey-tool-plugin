@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.71 - 2019-03-05
+
+- #118 Result question feedback text update.
+
 ## 1.2.70 - 2019-03-01
 
 - #112 Add result feedback to aggregation view.
