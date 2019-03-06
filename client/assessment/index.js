@@ -823,9 +823,10 @@ const storage = require('./../storage');
                                         });
                                         result.points = result._embedded.relevantQuestions.length > 0 ? result.points / result._embedded.relevantQuestions.length : 0;
                                     });
-                                    const recommendation = _.orderBy(_.filter(resultSet._embedded.results, (result) => {
+                                    const orderedRecommendations = _.orderBy(_.filter(resultSet._embedded.results, (result) => {
                                         return result.points > 0;
-                                    }), ['points'], ['desc'])[0];
+                                    }), ['points'], ['desc']);
+                                    const recommendation = orderedRecommendations[0];
                                     const existingFeedback = _.find(assessment.resultsetFeedback, (feedback) => {
                                         return feedback.resultsetId === resultSet.id && feedback.resultId === recommendation.id && feedback.feedbackType === 'result';
                                     });
@@ -834,7 +835,9 @@ const storage = require('./../storage');
                                         recommendation.thumbValue = existingFeedback.thumbValue.toLowerCase();
                                     }
 
+                                    resultSet.showMore = orderedRecommendations.length > 3;
                                     resultSet.recommendation = recommendation;
+                                    resultSet.orderedRecommendations = orderedRecommendations;
                                     resultSet.recommendationName = recommendation ? recommendation.name : null;
                                 });
                                 shared.setSurveyContent($, placeholder, questionnaireRelatedReadingTemplate({readings: result.data._embedded.questionnaires[0]._embedded.resultSets, feedbackUrl: feedbackUrl}));
@@ -895,10 +898,18 @@ const storage = require('./../storage');
                             $(document).on('click', '.releated-read-more', (event) => {
                                 getAssessment();
                                 $('.progress-container, .blue-button-container').css('display', 'none');
-                                const resultSetId = $(event.target).data('result-set');
+                                const resultSetId = $(event.target).data('warpjsResultSet');
                                 const relatedResultSet = _.find(result.data._embedded.questionnaires[0]._embedded.resultSets, (resultSet) => {
                                     return resultSet.id === resultSetId;
                                 });
+
+                                const clickedResultId = $(event.target).data('warpjsResult');
+                                const clickedResult = _.find(relatedResultSet._embedded.results, (result) => {
+                                    return result.id === clickedResultId;
+                                });
+
+                                relatedResultSet.recommendation = clickedResult;
+
                                 relatedResultSet.recommendation.questions = _.filter(flattenedAnswers, (flat) => {
                                     const found = _.find(relatedResultSet.recommendation._embedded.relevantQuestions, (relevantQuestion) => {
                                         return relevantQuestion.id === flat.id && ((parseInt(flat.answer, 10) > weightAdjustment && relevantQuestion.relevance === 'high') || (((parseInt(flat.answer, 10) <= weightAdjustment && weightAdjustmentEven) || (parseInt(flat.answer, 10) < weightAdjustment && !weightAdjustmentEven)) && relevantQuestion.relevance === 'low'));
@@ -1121,6 +1132,10 @@ const storage = require('./../storage');
                                         )
                                     ;
                                 }
+                            });
+
+                            $(document).on('click', '.result-expand-button', (event) => {
+                                $(event.target).closest('.result-card').toggleClass('show-all');
                             });
                         })
                     ;

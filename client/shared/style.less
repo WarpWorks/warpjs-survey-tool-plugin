@@ -528,8 +528,64 @@
         }
     }
 
-    .related-reading {
+    .result-card {
         background-color: #f0f0f0;
+        border: solid 1px #dedede;
+        padding: 0px 20px 0px 20px;
+        margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
+
+        &.show-more-start {
+            height: 370px;
+            padding-bottom: 50px;
+        }
+
+        .see-less {
+            display: none;
+        }
+
+        &.show-all {
+            height: auto;
+
+            .see-more {
+                display: none;
+            }
+            .see-less {
+                display: inline;
+            }
+        }
+
+        .blue-button-container {
+            position: absolute;
+            bottom: 0px;
+            width: calc(100% - 40px);
+            background-color: #f0f0f0;
+
+            .result-expand-position {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .result-expand-button.blue-button {
+                    display: inline-block;
+                    margin-bottom: 20px;
+                    width: 200px;
+                    background-color: #ffffff;
+                    border: solid 1px #5296b3;
+                    text-align: center;
+
+                    span {
+                        color: #5296b3;
+                    }
+                }
+            }
+        }
+    }
+
+
+    .related-reading {
+        background-color: #ffffff;
         border: solid 1px #dedede;
         padding: 10px 100px 30px 10px;
         margin: 20px 0px 20px 0px;
@@ -549,6 +605,49 @@
             font-size: 20px;
             text-transform: uppercase;
             line-height: 20px;
+        }
+
+        .rank {
+            color: #dea128;
+            position: absolute;
+            top: -5px;
+            font-size: 16px;
+            display: none;
+        }
+
+        &.rank-0 .rank.first {
+            display: block;
+        }
+
+        &.rank-1 .rank.second {
+            display: block;
+        }
+
+        &.rank-2 .rank.third {
+            display: block;
+        }
+
+        .lightbulb-rank {
+            display: none;
+            font-size: 18px;
+            font-weight: bold;
+            position: absolute;
+            right: 31px;
+            top: 24px;
+            color: #ffffff;
+        }
+
+        &.rank-0 .lightbulb-rank.first {
+            display: block;
+            right: 33px;
+        }
+
+        &.rank-1 .lightbulb-rank.second {
+            display: block;
+        }
+
+        &.rank-2 .lightbulb-rank.third {
+            display: block;
         }
 
         .related-reading-image {

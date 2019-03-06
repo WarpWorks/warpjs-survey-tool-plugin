@@ -8,34 +8,70 @@
         <p>The following contains a list of related readings that directly apply to your project. Using IIC's Actionable Intelligence Algorithms, we were able to create individual matches for you.</p>
       </div>
     </div>
-    <div class="row">
-      {{#each readings}}
-        {{#if recommendationName}}
-          <div class="col-sm-4">
-            <div class="related-reading">
-              <h3>{{name}}</h3>
-              <div class="related-reading-image"></div>
-              <h2>{{recommendationName}}</h2>
-              <a class="releated-read-more" data-result-set="{{id}}">Read more</a>
-              <div
-                class="result-feedback-button-container {{recommendation.thumbValue}}"
-                data-warpjs-feedback-type="result"
-                data-warpjs-resultset-id="{{id}}"
-                data-warpjs-result-id="{{recommendation.id}}"
-                data-warpjs-submit-url="{{recommendation._links.submitFeedback.href}}"
-              >
-                <div class="thumbs-up result-feedback-button">
-                  <span class="glyphicon glyphicon-thumbs-up"></span>
-                </div>
-                <div class="thumbs-down result-feedback-button">
-                  <span class="glyphicon glyphicon-thumbs-down"></span>
+    {{#each readings as |resultset|}}
+      {{#if resultset.orderedRecommendations.length}}
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="result-card{{#if showMore}} show-more-start{{/if}}">
+              <div class="row">
+                <div class="col-sm-12">
+                  <h3>{{resultset.name}}</h3>
                 </div>
               </div>
+              <div class="row">
+                {{#each resultset.orderedRecommendations as |orderedRecommendation|}}
+                  <div class="col-sm-4">
+                    <div class="related-reading rank-{{@index}}">
+                      <div class="related-reading-image">
+                        <div class="lightbulb-rank first">1st</div>
+                        <div class="lightbulb-rank second">2nd</div>
+                        <div class="lightbulb-rank third">3rd</div>
+                      </div>
+                      <h4 class="rank first">Best Fit</h4>
+                      <h4 class="rank second">2nd Best Fit</h4>
+                      <h4 class="rank third">3rd Best Fit</h4>
+
+                      <h2>{{orderedRecommendation.name}}</h2>
+                      <a class="releated-read-more"
+                        data-warpjs-result-set="{{resultset.id}}"
+                        data-warpjs-result="{{orderedRecommendation.id}}"
+                        data-warpjs-self-link="{{orderedRecommendation.selfLink}}"
+                      >
+                        Read more
+                      </a>
+                      <div
+                        class="result-feedback-button-container {{orderedRecommendation.thumbValue}}"
+                        data-warpjs-feedback-type="result"
+                        data-warpjs-resultset-id="{{id}}"
+                        data-warpjs-result-id="{{orderedRecommendation.id}}"
+                        data-warpjs-submit-url="{{orderedRecommendation._links.submitFeedback.href}}"
+                      >
+                        <div class="thumbs-up result-feedback-button">
+                          <span class="glyphicon glyphicon-thumbs-up"></span>
+                        </div>
+                        <div class="thumbs-down result-feedback-button">
+                          <span class="glyphicon glyphicon-thumbs-down"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {{/each}}
+              </div>
+              {{#if showMore}}
+                <div class="blue-button-container">
+                  <div class="result-expand-position">
+                    <div class="blue-button result-expand-button">
+                      <span class="see-more">See more recommendations</span>
+                      <span class="see-less">See less recommendations</span>
+                    </div>
+                  </div>
+                </div>
+              {{/if}}
             </div>
           </div>
-        {{/if}}
-      {{/each}}
-    </div>
+        </div>
+      {{/if}}
+    {{/each}}
   </div>
 </div>
 <div class="questionnaire question buttons-fixed">
