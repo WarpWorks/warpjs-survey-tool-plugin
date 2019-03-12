@@ -895,6 +895,7 @@ const storage = require('./../storage');
                                         // since stars are rounded up, mod === 0 means it should be a full star.
                                         result.starRemainder = unroundedStars % 1 === 0 ? 2 : Math.round((unroundedStars % 1) * 2);
                                         result.stars = Math.ceil(unroundedStars);
+                                        result.textRank = Math.max(Math.floor(unroundedStars), 1);
                                     });
 
                                     resultSet.orderedRecommendations = _.orderBy(_.filter(resultSet._embedded.results, (result) => {
