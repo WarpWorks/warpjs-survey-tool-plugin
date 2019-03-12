@@ -1,0 +1,48 @@
+<div class="main-content-overflow">
+  <div class="questionnaire related-all"
+      data-warpjs-resultset-id="{{resultSet.id}}">
+    <div class="row">
+      <div>{{resultSet.name}}</div>
+      <div>{{resultSet.recommendationName}}</div>
+      {{#if resultSet.recommendationName}}
+        test
+        {{#each orderedRecommendations as |orderedRecommendation|}}
+          <div class="recommendation-full">
+            <div class="star-container star-number-{{stars}}">
+              <div class="star star1">
+                <span class="star-icon"></span>
+                <span class="star-icon-remainder star-icon-remainder-{{orderedRecommendation.starRemainder}}"></span>
+              </div>
+              <div class="star star2">
+                <span class="star-icon"></span>
+                <span class="star-icon-remainder star-icon-remainder-{{orderedRecommendation.starRemainder}}"></span>
+              </div>
+              <div class="star star3">
+                <span class="star-icon"></span>
+                <span class="star-icon-remainder star-icon-remainder-{{orderedRecommendation.starRemainder}}"></span>
+              </div>
+              <div class="star star4">
+                <span class="star-icon"></span>
+                <span class="star-icon-remainder star-icon-remainder-{{orderedRecommendation.starRemainder}}"></span>
+              </div>
+              <div class="star star5">
+                <span class="star-icon"></span>
+                <span class="star-icon-remainder star-icon-remainder-{{orderedRecommendation.starRemainder}}"></span>
+              </div>
+            </div>
+            <h3>{{orderedRecommendation.name}}</h3>
+            <a class="related-all-read-more" data-warpjs-result="{{orderedRecommendation.id}}">Read more</a>
+            <div class="related-reading-image"></div>
+          </div>
+        {{/each}}
+      {{/if}}
+    </div>
+  </div>
+</div>
+<div class="questionnaire question buttons-fixed">
+  <div class="row buttons">
+    <div class="col-sm-12">
+      <a class="related-details-back">Back to Related Readings</a>
+    </div>
+  </div>
+</div>

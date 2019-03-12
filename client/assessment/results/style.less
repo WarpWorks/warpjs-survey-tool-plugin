@@ -189,54 +189,152 @@
         }
     }
 
-    .star-container {
+    .related-reading .star-container {
         position: absolute;
         left: 10px;
         bottom: 60px;
+    }
 
+    .star-container {
         .star {
             display: inline-block;
             marign-left: 10px;
 
-            span {
-                color: #ffffff;
+            .star-icon,
+            .star-icon-remainder {
+                background-image: url(images/star-0.svg);
+                width: 20px;
+                height: 20px;
+                display: inline-block;
+                background-size: contain;
+                background-position: center center;
+                background-repeat: no-repeat;
+            }
+
+            .star-icon-remainder {
+                display: none;
             }
         }
 
+        .star .star-icon-remainder-0 {
+            background-image: url(images/star-0.svg);
+        }
+
+        .star .star-icon-remainder-1 {
+            background-image: url(images/star-1.svg);
+        }
+
+        .star .star-icon-remainder-2 {
+            background-image: url(images/star-2.svg);
+        }
+
         &.star-number-1 {
-            .star.star1 span {
-                color: #fcb932;
+            .star.star1 .star-icon {
+                display: none;
+            }
+
+            .star.star1 .star-icon-remainder {
+                display: inline-block;
             }
         }
 
         &.star-number-2 {
-            .star.star1 span,
-            .star.star2 span {
-                color: #fcb932;
+            .star.star1 .star-icon {
+                background-image: url(images/star-2.svg);
+            }
+
+            .star.star2 .star-icon {
+                display: none;
+            }
+
+            .star.star2 .star-icon-remainder {
+                display: inline-block;
             }
         }
 
         &.star-number-3 {
-            .star.star1 span,
-            .star.star2 span,
-            .star.star3 span  {
-                color: #fcb932;
+            .star.star1 .star-icon,
+            .star.star2 .star-icon {
+                background-image: url(images/star-2.svg);
+            }
+
+            .star.star3 .star-icon {
+                display: none;
+            }
+
+            .star.star3 .star-icon-remainder {
+                display: inline-block;
             }
         }
 
         &.star-number-4 {
-            .star.star1 span,
-            .star.star2 span,
-            .star.star3 span,
-            .star.star4 span  {
-                color: #fcb932;
+            .star.star1 .star-icon,
+            .star.star2 .star-icon,
+            .star.star3 .star-icon {
+                background-image: url(images/star-2.svg);
+            }
+
+            .star.star4 .star-icon {
+                display: none;
+            }
+
+            .star.star4 .star-icon-remainder {
+                display: inline-block;
             }
         }
 
         &.star-number-5 {
-            .star {
-                color: #fcb932;
+            .star-icon {
+                background-image: url(images/star-2.svg);
             }
+
+            .star.star5 .star-icon {
+                display: none;
+            }
+
+            .star.star5 .star-icon-remainder {
+                display: inline-block;
+            }
+        }
+    }
+
+    .recommendation-full {
+        background-color: #f0f0f0;
+        border: solid 1px #dedede;
+        padding: 20px 100px 20px 10px;
+        margin: 28px 0px 20px 0px;
+        position: relative;
+
+        .star-container {
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        h3 {
+            display: inline-block;
+            font-size: 16px;
+            vertical-align: top;
+            margin: 0px;
+            width: calc(100% - 165px);
+        }
+
+        .related-all-read-more {
+            position: absolute;
+            right: 70px;
+            top: 30px;
+        }
+
+        .related-reading-image {
+            position: absolute;
+            right: 10px;
+            top: -30px;
+            background-image: url(images/bulb.svg);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center center;
+            width: 49px;
+            height: 95px;
         }
     }
 }

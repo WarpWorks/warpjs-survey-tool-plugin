@@ -18,23 +18,28 @@
               <h2>{{recommendationName}}</h2>
               <div class="star-container star-number-{{recommendation.stars}}">
                 <div class="star star1">
-                  <span class="glyphicon glyphicon-star"></span>
+                  <span class="star-icon"></span>
+                  <span class="star-icon-remainder star-icon-remainder-{{recommendation.starRemainder}}"></span>
                 </div>
                 <div class="star star2">
-                  <span class="glyphicon glyphicon-star"></span>
+                  <span class="star-icon"></span>
+                  <span class="star-icon-remainder star-icon-remainder-{{recommendation.starRemainder}}"></span>
                 </div>
                 <div class="star star3">
-                  <span class="glyphicon glyphicon-star"></span>
+                  <span class="star-icon"></span>
+                  <span class="star-icon-remainder star-icon-remainder-{{recommendation.starRemainder}}"></span>
                 </div>
                 <div class="star star4">
-                  <span class="glyphicon glyphicon-star"></span>
+                  <span class="star-icon"></span>
+                  <span class="star-icon-remainder star-icon-remainder-{{recommendation.starRemainder}}"></span>
                 </div>
                 <div class="star star5">
-                  <span class="glyphicon glyphicon-star"></span>
+                  <span class="star-icon"></span>
+                  <span class="star-icon-remainder star-icon-remainder-{{recommendation.starRemainder}}"></span>
                 </div>
               </div>
               <a class="related-read-more" data-warpjs-result-set="{{id}}">Read more</a>
-              <button class="related-all" data-warpjs-result-set="{{id}}">All tools in this category</button>
+              <button class="show-related-all" data-warpjs-result-set="{{id}}">All tools in this category</button>
               <div
                 class="result-feedback-button-container {{recommendation.thumbValue}}"
                 data-warpjs-feedback-type="result"

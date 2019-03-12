@@ -18,6 +18,7 @@ const questionnaireSummaryTemplate = require('./results/questionnaire-summary.hb
 const questionnaireDetailsTemplate = require('./results/questionnaire-details.hbs');
 const questionnaireRelatedReadingTemplate = require('./results/questionnaire-related-readings.hbs');
 const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-related-reading-detail.hbs');
+const questionnaireRelatedAllTemplate = require('./results/questionnaire-related-all.hbs');
 const emailFormTemplate = require('./results/email-form-template.hbs');
 const shared = require('./../shared');
 const storage = require('./../storage');
@@ -890,8 +891,16 @@ const storage = require('./../storage');
                                             });
                                         });
                                         result.points = result._embedded.relevantQuestions.length > 0 ? result.points / result._embedded.relevantQuestions.length : 0;
-                                        result.stars = Math.max(Math.ceil(result.points / Math.floor(numberOfOptions / 2) * 5), 1);
+                                        const unroundedStars = result.points / Math.floor(numberOfOptions / 2) * 5;
+                                        // since stars are rounded up, mod === 0 means it should be a full star.
+                                        result.starRemainder = unroundedStars % 1 === 0 ? 2 : Math.round((unroundedStars % 1) * 2);
+                                        result.stars = Math.ceil(unroundedStars);
                                     });
+
+                                    resultSet.orderedRecommendations = _.orderBy(_.filter(resultSet._embedded.results, (result) => {
+                                        return result.points > 0;
+                                    }), ['points'], ['desc']);
+
                                     const recommendation = _.orderBy(_.filter(resultSet._embedded.results, (result) => {
                                         return result.points > 0;
                                     }), ['points'], ['desc'])[0];
@@ -962,21 +971,16 @@ const storage = require('./../storage');
                                 shared.setSurveyContent($, placeholder, emailFormTemplate());
                             });
 
-                            $(document).on('click', '.related-read-more', (event) => {
-                                getAssessment();
-                                $('.progress-container, .blue-button-container').css('display', 'none');
+                            $(document).on('click', '.show-related-all', (event) => {
                                 const resultSetId = $(event.target).data('warpjsResultSet');
                                 const relatedResultSet = _.find(result.data._embedded.questionnaires[0]._embedded.resultSets, (resultSet) => {
                                     return resultSet.id === resultSetId;
                                 });
 
-                                // const clickedResultId = $(event.target).data('warpjsResult');
-                                // const clickedResult = _.find(relatedResultSet._embedded.results, (result) => {
-                                //     return result.id === clickedResultId;
-                                // });
+                                shared.setSurveyContent($, placeholder, questionnaireRelatedAllTemplate({resultSet: relatedResultSet, orderedRecommendations: relatedResultSet.orderedRecommendations}));
+                            });
 
-                                // relatedResultSet.recommendation = clickedResult;
-
+                            const readMoreSetup = (resultSetId, relatedResultSet) => {
                                 relatedResultSet.recommendation.questions = _.filter(flattenedAnswers, (flat) => {
                                     const found = _.find(relatedResultSet.recommendation._embedded.relevantQuestions, (relevantQuestion) => {
                                         return relevantQuestion.id === flat.id && ((parseInt(flat.answer, 10) > weightAdjustment && relevantQuestion.relevance === 'high') || (((parseInt(flat.answer, 10) <= weightAdjustment && weightAdjustmentEven) || (parseInt(flat.answer, 10) < weightAdjustment && !weightAdjustmentEven)) && relevantQuestion.relevance === 'low'));
@@ -1015,6 +1019,34 @@ const storage = require('./../storage');
                                 }
 
                                 shared.setSurveyContent($, placeholder, questionnaireRelatedDetailsTemplate({resultSet: relatedResultSet, contentPreview: contentPreview, href: contentDocumentHref, feedbackUrl: feedbackUrl}));
+                            };
+
+                            $(document).on('click', '.related-read-more', (event) => {
+                                getAssessment();
+                                $('.progress-container, .blue-button-container').css('display', 'none');
+                                const resultSetId = $(event.target).data('warpjsResultSet');
+                                const relatedResultSet = _.find(result.data._embedded.questionnaires[0]._embedded.resultSets, (resultSet) => {
+                                    return resultSet.id === resultSetId;
+                                });
+
+                                readMoreSetup(resultSetId, relatedResultSet);
+                            });
+
+                            $(document).on('click', '.related-all-read-more', (event) => {
+                                getAssessment();
+                                $('.progress-container, .blue-button-container').css('display', 'none');
+                                const resultSetId = $('.related-all').data('warpjsResultsetId');
+                                const relatedResultSet = _.find(result.data._embedded.questionnaires[0]._embedded.resultSets, (resultSet) => {
+                                    return resultSet.id === resultSetId;
+                                });
+                                const clickedResultId = $(event.target).data('warpjsResult');
+                                const clickedResult = _.find(relatedResultSet._embedded.results, (result) => {
+                                    return result.id === clickedResultId;
+                                });
+
+                                relatedResultSet.recommendation = clickedResult;
+
+                                readMoreSetup(resultSetId, relatedResultSet);
                             });
 
                             $(document).on('click', '.related-details-back', () => {
