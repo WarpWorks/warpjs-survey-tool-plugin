@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.72 - 2019-03-12
+
+- #117 Recommended ranking.
+
 ## 1.2.71 - 2019-03-05
 
 - #118 Result question feedback text update.
