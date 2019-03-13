@@ -65,21 +65,35 @@
                   </div>
                   <span class="summary-question">{{name}}</span>
                   {{#if moreInformation}}
-                    <a href="{{moreInformation}}" class="summary-more-info">more information</a>
+                    <a href="{{moreInformation}}" target="_blank" class="summary-more-info">more information</a>
                   {{/if}}
                   {{#if allStatuses.length}}
                     <div class="detail-status-cutoff">
                       <div class="detail-question-status-container">
                         {{#each allStatuses}}
                           {{#if isSelected}}
-                            <div class="blue-card current-status">
-                              <p class="blue-card-title">Current Status</p>
+                            <div class="blue-card current-status status-number-{{@index}}">
+                              <p class="blue-card-title">
+                                Current Status:
+                                <span class="status-label status-label-0"> Establishing</span>
+                                <span class="status-label status-label-1"> Emerging</span>
+                                <span class="status-label status-label-2"> Developing</span>
+                                <span class="status-label status-label-3"> Comprehensive</span>
+                                <span class="status-label status-label-4"> Best Practice</span>
+                              </p>
                               <p>{{currentStatus}}</p>
                             </div>
                           {{else}}
-                            <div class="blue-card next-level">
-                              <p class="blue-card-title">Next Level</p>
-                              <p>{{currentStatus}}</p>
+                            <div class="blue-card next-level status-number-{{@index}}">
+                              <p class="blue-card-title">
+                                <span class="status-next-level">Next Level: </span>
+                                <span class="status-label status-label-0">Establishing</span>
+                                <span class="status-label status-label-1">Emerging</span>
+                                <span class="status-label status-label-2">Developing</span>
+                                <span class="status-label status-label-3">Comprehensive</span>
+                                <span class="status-label status-label-4">Best Practice</span>
+                              </p>
+                              <p>{{{currentStatus}}}</p>
                             </div>
                           {{/if}}
                           {{#unless @last}}

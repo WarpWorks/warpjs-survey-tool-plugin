@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.75 - 2019-03-18
+
+- #119 Maturity Model updates: detail level separation, status view labels.
+
 ## 1.2.74 - 2019-03-14
 
 - Fix missing definition for routes.

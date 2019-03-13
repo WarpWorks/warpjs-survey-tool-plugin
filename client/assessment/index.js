@@ -75,6 +75,8 @@ const storage = require('./../storage');
                 ));
             }
 
+            const isMM = result.data._embedded.questionnaires[0].key === 'mm';
+
             if (result.error) {
                 shared.setSurveyContent($, placeholder, errorTemplate(result.data));
             } else {
@@ -115,7 +117,8 @@ const storage = require('./../storage');
                 const filterContent = () => {
                     categories = _.filter(assessment.answers[0]._embedded.categories, (progressCategory) => {
                         const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
-                            return progressQuestion.detailLevel <= assessment.detailLevel;
+                            console.log('progressQuestion.detailLevel === assessment.detailLevel', progressQuestion.detailLevel, typeof progressQuestion.detailLevel, assessment.detailLevel, typeof assessment.detailLevel);
+                            return isMM ? parseInt(progressQuestion.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : progressQuestion.detailLevel <= assessment.detailLevel;
                         });
                         return questionDetailLevels.length > 0;
                     });
@@ -123,7 +126,7 @@ const storage = require('./../storage');
                         return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                     }) : [];
                     questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                        return question.detailLevel <= assessment.detailLevel;
+                        return isMM ? parseInt(question.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : question.detailLevel <= assessment.detailLevel;
                     }) : [];
                 };
 
@@ -168,7 +171,7 @@ const storage = require('./../storage');
                                 assessment.detailLevel = $("input[name='questionnaire-level'][checked='checked']").val();
                                 categories = _.filter(assessment.answers[0]._embedded.categories, (progressCategory) => {
                                     const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
-                                        return progressQuestion.detailLevel <= assessment.detailLevel;
+                                        return isMM ? parseInt(progressQuestion.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : progressQuestion.detailLevel <= assessment.detailLevel;
                                     });
                                     return questionDetailLevels.length > 0;
                                 });
@@ -205,15 +208,15 @@ const storage = require('./../storage');
                             const updatePointers = (direction) => {
                                 categories = _.filter(categories, (progressCategory) => {
                                     const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
-                                        return progressQuestion.detailLevel <= assessment.detailLevel;
+                                        return isMM ? parseInt(progressQuestion.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : progressQuestion.detailLevel <= assessment.detailLevel;
                                     });
                                     return questionDetailLevels.length > 0;
                                 });
-                                iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
+                                iterations = categories[categoryPointer] ? _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
                                     return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
-                                });
+                                }) : [];
                                 questions = iterations.length ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                    return question.detailLevel <= assessment.detailLevel;
+                                    return isMM ? parseInt(question.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : question.detailLevel <= assessment.detailLevel;
                                 }) : [];
                                 let outOfBounds = '';
                                 if (direction === 'next') {
@@ -231,7 +234,7 @@ const storage = require('./../storage');
                                                 });
 
                                                 questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                                    return question.detailLevel <= assessment.detailLevel;
+                                                    return isMM ? parseInt(question.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : question.detailLevel <= assessment.detailLevel;
                                                 }) : [];
                                                 if (categories[categoryPointer].isRepeatable) {
                                                     questionPointer = -1;
@@ -242,7 +245,7 @@ const storage = require('./../storage');
                                             questionPointer = 0;
 
                                             questions = _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                                return question.detailLevel <= assessment.detailLevel;
+                                                return isMM ? parseInt(question.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : question.detailLevel <= assessment.detailLevel;
                                             });
                                         }
                                     } else {
@@ -259,7 +262,7 @@ const storage = require('./../storage');
                                                     return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                                                 });
                                                 questions = iterations.length ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                                    return question.detailLevel <= assessment.detailLevel;
+                                                    return isMM ? parseInt(question.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : question.detailLevel <= assessment.detailLevel;
                                                 }) : [];
                                                 iterationPointer = iterations.length === 0 ? 0 : iterations.length - 1;
                                                 questionPointer = questions.length - 1;
@@ -470,7 +473,7 @@ const storage = require('./../storage');
                                         return _.flatten(_.map(iteration._embedded.questions, (question) => {
                                             let position = null;
                                             let positionResult = null;
-                                            if (question.detailLevel <= assessment.detailLevel) {
+                                            if ((isMM && parseInt(question.detailLevel, 10) === parseInt(assessment.detailLevel, 10)) || (!isMM && question.detailLevel <= assessment.detailLevel)) {
                                                 const categoryQ = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (questionCategory) => {
                                                     return questionCategory.id === category.id;
                                                 });
@@ -485,7 +488,7 @@ const storage = require('./../storage');
                                                 const priority = calculatePriority(question.priority);
                                                 const positionNumber = parseInt(position);
                                                 let positions = [];
-                                                if (assessment.detailLevel !== '1' && result.data._embedded.questionnaires[0].key === 'mm') {
+                                                if (assessment.detailLevel !== '1' && isMM) {
                                                     for (let i = 0; i < priority; i++) {
                                                         positions.push(positionNumber);
                                                     }
@@ -545,7 +548,7 @@ const storage = require('./../storage');
                                     });
                                     const answersList = _.map(category._embedded.iterations, (iteration) => {
                                         const iterationQ = _.map(iteration._embedded.questions, (question) => {
-                                            if (question.detailLevel <= assessment.detailLevel) {
+                                            if ((isMM && parseInt(question.detailLevel, 10) === parseInt(assessment.detailLevel, 10)) || (!isMM && question.detailLevel <= assessment.detailLevel)) {
                                                 const questionQ = question ? _.find(categoryQ._embedded.questions, (questionQuestion) => {
                                                     return questionQuestion.id === question.id;
                                                 }) : null;
@@ -665,7 +668,7 @@ const storage = require('./../storage');
                                         createImageMapElements(values.imageMap);
                                     }
                                 } else {
-                                    if (currentCategory.name === constants.specializedTemplates.introCategory) {
+                                    if (currentCategory && currentCategory.name === constants.specializedTemplates.introCategory) {
                                         const currentQuestion = questions[questionPointer] ? _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
                                             return question.id === questions[questionPointer].id;
                                         })) : null;
@@ -753,6 +756,7 @@ const storage = require('./../storage');
                                         }
                                     )
                                 }));
+                                $('.current-status ~ div').addClass('show-status-next');
                                 $('.has-comments').append('<a class="has-comments-after" data-toggle="modal" data-target="#comments-modal"></a>');
                                 $(document).on('click', '.has-comments-after', (event) => {
                                     const comment = $(event.target).parent().data('comments');
@@ -776,81 +780,13 @@ const storage = require('./../storage');
                             let weightAdjustment = 0;
                             let weightAdjustmentEven = false;
 
-                            // const relatedReadingSetup = () => {
-                            //     flattenedAnswers = [];
-                            //     let numberOfOptions = 0;
-                            //     _.each(assessment.answers[0]._embedded.categories, (rCategory) => {
-                            //         _.each(rCategory._embedded.iterations, (rIteration) => {
-                            //             _.each(rIteration._embedded.questions, (rQuestion) => {
-                            //                 if (rQuestion.detailLevel <= assessment.detailLevel && rQuestion.answer) {
-                            //                     const questionCategory = rCategory ? _.find(result.data._embedded.questionnaires[0]._embedded.categories, (qCategory) => {
-                            //                         return qCategory.id === rCategory.id;
-                            //                     }) : null;
-                            //                     const questionQuestion = questionCategory ? _.find(questionCategory._embedded.questions, (qQuestion) => {
-                            //                         return qQuestion.id === rQuestion.id;
-                            //                     }) : null;
-                            //                     numberOfOptions = Math.max(numberOfOptions, questionQuestion._embedded.options.length);
-                            //                     const questionAnswer = questionQuestion ? _.find(questionQuestion._embedded.options, (qOption) => {
-                            //                         return qOption.id === rQuestion.answer;
-                            //                     }) : null;
-                            //                     flattenedAnswers.push({
-                            //                         id: rQuestion.id,
-                            //                         answer: questionAnswer ? questionAnswer.position : null,
-                            //                         questionName: questionQuestion ? questionQuestion.name : null,
-                            //                         answerName: questionAnswer ? questionAnswer.name : null
-                            //                     });
-                            //                 }
-                            //             });
-                            //         });
-                            //     });
-
-                            //     weightAdjustment = Math.ceil(numberOfOptions / 2);
-                            //     weightAdjustmentEven = numberOfOptions % 2 === 0;
-
-                            //     _.each(result.data._embedded.questionnaires[0]._embedded.resultSets, (resultSet) => {
-                            //         resultSet.recommendation = null;
-                            //         _.each(resultSet._embedded.results, (result) => {
-                            //             result.points = 0;
-                            //             _.each(result._embedded.relevantQuestions, (relevantQuestion) => {
-                            //                 _.each(relevantQuestion ? _.filter(flattenedAnswers, (aQuestion) => {
-                            //                     return aQuestion.id === relevantQuestion.id;
-                            //                 }) : null, (aQuestion) => {
-                            //                     if (relevantQuestion.relevance === 'high') {
-                            //                         result.points += Math.max(0, parseInt(aQuestion.answer, 10) - weightAdjustment);
-                            //                     } else if (relevantQuestion.relevance === 'low') {
-                            //                         result.points += Math.max(0, (5 - parseInt(aQuestion.answer, 10)) - weightAdjustment);
-                            //                     }
-                            //                 });
-                            //             });
-                            //             result.points = result._embedded.relevantQuestions.length > 0 ? result.points / result._embedded.relevantQuestions.length : 0;
-                            //         });
-                            //         const orderedRecommendations = _.orderBy(_.filter(resultSet._embedded.results, (result) => {
-                            //             return result.points > 0;
-                            //         }), ['points'], ['desc']);
-                            //         const recommendation = orderedRecommendations[0];
-                            //         const existingFeedback = _.find(assessment.resultsetFeedback, (feedback) => {
-                            //             return feedback.resultsetId === resultSet.id && feedback.resultId === recommendation.id && feedback.feedbackType === 'result';
-                            //         });
-
-                            //         if (existingFeedback) {
-                            //             recommendation.thumbValue = existingFeedback.thumbValue.toLowerCase();
-                            //         }
-
-                            //         resultSet.showMore = orderedRecommendations.length > 3;
-                            //         resultSet.recommendation = recommendation;
-                            //         resultSet.orderedRecommendations = orderedRecommendations;
-                            //         resultSet.recommendationName = recommendation ? recommendation.name : null;
-                            //     });
-                            //     shared.setSurveyContent($, placeholder, questionnaireRelatedReadingTemplate({readings: result.data._embedded.questionnaires[0]._embedded.resultSets, feedbackUrl: feedbackUrl}));
-                            // };
-
                             const relatedReadingSetup = () => {
                                 flattenedAnswers = [];
                                 let numberOfOptions = 0;
                                 _.each(assessment.answers[0]._embedded.categories, (rCategory) => {
                                     _.each(rCategory._embedded.iterations, (rIteration) => {
                                         _.each(rIteration._embedded.questions, (rQuestion) => {
-                                            if (rQuestion.detailLevel <= assessment.detailLevel && rQuestion.answer) {
+                                            if (((isMM && parseInt(rQuestion.detailLevel, 10) === parseInt(assessment.detailLevel, 10)) || (!isMM && rQuestion.detailLevel <= assessment.detailLevel)) && rQuestion.answer) {
                                                 const questionCategory = rCategory ? _.find(result.data._embedded.questionnaires[0]._embedded.categories, (qCategory) => {
                                                     return qCategory.id === rCategory.id;
                                                 }) : null;
@@ -929,7 +865,7 @@ const storage = require('./../storage');
                                 return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                             });
                             questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                return question.detailLevel <= assessment.detailLevel;
+                                return isMM ? parseInt(question.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : question.detailLevel <= assessment.detailLevel;
                             }) : [];
 
                             updateQuestionContent();
@@ -1108,7 +1044,7 @@ const storage = require('./../storage');
                                         });
                                         iterationPointer = iterations.length - 1;
                                         questions = iterations.length ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                            return question.detailLevel <= assessment.detailLevel;
+                                            return isMM ? parseInt(question.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : question.detailLevel <= assessment.detailLevel;
                                         }) : [];
                                         questionPointer = questions.length ? questions.length - 1 : -1;
 
@@ -1123,7 +1059,7 @@ const storage = require('./../storage');
                                             return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                                         });
                                         questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                            return question.detailLevel <= assessment.detailLevel;
+                                            return isMM ? parseInt(question.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : question.detailLevel <= assessment.detailLevel;
                                         }) : [];
 
                                         if (categories[categoryPointer].isRepeatable) {
