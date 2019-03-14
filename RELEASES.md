@@ -1,5 +1,13 @@
 # Release Notes
 
+## 1.2.74 - 2019-03-14
+
+- Fix missing definition for routes.
+
+## 1.2.73 - 2019-03-12
+
+- Re-publish to npm.
+
 ## 1.2.72 - 2019-03-12
 
 - #117 Recommended ranking.
