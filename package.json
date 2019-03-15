@@ -75,7 +75,7 @@
   "dependencies": {
     "@warp-works/warpjs-action-plugin": "1.2",
     "bluebird": "~3.5.2",
-    "d3": "^5.9.1",
+    "d3": "^5.9.2",
     "debug": "~3.1.0",
     "grunt-contrib-copy": "~1.0.0",
     "lodash": "~4.17.x",
