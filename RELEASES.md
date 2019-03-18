@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.76 - 2019-03-18
+
+- #116 Spider diagram demo setup.
+
 ## 1.2.75 - 2019-03-18
 
 - #119 Maturity Model updates: detail level separation, status view labels.

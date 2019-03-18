@@ -3,6 +3,7 @@ module.exports = {
         introCategory: 'Introduction',
         description: 'Project Description',
         details: 'Levels of Detail',
-        create: 'Privacy'
+        create: 'Privacy',
+        spider: 'Spider Diagram'
     }
 };
