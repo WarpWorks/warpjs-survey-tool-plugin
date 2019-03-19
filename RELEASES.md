@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.79 - 2019-03-19
+
+- Remove option level from spider diagram.
+
 ## 1.2.78 - 2019-03-19
 
 - Bump version.

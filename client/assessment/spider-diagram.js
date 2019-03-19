@@ -7,11 +7,7 @@ module.exports = ($, questionnaire) => {
     const radius = width / 2;
     const questionnaireChildren = _.map(questionnaire._embedded.categories, (category) => {
         const categoryChildren = _.map(category._embedded.questions, (question) => {
-            const questionChildren = question._embedded.options.length ? _.map(question._embedded.options, (option) => {
-                return {name: option.name};
-            }) : [];
-
-            return {name: question.name, children: questionChildren};
+            return {name: question.name};
         });
 
         return {name: category.name, children: categoryChildren};
