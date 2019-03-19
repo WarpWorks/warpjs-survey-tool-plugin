@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.78 - 2019-03-19
+
+- Bump version.
+
 ## 1.2.77 - 2019-03-19
 
 - Fix html parsing in selected status for MM. 
