@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.77 - 2019-03-19
+
+- Fix html parsing in selected status for MM. 
+
 ## 1.2.76 - 2019-03-18
 
 - #116 Spider diagram demo setup.
