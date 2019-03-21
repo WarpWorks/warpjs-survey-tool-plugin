@@ -268,14 +268,15 @@
                 position: relative;
                 overflow: hidden;
                 padding: 0px calc((100% - 35vw) / 2);
+                display: flex;
 
                 .blue-card {
                     padding: 20px;
+                    display:inline-block;
                     background-color: #edfaff;
-                    display: inline-block;
                     margin: 15px 0px;
                     width: 35vw;
-                    vertical-align: middle;
+                    flex: 1 0 auto;
 
                     p {
                         font-size: 11px;
@@ -294,9 +295,17 @@
                     display: inline-block;
                     margin: 5px 0px;
                     width: 6vw;
+                    min-width: 6vw;
                     vertical-align: middle;
                     font-size: 30;
                     text-align: center;
+                    position: relative;
+
+                    &:before {
+                        top: calc(50% - 15px);
+                        left: calc(50% - 15px);
+                        position: absolute;
+                    }
                 }
 
                 .current-status-center {

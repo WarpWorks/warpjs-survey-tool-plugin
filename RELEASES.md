@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.80 - 2019-03-21
+
+- #120 Same height for MM statuses.
+
 ## 1.2.79 - 2019-03-19
 
 - Remove option level from spider diagram.
