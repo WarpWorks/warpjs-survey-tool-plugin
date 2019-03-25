@@ -119,7 +119,6 @@ const spiderDiagram = require('./spider-diagram.js');
                 const filterContent = () => {
                     categories = _.filter(assessment.answers[0]._embedded.categories, (progressCategory) => {
                         const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
-                            console.log('progressQuestion.detailLevel === assessment.detailLevel', progressQuestion.detailLevel, typeof progressQuestion.detailLevel, assessment.detailLevel, typeof assessment.detailLevel);
                             return isMM ? parseInt(progressQuestion.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : progressQuestion.detailLevel <= assessment.detailLevel;
                         });
                         return questionDetailLevels.length > 0;
