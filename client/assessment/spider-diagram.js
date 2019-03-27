@@ -1,22 +1,62 @@
 const _ = require('lodash');
 const d3 = require('d3');
 
-module.exports = ($, questionnaire) => {
+module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, goToQuesiton) => {
     const width = 1200;
     const margin = ({top: 10, right: 120, bottom: 10, left: 40});
     const dy = width / 3.5;
     const dx = 20;
 
-    const questionnaireChildren = _.map(questionnaire._embedded.categories, (category) => {
-        const categoryChildren = _.map(category._embedded.questions, (question) => {
-            return {name: question.name, dataId: question.id};
-        });
+    console.log('test stuff', surveyDetailLevel, questionnaire, answers);
 
-        return {name: category.name, children: categoryChildren, dataId: category.id};
-    });
+    let questionnaireChildren = {};
+    if (type === 'progress') {
+        questionnaireChildren = _.map(questionnaire._embedded.categories, (category, categoryIndex) => {
+            let categoryChildren = [];
+
+            const answerCategory = _.find(answers._embedded.categories, (answerCategory) => {
+                return category.id === answerCategory.id;
+            });
+
+            if (category.isRepeatable && answerCategory._embedded.iterations) {
+                categoryChildren = _.filter(_.map(answerCategory._embedded.iterations, (iteration, iterationIndex) => {
+                    const iterationChildren = _.filter(_.map(iteration._embedded.questions, (question, questionIndex) => {
+                        const categoryQuestion = _.find(category._embedded.questions, (catQuestion) => {
+                            return catQuestion.id === question.id;
+                        });
+
+                        return {name: categoryQuestion.name, questionIndex: questionIndex, iterationIndex: iterationIndex, categoryIndex: categoryIndex, answered: question.answer !== undefined && question.answer !== null, hasOptions: categoryQuestion._embedded && categoryQuestion._embedded.options.length > 0, detailLevel: categoryQuestion.detailLevel};
+                    }), (question) => {
+                        return parseInt(question.detailLevel, 10) <= parseInt(surveyDetailLevel, 10);
+                    });
+
+                    return {name: iteration.name, children: iterationChildren};
+                }), (iteration) => {
+                    return iteration.name !== '';
+                });
+            } else {
+                categoryChildren = _.filter(_.map(category._embedded.questions, (question) => {
+                    return {name: question.name, dataId: question.id, detailLevel: question.detailLevel};
+                }), (question) => {
+                    return parseInt(question.detailLevel, 10) <= parseInt(surveyDetailLevel, 10);
+                });
+            }
+
+            return {name: category.name, children: categoryChildren, dataId: category.id};
+        });
+    } else {
+        questionnaireChildren = _.map(questionnaire._embedded.categories, (category) => {
+            const categoryChildren = _.filter(_.map(category._embedded.questions, (question) => {
+                return {name: question.name, dataId: question.id, detailLevel: question.detailLevel};
+            }), (question) => {
+                return parseInt(question.detailLevel, 10) <= parseInt(surveyDetailLevel, 10);
+            });
+
+            return {name: category.name, children: categoryChildren, dataId: category.id};
+        });
+    }
 
     const data = {name: questionnaire.name, children: questionnaireChildren};
-
     const tree = d3.tree().nodeSize([dx, dy]);
     const diagonal = d3.linkHorizontal().x(d => d.y).y(d => d.x);
 
@@ -27,12 +67,12 @@ module.exports = ($, questionnaire) => {
     root.descendants().forEach((d, i) => {
         d.id = i;
         d._children = d.children;
-        if (d.depth && d.data.name.length !== 7) {
+        if (d.depth && d.data.name && d.data.name.length !== 7) {
             d.children = null;
         }
     });
 
-    const svg = d3.select('svg.spider')
+    const svg = d3.select(selector)
         .attr("width", width)
         .attr("height", dx)
         .attr("viewBox", [-margin.left, -margin.top, width, dx])
@@ -93,14 +133,22 @@ module.exports = ($, questionnaire) => {
                 if (d._children) {
                     d.children = d.children ? null : d._children;
                     update(d);
-                } else {
-                    console.log('got to here: ', d.data.dataId);
+                } else if (d.data.questionIndex) {
+                    goToQuesiton(d.data.questionIndex, d.data.iterationIndex, d.data.categoryIndex);
                 }
             });
 
         nodeEnter.append("circle")
             .attr("r", 2.5)
-            .attr("fill", d => d._children ? "#555" : "#999");
+            .attr("fill", d => {
+                let color = d._children ? "#555" : "#999";
+                if (d.data.answered === true && d.data.hasOptions) {
+                    color = '#5ca81e';
+                } else if (d.data.answered === false && d.data.hasOptions) {
+                    color = '#de2a2d';
+                }
+                return color;
+            });
 
         nodeEnter.append("text")
             .attr("dy", "0.31em")

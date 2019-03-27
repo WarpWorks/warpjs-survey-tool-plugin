@@ -681,8 +681,20 @@ const spiderDiagram = require('./spider-diagram.js');
                                             shared.setSurveyContent($, placeholder, questionnaireLevelsTemplate({level: assessment.detailLevel, question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null}));
                                             assignDetailLevelSelected();
                                         } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.spider) {
+                                            getAssessment();
                                             shared.setSurveyContent($, placeholder, questionnaireSpiderTemplate({question: currentQuestion}));
-                                            spiderDiagram($, result.data._embedded.questionnaires[0]);
+
+                                            const goToQuesiton = (questionIndex, iterationIndex, categoryIndex) => {
+                                                console.log('indexes: ', questionIndex, iterationIndex, categoryIndex);
+                                                categoryPointer = categoryIndex;
+                                                iterationPointer = iterationIndex;
+                                                questionPointer = questionIndex;
+                                                updatePointers('next');
+                                                updatePointers('back');
+                                                updateAssessment();
+                                            };
+                                            spiderDiagram($, result.data._embedded.questionnaires[0], 'svg.spider.intro-spider', 'intro', assessment.answers[0], assessment.detailLevel, goToQuesiton);
+                                            spiderDiagram($, result.data._embedded.questionnaires[0], 'svg.spider.progress-spider', 'progress', assessment.answers[0], assessment.detailLevel, goToQuesiton);
                                         } else {
                                             shared.setSurveyContent($, placeholder, questionnaireIntroTemplate(introTemplateValues()));
                                         }
