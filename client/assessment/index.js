@@ -646,6 +646,22 @@ const spiderDiagram = require('./spider-diagram.js');
                                 summaryCalculations();
                             };
 
+                            const spiderSetup = (type, currentQuestion) => {
+                                getAssessment();
+                                shared.setSurveyContent($, placeholder, questionnaireSpiderTemplate({question: currentQuestion, type: type}));
+
+                                const goToQuesiton = (questionIndex, iterationIndex, categoryIndex) => {
+                                    console.log(categoryIndex, iterationIndex, questionIndex);
+                                    categoryPointer = categoryIndex;
+                                    iterationPointer = iterationIndex;
+                                    questionPointer = questionIndex;
+                                    updatePointers('next');
+                                    updatePointers('back');
+                                    updateAssessment();
+                                };
+                                spiderDiagram($, result.data._embedded.questionnaires[0], 'svg.spider.' + type + '-spider', type, assessment.answers[0], assessment.detailLevel, goToQuesiton);
+                            };
+
                             const updateQuestionContent = (outOfBounds = '') => {
                                 const progressPosition = categories[categoryPointer] ? _.findIndex(progressFilteredCategories, function(o) {
                                     return o.id && o.id === categories[categoryPointer].id;
@@ -681,20 +697,7 @@ const spiderDiagram = require('./spider-diagram.js');
                                             shared.setSurveyContent($, placeholder, questionnaireLevelsTemplate({level: assessment.detailLevel, question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null}));
                                             assignDetailLevelSelected();
                                         } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.spider) {
-                                            getAssessment();
-                                            shared.setSurveyContent($, placeholder, questionnaireSpiderTemplate({question: currentQuestion}));
-
-                                            const goToQuesiton = (questionIndex, iterationIndex, categoryIndex) => {
-                                                console.log('indexes: ', questionIndex, iterationIndex, categoryIndex);
-                                                categoryPointer = categoryIndex;
-                                                iterationPointer = iterationIndex;
-                                                questionPointer = questionIndex;
-                                                updatePointers('next');
-                                                updatePointers('back');
-                                                updateAssessment();
-                                            };
-                                            spiderDiagram($, result.data._embedded.questionnaires[0], 'svg.spider.intro-spider', 'intro', assessment.answers[0], assessment.detailLevel, goToQuesiton);
-                                            spiderDiagram($, result.data._embedded.questionnaires[0], 'svg.spider.progress-spider', 'progress', assessment.answers[0], assessment.detailLevel, goToQuesiton);
+                                            spiderSetup('intro', currentQuestion);
                                         } else {
                                             shared.setSurveyContent($, placeholder, questionnaireIntroTemplate(introTemplateValues()));
                                         }
@@ -1184,6 +1187,10 @@ const spiderDiagram = require('./spider-diagram.js');
                                         )
                                     ;
                                 }
+                            });
+
+                            $(document).on('click', '.spider-button', (event) => {
+                                spiderSetup('progress', null);
                             });
                         })
                     ;

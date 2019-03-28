@@ -2,18 +2,15 @@
   <div class="questionnaire spider">
     <div class="row">
       <div class="col-12">
-        <h2 class="ipt-title-question">{{question.name}}</h2>
-        <p>{{{question.content}}}</p>
+        <h2 class="ipt-title-question">Spider Diagram</h2>
+        {{#if question}}
+          <p>{{{question.content}}}</p>
+        {{/if}}
       </div>
     </div>
     <div class="row">
       <div class="col-12 spider-container">
-        <svg class="spider intro-spider" width="800" height="700" pointer-events="all"></svg>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12 spider-container">
-        <svg class="spider progress-spider" width="800" height="700" pointer-events="all"></svg>
+        <svg class="spider {{type}}-spider" width="800" height="700" pointer-events="all"></svg>
       </div>
     </div>
   </div>

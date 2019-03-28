@@ -18,29 +18,51 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
 
             if (category.isRepeatable && answerCategory._embedded.iterations) {
                 categoryChildren = _.filter(_.map(answerCategory._embedded.iterations, (iteration, iterationIndex) => {
-                    const iterationChildren = _.filter(_.map(iteration._embedded.questions, (question, questionIndex) => {
+                    let oneAnswered = false;
+                    let allAnswered = true;
+
+                    const filteredQuestions = _.filter(iteration._embedded.questions, (question) => {
+                        return parseInt(question.detailLevel, 10) <= parseInt(surveyDetailLevel, 10);
+                    });
+                    const iterationChildren = _.map(filteredQuestions, (question, questionIndex) => {
                         const categoryQuestion = _.find(category._embedded.questions, (catQuestion) => {
                             return catQuestion.id === question.id;
                         });
 
-                        return {name: categoryQuestion.name, questionIndex: questionIndex, iterationIndex: iterationIndex, categoryIndex: categoryIndex, answered: question.answer !== undefined && question.answer !== null, hasOptions: categoryQuestion._embedded && categoryQuestion._embedded.options.length > 0, detailLevel: categoryQuestion.detailLevel, linkTo: true};
-                    }), (question) => {
-                        return parseInt(question.detailLevel, 10) <= parseInt(surveyDetailLevel, 10);
+                        const isAnswered = question.answer !== undefined && question.answer !== null;
+                        if (isAnswered) {
+                            oneAnswered = true;
+                        } else if (categoryQuestion._embedded && categoryQuestion._embedded.options.length > 0) {
+                            allAnswered = false;
+                        }
+
+                        console.log('test:', questionIndex, categoryQuestion.name);
+
+                        return {name: categoryQuestion.name, questionIndex: questionIndex, iterationIndex: iterationIndex, categoryIndex: categoryIndex, answered: isAnswered, hasOptions: categoryQuestion._embedded && categoryQuestion._embedded.options.length > 0, detailLevel: categoryQuestion.detailLevel, linkTo: true};
                     });
 
-                    return {name: iteration.name, children: iterationChildren};
+                    let answeredLevel = 'none';
+                    if (allAnswered) {
+                        answeredLevel = 'all';
+                    } else if (oneAnswered) {
+                        answeredLevel = 'one';
+                    }
+
+                    return {name: iteration.name, children: iterationChildren, answeredLevel: answeredLevel};
                 }), (iteration) => {
                     return iteration.name !== '';
                 });
             } else {
-                categoryChildren = _.filter(_.map(category._embedded.questions, (question, questionIndex) => {
+                const filteredQuestions = _.filter(category._embedded.questions, (question) => {
+                    return parseInt(question.detailLevel, 10) <= parseInt(surveyDetailLevel, 10);
+                });
+
+                categoryChildren = _.map(filteredQuestions, (question, questionIndex) => {
                     const answerQuestion = _.find(answerCategory._embedded.iterations[0]._embedded.questions, (aQuestion) => {
                         return aQuestion.id === question.id;
                     });
 
-                    return {name: question.name, dataId: question.id, questionIndex: questionIndex, iterationIndex: 0, categoryIndex: categoryIndex, answered: answerQuestion.answer !== undefined && answerQuestion.answer !== null, hasOptions: question._embedded && question._embedded.options.length > 0, detailLevel: question.detailLevel, linkTo: true};
-                }), (question) => {
-                    return parseInt(question.detailLevel, 10) <= parseInt(surveyDetailLevel, 10);
+                    return {name: question.name, questionIndex: questionIndex, iterationIndex: 0, categoryIndex: categoryIndex, answered: answerQuestion.answer !== undefined && answerQuestion.answer !== null, hasOptions: question._embedded && question._embedded.options.length > 0, detailLevel: question.detailLevel, linkTo: true};
                 });
             }
 
@@ -75,14 +97,14 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
 
     const svg = d3.select(selector)
         .attr("width", width)
-        .attr("height", dx)
-        .attr("viewBox", [-margin.left, -margin.top, width, dx])
+        .attr("height", width)
+        .attr("viewBox", [-margin.left, -margin.top, width, width])
         .style("font", "10px sans-serif")
         .style("user-select", "none");
 
     const child = svg.append("g")
         .attr("width", width)
-        .attr("height", dx);
+        .attr("height", width);
 
     svg.call(d3.zoom().on("zoom", function() {
         child.attr("transform", d3.event.transform);
@@ -115,7 +137,7 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
             }
         });
 
-        const height = right.x - left.x + margin.top + margin.bottom;
+        const height = Math.max(right.x - left.x + margin.top + margin.bottom, width);
 
         const transition = svg.transition()
             .duration(duration)
@@ -143,10 +165,12 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
             .attr("r", 2.5)
             .attr("fill", d => {
                 let color = d._children ? "#555" : "#999";
-                if (d.data.answered === true && d.data.hasOptions) {
+                if ((d.data.answered === true && d.data.hasOptions) || d.data.answeredLevel === 'all') {
                     color = '#5ca81e';
-                } else if (d.data.answered === false && d.data.hasOptions) {
+                } else if ((d.data.answered === false && d.data.hasOptions) || d.data.answeredLevel === 'none') {
                     color = '#de2a2d';
+                } else if (d.data.answeredLevel === 'one') {
+                    color = '#fcb830';
                 }
                 return color;
             });

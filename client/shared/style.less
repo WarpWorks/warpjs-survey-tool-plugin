@@ -68,10 +68,14 @@
             border-radius: 3px;
             padding: 3px 7px;
             margin-left: 10px;
+            margin-bottom: 3px;
             text-transform: uppercase;
             font-size: 11px;
 
             &[data-survey-tool-action="download-json"] {
+                display: none;
+            }
+            &.spider-button {
                 display: none;
             }
         }
@@ -1144,8 +1148,18 @@
     }
 }
 
-.survey-tool.ipt .survey-type-title-container.survey-type-ipt {
-    display: block;
+.survey-tool.ipt {
+    .blue-button-container {
+        max-width: 200px;
+
+        .blue-button.spider-button {
+            display: inline-block;
+        }
+    }
+
+    .survey-type-title-container.survey-type-ipt {
+        display: block;
+    }
 }
 
 @import './export-assessment/style.less';
