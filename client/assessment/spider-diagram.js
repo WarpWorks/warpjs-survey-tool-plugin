@@ -7,8 +7,6 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
     const dy = width / 3.5;
     const dx = 20;
 
-    console.log('test stuff', surveyDetailLevel, questionnaire, answers);
-
     let questionnaireChildren = {};
     if (type === 'progress') {
         questionnaireChildren = _.map(questionnaire._embedded.categories, (category, categoryIndex) => {
@@ -25,7 +23,7 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
                             return catQuestion.id === question.id;
                         });
 
-                        return {name: categoryQuestion.name, questionIndex: questionIndex, iterationIndex: iterationIndex, categoryIndex: categoryIndex, answered: question.answer !== undefined && question.answer !== null, hasOptions: categoryQuestion._embedded && categoryQuestion._embedded.options.length > 0, detailLevel: categoryQuestion.detailLevel};
+                        return {name: categoryQuestion.name, questionIndex: questionIndex, iterationIndex: iterationIndex, categoryIndex: categoryIndex, answered: question.answer !== undefined && question.answer !== null, hasOptions: categoryQuestion._embedded && categoryQuestion._embedded.options.length > 0, detailLevel: categoryQuestion.detailLevel, linkTo: true};
                     }), (question) => {
                         return parseInt(question.detailLevel, 10) <= parseInt(surveyDetailLevel, 10);
                     });
@@ -35,8 +33,12 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
                     return iteration.name !== '';
                 });
             } else {
-                categoryChildren = _.filter(_.map(category._embedded.questions, (question) => {
-                    return {name: question.name, dataId: question.id, detailLevel: question.detailLevel};
+                categoryChildren = _.filter(_.map(category._embedded.questions, (question, questionIndex) => {
+                    const answerQuestion = _.find(answerCategory._embedded.iterations[0]._embedded.questions, (aQuestion) => {
+                        return aQuestion.id === question.id;
+                    });
+
+                    return {name: question.name, dataId: question.id, questionIndex: questionIndex, iterationIndex: 0, categoryIndex: categoryIndex, answered: answerQuestion.answer !== undefined && answerQuestion.answer !== null, hasOptions: question._embedded && question._embedded.options.length > 0, detailLevel: question.detailLevel, linkTo: true};
                 }), (question) => {
                     return parseInt(question.detailLevel, 10) <= parseInt(surveyDetailLevel, 10);
                 });
@@ -51,7 +53,6 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
             }), (question) => {
                 return parseInt(question.detailLevel, 10) <= parseInt(surveyDetailLevel, 10);
             });
-
             return {name: category.name, children: categoryChildren, dataId: category.id};
         });
     }
@@ -133,7 +134,7 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
                 if (d._children) {
                     d.children = d.children ? null : d._children;
                     update(d);
-                } else if (d.data.questionIndex) {
+                } else if (d.data.linkTo) {
                     goToQuesiton(d.data.questionIndex, d.data.iterationIndex, d.data.categoryIndex);
                 }
             });
