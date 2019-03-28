@@ -100,6 +100,8 @@ const spiderDiagram = require('./spider-diagram.js');
                         shared.setSurveyContent($, placeholder, cannotFindAssessmentTemplate({ assessmentId: result.data.assessmentId }));
                         return;
                     }
+
+                    $('.survey-tool.ipt').addClass('show-spider');
                 } else {
                     storage.setCurrent($, 'surveyId', result.data.surveyId);
                     const questionnaire = storage.getCurrent($, 'surveyToolQuestionnaires')[storage.getCurrent($, 'surveyId')];
