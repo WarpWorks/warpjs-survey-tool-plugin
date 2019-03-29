@@ -36,7 +36,7 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
                             allAnswered = false;
                         }
 
-                        return {name: categoryQuestion.name, questionIndex: questionIndex, iterationIndex: iterationIndex, categoryIndex: categoryIndex, answered: isAnswered, hasOptions: categoryQuestion._embedded && categoryQuestion._embedded.options.length > 0, detailLevel: categoryQuestion.detailLevel, linkTo: true};
+                        return {isQuestion: true, name: categoryQuestion.name, questionIndex: questionIndex, iterationIndex: iterationIndex, categoryIndex: categoryIndex, answered: isAnswered, hasOptions: categoryQuestion._embedded && categoryQuestion._embedded.options.length > 0, detailLevel: categoryQuestion.detailLevel, linkTo: true};
                     });
 
                     let answeredLevel = 'none';
@@ -60,7 +60,7 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
                         return aQuestion.id === question.id;
                     });
 
-                    return {name: question.name, questionIndex: questionIndex, iterationIndex: 0, categoryIndex: categoryIndex, answered: answerQuestion.answer !== undefined && answerQuestion.answer !== null, hasOptions: question._embedded && question._embedded.options.length > 0, detailLevel: question.detailLevel, linkTo: true};
+                    return {isQuestion: true, name: question.name, questionIndex: questionIndex, iterationIndex: 0, categoryIndex: categoryIndex, answered: answerQuestion.answer !== undefined && answerQuestion.answer !== null, hasOptions: question._embedded && question._embedded.options.length > 0, detailLevel: question.detailLevel, linkTo: true};
                 });
             }
 
@@ -69,7 +69,7 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
     } else {
         questionnaireChildren = _.map(questionnaire._embedded.categories, (category) => {
             const categoryChildren = _.filter(_.map(category._embedded.questions, (question) => {
-                return {name: question.name, dataId: question.id, detailLevel: question.detailLevel};
+                return {isQuestion: true, name: question.name, dataId: question.id, detailLevel: question.detailLevel};
             }), (question) => {
                 return parseInt(question.detailLevel, 10) <= parseInt(surveyDetailLevel, 10);
             });
@@ -176,8 +176,8 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
         nodeEnter.append("text")
             .attr("dy", "0.31em")
             .style("font-size", "14px")
-            .attr("x", d => d._children ? -6 : 6)
-            .attr("text-anchor", d => d._children ? "end" : "start")
+            .attr("x", d => d.data.isQuestion === true ? 6 : -6)
+            .attr("text-anchor", d => d.data.isQuestion === true ? "start" : "end")
             .text(d => d.data.name)
             .clone(true).lower()
             .attr("stroke-linejoin", "round")
