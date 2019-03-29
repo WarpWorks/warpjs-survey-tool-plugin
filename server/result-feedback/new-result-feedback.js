@@ -67,7 +67,7 @@ module.exports = (req, res) => {
                                                         .then((ResultRelationship) => ResultRelationship.addAssociation(feedback, {
                                                             id: resultQuestionFeedback.resultId,
                                                             type: 'Result'
-                                                        }))
+                                                        }, persistence))
                                                     ;
                                                 }
                                             })
@@ -78,7 +78,7 @@ module.exports = (req, res) => {
                                                         .then((ResultRelationship) => ResultRelationship.addAssociation(feedback, {
                                                             id: resultQuestionFeedback.resultsetId,
                                                             type: 'ResultSet'
-                                                        }))
+                                                        }, persistence))
                                                     ;
                                                 }
                                             })
@@ -89,7 +89,7 @@ module.exports = (req, res) => {
                                                         .then((ResultRelationship) => ResultRelationship.addAssociation(feedback, {
                                                             id: resultQuestionFeedback.questionId,
                                                             type: 'DimensionQ'
-                                                        }))
+                                                        }, persistence))
                                                     ;
                                                 }
                                             })

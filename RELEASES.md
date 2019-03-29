@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.82 - 2019-03-29
+
+- Update for addAssociation parameteres.
+
 ## 1.2.81 - 2019-03-29
 
 - #121 Spider diagram version II.
