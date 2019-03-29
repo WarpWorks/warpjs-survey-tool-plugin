@@ -36,8 +36,6 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
                             allAnswered = false;
                         }
 
-                        console.log('test:', questionIndex, categoryQuestion.name);
-
                         return {name: categoryQuestion.name, questionIndex: questionIndex, iterationIndex: iterationIndex, categoryIndex: categoryIndex, answered: isAnswered, hasOptions: categoryQuestion._embedded && categoryQuestion._embedded.options.length > 0, detailLevel: categoryQuestion.detailLevel, linkTo: true};
                     });
 
@@ -50,7 +48,7 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
 
                     return {name: iteration.name, children: iterationChildren, answeredLevel: answeredLevel};
                 }), (iteration) => {
-                    return iteration.name !== '';
+                    return iteration.name !== null && iteration.name !== '';
                 });
             } else {
                 const filteredQuestions = _.filter(category._embedded.questions, (question) => {
