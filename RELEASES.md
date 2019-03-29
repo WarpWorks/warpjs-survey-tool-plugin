@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.81 - 2019-03-29
+
+- #121 Spider diagram version II.
+
 ## 1.2.80 - 2019-03-21
 
 - #120 Same height for MM statuses.
