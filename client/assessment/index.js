@@ -13,7 +13,6 @@ const Questionnaire = require('./../../lib/models/questionnaire');
 const questionnaireTemplate = require('./questionnaire.hbs');
 const questionnaireIntroTemplate = require('./questionnaire-intro.hbs');
 const questionnaireLevelsTemplate = require('./questionnaire-levels.hbs');
-const questionnaireSpiderTemplate = require('./questionnaire-spider.hbs');
 const questionnaireIterationTemplate = require('./questionnaire-iterations.hbs');
 const questionnaireSummaryTemplate = require('./results/questionnaire-summary.hbs');
 const questionnaireDetailsTemplate = require('./results/questionnaire-details.hbs');
@@ -648,16 +647,19 @@ const spiderDiagram = require('./spider-diagram.js');
                                 summaryCalculations();
                             };
 
-                            const spiderSetup = (type, currentQuestion) => {
+                            const spiderSetup = (type) => {
                                 getAssessment();
-                                shared.setSurveyContent($, placeholder, questionnaireSpiderTemplate({question: currentQuestion, type: type}));
+                                // shared.setSurveyContent($, placeholder, questionnaireSpiderTemplate({question: currentQuestion, type: type}));
 
-                                const goToQuesiton = (questionIndex, iterationIndex, categoryIndex) => {
-                                    console.log(categoryIndex, iterationIndex, questionIndex);
+                                const goToQuesiton = (questionIndex, iterationIndex, categoryIndex, type) => {
                                     categoryPointer = categoryIndex;
                                     iterationPointer = iterationIndex;
                                     questionPointer = questionIndex;
-                                    updatePointers('next');
+
+                                    if (type === 'question') {
+                                        updatePointers('next');
+                                    }
+
                                     updatePointers('back');
                                     updateAssessment();
                                 };
@@ -699,7 +701,7 @@ const spiderDiagram = require('./spider-diagram.js');
                                             shared.setSurveyContent($, placeholder, questionnaireLevelsTemplate({level: assessment.detailLevel, question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null}));
                                             assignDetailLevelSelected();
                                         } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.spider) {
-                                            spiderSetup('intro', currentQuestion);
+                                            spiderSetup('intro');
                                         } else {
                                             shared.setSurveyContent($, placeholder, questionnaireIntroTemplate(introTemplateValues()));
                                         }
@@ -1192,7 +1194,7 @@ const spiderDiagram = require('./spider-diagram.js');
                             });
 
                             $(document).on('click', '.spider-button', (event) => {
-                                spiderSetup('progress', null);
+                                spiderSetup('progress');
                             });
                         })
                     ;

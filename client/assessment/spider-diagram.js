@@ -1,7 +1,13 @@
 const _ = require('lodash');
 const d3 = require('d3');
 
+const questionnaireSpiderTemplate = require('./questionnaire-spider.hbs');
+
 module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, goToQuesiton) => {
+    const modal = window.WarpJS.modal($, 'spider', 'Spider Diagram');
+    $('> .modal-dialog > .modal-content > .modal-body', modal).html(questionnaireSpiderTemplate({type: type}));
+    modal.modal('show');
+
     const width = 1200;
     const margin = ({top: 10, right: 120, bottom: 10, left: 40});
     const dy = width / 3.5;
@@ -36,7 +42,7 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
                             allAnswered = false;
                         }
 
-                        return {isQuestion: true, name: categoryQuestion.name, questionIndex: questionIndex, iterationIndex: iterationIndex, categoryIndex: categoryIndex, answered: isAnswered, hasOptions: categoryQuestion._embedded && categoryQuestion._embedded.options.length > 0, detailLevel: categoryQuestion.detailLevel, linkTo: true};
+                        return {type: 'question', name: categoryQuestion.name, questionIndex: questionIndex, iterationIndex: iterationIndex, categoryIndex: categoryIndex, answered: isAnswered, hasOptions: categoryQuestion._embedded && categoryQuestion._embedded.options.length > 0, detailLevel: categoryQuestion.detailLevel, linkTo: true};
                     });
 
                     let answeredLevel = 'none';
@@ -60,16 +66,16 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
                         return aQuestion.id === question.id;
                     });
 
-                    return {isQuestion: true, name: question.name, questionIndex: questionIndex, iterationIndex: 0, categoryIndex: categoryIndex, answered: answerQuestion.answer !== undefined && answerQuestion.answer !== null, hasOptions: question._embedded && question._embedded.options.length > 0, detailLevel: question.detailLevel, linkTo: true};
+                    return {type: 'question', name: question.name, questionIndex: questionIndex, iterationIndex: 0, categoryIndex: categoryIndex, answered: answerQuestion.answer !== undefined && answerQuestion.answer !== null, hasOptions: question._embedded && question._embedded.options.length > 0, detailLevel: question.detailLevel, linkTo: true};
                 });
             }
 
-            return {name: category.name, children: categoryChildren, dataId: category.id};
+            return {type: 'category', categoryIndex: categoryIndex, isRepeatable: category.isRepeatable, name: category.name, children: categoryChildren, dataId: category.id};
         });
     } else {
         questionnaireChildren = _.map(questionnaire._embedded.categories, (category) => {
             const categoryChildren = _.filter(_.map(category._embedded.questions, (question) => {
-                return {isQuestion: true, name: question.name, dataId: question.id, detailLevel: question.detailLevel};
+                return {type: 'question', name: question.name, dataId: question.id, detailLevel: question.detailLevel};
             }), (question) => {
                 return parseInt(question.detailLevel, 10) <= parseInt(surveyDetailLevel, 10);
             });
@@ -154,8 +160,12 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
                 if (d._children) {
                     d.children = d.children ? null : d._children;
                     update(d);
-                } else if (d.data.linkTo) {
-                    goToQuesiton(d.data.questionIndex, d.data.iterationIndex, d.data.categoryIndex);
+                } else if (d.data && d.data.type === 'category' && d.data.isRepeatable) {
+                    goToQuesiton(0, 0, d.data.categoryIndex, 'category');
+                    modal.modal('hide');
+                } else if (d.data && d.data.linkTo) {
+                    goToQuesiton(d.data.questionIndex, d.data.iterationIndex, d.data.categoryIndex, 'question');
+                    modal.modal('hide');
                 }
             });
 
@@ -176,8 +186,8 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
         nodeEnter.append("text")
             .attr("dy", "0.31em")
             .style("font-size", "14px")
-            .attr("x", d => d.data.isQuestion === true ? 6 : -6)
-            .attr("text-anchor", d => d.data.isQuestion === true ? "start" : "end")
+            .attr("x", d => d.data.type === 'question' ? 6 : -6)
+            .attr("text-anchor", d => d.data.type === 'question' ? "start" : "end")
             .text(d => d.data.name)
             .clone(true).lower()
             .attr("stroke-linejoin", "round")
@@ -221,4 +231,8 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
     update(root);
 
     child.node();
+
+    $(modal).on('hidden.bs.modal', function() {
+        $(modal).remove();
+    });
 };

@@ -1152,14 +1152,25 @@
     &.show-spider .blue-button-container {
         max-width: 200px;
 
-        .blue-button.spider-button {
-            display: inline-block;
+        .blue-button {
+            width: 57px;
+
+            &.spider-button {
+                display: inline-block;
+
+            }
         }
     }
 
     .survey-type-title-container.survey-type-ipt {
         display: block;
     }
+}
+
+[data-warpjs-modal="spider"] .modal-dialog {
+    height: 90vh;
+    width: 90vw;
+    overflow: hidden;
 }
 
 @import './export-assessment/style.less';
