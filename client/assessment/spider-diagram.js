@@ -169,8 +169,15 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
                 }
             });
 
-        nodeEnter.append("circle")
-            .attr("r", 2.5)
+        nodeEnter.append('circle')
+            .attr("r", d => {
+                let size = 2.5;
+                if (d.data && d.data.type === 'question') {
+                    size = 4;
+                }
+
+                return size;
+            })
             .attr("fill", d => {
                 let color = d._children ? "#555" : "#999";
                 if ((d.data.answered === true && d.data.hasOptions) || d.data.answeredLevel === 'all') {
