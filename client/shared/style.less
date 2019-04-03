@@ -1211,14 +1211,14 @@
         background-repeat: no-repeat;
         background-position: center center;
         position: absolute;
-        left: -40px;
+        left: -30px;
         top: 0px;
         width: 25px;
         height: 25px;
     }
 }
 
-.spider-show.show-none,
+.spider-show:not(.show-none),
 .auto-collapse.collapse-on-click {
     &:after {
         background-image: url('images/unchecked.jpg');

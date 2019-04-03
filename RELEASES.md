@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.86 - 2019-04-03
+
+- Spider diagram: fix button indicators.
+
 ## 1.2.85 - 2019-04-03
 
 - Spider diagram: updates based on mockup.
