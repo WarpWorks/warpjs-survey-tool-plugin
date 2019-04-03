@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.85 - 2019-04-03
+
+- Spider diagram: updates based on mockup.
+
 ## 1.2.84 - 2019-04-02
 
 - Spider diagram: increase size of last node bullet.

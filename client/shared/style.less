@@ -1153,7 +1153,7 @@
         max-width: 200px;
 
         .blue-button {
-            width: 57px;
+            width: 72px;
 
             &.spider-button {
                 display: inline-block;
@@ -1171,6 +1171,58 @@
     height: 90vh;
     width: 90vw;
     overflow: hidden;
+}
+
+.spider-header {
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 10px;
+}
+
+.spider-title,
+.spider-buttons {
+    float: left;
+}
+
+.spider-title h2 {
+    font-size: 25px;
+    margin-top: 0px;
+}
+
+.spider-buttons {
+    margin-top: 6px;
+}
+
+.spider-show,
+.auto-collapse {
+    font-size: 15px;
+    position: relative;
+    margin-left: 60px;
+    color: #666471;
+
+    &:hover {
+        color: #666471;
+        text-decoration: none;
+    }
+
+    &:after {
+        content: '';
+        background-image: url('images/checked.jpg');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center center;
+        position: absolute;
+        left: -40px;
+        top: 0px;
+        width: 25px;
+        height: 25px;
+    }
+}
+
+.spider-show.show-none,
+.auto-collapse.collapse-on-click {
+    &:after {
+        background-image: url('images/unchecked.jpg');
+    }
 }
 
 @import './export-assessment/style.less';

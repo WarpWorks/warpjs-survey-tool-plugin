@@ -4,13 +4,13 @@ const d3 = require('d3');
 const questionnaireSpiderTemplate = require('./questionnaire-spider.hbs');
 
 module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, goToQuesiton) => {
-    const modal = window.WarpJS.modal($, 'spider', 'Spider Diagram');
+    const modal = window.WarpJS.modal($, 'spider', '');
     $('> .modal-dialog > .modal-content > .modal-body', modal).html(questionnaireSpiderTemplate({type: type}));
     modal.modal('show');
 
     const width = 1200;
     const margin = ({top: 10, right: 120, bottom: 10, left: 40});
-    const dy = width / 3.5;
+    const dy = width / 4.5;
     const dx = 20;
 
     let questionnaireChildren = {};
@@ -89,7 +89,7 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
 
     const root = d3.hierarchy(data);
 
-    root.x0 = dy / 3.5;
+    root.x0 = dy / 4.5;
     root.y0 = 0;
     root.descendants().forEach((d, i) => {
         d.id = i;
@@ -152,13 +152,38 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
         const node = gNode.selectAll("g")
             .data(nodes, d => d.id);
 
+        const normalClick = (d) => {
+            d.children = d.children ? null : d._children;
+        };
+
+        const collapseClick = (d) => {
+            if (d.children) {
+                d._children = d.children;
+                d.children = null;
+            } else {
+                d.children = d._children;
+                d._children = null;
+            }
+            if (d.parent) {
+                d.parent.children.forEach(function(element) {
+                    if (d !== element) {
+                        collapse(element);
+                    }
+                });
+            }
+        };
+
         const nodeEnter = node.enter().append("g")
             .attr("transform", d => `translate(${source.y0},${source.x0})`)
             .attr("fill-opacity", 0)
             .attr("stroke-opacity", 0)
             .on("click", d => {
                 if (d._children) {
-                    d.children = d.children ? null : d._children;
+                    if ($('.auto-collapse.collapse-on-click').length) {
+                        collapseClick(d);
+                    } else {
+                        normalClick(d);
+                    }
                     update(d);
                 } else if (d.data && d.data.type === 'category' && d.data.isRepeatable) {
                     goToQuesiton(0, 0, d.data.categoryIndex, 'category');
@@ -241,5 +266,50 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
 
     $(modal).on('hidden.bs.modal', function() {
         $(modal).remove();
+    });
+
+    const expand = (d) => {
+        var children = (d.children) ? d.children : d._children;
+        if (d._children) {
+            d.children = d._children;
+            d._children = null;
+        }
+        if (children) {
+            children.forEach(expand);
+        }
+    };
+
+    const collapse = (d) => {
+        if (d.children) {
+            d._children = d.children;
+            d._children.forEach(collapse);
+            d.children = null;
+        }
+    };
+
+    const expandAll = () => {
+        expand(root);
+        update(root);
+    };
+
+    const collapseAll = () => {
+        root.children.forEach(collapse);
+        collapse(root);
+        update(root);
+    };
+
+    $(modal).on('click', '.spider-show.show-all', () => {
+        expandAll();
+        $(event.target).addClass('show-none');
+        $(event.target).removeClass('show-all');
+    });
+    $(modal).on('click', '.spider-show.show-none', () => {
+        collapseAll();
+        $(event.target).addClass('show-all');
+        $(event.target).removeClass('show-none');
+    });
+
+    $(modal).on('click', '.auto-collapse', (event) => {
+        $(event.target).toggleClass('collapse-on-click');
     });
 };

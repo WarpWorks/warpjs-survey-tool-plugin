@@ -649,7 +649,6 @@ const spiderDiagram = require('./spider-diagram.js');
 
                             const spiderSetup = (type) => {
                                 getAssessment();
-                                // shared.setSurveyContent($, placeholder, questionnaireSpiderTemplate({question: currentQuestion, type: type}));
 
                                 const goToQuesiton = (questionIndex, iterationIndex, categoryIndex, type) => {
                                     categoryPointer = categoryIndex;
@@ -663,6 +662,7 @@ const spiderDiagram = require('./spider-diagram.js');
                                     updatePointers('back');
                                     updateAssessment();
                                 };
+
                                 spiderDiagram($, result.data._embedded.questionnaires[0], 'svg.spider.' + type + '-spider', type, assessment.answers[0], assessment.detailLevel, goToQuesiton);
                             };
 
