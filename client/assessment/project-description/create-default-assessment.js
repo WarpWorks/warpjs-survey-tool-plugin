@@ -16,7 +16,7 @@ module.exports = ($, placeholder) => {
                 });
             });
         }
-        get_json('/public/uploaded-files/ipt-acme_asset_management-2018-10-14.txt', (resp) => {
+        get_json('/public/uploaded-files/ipt-acme_asset_management.txt', (resp) => {
             fileLoaded($, placeholder, resp);
         });
     });
