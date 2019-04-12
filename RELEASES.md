@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.88 - 2019-04-12
+
+- #124 Fix FireFox height issue with nav buttons.
+
 ## 1.2.87 - 2019-04-11
 
 - #125 update sample data.
