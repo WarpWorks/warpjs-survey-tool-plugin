@@ -8,14 +8,16 @@ module.exports = ($, placeholder) => {
     const { surveyId, assessmentId } = storage.getCurrent($);
 
     if (assessmentId) {
-        let assessment = storage.getAssessment(surveyId, assessmentId);
-        assessment = convertFormat($, assessment);
         $('[data-survey-tool-action="download-json"]', placeholder).show();
 
         $('[data-survey-tool-action="download-json"]', placeholder).on('click', function() {
+            let assessment = storage.getAssessment(surveyId, assessmentId);
+            assessment = convertFormat($, assessment);
             askProperties($, placeholder, assessment);
         });
         placeholder.on('click', '.survey-tool-export-assessment-properties [data-survey-tool-action="export"]', function() {
+            let assessment = storage.getAssessment(surveyId, assessmentId);
+            assessment = convertFormat($, assessment);
             assessment._meta.history.push({
                 name: $('.survey-tool-export-assessment-properties [name="name"]', placeholder).val(),
                 revision: $('.survey-tool-export-assessment-properties [name="revision"]', placeholder).val(),

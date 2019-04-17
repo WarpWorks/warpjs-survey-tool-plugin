@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.90 - 2019-04-17
+
+- #127 Export answers fix.
+
 ## 1.2.89 - 2019-04-12
 
 - #126 New spider diagram styles.
