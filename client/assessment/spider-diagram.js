@@ -42,7 +42,13 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
                             allAnswered = false;
                         }
 
-                        return {type: 'question', name: categoryQuestion.name, questionIndex: questionIndex, iterationIndex: iterationIndex, categoryIndex: categoryIndex, answered: isAnswered, hasOptions: categoryQuestion._embedded && categoryQuestion._embedded.options.length > 0, detailLevel: categoryQuestion.detailLevel, linkTo: true};
+                        const answer = _.find(categoryQuestion._embedded.options, (answer) => {
+                            return answer && answer.id === question.answer;
+                        });
+
+                        var answerPosition = answer ? answer.position : null;
+
+                        return {type: 'question', name: categoryQuestion.name, questionIndex: questionIndex, iterationIndex: iterationIndex, categoryIndex: categoryIndex, answered: isAnswered, answer: answerPosition, hasOptions: categoryQuestion._embedded && categoryQuestion._embedded.options.length > 0, detailLevel: categoryQuestion.detailLevel, linkTo: true};
                     });
 
                     let answeredLevel = 'none';
@@ -66,7 +72,13 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
                         return aQuestion.id === question.id;
                     });
 
-                    return {type: 'question', name: question.name, questionIndex: questionIndex, iterationIndex: 0, categoryIndex: categoryIndex, answered: answerQuestion.answer !== undefined && answerQuestion.answer !== null, hasOptions: question._embedded && question._embedded.options.length > 0, detailLevel: question.detailLevel, linkTo: true};
+                    const answer = _.find(question._embedded.options, (answer) => {
+                        return answer && answer.id === answerQuestion.answer;
+                    });
+
+                    var answerPosition = answer ? answer.position : null;
+
+                    return {type: 'question', name: question.name, questionIndex: questionIndex, iterationIndex: 0, categoryIndex: categoryIndex, answered: answerQuestion.answer !== undefined && answerQuestion.answer !== null, answer: answerPosition, hasOptions: question._embedded && question._embedded.options.length > 0, detailLevel: question.detailLevel, linkTo: true};
                 });
             }
 
@@ -204,20 +216,59 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
                 return size;
             })
             .attr("fill", d => {
-                let color = d._children ? "#555" : "#999";
-                if ((d.data.answered === true && d.data.hasOptions) || d.data.answeredLevel === 'all') {
+                let color = d.data && d.data.type !== 'question' ? "#555" : "#fff";
+                if (d.data.answer === '1') {
                     color = '#5ca81e';
-                } else if ((d.data.answered === false && d.data.hasOptions) || d.data.answeredLevel === 'none') {
+                } else if (d.data.type !== 'question' && !d._children) {
+                    color = '#999';
+                } else if (d.data.answer === '2' || d.data.answer === '3') {
+                    color = '#fcb830';
+                } else if (d.data.answer === '4' || d.data.answeredLevel === 'none') {
                     color = '#de2a2d';
+                } else if ((d.data.answered === false && d.data.hasOptions)) {
+                    color = '#fff';
                 } else if (d.data.answeredLevel === 'one') {
                     color = '#fcb830';
                 }
+
+                return color;
+            })
+            .attr("stroke", d => {
+                let color = d.data && d.data.type !== 'question' ? "#555" : "#fff";
+                if (d.data.answer === '1') {
+                    color = '#5ca81e';
+                } else if (d.data.type !== 'question' && !d._children) {
+                    color = '#999';
+                } else if (d.data.answer === '2' || d.data.answer === '3') {
+                    color = '#fcb830';
+                } else if (d.data.answer === '4' || d.data.answeredLevel === 'none') {
+                    color = '#de2a2d';
+                } else if ((d.data.answered === false && d.data.hasOptions)) {
+                    color = '#000';
+                } else if (d.data.answeredLevel === 'one') {
+                    color = '#fcb830';
+                }
+
                 return color;
             });
 
         nodeEnter.append("text")
             .attr("dy", "0.31em")
             .style("font-size", "14px")
+            .style("fill", d => {
+                let color = '#000';
+                if (d.data.type === 'question' && d.data.hasOptions && d.data.answered === true) {
+                    color = '#999';
+                }
+                return color;
+            })
+            .style("font-weight", d => {
+                let weight = '';
+                if (d.data.type === 'question' && d.data.hasOptions && d.data.answered === false) {
+                    weight = 'bold';
+                }
+                return weight;
+            })
             .attr("x", d => d.data.type === 'question' ? 6 : -6)
             .attr("text-anchor", d => d.data.type === 'question' ? "start" : "end")
             .text(d => d.data.name)

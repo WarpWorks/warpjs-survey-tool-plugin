@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.89 - 2019-04-12
+
+- #126 New spider diagram styles.
+
 ## 1.2.88 - 2019-04-12
 
 - #124 Fix FireFox height issue with nav buttons.
