@@ -257,14 +257,14 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
             .style("font-size", "14px")
             .style("fill", d => {
                 let color = '#000';
-                if (d.data.type === 'question' && d.data.hasOptions && d.data.answered === true) {
+                if (d.data.type === 'question' && d.data.hasOptions && d.data.answered === false) {
                     color = '#999';
                 }
                 return color;
             })
             .style("font-weight", d => {
                 let weight = '';
-                if (d.data.type === 'question' && d.data.hasOptions && d.data.answered === false) {
+                if (d.data.type === 'question' && !d.data.hasOptions) {
                     weight = 'bold';
                 }
                 return weight;

@@ -38,7 +38,6 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
             const questionnaireDocument = await questionnaireEntity.getDocuments(persistence, {_id: surveyId}, true);
             const feedbackRelationship = await questionnaireEntity.getRelationshipByName(pluginInfo.config.schema.surveyToolFeedback);
             const feedbackDocuments = await feedbackRelationship.getDocuments(persistence, questionnaireDocument[0]);
-            console.log('feedbackDocuments', feedbackDocuments);
             const filteredFeedback = _.filter(feedbackDocuments, (feedbackDocument) => {
                 const matchesThumbDirection = feedbackDocument.ThumbDirection === thumbDirection;
                 const matchesAssociations = feedbackDocument.associations && feedbackDocument.associations.length === 2 && feedbackDocument.FeedbackType === 'result' && feedbackDocument.associations[0].data[0]._id === resultId && feedbackDocument.associations[1].data[0]._id === resultsetId;
