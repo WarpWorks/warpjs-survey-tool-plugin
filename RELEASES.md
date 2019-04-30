@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.92 - 2019-04-30
+
+- #129 update: Spider diagram move sub category text.
+
 ## 1.2.91 - 2019-04-29
 
 - #129 Spider diagram style changes.

@@ -225,7 +225,7 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
                     color = '#fcb830';
                 } else if (d.data.answer === '4' || d.data.answeredLevel === 'none') {
                     color = '#de2a2d';
-                } else if ((d.data.answered === false && d.data.hasOptions)) {
+                } else if (d.data.answered === false && d.data.hasOptions) {
                     color = '#fff';
                 } else if (d.data.answeredLevel === 'one') {
                     color = '#fcb830';
@@ -269,7 +269,14 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
                 }
                 return weight;
             })
-            .attr("x", d => d.data.type === 'question' ? 6 : -6)
+            .attr("x", d => {
+                let offset = 6;
+                if (d.data.type !== 'question' || !d.data.hasOptions) {
+                    offset = -6;
+                }
+
+                return offset;
+            })
             .attr("text-anchor", d => d.data.type === 'question' ? "start" : "end")
             .text(d => d.data.name)
             .clone(true).lower()
