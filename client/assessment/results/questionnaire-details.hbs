@@ -58,7 +58,13 @@
                 </div>
 
                 <div class="question-block question-block-mm {{#if comments}} has-comments{{/if}}" data-comments="{{comments}}">
-                  <div class="position-display selected-{{urgency}}">
+                  <div
+                    class="position-display
+                    selected-{{urgency}}" data-toggle="tooltip"
+                    data-html="true"
+                    title='{{> urgency-tooltip}}'
+                    data-placement="bottom"
+                  >
                     <div class="red"></div>
                     <div class="yellow"></div>
                     <div class="green"></div>
@@ -85,6 +91,7 @@
                             </div>
                           {{else}}
                             <div class="blue-card next-level status-number-{{@index}}">
+                              <div class="not-answered-indicator">not answered</div>
                               <p class="blue-card-title">
                                 <span class="status-next-level">Next Level: </span>
                                 <span class="status-label status-label-0">Establishing</span>

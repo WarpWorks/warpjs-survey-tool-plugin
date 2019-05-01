@@ -20,12 +20,12 @@
       <div class="priority-wrapper mm-reveal">
         <div class="priority-container">
           <span>Priority of this question to you</span>
-          <input type="radio" name="priority-options" id="high-priority" class="priority-options" value="3" {{#if priorityHigh}}checked="checked"{{/if}}>
-          <label for="high-priority">high</label>
-          <input type="radio" name="priority-options" id="medium-priority" class="priority-options" value="2" {{#if priorityMid}}checked="checked"{{/if}}>
-          <label for="medium-priority">medium</label>
           <input type="radio" name="priority-options" id="low-priority" class="priority-options" value="1" {{#if priorityLow}}checked="checked"{{/if}}>
           <label for="lowv">low</label>
+          <input type="radio" name="priority-options" id="medium-priority" class="priority-options" value="2" {{#if priorityMid}}checked="checked"{{/if}}>
+          <label for="medium-priority">medium</label>
+          <input type="radio" name="priority-options" id="high-priority" class="priority-options" value="3" {{#if priorityHigh}}checked="checked"{{/if}}>
+          <label for="high-priority">high</label>
         </div>
       </div>
     {{/if}}

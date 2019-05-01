@@ -789,13 +789,23 @@ const spiderDiagram = require('./spider-diagram.js');
                                 });
 
                                 $('.detail-question-status-container').each(function() {
+                                    let hasAnswer = false;
                                     const paddingAmount = $(this).innerWidth() - $(this).find('.blue-card').outerWidth(true);
                                     const containerWidth = $(this).find('.blue-card').length * ($(this).find('.blue-card').outerWidth(true) + 3) + $(this).find('.status-arrow').length * ($(this).find('.status-arrow').outerWidth(true) + 4) + paddingAmount;
                                     $(this).css('width', containerWidth);
                                     if ($('.detail-question-status-container').find('.current-status').length && $(this).find('.current-status').position()) {
                                         const scrollDistance = $(this).find('.current-status').position().left - (paddingAmount / 2);
                                         $(this).closest('.detail-status-cutoff').scrollLeft(scrollDistance);
+                                        hasAnswer = true;
                                     }
+
+                                    if (!hasAnswer) {
+                                        $(this).addClass('not-answered');
+                                    }
+                                });
+
+                                $('[data-toggle="tooltip"]').tooltip({
+                                    container: 'body'
                                 });
                             };
 

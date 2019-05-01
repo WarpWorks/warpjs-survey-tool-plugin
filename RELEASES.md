@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.94 - 2019-05-07
+
+- #128: survey tool style changes.
+
 ## 1.2.93 - 2019-05-06
 
 - #130 algorithm for recommendation: divide by relevant answered questions only.
