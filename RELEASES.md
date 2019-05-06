@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.93 - 2019-05-06
+
+- #130 algorithm for recommendation: divide by relevant answered questions only.
+
 ## 1.2.92 - 2019-04-30
 
 - #129 update: Spider diagram move sub category text.

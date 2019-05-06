@@ -838,18 +838,22 @@ const spiderDiagram = require('./spider-diagram.js');
                                     resultSet.recommendation = null;
                                     _.each(resultSet._embedded.results, (result) => {
                                         result.points = 0;
+                                        result.numberAnswered = 0;
                                         _.each(result._embedded.relevantQuestions, (relevantQuestion) => {
                                             _.each(relevantQuestion ? _.filter(flattenedAnswers, (aQuestion) => {
                                                 return aQuestion.id === relevantQuestion.id;
                                             }) : null, (aQuestion) => {
                                                 if (relevantQuestion.relevance === 'high') {
                                                     result.points += Math.max(0, parseInt(aQuestion.answer, 10) - weightAdjustment);
+                                                    result.numberAnswered += 1;
                                                 } else if (relevantQuestion.relevance === 'low') {
                                                     result.points += Math.max(0, (5 - parseInt(aQuestion.answer, 10)) - weightAdjustment);
+                                                    result.numberAnswered += 1;
                                                 }
                                             });
                                         });
-                                        result.points = result._embedded.relevantQuestions.length > 0 ? result.points / result._embedded.relevantQuestions.length : 0;
+
+                                        result.points = result.numberAnswered > 0 ? result.points / result.numberAnswered : 0;
                                         const unroundedStars = result.points / Math.floor(numberOfOptions / 2) * 5;
                                         // since stars are rounded up, mod === 0 means it should be a full star.
                                         result.starRemainder = unroundedStars % 1 === 0 ? 2 : Math.round((unroundedStars % 1) * 2);
