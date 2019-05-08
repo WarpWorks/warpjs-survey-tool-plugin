@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.96 - 2019-05-08
+
+- #132 Maturity model change copyright text.
+
 ## 1.2.95 - 2019-05-08
 
 - #131 Maturity model reverse colors for summary bars.
