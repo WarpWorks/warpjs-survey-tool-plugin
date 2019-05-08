@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.95 - 2019-05-08
+
+- #131 Maturity model reverse colors for summary bars.
+
 ## 1.2.94 - 2019-05-07
 
 - #128: survey tool style changes.

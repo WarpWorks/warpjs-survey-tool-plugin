@@ -523,15 +523,15 @@ const spiderDiagram = require('./spider-diagram.js');
                                     const offset = (score - 1) / numberOfSections * 100 + offsetConstant;
                                     const colorScore = Math.round(score);
                                     let color = '#de2a2d';
-                                    if (colorScore <= 2) {
+                                    if ((colorScore <= 2 && numberOfSections === 4) || ((colorScore === 5 || colorScore === 4) && numberOfSections === 5)) {
                                         color = '#7eba41';
                                     } else if (colorScore === 3 && numberOfSections === 4) {
                                         color = '#fcb830';
                                     } else if (colorScore === 3 && numberOfSections === 5) {
                                         color = '#949494';
-                                    } else if (colorScore === 4 && numberOfSections === 5) {
+                                    } else if (colorScore === 2 && numberOfSections === 5) {
                                         color = '#fcb830';
-                                    } else if (colorScore === 5 && numberOfSections === 5) {
+                                    } else if (colorScore === 1 && numberOfSections === 5) {
                                         color = '#de2a2d';
                                     }
                                     $(element).css('left', 'calc(' + offset + '% - 5px)').css('background-color', color);
