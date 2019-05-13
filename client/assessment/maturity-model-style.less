@@ -17,6 +17,10 @@
         }
     }
 
+    .results-title.sub-details {
+        display: inline-block;
+    }
+
     .questionnaire {
         &.details .next-to-email-form {
             display: block;
@@ -197,6 +201,15 @@
             display: none;
         }
 
+        &.sub-details {
+            .details-form-data-status,
+            .survey-name-label-ipt,
+            .question-block-ipt,
+            .sub-category-name-ipt {
+                display: block;
+            }
+        }
+
         .survey-name-label-mm,
         .question-block.question-block-mm,
         .sub-category-name-mm {
@@ -332,6 +345,60 @@
                 }
             }
         }
+
+        .position-display {
+            .position1 {
+                background-color: #fce3e3;
+            }
+
+            .position2 {
+                background-color: #fff9ed;
+            }
+
+            .position3 {
+                background-color: #f7f7f7;
+            }
+
+            .position4 {
+                background-color: #f6ffed;
+            }
+
+            .position5 {
+                background-color: #d5f5b3;
+            }
+
+            &.selected-position1 .position1 {
+                background-color: #de2a2d;
+            }
+
+            &.selected-position2 .position2 {
+                background-color: #fcb830;
+            }
+
+            &.selected-position3 .position3 {
+                background-color: #949494;
+            }
+
+            &.selected-position4 .position4 {
+                background-color: #7eba41;
+            }
+
+            &.selected-position5 .position5 {
+                background-color: #7eba41;
+            }
+        }
+
+        .summary-selection {
+            display: none;
+        }
+
+        .selected-1 .select1,
+        .selected-2 .select2,
+        .selected-3 .select3,
+        .selected-4 .select4,
+        .selected-5 .select5, {
+            display: block;
+        }
     }
 
     .email-form {
@@ -340,6 +407,18 @@
         }
 
         .email-back-to-related {
+            display: none;
+        }
+    }
+
+    .questionnaire .buttons {
+        .mm-details-back,
+        .mm-summary-next {
+            display: block;
+        }
+
+        .details-back,
+        .summary-next {
             display: none;
         }
     }

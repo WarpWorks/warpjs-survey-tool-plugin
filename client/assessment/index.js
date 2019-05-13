@@ -16,6 +16,7 @@ const questionnaireLevelsTemplate = require('./questionnaire-levels.hbs');
 const questionnaireIterationTemplate = require('./questionnaire-iterations.hbs');
 const questionnaireSummaryTemplate = require('./results/questionnaire-summary.hbs');
 const questionnaireDetailsTemplate = require('./results/questionnaire-details.hbs');
+const questionnaireSubDetailsTemplate = require('./results/questionnaire-sub-details.hbs');
 const questionnaireRelatedReadingTemplate = require('./results/questionnaire-related-readings.hbs');
 const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-related-reading-detail.hbs');
 const questionnaireRelatedAllTemplate = require('./results/questionnaire-related-all.hbs');
@@ -809,6 +810,37 @@ const spiderDiagram = require('./spider-diagram.js');
                                 });
                             };
 
+                            const subDetailsSetup = () => {
+                                const details = {
+                                    questionnaire: result.data._embedded.questionnaires[0].name,
+                                    name: assessment.projectName,
+                                    contact: assessment.mainContact,
+                                    status: assessment.projectStatus,
+                                    data: detailsValues()
+                                };
+                                const values = summaryValues();
+                                shared.setSurveyContent($, placeholder, questionnaireSubDetailsTemplate({
+                                    details: details,
+                                    values: values,
+                                    title: assessment.projectName,
+                                    url: result.data._links.docx.href,
+                                    feedbackUrl: feedbackUrl,
+                                    data: JSON.stringify(
+                                        {
+                                            details: details,
+                                            values: values
+                                        }
+                                    )
+                                }));
+                                $('.has-comments').append('<a class="has-comments-after" data-toggle="modal" data-target="#comments-modal"></a>');
+                                $(document).on('click', '.has-comments-after', (event) => {
+                                    const comment = $(event.target).parent().data('comments');
+                                    $('.comment-text').css('display', 'none');
+                                    $('.comment-text-not-editable').css('display', 'block');
+                                    $('.comment-text-not-editable').html(comment);
+                                });
+                            };
+
                             let flattenedAnswers = [];
                             let weightAdjustment = 0;
                             let weightAdjustmentEven = false;
@@ -935,11 +967,14 @@ const spiderDiagram = require('./spider-diagram.js');
                             $(document).on('click', '.details-next, .email-back-to-related', () => {
                                 relatedReadingSetup();
                             });
-                            $(document).on('click', '.details-back', () => {
+                            $(document).on('click', '.details-back, .sub-details-back', () => {
                                 summarySetup();
                             });
-                            $(document).on('click', '.summary-next, .related-reading-back, .email-back-to-details', () => {
+                            $(document).on('click', '.summary-next, .sub-summary-next, .related-reading-back, .email-back-to-details', () => {
                                 detailsSetup();
+                            });
+                            $(document).on('click', '.mm-summary-next, .mm-details-back', () => {
+                                subDetailsSetup();
                             });
                             $(document).on('click', '.next-to-email-form', () => {
                                 shared.setSurveyContent($, placeholder, emailFormTemplate());

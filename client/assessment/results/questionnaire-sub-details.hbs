@@ -1,0 +1,78 @@
+<div class="main-content-overflow">
+  <div class="questionnaire details sub-details">
+    <h2 class="ipt-title results-title faded">Summary</h2>
+    <h2 class="ipt-title results-title">Overview</h2>
+    <h2 class="ipt-title results-title faded">Details</h2>
+    <h2 class="ipt-title results-title faded related-readings-title">Related Readings</h2>
+    <form class="word-download-form" action="{{url}}" method="post">
+      <input type="hidden" id="data" name="data" value="{{data}}">
+      <input type="hidden" id="title" name="title" value="{{title}}">
+      <input type="submit" class="word-download" value="Download Draft RFP">
+    </form>
+    <div class="row question-detail-content">
+      <div class="col-sm-12">
+        <h3 class="ipt-name">{{details.questionnaire}}</h3>
+        <h4 class="details-title-ipt">Project Description</h4>
+        <h4 class="details-title-mm">IIoT Maturity Analysis</h4>
+        <div class="details-form-data">
+          <div class="col-sm-6">
+            <p class="survey-name-label-ipt">Solution / Testbed Name</p>
+            <p class="survey-name-label-mm">Analysis</p>
+          </div>
+          <div class="col-sm-6">
+            <p class="form-details">{{details.name}}</p>
+          </div>
+        </div>
+        <div class="details-form-data">
+          <div class="col-sm-6">
+            <p>Main Contact</p>
+          </div>
+          <div class="col-sm-6">
+            <p class="form-details">{{details.contact}}</p>
+          </div>
+        </div>
+        <h4 class="details-title-ipt">Project Assessment Details</h4>
+        <h4 class="details-title-mm">Analysis Details</h4>
+        {{#each details.data}}
+          <p class="summary-category {{#if comments}} has-comments{{/if}}" data-comments="{{comments}}">{{category}}</p>
+          {{#each iterations}}
+            {{#if name}}<p class="summary-iteration">{{name}}</p>{{/if}}
+            {{#each questions}}
+              {{#if hasOptions}}
+                <div class="question-block question-block-ipt selected-{{position}} {{#if comments}} has-comments{{/if}}" data-comments="{{comments}}">
+                  <div class="position-display selected-position{{position}}">
+                    <div class="position1"></div>
+                    <div class="position2"></div>
+                    <div class="position3"></div>
+                    <div class="position4"></div>
+                    <div class="position5"></div>
+                  </div>
+                  <span class="summary-question">{{name}}</span>
+                  <span class="summary-selection select1">Establishing</span>
+                  <span class="summary-selection select2">Emerging</span>
+                  <span class="summary-selection select3">Developing</span>
+                  <span class="summary-selection select4">Comprehensive</span>
+                  <span class="summary-selection select5">Best practice</span>
+                </div>
+              {{else}}
+                <p class="sub-category-name sub-category-name-ipt{{#if comments}} has-comments{{/if}}" data-comments="{{comments}}">{{name}}</p>
+              {{/if}}
+            {{/each}}
+          {{/each}}
+        {{/each}}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="questionnaire question buttons-fixed details">
+  <div class="buttons row">
+    <div class="col-sm-4">
+      <button class="sub-details-back">back</button>
+    </div>
+    <div class="col-sm-4 col-sm-push-4">
+      <button class="sub-summary-next">Next</button>
+    </div>
+  </div>
+</div>
+{{> survey-tool-feedback-button feedbackUrl=feedbackUrl}}
+{{> ../comments}}

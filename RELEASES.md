@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.97 - 2019-05-13
+
+- #133 Maturity model add overview view.
+
 ## 1.2.96 - 2019-05-08
 
 - #132 Maturity model change copyright text.
