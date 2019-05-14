@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.98 - 2019-05-14
+
+- Maturity model company name title change.
+
 ## 1.2.97 - 2019-05-13
 
 - #133 Maturity model add overview view.
