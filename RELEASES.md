@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.99 - 2019-05-15
+
+- Maturity model details company name label change.
+
 ## 1.2.98 - 2019-05-14
 
 - Maturity model company name title change.
