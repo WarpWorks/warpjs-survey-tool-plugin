@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.100 - 2019-05-16
+
+- #137 Beta banner positioning to edge of container.
+
 ## 1.2.99 - 2019-05-15
 
 - Maturity model details company name label change.
