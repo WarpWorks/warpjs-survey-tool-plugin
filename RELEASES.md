@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.101 - 2019-05-20
+
+- #138 Feedback button overlapped by scrollbar.
+
 ## 1.2.100 - 2019-05-16
 
 - #137 Beta banner positioning to edge of container.
