@@ -23,7 +23,8 @@ const template = require('./template.hbs');
             if (result.error) {
                 shared.setSurveyContent($, placeholder, errorTemplate(result.data));
             } else {
-                const content = template({ page: result.data });
+                console.log('result.data', result.data);
+                const content = template({ page: result.data, loggedIn: result.data.warpjsUser !== null });
                 shared.setSurveyContent($, placeholder, content);
 
                 if (result.data && result.data._embedded && result.data._embedded.questionnaires) {

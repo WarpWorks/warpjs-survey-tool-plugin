@@ -1,27 +1,39 @@
-{{#if page._embedded.questionnaires.length}}
-  <div class="main-content-overflow">
-    <div class="container-fluid survey-tool-section"
-      data-survey-tool-url="{{page._links.self.href}}"
-      data-survey-tool-assessment-template-url="{{page._links.assessmentTemplate.href}}"
-      >
-      {{#each page._embedded.questionnaires as |questionnaire|}}
-        <div class="container-fluid survey-tool-item"
-          data-survey-tool-name="{{questionnaire.name}}"
-          data-survey-tool-survey-id="{{questionnaire.id}}"
-          >
-          <div class="row">
-            <div class="col-xs-12 survey-tool-item-name">{{questionnaire.name}}</div>
+{{#if loggedIn}}
+  {{#if page._embedded.questionnaires.length}}
+    <div class="main-content-overflow">
+      <div class="container-fluid survey-tool-section"
+        data-survey-tool-url="{{page._links.self.href}}"
+        data-survey-tool-assessment-template-url="{{page._links.assessmentTemplate.href}}"
+        >
+        {{#each page._embedded.questionnaires as |questionnaire|}}
+          <div class="container-fluid survey-tool-item"
+            data-survey-tool-name="{{questionnaire.name}}"
+            data-survey-tool-survey-id="{{questionnaire.id}}"
+            >
+            <div class="row">
+              <div class="col-xs-12 survey-tool-item-name">{{questionnaire.name}}</div>
+            </div>
+            <div class="container-fluid survey-tool-item-assessments"></div>
+            <div class="container-fluid survey-tool-aggregated-feedback-links">
+              <h3>Result set feedback dashboards</h3>
+              {{#each questionnaire._embedded.resultSets as |resultSet|}}
+                <div class="aggregated-feedback-link">
+                  <a href="{{resultSet._links.aggregatedFeedback.href}}">{{resultSet.name}}</a>
+                </div>
+              {{/each}}
+            </div>
+            <div class="container-fluid survey-tool-actions">
+              {{> ./create-new}}
+            </div>
           </div>
-          <div class="container-fluid survey-tool-item-assessments"></div>
-          <div class="container-fluid survey-tool-actions">
-            {{> ./create-new}}
-          </div>
-        </div>
 
-        {{#unless @last}}<hr>{{/unless}}
-      {{/each}}
+          {{#unless @last}}<hr>{{/unless}}
+        {{/each}}
+      </div>
     </div>
-  </div>
+  {{else}}
+    TODO: NO surveys available.
+  {{/if}}
 {{else}}
-  TODO: NO surveys available.
-{{/if}}
+    Please log in to view this page.
+  {{/if}}
