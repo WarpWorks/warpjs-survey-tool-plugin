@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.102 - 2019-05-28
+
+- #140 Add link to aggregated feedback view to list of projects at /survey-tool.
+
 ## 1.2.101 - 2019-05-20
 
 - #138 Feedback button overlapped by scrollbar.
