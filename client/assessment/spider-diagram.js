@@ -3,7 +3,7 @@ const d3 = require('d3');
 
 const questionnaireSpiderTemplate = require('./questionnaire-spider.hbs');
 
-module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, goToQuesiton) => {
+module.exports = ($, questionnaire, selector, type, answers, questionModules, goToQuesiton) => {
     const modal = window.WarpJS.modal($, 'spider', '');
     $('> .modal-dialog > .modal-content > .modal-body', modal).html(questionnaireSpiderTemplate({type: type}));
     modal.modal('show');
@@ -12,6 +12,40 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
     const margin = ({top: 10, right: 120, bottom: 10, left: 40});
     const dy = width / 4.5;
     const dx = 20;
+
+    const intro = _.find(questionnaire._embedded.categories, (qCategory) => {
+        return qCategory.name === "Introduction";
+    });
+    const introQuestions = _.map(intro._embedded.questions, 'id');
+
+    const questionInSelection = (question) => {
+        const currentQuestionModules = (question._embedded && question._embedded.questionModules) || question.questionModules || [];
+
+        return _.filter(questionModules, (questionModule) => {
+            let match = false;
+            _.each(currentQuestionModules, (currentModule) => {
+                if (questionModule === currentModule.id) {
+                    match = true;
+                }
+            });
+
+            if (_.indexOf(introQuestions, question.id) >= 0) {
+                match = true;
+            }
+
+            return match;
+        }).length > 0;
+    };
+
+    // const getCategories = (categories) => {
+    //     return _.filter(categories, (progressCategory) => {
+    //         const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
+    //             return questionInSelection(progressQuestion);
+    //         });
+
+    //         return questionDetailLevels.length > 0 || progressCategory.id === intro.id;
+    //     });
+    // };
 
     let questionnaireChildren = {};
     if (type === 'progress') {
@@ -22,13 +56,13 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
                 return category.id === answerCategory.id;
             });
 
-            if (category.isRepeatable && answerCategory._embedded.iterations) {
+            if (category && category.isRepeatable && answerCategory._embedded.iterations) {
                 categoryChildren = _.filter(_.map(answerCategory._embedded.iterations, (iteration, iterationIndex) => {
                     let oneAnswered = false;
                     let allAnswered = true;
 
                     const filteredQuestions = _.filter(iteration._embedded.questions, (question) => {
-                        return parseInt(question.detailLevel, 10) <= parseInt(surveyDetailLevel, 10);
+                        return questionInSelection(question);
                     });
                     const iterationChildren = _.map(filteredQuestions, (question, questionIndex) => {
                         const categoryQuestion = _.find(category._embedded.questions, (catQuestion) => {
@@ -64,7 +98,7 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
                 });
             } else {
                 const filteredQuestions = _.filter(category._embedded.questions, (question) => {
-                    return parseInt(question.detailLevel, 10) <= parseInt(surveyDetailLevel, 10);
+                    return questionInSelection(question);
                 });
 
                 categoryChildren = _.map(filteredQuestions, (question, questionIndex) => {
@@ -82,14 +116,14 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
                 });
             }
 
-            return {type: 'category', categoryIndex: categoryIndex, isRepeatable: category.isRepeatable, name: category.name, children: categoryChildren, dataId: category.id};
+            return {type: 'category', categoryIndex: categoryIndex, isRepeatable: category && category.isRepeatable, name: category.name, children: categoryChildren, dataId: category.id};
         });
     } else {
         questionnaireChildren = _.map(questionnaire._embedded.categories, (category) => {
             const categoryChildren = _.filter(_.map(category._embedded.questions, (question) => {
                 return {type: 'question', name: question.name, dataId: question.id, detailLevel: question.detailLevel};
             }), (question) => {
-                return parseInt(question.detailLevel, 10) <= parseInt(surveyDetailLevel, 10);
+                return questionInSelection(question);
             });
             return {name: category.name, children: categoryChildren, dataId: category.id};
         });
