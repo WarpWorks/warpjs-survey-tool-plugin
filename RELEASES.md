@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.103 - 2019-06-17
+
+- #143 Update times for Level of Detail levels.
+
 ## 1.2.102 - 2019-05-28
 
 - #140 Add link to aggregated feedback view to list of projects at /survey-tool.
