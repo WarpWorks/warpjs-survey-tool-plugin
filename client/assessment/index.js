@@ -13,6 +13,9 @@ const Questionnaire = require('./../../lib/models/questionnaire');
 const questionnaireTemplate = require('./questionnaire.hbs');
 const questionnaireIntroTemplate = require('./questionnaire-intro.hbs');
 const questionnaireLevelsTemplate = require('./questionnaire-levels.hbs');
+const questionnaireModulesTemplate = require('./questionnaire-modules.hbs');
+const questionnaireModuleDetailsTemplate = require('./questionnaire-module-details.hbs');
+const questionnairePersonasTemplate = require('./questionnaire-personas.hbs');
 const questionnaireIterationTemplate = require('./questionnaire-iterations.hbs');
 const questionnaireSummaryTemplate = require('./results/questionnaire-summary.hbs');
 const questionnaireDetailsTemplate = require('./results/questionnaire-details.hbs');
@@ -34,7 +37,7 @@ const spiderDiagram = require('./spider-diagram.js');
         trigger: 'click'
     });
     const styleRadio = () => {
-        $('input:radio').hide().each(function() {
+        $("input:radio, input[type='checkbox']").hide().each(function() {
             $(this).attr('data-radio-fx', this.name);
             var label = $("label[for=" + '"' + this.id + '"' + "]").text();
             $('<a ' + (label !== '' ? 'title=" ' + label + ' "' : '') + ' data-radio-fx="' + this.name + '" class="radio-fx" href="#">' +
@@ -50,10 +53,10 @@ const spiderDiagram = require('./spider-diagram.js');
             const unique = $(this).attr('data-radio-fx');
             const checked = $(this).find('span').hasClass('radio-checked');
             $("a[data-radio-fx='" + unique + "'] span").removeClass('radio-checked');
-            $(":radio[data-radio-fx='" + unique + "']").attr('checked', false);
+            $(":radio[data-radio-fx='" + unique + "'], input[type='checkbox'][data-radio-fx='" + unique + "']").attr('checked', false);
             if (!checked || !$('.questionnaire.question').length) {
                 $(this).find('span').addClass('radio-checked');
-                $(this).prev('input:radio').attr('checked', true);
+                $(this).prev("input:radio, input[type='checkbox']").attr('checked', true);
             }
             if ($(":radio.question-options[data-radio-fx='" + unique + "'][checked='checked']").length) {
                 $('.questionnaire.question .question-next').html('Next Question');
@@ -114,23 +117,56 @@ const spiderDiagram = require('./spider-diagram.js');
                 let iterations = [];
                 let questions = [];
 
+                const intro = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (qCategory) => {
+                    return qCategory.name === "Introduction";
+                });
+                const categoriesMinusIntro = _.reject(result.data._embedded.questionnaires[0]._embedded.categories, {id: intro.id});
+
+                const questionInSelection = (question) => {
+                    let isMatch = true;
+
+                    if (isMM) {
+                        isMatch = parseInt(question.detailLevel, 10) === parseInt(assessment.detailLevel, 10);
+                    }
+
+                    return isMatch;
+                };
+
+                const getCategories = (categories) => {
+                    let filteredCategories = [];
+                    if (isMM) {
+                        filteredCategories = _.filter(categories, (progressCategory) => {
+                            const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
+                                return questionInSelection(progressQuestion);
+                            });
+
+                            return questionDetailLevels.length > 0;
+                        });
+                    } else {
+                        filteredCategories = _.filter(categories, (progressCategory) => {
+                            return (assessment.modules && assessment.modules.indexOf(progressCategory.id) > -1) || (progressCategory.id === intro.id);
+                        });
+                    }
+
+                    return filteredCategories;
+                };
+
+                const getQuestions = (iterations) => {
+                    return iterations.length ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
+                        return questionInSelection(question);
+                    }) : [];
+                };
+
                 const calculatePriority = (priorityValue) => {
                     return isNaN(parseInt(priorityValue, 10)) ? 2 : parseInt(priorityValue, 10);
                 };
 
                 const filterContent = () => {
-                    categories = _.filter(assessment.answers[0]._embedded.categories, (progressCategory) => {
-                        const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
-                            return isMM ? parseInt(progressQuestion.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : progressQuestion.detailLevel <= assessment.detailLevel;
-                        });
-                        return questionDetailLevels.length > 0;
-                    });
+                    categories = getCategories(assessment.answers[0]._embedded.categories);
                     iterations = categories && categories[categoryPointer] ? _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
                         return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                     }) : [];
-                    questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                        return isMM ? parseInt(question.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : question.detailLevel <= assessment.detailLevel;
-                    }) : [];
+                    questions = getQuestions(iterations);
                 };
 
                 filterContent();
@@ -163,6 +199,17 @@ const spiderDiagram = require('./spider-diagram.js');
                                 $("input[name='questionnaire-level'][value='" + detailLevel + "']").attr('checked', 'checked');
                             };
 
+                            const assignModulesSelected = () => {
+                                _.each(categories, (categoryModule) => {
+                                    $(".modules input[value='" + categoryModule.id + "']").attr('checked', 'checked');
+                                });
+                            };
+
+                            const assignPersonaSelected = () => {
+                                const persona = assessment.persona !== '' ? assessment.persona : '';
+                                $("input[name='questionnaire-persona'][value='" + persona + "']").attr('checked', 'checked');
+                            };
+
                             const feedbackUrl = result.data._links.submitFeedback.href;
 
                             $('.ipt-title').html(assessment.projectName);
@@ -172,12 +219,45 @@ const spiderDiagram = require('./spider-diagram.js');
                             const levelsOnLeave = () => {
                                 getAssessment();
                                 assessment.detailLevel = $("input[name='questionnaire-level'][checked='checked']").val();
-                                categories = _.filter(assessment.answers[0]._embedded.categories, (progressCategory) => {
-                                    const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
-                                        return isMM ? parseInt(progressQuestion.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : progressQuestion.detailLevel <= assessment.detailLevel;
+                                categories = getCategories(assessment.answers[0]._embedded.categories);
+                                updateProgressTotal();
+                                updateAssessment();
+                            };
+
+                            const personasOnLeave = () => {
+                                getAssessment();
+                                const newPersona = $("input[name='questionnaire-persona'][checked='checked']").val();
+
+                                if (assessment.persona && assessment.persona === newPersona) {
+                                    return;
+                                }
+
+                                assessment.persona = newPersona;
+                                assessment.modules = [];
+
+                                _.each(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
+                                    const personaMatch = _.filter(category._embedded.personas, (persona) => {
+                                        return persona.id === assessment.persona;
                                     });
-                                    return questionDetailLevels.length > 0;
+
+                                    if (personaMatch.length > 0) {
+                                        assessment.modules.push(category.id);
+                                    }
                                 });
+
+                                categories = getCategories(assessment.answers[0]._embedded.categories);
+                                updateProgressTotal();
+                                updateAssessment();
+                            };
+
+                            const modulesOnLeave = () => {
+                                getAssessment();
+                                assessment.modules = [];
+                                _.each($('.modules input:checked'), (module) => {
+                                    assessment.modules.push($(module).val());
+                                });
+
+                                categories = getCategories(assessment.answers[0]._embedded.categories);
                                 updateProgressTotal();
                                 updateAssessment();
                             };
@@ -208,19 +288,20 @@ const spiderDiagram = require('./spider-diagram.js');
                                 levelsOnLeave();
                             });
 
+                            $(document).on('click', '.personas-back, .personas-next', () => {
+                                personasOnLeave();
+                            });
+
+                            $(document).on('click', '.modules-back, .modules-next', () => {
+                                modulesOnLeave();
+                            });
+
                             const updatePointers = (direction) => {
-                                categories = _.filter(categories, (progressCategory) => {
-                                    const questionDetailLevels = _.filter(progressCategory._embedded.iterations[0]._embedded.questions, (progressQuestion) => {
-                                        return isMM ? parseInt(progressQuestion.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : progressQuestion.detailLevel <= assessment.detailLevel;
-                                    });
-                                    return questionDetailLevels.length > 0;
-                                });
+                                categories = getCategories(assessment.answers[0]._embedded.categories);
                                 iterations = categories[categoryPointer] ? _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
                                     return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                                 }) : [];
-                                questions = iterations.length ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                    return isMM ? parseInt(question.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : question.detailLevel <= assessment.detailLevel;
-                                }) : [];
+                                questions = getQuestions(iterations);
                                 let outOfBounds = '';
                                 if (direction === 'next') {
                                     if (questionPointer + 1 >= questions.length) {
@@ -236,10 +317,8 @@ const spiderDiagram = require('./spider-diagram.js');
                                                     return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                                                 });
 
-                                                questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                                    return isMM ? parseInt(question.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : question.detailLevel <= assessment.detailLevel;
-                                                }) : [];
-                                                if (categories[categoryPointer].isRepeatable) {
+                                                questions = getQuestions(iterations);
+                                                if (categories[categoryPointer] && categories[categoryPointer].isRepeatable) {
                                                     questionPointer = -1;
                                                 }
                                             }
@@ -247,9 +326,7 @@ const spiderDiagram = require('./spider-diagram.js');
                                             iterationPointer += 1;
                                             questionPointer = 0;
 
-                                            questions = _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                                return isMM ? parseInt(question.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : question.detailLevel <= assessment.detailLevel;
-                                            });
+                                            questions = getQuestions(iterations);
                                         }
                                     } else {
                                         questionPointer += 1;
@@ -264,9 +341,7 @@ const spiderDiagram = require('./spider-diagram.js');
                                                 iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
                                                     return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                                                 });
-                                                questions = iterations.length ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                                    return isMM ? parseInt(question.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : question.detailLevel <= assessment.detailLevel;
-                                                }) : [];
+                                                questions = getQuestions(iterations);
                                                 iterationPointer = iterations.length === 0 ? 0 : iterations.length - 1;
                                                 questionPointer = questions.length - 1;
                                             }
@@ -545,13 +620,13 @@ const spiderDiagram = require('./spider-diagram.js');
                             };
 
                             const detailsValues = () => {
-                                return _.filter(_.map(assessment.answers[0]._embedded.categories, (category) => {
+                                return _.filter(_.map(getCategories(assessment.answers[0]._embedded.categories), (category) => {
                                     const categoryQ = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (questionCategory) => {
                                         return questionCategory.id === category.id;
                                     });
                                     const answersList = _.map(category._embedded.iterations, (iteration) => {
                                         const iterationQ = _.map(iteration._embedded.questions, (question) => {
-                                            if ((isMM && parseInt(question.detailLevel, 10) === parseInt(assessment.detailLevel, 10)) || (!isMM && question.detailLevel <= assessment.detailLevel)) {
+                                            if ((isMM && parseInt(question.detailLevel, 10) === parseInt(assessment.detailLevel, 10)) || !isMM) {
                                                 const questionQ = question ? _.find(categoryQ._embedded.questions, (questionQuestion) => {
                                                     return questionQuestion.id === question.id;
                                                 }) : null;
@@ -651,7 +726,7 @@ const spiderDiagram = require('./spider-diagram.js');
                             const spiderSetup = (type) => {
                                 getAssessment();
 
-                                const goToQuesiton = (questionIndex, iterationIndex, categoryIndex, type) => {
+                                const goToQuestion = (questionIndex, iterationIndex, categoryIndex, type) => {
                                     categoryPointer = categoryIndex;
                                     iterationPointer = iterationIndex;
                                     questionPointer = questionIndex;
@@ -664,7 +739,7 @@ const spiderDiagram = require('./spider-diagram.js');
                                     updateAssessment();
                                 };
 
-                                spiderDiagram($, result.data._embedded.questionnaires[0], 'svg.spider.' + type + '-spider', type, assessment.answers[0], assessment.detailLevel, goToQuesiton);
+                                spiderDiagram($, isMM, result.data._embedded.questionnaires[0], getCategories(result.data._embedded.questionnaires[0]._embedded.categories), 'svg.spider.' + type + '-spider', type, assessment.answers[0], assessment.detailLevel, goToQuestion);
                             };
 
                             const updateQuestionContent = (outOfBounds = '') => {
@@ -703,6 +778,16 @@ const spiderDiagram = require('./spider-diagram.js');
                                             assignDetailLevelSelected();
                                         } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.spider) {
                                             spiderSetup('intro');
+                                        } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.personas) {
+                                            shared.setSurveyContent($, placeholder, questionnairePersonasTemplate({personas: result.data._embedded.questionnaires[0]._embedded.personas, question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null}));
+                                            assignPersonaSelected();
+                                        } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.modules) {
+                                            const sections = _.groupBy(categoriesMinusIntro, (category) => {
+                                                return category.section === undefined ? '' : category.section;
+                                            });
+
+                                            shared.setSurveyContent($, placeholder, questionnaireModulesTemplate({sections: sections, question: currentQuestion}));
+                                            assignModulesSelected();
                                         } else {
                                             shared.setSurveyContent($, placeholder, questionnaireIntroTemplate(introTemplateValues()));
                                         }
@@ -722,7 +807,7 @@ const spiderDiagram = require('./spider-diagram.js');
                             };
 
                             const updateIterations = () => {
-                                const category = assessment.answers[0]._embedded.categories[categoryPointer];
+                                const category = categories[categoryPointer];
                                 category._embedded.iterations[0].name = $('input#iteration1').val();
                                 category._embedded.iterations[1].name = $('input#iteration2').val();
                                 category._embedded.iterations[2].name = $('input#iteration3').val();
@@ -933,9 +1018,7 @@ const spiderDiagram = require('./spider-diagram.js');
                             iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
                                 return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                             });
-                            questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                return isMM ? parseInt(question.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : question.detailLevel <= assessment.detailLevel;
-                            }) : [];
+                            questions = getQuestions(iterations);
 
                             updateQuestionContent();
 
@@ -1115,9 +1198,7 @@ const spiderDiagram = require('./spider-diagram.js');
                                             return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                                         });
                                         iterationPointer = iterations.length - 1;
-                                        questions = iterations.length ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                            return isMM ? parseInt(question.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : question.detailLevel <= assessment.detailLevel;
-                                        }) : [];
+                                        questions = getQuestions(iterations);
                                         questionPointer = questions.length ? questions.length - 1 : -1;
 
                                         updatePointers('next');
@@ -1130,9 +1211,7 @@ const spiderDiagram = require('./spider-diagram.js');
                                         iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
                                             return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                                         });
-                                        questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                            return isMM ? parseInt(question.detailLevel, 10) === parseInt(assessment.detailLevel, 10) : question.detailLevel <= assessment.detailLevel;
-                                        }) : [];
+                                        questions = getQuestions(iterations);
 
                                         if (categories[categoryPointer].isRepeatable) {
                                             questionPointer = -1;
@@ -1244,6 +1323,32 @@ const spiderDiagram = require('./spider-diagram.js');
 
                             $(document).on('click', '.spider-button', (event) => {
                                 spiderSetup('progress');
+                            });
+
+                            $(document).on('click', '.module-details-button', (event) => {
+                                event.preventDefault();
+                                getAssessment();
+                                const target = $(event.target);
+                                const moduleId = target.data('warpjsModuleId');
+                                const questionId = target.data('warpjsQuestionId');
+                                const selectedCategory = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
+                                    return category.id === moduleId;
+                                });
+                                shared.setSurveyContent($, placeholder, questionnaireModuleDetailsTemplate({selectedCategory: selectedCategory, questionId: questionId}));
+                            });
+
+                            $(document).on('click', '.module-details-back', (event) => {
+                                const target = $(event.target);
+                                const moduleId = target.data('warpjsModuleId');
+                                const questionId = target.data('warpjsQuestionId');
+                                const selectedCategory = _.find(categories, {id: moduleId});
+                                const currentQuestion = selectedCategory ? _.cloneDeep(_.find(selectedCategory._embedded.questions, {id: questionId})) : null;
+                                const sections = _.groupBy(categoriesMinusIntro, (category) => {
+                                    return category.section === undefined ? '' : category.section;
+                                });
+                                shared.setSurveyContent($, placeholder, questionnaireModulesTemplate({sections: sections, question: currentQuestion}));
+                                assignModulesSelected();
+                                styleRadio();
                             });
                         })
                     ;

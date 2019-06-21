@@ -4,6 +4,8 @@ module.exports = {
         description: 'Project Description',
         details: 'Levels of Detail',
         create: 'Privacy',
-        spider: 'Spider Diagram'
+        spider: 'Spider Diagram',
+        personas: 'Personas',
+        modules: 'Modules'
     }
 };

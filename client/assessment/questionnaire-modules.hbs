@@ -1,0 +1,47 @@
+<div class="main-content-overflow">
+  <div class="questionnaire modules-main">
+    <div class="row">
+      <div class="col-12">
+        <h2 class="ipt-title-question">Your Module Preselection</h2>
+        <p>{{{question.content}}}</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <form class="modules">
+          {{#each sections as |section|}}
+            <div class=" row">
+              <div class="col-sm-12">
+                <h3>{{@key}}</h3>
+              </div>
+            </div>
+            {{#each section as |module|}}
+              <div class="module-container row">
+                <div class="col-sm-1">
+                  <input type="checkbox" name="{{module.name}}" value="{{module.id}}">
+                </div>
+                <div class="col-sm-8 module-description">
+                  <p class="module-name">{{module.name}}</p>
+                  <p>{{module.description}}</p>
+                </div>
+                <div class="col-sm-2 module-details blue-button-container">
+                  <button class="blue-button module-details-button" data-warpjs-module-id="{{module.id}}" data-warpjs-question-id="{{../../question.id}}">details</button>
+                </div>
+              </div>
+            {{/each}}
+          {{/each}}
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="questionnaire question buttons-fixed">
+  <div class="buttons row">
+    <div class="col-sm-4">
+      <button class="back modules-back question-back">back</button>
+    </div>
+    <div class="col-sm-4 col-sm-push-4">
+      <button class="next modules-next question-next">NEXT</button>
+    </div>
+  </div>
+</div>

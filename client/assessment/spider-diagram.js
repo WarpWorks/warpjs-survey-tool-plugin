@@ -3,7 +3,7 @@ const d3 = require('d3');
 
 const questionnaireSpiderTemplate = require('./questionnaire-spider.hbs');
 
-module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, goToQuesiton) => {
+module.exports = ($, isMM, questionnaire, categories, selector, type, answers, surveyDetailLevel, goToQuesiton) => {
     const modal = window.WarpJS.modal($, 'spider', '');
     $('> .modal-dialog > .modal-content > .modal-body', modal).html(questionnaireSpiderTemplate({type: type}));
     modal.modal('show');
@@ -15,7 +15,7 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
 
     let questionnaireChildren = {};
     if (type === 'progress') {
-        questionnaireChildren = _.map(questionnaire._embedded.categories, (category, categoryIndex) => {
+        questionnaireChildren = _.map(categories, (category, categoryIndex) => {
             let categoryChildren = [];
 
             const answerCategory = _.find(answers._embedded.categories, (answerCategory) => {
@@ -28,7 +28,7 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
                     let allAnswered = true;
 
                     const filteredQuestions = _.filter(iteration._embedded.questions, (question) => {
-                        return parseInt(question.detailLevel, 10) <= parseInt(surveyDetailLevel, 10);
+                        return !isMM || parseInt(question.detailLevel, 10) <= parseInt(surveyDetailLevel, 10);
                     });
                     const iterationChildren = _.map(filteredQuestions, (question, questionIndex) => {
                         const categoryQuestion = _.find(category._embedded.questions, (catQuestion) => {
@@ -85,7 +85,7 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
             return {type: 'category', categoryIndex: categoryIndex, isRepeatable: category.isRepeatable, name: category.name, children: categoryChildren, dataId: category.id};
         });
     } else {
-        questionnaireChildren = _.map(questionnaire._embedded.categories, (category) => {
+        questionnaireChildren = _.map(categories, (category) => {
             const categoryChildren = _.filter(_.map(category._embedded.questions, (question) => {
                 return {type: 'question', name: question.name, dataId: question.id, detailLevel: question.detailLevel};
             }), (question) => {

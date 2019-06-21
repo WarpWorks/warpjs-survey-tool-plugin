@@ -190,13 +190,35 @@
             }
         }
 
-        .project-levels {
+        .project-personas {
+            text-align: center;
+
+            .persona-container {
+                display: inline-block;
+                text-align: center;
+                padding: 10px;
+                margin: 10px 5px;
+
+                h3 {
+                    font-size: 20px;
+                    font-weight: bold;
+                }
+
+                .glyphicon {
+                    font-size: 60px;
+                }
+            }
+        }
+
+        .project-levels,
+        .modules {
             width: 80%;
             margin: 10px auto;
             position: relative;
             overflow: hidden;
 
-            .level-container {
+            .level-container,
+            .module-container {
                 background-color: #f0f0f0;
                 padding: 20px;
                 margin-bottom: 15px;
@@ -225,6 +247,15 @@
                     font-weight: bold;
                     color: #000000;
                     font-size: 13px;
+                }
+
+                .module-name {
+                    font-weight: bold;
+                    font-size: 15px;
+                }
+
+                .module-details {
+                    text-align: center;
                 }
             }
 
