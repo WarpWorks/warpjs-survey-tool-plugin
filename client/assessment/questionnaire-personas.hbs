@@ -9,13 +9,25 @@
     <div class="row">
       <div class="col-12">
         <form class="project-personas">
-          {{#each personas as |persona|}}
-            <div class="persona-container">
-              <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
-              <h3>{{persona.name}}</h3>
-              <input type="radio" name="questionnaire-persona" value="{{persona.id}}">
-            </div>
-          {{/each}}
+          <div class="row">
+            {{#each personas as |persona|}}
+              <div class="col-sm-3">
+                <div class="persona-container">
+                  {{#if persona.image}}
+                    <div class="persona-image">
+                      <img src="{{persona.imageUrl}}"/>
+                    </div>
+                  {{else}}
+                    <div class="persona-image-default">
+                      <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                    </div>
+                  {{/if}}
+                  <h3>{{persona.name}}</h3>
+                  <input type="radio" name="questionnaire-persona" value="{{persona.id}}">
+                </div>
+              </div>
+            {{/each}}
+          </div>
         </form>
       </div>
     </div>

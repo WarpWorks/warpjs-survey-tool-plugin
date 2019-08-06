@@ -779,7 +779,7 @@ const spiderDiagram = require('./spider-diagram.js');
                                         } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.spider) {
                                             spiderSetup('intro');
                                         } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.personas) {
-                                            shared.setSurveyContent($, placeholder, questionnairePersonasTemplate({personas: result.data._embedded.questionnaires[0]._embedded.personas, question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null}));
+                                            shared.setSurveyContent($, placeholder, questionnairePersonasTemplate({personas: _.orderBy(result.data._embedded.questionnaires[0]._embedded.personas, [ 'position' ], [ 'asc' ]), question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null}));
                                             assignPersonaSelected();
                                         } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.modules) {
                                             const sections = _.groupBy(categoriesMinusIntro, (category) => {
