@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.105 - 2019-08-13
+
+- #142 Personas
+
 ## 1.2.104 - 2019-08-09
 
 - #123 Converting one path to async/await.
