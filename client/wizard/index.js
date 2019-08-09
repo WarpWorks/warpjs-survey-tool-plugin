@@ -695,7 +695,7 @@ const template = require('./../template.hbs');
                                 });
                                 const recommendation = _.orderBy(_.filter(resultSet._embedded.results, (result) => {
                                     return result.points > 0;
-                                }), ['points'], ['desc'])[0];
+                                }), [ 'points' ], [ 'desc' ])[0];
                                 resultSet.recommendation = recommendation;
                                 resultSet.recommendationName = recommendation ? recommendation.name : null;
                             });

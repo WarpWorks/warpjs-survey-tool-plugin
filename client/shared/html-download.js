@@ -1,5 +1,5 @@
 module.exports = ($, content, filename, contentType) => {
-    const file = new Blob([JSON.stringify(content, null, 2)], { type: contentType || 'application/octet-stream' });
+    const file = new Blob([ JSON.stringify(content, null, 2) ], { type: contentType || 'application/octet-stream' });
     const url = window.URL.createObjectURL(file);
 
     const a = document.createElement('a');

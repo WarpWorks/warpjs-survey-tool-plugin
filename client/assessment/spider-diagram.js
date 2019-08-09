@@ -96,7 +96,7 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
     }
 
     const data = {name: questionnaire.name, children: questionnaireChildren};
-    const tree = d3.tree().nodeSize([dx, dy]);
+    const tree = d3.tree().nodeSize([ dx, dy ]);
     const diagonal = d3.linkHorizontal().x(d => d.y).y(d => d.x);
 
     const root = d3.hierarchy(data);
@@ -114,7 +114,7 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
     const svg = d3.select(selector)
         .attr("width", width)
         .attr("height", width)
-        .attr("viewBox", [-margin.left, -margin.top, width, width])
+        .attr("viewBox", [ -margin.left, -margin.top, width, width ])
         .style("font", "10px sans-serif")
         .style("user-select", "none");
 
@@ -158,7 +158,7 @@ module.exports = ($, questionnaire, selector, type, answers, surveyDetailLevel, 
         const transition = svg.transition()
             .duration(duration)
             .attr("height", height)
-            .attr("viewBox", [-margin.left, left.x - margin.top, width, height])
+            .attr("viewBox", [ -margin.left, left.x - margin.top, width, height ])
             .tween("resize", window.ResizeObserver ? null : () => () => svg.dispatch("toggle"));
 
         const node = gNode.selectAll("g")

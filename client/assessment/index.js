@@ -695,7 +695,7 @@ const spiderDiagram = require('./spider-diagram.js');
                                             return question.id === questions[questionPointer].id;
                                         })) : null;
                                         if (currentQuestion && currentQuestion.name === constants.specializedTemplates.description) {
-                                            const questionnaire = _.find(result.data._embedded.questionnaires, ['id', result.data.surveyId]);
+                                            const questionnaire = _.find(result.data._embedded.questionnaires, [ 'id', result.data.surveyId ]);
                                             const questionnaireUrl = questionnaire ? questionnaire._links.self.href : '';
                                             projectDescription($, placeholder, assessment, currentQuestion, questionnaireUrl);
                                         } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.details) {
@@ -905,11 +905,11 @@ const spiderDiagram = require('./spider-diagram.js');
 
                                     resultSet.orderedRecommendations = _.orderBy(_.filter(resultSet._embedded.results, (result) => {
                                         return result.points > 0;
-                                    }), ['points'], ['desc']);
+                                    }), [ 'points' ], [ 'desc' ]);
 
                                     const recommendation = _.orderBy(_.filter(resultSet._embedded.results, (result) => {
                                         return result.points > 0;
-                                    }), ['points'], ['desc'])[0];
+                                    }), [ 'points' ], [ 'desc' ])[0];
 
                                     const existingFeedback = _.find(assessment.resultsetFeedback, (feedback) => {
                                         return feedback.resultsetId === resultSet.id && feedback.resultId === recommendation.id && feedback.feedbackType === 'result';
