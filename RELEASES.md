@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.106 - 2019-08-13
+
+- #142 Personas: update: fix for when releationship is null.
+
 ## 1.2.105 - 2019-08-13
 
 - #142 Personas
