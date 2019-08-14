@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.107 - 2019-08-14
+
+- #142 Personas: update: fix casesensitive filename.
+
 ## 1.2.106 - 2019-08-13
 
 - #142 Personas: update: fix for when releationship is null.
