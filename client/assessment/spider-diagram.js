@@ -3,8 +3,8 @@ const d3 = require('d3');
 
 const questionnaireSpiderTemplate = require('./questionnaire-spider.hbs');
 
-module.exports = ($, isMM, questionnaire, categories, selector, type, answers, surveyDetailLevel, goToQuesiton) => {
-    const modal = window.WarpJS.modal($, 'spider', '');
+module.exports = ($, isMM, questionnaire, categories, selector, type, answers, surveyDetailLevel, goToQuestion) => {
+    const modal = window.WarpJS.modal($, 'spider', 'Questions of this assignment in one overview');
     $('> .modal-dialog > .modal-content > .modal-body', modal).html(questionnaireSpiderTemplate({type: type}));
     modal.modal('show');
 
@@ -198,10 +198,10 @@ module.exports = ($, isMM, questionnaire, categories, selector, type, answers, s
                     }
                     update(d);
                 } else if (d.data && d.data.type === 'category' && d.data.isRepeatable) {
-                    goToQuesiton(0, 0, d.data.categoryIndex, 'category');
+                    goToQuestion(0, 0, d.data.categoryIndex, 'category');
                     modal.modal('hide');
                 } else if (d.data && d.data.linkTo) {
-                    goToQuesiton(d.data.questionIndex, d.data.iterationIndex, d.data.categoryIndex, 'question');
+                    goToQuestion(d.data.questionIndex, d.data.iterationIndex, d.data.categoryIndex, 'question');
                     modal.modal('hide');
                 }
             });
@@ -361,6 +361,7 @@ module.exports = ($, isMM, questionnaire, categories, selector, type, answers, s
         $(event.target).addClass('show-none');
         $(event.target).removeClass('show-all');
     });
+
     $(modal).on('click', '.spider-show.show-none', () => {
         collapseAll();
         $(event.target).addClass('show-all');
@@ -369,5 +370,22 @@ module.exports = ($, isMM, questionnaire, categories, selector, type, answers, s
 
     $(modal).on('click', '.auto-collapse', (event) => {
         $(event.target).toggleClass('collapse-on-click');
+    });
+
+    $(modal).on('click', '.edit-spider', (event) => {
+        event.preventDefault();
+        let introIndex = 0;
+        const intro = _.find(categories, (o, index) => {
+            introIndex = index;
+            return o.name === 'Introduction';
+        });
+        let modulesIndex = 0;
+        _.find(intro._embedded.questions, (o, index) => {
+            modulesIndex = index;
+            return o.name === 'Modules';
+        });
+
+        goToQuestion(modulesIndex, 0, introIndex, 'question');
+        modal.modal('hide');
     });
 };

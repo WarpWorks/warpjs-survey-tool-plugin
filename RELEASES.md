@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.108 - 2019-08-19
+
+- #144 Header for overview modal with link to modules.
+
 ## 1.2.107 - 2019-08-14
 
 - #142 Personas: update: fix casesensitive filename.
