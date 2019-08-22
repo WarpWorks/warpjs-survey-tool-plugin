@@ -21,8 +21,20 @@
                   <input type="checkbox" name="{{module.name}}" value="{{module.id}}">
                 </div>
                 <div class="col-sm-8 module-description">
-                  <p class="module-name">{{module.name}}</p>
-                  <p>{{module.description}}</p>
+                  {{#if module.iconImageUrl}}
+                    <div class="module-inline">
+                      <img class="icon-image" src="{{module.iconImageUrl}}" />
+                    </div>
+                  {{/if}}
+                  <div class="module-inline module-inline-right">
+                    <p class="module-name">
+                      {{#if module.logoImageUrl}}
+                        <img class="logo-image" src="{{module.logoImageUrl}}" />
+                      {{/if}}
+                       {{module.name}}
+                    </p>
+                    <p>{{module.description}}</p>
+                  </div>
                 </div>
                 <div class="col-sm-2 module-details blue-button-container">
                   <button class="blue-button module-details-button" data-warpjs-module-id="{{module.id}}" data-warpjs-question-id="{{../../question.id}}">details</button>

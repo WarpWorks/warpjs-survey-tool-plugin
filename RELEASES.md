@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.109 - 2019-08-22
+
+- #145 Modules view: add image field for icon, image field for logo, and use description.
+
 ## 1.2.108 - 2019-08-19
 
 - #144 Header for overview modal with link to modules.

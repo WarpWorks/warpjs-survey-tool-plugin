@@ -246,7 +246,7 @@
             .level-container,
             .module-container {
                 background-color: #f0f0f0;
-                padding: 20px;
+                padding: 10px 20px;
                 margin-bottom: 15px;
                 position: relative;
                 overflow: hidden;
@@ -275,13 +275,34 @@
                     font-size: 13px;
                 }
 
-                .module-name {
-                    font-weight: bold;
-                    font-size: 15px;
-                }
+                .module-inline {
+                    display: inline-block;
+                    vertical-align: middle;
 
-                .module-details {
-                    text-align: center;
+                    &.module-inline-right {
+                        width: calc(100% - 120px);
+                    }
+
+                    .icon-image {
+                        max-width: 90px;
+                        max-height: 90px;
+                        margin-right: 10px;
+                    }
+
+                    .logo-image {
+                        vertical-align: bottom;
+                        max-width: 50px;
+                        max-height: 50px;
+                    }
+
+                    .module-name {
+                        font-weight: bold;
+                        font-size: 15px;
+                    }
+
+                    .module-details {
+                        text-align: center;
+                    }
                 }
             }
 
