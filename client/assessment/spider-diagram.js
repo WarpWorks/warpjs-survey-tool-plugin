@@ -68,7 +68,8 @@ module.exports = ($, isMM, questionnaire, categories, selector, type, answers, s
                 });
 
                 categoryChildren = _.map(filteredQuestions, (question, questionIndex) => {
-                    const answerQuestion = _.find(answerCategory._embedded.iterations[0]._embedded.questions, (aQuestion) => {
+                    const answerQuestions = answerCategory && answerCategory._embedded && answerCategory._embedded.iterations[0] && answerCategory._embedded.iterations[0]._embedded ? answerCategory._embedded.iterations[0] && answerCategory._embedded.iterations[0]._embedded.questions : [];
+                    const answerQuestion = _.find(answerQuestions, (aQuestion) => {
                         return aQuestion.id === question.id;
                     });
 
@@ -78,7 +79,7 @@ module.exports = ($, isMM, questionnaire, categories, selector, type, answers, s
 
                     var answerPosition = answer ? answer.position : null;
 
-                    return {type: 'question', name: question.name, questionIndex: questionIndex, iterationIndex: 0, categoryIndex: categoryIndex, answered: answerQuestion.answer !== undefined && answerQuestion.answer !== null, answer: answerPosition, hasOptions: question._embedded && question._embedded.options.length > 0, detailLevel: question.detailLevel, linkTo: true};
+                    return {type: 'question', name: question.name, questionIndex: questionIndex, iterationIndex: 0, categoryIndex: categoryIndex, answered: answerQuestion && answerQuestion.answer !== undefined && answerQuestion.answer !== null, answer: answerPosition, hasOptions: question._embedded && question._embedded.options.length > 0, detailLevel: question.detailLevel, linkTo: true};
                 });
             }
 

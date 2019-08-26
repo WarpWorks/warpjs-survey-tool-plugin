@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.110 - 2019-08-26
+
+- #146 Error handling for spider diagram when adding new questions using old sample data.
+
 ## 1.2.109 - 2019-08-22
 
 - #145 Modules view: add image field for icon, image field for logo, and use description.
