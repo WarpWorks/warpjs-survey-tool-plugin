@@ -1,5 +1,13 @@
 # Release Notes
 
+## 1.2.111 - 2019-08-27
+
+- #147 Description for personas in tooltip.
+
+## 1.2.110 - 2019-08-26
+
+- #146 Error handling for spider diagram when adding new questions using old sample data.
+
 ## 1.2.110 - 2019-08-26
 
 - #146 Error handling for spider diagram when adding new questions using old sample data.

@@ -36,6 +36,7 @@ const spiderDiagram = require('./spider-diagram.js');
         container: 'body',
         trigger: 'click'
     });
+
     const styleRadio = () => {
         $("input:radio, input[type='checkbox']").hide().each(function() {
             $(this).attr('data-radio-fx', this.name);
@@ -781,6 +782,9 @@ const spiderDiagram = require('./spider-diagram.js');
                                         } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.personas) {
                                             shared.setSurveyContent($, placeholder, questionnairePersonasTemplate({personas: _.orderBy(result.data._embedded.questionnaires[0]._embedded.personas, [ 'position' ], [ 'asc' ]), question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null}));
                                             assignPersonaSelected();
+                                            $('[data-toggle="tooltip"]').tooltip({
+                                                container: 'body'
+                                            });
                                         } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.modules) {
                                             const sections = _.groupBy(categoriesMinusIntro, (category) => {
                                                 return category.section === undefined ? '' : category.section;

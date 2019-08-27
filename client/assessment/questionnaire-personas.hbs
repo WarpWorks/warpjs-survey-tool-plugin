@@ -12,7 +12,7 @@
           <div class="row persona-row">
             {{#each personas as |persona|}}
               <div class="col-sm-3 persona-col">
-                <div class="persona-container">
+                <div class="persona-container" data-toggle="tooltip" title="{{persona.description}}" data-placement="top">
                   {{#if persona.image}}
                     <div class="persona-image">
                       <img src="{{persona.imageUrl}}"/>
