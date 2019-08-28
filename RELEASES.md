@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.112 - 2019-08-28
+
+- #148 Skip personas view if there are no personas.
+
 ## 1.2.111 - 2019-08-27
 
 - #147 Description for personas in tooltip.

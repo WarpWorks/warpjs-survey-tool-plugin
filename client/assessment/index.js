@@ -4,6 +4,8 @@ const uuid = require('uuid/v4');
 
 const cannotFindAssessmentTemplate = require('./cannot-find-assessment.hbs');
 const constants = require('./../constants');
+const createImageMapElements = require('./resources/create-image-map-elements.js');
+const emailFormTemplate = require('./results/email-form-template.hbs');
 const errorTemplate = require('./../error.hbs');
 const getVersion = require('./get-version');
 const mockWarpjsUtils = require('./../mock-warpjs-utils');
@@ -23,10 +25,10 @@ const questionnaireSubDetailsTemplate = require('./results/questionnaire-sub-det
 const questionnaireRelatedReadingTemplate = require('./results/questionnaire-related-readings.hbs');
 const questionnaireRelatedDetailsTemplate = require('./results/questionnaire-related-reading-detail.hbs');
 const questionnaireRelatedAllTemplate = require('./results/questionnaire-related-all.hbs');
-const emailFormTemplate = require('./results/email-form-template.hbs');
 const shared = require('./../shared');
-const storage = require('./../storage');
 const spiderDiagram = require('./spider-diagram.js');
+const storage = require('./../storage');
+const styleRadio = require('./resources/style-radio');
 
 (($) => $(document).ready(() => {
     const loader = window.WarpJS.toast.loading($, "Page is loading");
@@ -36,36 +38,6 @@ const spiderDiagram = require('./spider-diagram.js');
         container: 'body',
         trigger: 'click'
     });
-
-    const styleRadio = () => {
-        $("input:radio, input[type='checkbox']").hide().each(function() {
-            $(this).attr('data-radio-fx', this.name);
-            var label = $("label[for=" + '"' + this.id + '"' + "]").text();
-            $('<a ' + (label !== '' ? 'title=" ' + label + ' "' : '') + ' data-radio-fx="' + this.name + '" class="radio-fx" href="#">' +
-                '<span class="radio ' + (this.checked ? ' radio-checked' : '') + ' ' + $(this).attr("class") + '"></span></a>').insertAfter(this);
-        });
-
-        if ($(":radio.question-options[checked='checked']").length) {
-            $('.questionnaire.question .question-next').html('Next Question');
-        }
-
-        $('a.radio-fx').on('click', function(event) {
-            event.preventDefault();
-            const unique = $(this).attr('data-radio-fx');
-            const checked = $(this).find('span').hasClass('radio-checked');
-            $("a[data-radio-fx='" + unique + "'] span").removeClass('radio-checked');
-            $(":radio[data-radio-fx='" + unique + "'], input[type='checkbox'][data-radio-fx='" + unique + "']").attr('checked', false);
-            if (!checked || !$('.questionnaire.question').length) {
-                $(this).find('span').addClass('radio-checked');
-                $(this).prev("input:radio, input[type='checkbox']").attr('checked', true);
-            }
-            if ($(":radio.question-options[data-radio-fx='" + unique + "'][checked='checked']").length) {
-                $('.questionnaire.question .question-next').html('Next Question');
-            } else if ($(this).hasClass('question-options')) {
-                $('.questionnaire.question .question-next').html("Don't know (yet)");
-            }
-        });
-    };
 
     return Promise.resolve()
         .then(() => window.WarpJS.getCurrentPageHAL($))
@@ -228,8 +200,7 @@ const spiderDiagram = require('./spider-diagram.js');
                             const personasOnLeave = () => {
                                 getAssessment();
                                 const newPersona = $("input[name='questionnaire-persona'][checked='checked']").val();
-
-                                if (assessment.persona && assessment.persona === newPersona) {
+                                if ((!assessment.persona && !newPersona) || (assessment.persona && assessment.persona === newPersona)) {
                                     return;
                                 }
 
@@ -355,7 +326,7 @@ const spiderDiagram = require('./spider-diagram.js');
                                     }
                                 }
 
-                                updateQuestionContent(outOfBounds);
+                                updateQuestionContent(outOfBounds, direction);
                             };
 
                             const assignOptionSelected = (qQuestion, aQuestion) => {
@@ -449,98 +420,6 @@ const spiderDiagram = require('./spider-diagram.js');
                                 }
 
                                 return values;
-                            };
-
-                            const createImageMapElements = (imageMapValues) => {
-                                const imageMapCoords = imageMapValues.split(',');
-                                const topLeft = document.createElement('div');
-                                $(topLeft).addClass('image-map-overlay top-left')
-                                    .css({
-                                        left: '0px',
-                                        top: '0px',
-                                        width: imageMapCoords[0] + 'px',
-                                        height: imageMapCoords[1] + 'px'
-                                    })
-                                    .appendTo($('.image-map-img-container'));
-
-                                const topMid = document.createElement('div');
-                                $(topMid).addClass('image-map-overlay top-mid')
-                                    .css({
-                                        left: imageMapCoords[0] + 'px',
-                                        top: '0px',
-                                        width: (imageMapCoords[2] - imageMapCoords[0]) + 'px',
-                                        height: imageMapCoords[1] + 'px'
-                                    })
-                                    .appendTo($('.image-map-img-container'));
-
-                                const topRight = document.createElement('div');
-                                $(topRight).addClass('image-map-overlay top-right')
-                                    .css({
-                                        left: imageMapCoords[2] + 'px',
-                                        top: '0px',
-                                        width: 'calc(100% - ' + imageMapCoords[2] + 'px)',
-                                        height: imageMapCoords[1] + 'px'
-                                    })
-                                    .appendTo($('.image-map-img-container'));
-
-                                const midRight = document.createElement('div');
-                                $(midRight).addClass('image-map-overlay mid-right')
-                                    .css({
-                                        left: imageMapCoords[2] + 'px',
-                                        top: imageMapCoords[1] + 'px',
-                                        width: 'calc(100% - ' + imageMapCoords[2] + 'px)',
-                                        height: (imageMapCoords[3] - imageMapCoords[1]) + 'px'
-                                    })
-                                    .appendTo($('.image-map-img-container'));
-
-                                const midLeft = document.createElement('div');
-                                $(midLeft).addClass('image-map-overlay mid-left')
-                                    .css({
-                                        left: '0px',
-                                        top: imageMapCoords[1] + 'px',
-                                        width: imageMapCoords[0] + 'px',
-                                        height: (imageMapCoords[3] - imageMapCoords[1]) + 'px'
-                                    })
-                                    .appendTo($('.image-map-img-container'));
-
-                                const bottomLeft = document.createElement('div');
-                                $(bottomLeft).addClass('image-map-overlay bottom-left')
-                                    .css({
-                                        left: '0px',
-                                        top: imageMapCoords[3] + 'px',
-                                        width: imageMapCoords[0] + 'px',
-                                        height: 'calc(100% - ' + imageMapCoords[3] + 'px)'
-                                    })
-                                    .appendTo($('.image-map-img-container'));
-
-                                const bottomMid = document.createElement('div');
-                                $(bottomMid).addClass('image-map-overlay bottom-mid')
-                                    .css({
-                                        left: imageMapCoords[0] + 'px',
-                                        top: imageMapCoords[3] + 'px',
-                                        width: (imageMapCoords[2] - imageMapCoords[0]) + 'px',
-                                        height: 'calc(100% - ' + imageMapCoords[3] + 'px)'
-                                    })
-                                    .appendTo($('.image-map-img-container'));
-
-                                const bottomRight = document.createElement('div');
-                                $(bottomRight).addClass('image-map-overlay bottom-right')
-                                    .css({
-                                        left: imageMapCoords[2] + 'px',
-                                        top: imageMapCoords[3] + 'px',
-                                        width: 'calc(100% - ' + imageMapCoords[2] + 'px)',
-                                        height: 'calc(100% - ' + imageMapCoords[3] + 'px)'
-                                    })
-                                    .appendTo($('.image-map-img-container'));
-                                const mapBorder = document.createElement('div');
-                                $(mapBorder).addClass('image-map-border')
-                                    .css({
-                                        left: imageMapCoords[0] + 'px',
-                                        top: imageMapCoords[1] + 'px',
-                                        width: (imageMapCoords[2] - imageMapCoords[0]) + 'px',
-                                        height: (imageMapCoords[3] - imageMapCoords[1]) + 'px'
-                                    })
-                                    .appendTo($('.image-map-img-container'));
                             };
 
                             const summaryValues = () => {
@@ -743,7 +622,7 @@ const spiderDiagram = require('./spider-diagram.js');
                                 spiderDiagram($, isMM, result.data._embedded.questionnaires[0], getCategories(result.data._embedded.questionnaires[0]._embedded.categories), 'svg.spider.' + type + '-spider', type, assessment.answers[0], assessment.detailLevel, goToQuestion);
                             };
 
-                            const updateQuestionContent = (outOfBounds = '') => {
+                            const updateQuestionContent = (outOfBounds = '', direction = null) => {
                                 const progressPosition = categories[categoryPointer] ? _.findIndex(progressFilteredCategories, function(o) {
                                     return o.id && o.id === categories[categoryPointer].id;
                                 }) : null;
@@ -763,7 +642,7 @@ const spiderDiagram = require('./spider-diagram.js');
                                     const values = templateValues();
                                     shared.setSurveyContent($, placeholder, questionnaireIterationTemplate({category: values.category, iterations: categories[categoryPointer]._embedded.iterations, image: values.image}));
                                     if (values.imageMap) {
-                                        createImageMapElements(values.imageMap);
+                                        createImageMapElements($, values.imageMap);
                                     }
                                 } else {
                                     if (currentCategory && currentCategory.name === constants.specializedTemplates.introCategory) {
@@ -780,11 +659,15 @@ const spiderDiagram = require('./spider-diagram.js');
                                         } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.spider) {
                                             spiderSetup('intro');
                                         } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.personas) {
-                                            shared.setSurveyContent($, placeholder, questionnairePersonasTemplate({personas: _.orderBy(result.data._embedded.questionnaires[0]._embedded.personas, [ 'position' ], [ 'asc' ]), question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null}));
-                                            assignPersonaSelected();
-                                            $('[data-toggle="tooltip"]').tooltip({
-                                                container: 'body'
-                                            });
+                                            if (result.data._embedded.questionnaires[0]._embedded.personas && result.data._embedded.questionnaires[0]._embedded.personas.length) {
+                                                shared.setSurveyContent($, placeholder, questionnairePersonasTemplate({personas: _.orderBy(result.data._embedded.questionnaires[0]._embedded.personas, [ 'position' ], [ 'asc' ]), question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null}));
+                                                assignPersonaSelected();
+                                                $('[data-toggle="tooltip"]').tooltip({
+                                                    container: 'body'
+                                                });
+                                            } else if (direction) {
+                                                updatePointers(direction);
+                                            }
                                         } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.modules) {
                                             const sections = _.groupBy(categoriesMinusIntro, (category) => {
                                                 return category.section === undefined ? '' : category.section;
@@ -799,7 +682,7 @@ const spiderDiagram = require('./spider-diagram.js');
                                         const values = templateValues();
                                         shared.setSurveyContent($, placeholder, questionnaireTemplate(values));
                                         if (values.imageMap) {
-                                            createImageMapElements(values.imageMap);
+                                            createImageMapElements($, values.imageMap);
                                         }
 
                                         $('.image-map-img-container > img').css({width: values.imageWidth ? values.imageWidth : 'auto', height: values.imageHeight ? values.imageHeight : 'auto'});
@@ -807,7 +690,7 @@ const spiderDiagram = require('./spider-diagram.js');
                                 }
 
                                 $('.survey-tool .progress-bar').css('width', progress + '%');
-                                styleRadio();
+                                styleRadio($);
                             };
 
                             const updateIterations = () => {
@@ -1352,7 +1235,7 @@ const spiderDiagram = require('./spider-diagram.js');
                                 });
                                 shared.setSurveyContent($, placeholder, questionnaireModulesTemplate({sections: sections, question: currentQuestion}));
                                 assignModulesSelected();
-                                styleRadio();
+                                styleRadio($);
                             });
                         })
                     ;
