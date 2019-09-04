@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.116 - 2019-09-04
+
+- #146 Error handling third update for spider diagram.
+
 ## 1.2.115 - 2019-09-04
 
 - #146 Error handling second update for spider diagram.

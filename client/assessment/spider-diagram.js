@@ -48,7 +48,7 @@ module.exports = ($, isMM, questionnaire, categories, selector, type, answers, s
 
                         var answerPosition = answer ? answer.position : null;
 
-                        return {type: 'question', name: categoryQuestion ? categoryQuestion.name : null, questionIndex: questionIndex, iterationIndex: iterationIndex, categoryIndex: categoryIndex, answered: isAnswered, answer: answerPosition, hasOptions: categoryQuestion._embedded && categoryQuestion._embedded.options.length > 0, detailLevel: categoryQuestion.detailLevel, linkTo: true};
+                        return {type: 'question', name: categoryQuestion ? categoryQuestion.name : null, questionIndex: questionIndex, iterationIndex: iterationIndex, categoryIndex: categoryIndex, answered: isAnswered, answer: answerPosition, hasOptions: categoryQuestion && categoryQuestion._embedded && categoryQuestion._embedded.options.length > 0, detailLevel: categoryQuestion ? categoryQuestion.detailLevel : null, linkTo: true};
                     });
 
                     let answeredLevel = 'none';
