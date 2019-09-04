@@ -22,7 +22,7 @@ module.exports = ($, isMM, questionnaire, categories, selector, type, answers, s
                 return category.id === answerCategory.id;
             });
 
-            if (category.isRepeatable && answerCategory._embedded.iterations) {
+            if (category.isRepeatable && answerCategory && answerCategory._embedded && answerCategory._embedded.iterations) {
                 categoryChildren = _.filter(_.map(answerCategory._embedded.iterations, (iteration, iterationIndex) => {
                     let oneAnswered = false;
                     let allAnswered = true;
@@ -74,7 +74,7 @@ module.exports = ($, isMM, questionnaire, categories, selector, type, answers, s
                     });
 
                     const answer = _.find(question._embedded.options, (answer) => {
-                        return answer && answer.id === answerQuestion.answer;
+                        return answer && answerQuestion && answer.id === answerQuestion.answer;
                     });
 
                     var answerPosition = answer ? answer.position : null;
