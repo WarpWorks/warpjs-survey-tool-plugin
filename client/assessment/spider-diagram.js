@@ -38,17 +38,17 @@ module.exports = ($, isMM, questionnaire, categories, selector, type, answers, s
                         const isAnswered = question.answer !== undefined && question.answer !== null;
                         if (isAnswered) {
                             oneAnswered = true;
-                        } else if (categoryQuestion._embedded && categoryQuestion._embedded.options.length > 0) {
+                        } else if (categoryQuestion && categoryQuestion._embedded && categoryQuestion._embedded.options.length > 0) {
                             allAnswered = false;
                         }
 
-                        const answer = _.find(categoryQuestion._embedded.options, (answer) => {
+                        const answer = categoryQuestion ? _.find(categoryQuestion._embedded.options, (answer) => {
                             return answer && answer.id === question.answer;
-                        });
+                        }) : null;
 
                         var answerPosition = answer ? answer.position : null;
 
-                        return {type: 'question', name: categoryQuestion.name, questionIndex: questionIndex, iterationIndex: iterationIndex, categoryIndex: categoryIndex, answered: isAnswered, answer: answerPosition, hasOptions: categoryQuestion._embedded && categoryQuestion._embedded.options.length > 0, detailLevel: categoryQuestion.detailLevel, linkTo: true};
+                        return {type: 'question', name: categoryQuestion ? categoryQuestion.name : null, questionIndex: questionIndex, iterationIndex: iterationIndex, categoryIndex: categoryIndex, answered: isAnswered, answer: answerPosition, hasOptions: categoryQuestion._embedded && categoryQuestion._embedded.options.length > 0, detailLevel: categoryQuestion.detailLevel, linkTo: true};
                     });
 
                     let answeredLevel = 'none';
