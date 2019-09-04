@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.113 - 2019-09-04
+
+- #149 Change persona text.
+
 ## 1.2.112 - 2019-08-28
 
 - #148 Skip personas view if there are no personas.
