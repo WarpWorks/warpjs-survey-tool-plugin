@@ -1058,7 +1058,7 @@
     }
 }
 
-.progress-container {
+.progress-container, .progress-results-container {
     display: none;
 }
 
@@ -1195,6 +1195,9 @@
         padding-left: 15px;
 
         .progress-container {
+            width: 80%;
+            float: left;
+
             .progress-label {
                 font-size: 12px;
                 color: #ccc;
@@ -1213,6 +1216,26 @@
                     width: 0px;
                     height: 12px;
                     border-radius: 6px;
+                }
+            }
+        }
+
+        .progress-results-container {
+            width: 20%;
+            float: left;
+            padding-left: 5px;
+
+            .progress-results-button {
+                background-color: #ccc;
+                width: 14px;
+                height: 14px;
+                border-radius: 7px;
+                margin: 17px 1px;
+                display: inline-block;
+                cursor: pointer;
+
+                &.selected-result {
+                    background-color:#337ab7;
                 }
             }
         }

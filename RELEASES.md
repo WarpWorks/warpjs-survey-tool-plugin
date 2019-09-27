@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.117 - 2019-09-27
+
+- #153 Dots for direct page access.
+
 ## 1.2.116 - 2019-09-04
 
 - #146 Error handling third update for spider diagram.
