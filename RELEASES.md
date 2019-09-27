@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.119 - 2019-09-27
+
+- #154 Rename "Related Readings" to "Guidance"
+
 ## 1.2.118 - 2019-09-27
 
 - #156 Remove feedback from one page.
