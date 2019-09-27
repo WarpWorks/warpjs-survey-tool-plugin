@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.118 - 2019-09-27
+
+- #156 Remove feedback from one page.
+
 ## 1.2.117 - 2019-09-27
 
 - #153 Dots for direct page access.
