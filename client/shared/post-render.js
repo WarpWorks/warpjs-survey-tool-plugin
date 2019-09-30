@@ -1,5 +1,3 @@
-const exportAssessement = require('./export-assessment');
-const loadAssessment = require('./load-assessment');
 const storage = require('./../storage');
 
 module.exports = ($, data) => {
@@ -39,7 +37,4 @@ module.exports = ($, data) => {
         console.log('triggered close');
         $('[data-toggle="tooltip"]').tooltip('hide');
     });
-
-    exportAssessement($, placeholder);
-    loadAssessment($, placeholder);
 };

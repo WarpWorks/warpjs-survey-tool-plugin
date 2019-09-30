@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.121 - 2019-09-30
+
+- #151 Move Export and Import buttons.
+
 ## 1.2.120 - 2019-09-30
 
 - #155 Replace stars with dots.

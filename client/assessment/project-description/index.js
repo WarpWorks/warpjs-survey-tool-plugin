@@ -5,6 +5,8 @@ const getVersion = require('./../get-version');
 const shared = require('./../../shared');
 const storage = require('./../../storage');
 const template = require('./template.hbs');
+const exportAssessement = require('./../../shared/export-assessment');
+const loadAssessment = require('./../../shared/load-assessment');
 
 let initialized = false;
 
@@ -42,4 +44,7 @@ module.exports = ($, placeholder, assessment, currentQuestion, rootUrl) => {
         deleteAssessment($, placeholder);
         createDefaultAssessment($, placeholder);
     }
+
+    exportAssessement($, placeholder);
+    loadAssessment($, placeholder);
 };

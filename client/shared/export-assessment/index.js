@@ -10,7 +10,7 @@ module.exports = ($, placeholder) => {
     if (assessmentId) {
         $('[data-survey-tool-action="download-json"]', placeholder).show();
 
-        $('[data-survey-tool-action="download-json"]', placeholder).on('click', function() {
+        placeholder.on('click', '[data-survey-tool-action="download-json"]', function() {
             let assessment = storage.getAssessment(surveyId, assessmentId);
             assessment = convertFormat($, assessment);
             askProperties($, placeholder, assessment);

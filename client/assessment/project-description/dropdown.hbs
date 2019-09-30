@@ -18,7 +18,14 @@
       No projects yet.
     {{/each}}
     <div class="dropdown-divider"></div>
-
+    <div>
+      <div class="export-import-container">
+        <button class="blue-button btn btn-primary" data-survey-tool-action="download-json">Export</button>
+      </div>
+      <div class="export-import-container">
+        <button class="blue-button btn btn-primary" data-survey-tool-action="load-json">Import</button>
+      </div>
+    </div>
     {{#unless showCreate}}
       <div class="dropdown-delete-actions">
         <button type="button" class="btn btn-danger dropdown-delete">DELETE '{{assessment.projectName}}'</button>
