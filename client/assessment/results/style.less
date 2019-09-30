@@ -206,13 +206,12 @@
 
             .star-icon,
             .star-icon-remainder {
-                background-image: url(images/star-0.svg);
-                width: 20px;
-                height: 20px;
+                background-color: #ffffff;
+                border: solid 1px #5B84A8;
+                border-radius: 8px;
+                width: 16px;
+                height: 16px;
                 display: inline-block;
-                background-size: contain;
-                background-position: center center;
-                background-repeat: no-repeat;
             }
 
             .star-icon-remainder {
@@ -221,15 +220,26 @@
         }
 
         .star .star-icon-remainder-0 {
-            background-image: url(images/star-0.svg);
+            background-color: #ffffff;
         }
 
         .star .star-icon-remainder-1 {
-            background-image: url(images/star-1.svg);
+            position: relative;
+            overflow: hidden;
+            background-color: #ffffff;
+
+            .remainder-inner {
+                position: absolute;
+                left: 0px;
+                top: 0px;
+                height: 18px;
+                width: 8px;
+                background-color: #43546A;
+            }
         }
 
         .star .star-icon-remainder-2 {
-            background-image: url(images/star-2.svg);
+            background-color: #43546A;
         }
 
         &.star-number-1 {
@@ -244,7 +254,7 @@
 
         &.star-number-2 {
             .star.star1 .star-icon {
-                background-image: url(images/star-2.svg);
+                background-color: #43546A;
             }
 
             .star.star2 .star-icon {
@@ -259,7 +269,7 @@
         &.star-number-3 {
             .star.star1 .star-icon,
             .star.star2 .star-icon {
-                background-image: url(images/star-2.svg);
+                background-color: #43546A;
             }
 
             .star.star3 .star-icon {
@@ -275,7 +285,7 @@
             .star.star1 .star-icon,
             .star.star2 .star-icon,
             .star.star3 .star-icon {
-                background-image: url(images/star-2.svg);
+                background-color: #43546A;
             }
 
             .star.star4 .star-icon {
@@ -289,7 +299,7 @@
 
         &.star-number-5 {
             .star-icon {
-                background-image: url(images/star-2.svg);
+                background-color: #43546A;
             }
 
             .star.star5 .star-icon {

@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.120 - 2019-09-30
+
+- #155 Replace stars with dots.
+
 ## 1.2.119 - 2019-09-27
 
 - #154 Rename "Related Readings" to "Guidance"
