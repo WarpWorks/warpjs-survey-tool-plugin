@@ -1,9 +1,12 @@
 // const debug = require('debug')('W2:plugin:survey-tool:assessment/wizard');
+const fs = require('fs');
+const path = require('path');
 const Promise = require('bluebird');
 const RoutesInfo = require('@quoin/expressjs-routes-info');
 const uuid = require('uuid/v4');
 const warpjsUtils = require('@warp-works/warpjs-utils');
 
+const config = require('../config');
 const constants = require('./../../lib/constants');
 const Questionnaire = require('./../../lib/models/questionnaire');
 const utils = require('./../utils');
@@ -48,6 +51,9 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
             await questionnaire.fromPersistence(Promise, pluginInfo, entity, instance);
 
             const hal = await questionnaire.toHal(warpjsUtils, RoutesInfo, constants.routes, pluginInfo.domain);
+            const fileSrc = path.resolve(config.public, `uploaded-files/${hal.key}-acme_asset_management.txt`);
+            hal.hasSampleProject = fs.existsSync(fileSrc);
+
             resource.embed('questionnaires', hal);
 
             // create answers resource

@@ -2,7 +2,7 @@ var http = require('http');
 
 const fileLoaded = require('./../../shared/load-assessment/file-loaded');
 
-module.exports = ($, placeholder) => {
+module.exports = ($, placeholder, type) => {
     placeholder.on('click', '.load-sample-project', (event) => {
         function get_json(url, callback) {
             http.get(url, (res) => {
@@ -16,7 +16,7 @@ module.exports = ($, placeholder) => {
                 });
             });
         }
-        get_json('/public/uploaded-files/ipt-acme_asset_management.txt', (resp) => {
+        get_json(`/public/uploaded-files/${type}-acme_asset_management.txt`, (resp) => {
             fileLoaded($, placeholder, resp);
         });
     });

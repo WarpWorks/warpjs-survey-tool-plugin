@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.122 - 2019-10-01
+
+- #150 Link sample file to surveys key.
+
 ## 1.2.121 - 2019-09-30
 
 - #151 Move Export and Import buttons.

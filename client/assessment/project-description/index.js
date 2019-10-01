@@ -10,7 +10,7 @@ const loadAssessment = require('./../../shared/load-assessment');
 
 let initialized = false;
 
-module.exports = ($, placeholder, assessment, currentQuestion, rootUrl) => {
+module.exports = ($, placeholder, assessment, currentQuestion, rootUrl, type, hasSampleProject) => {
     const showCreate = !storage.getCurrent($, 'assessmentId');
     const surveyId = storage.getCurrent($, 'surveyId');
     const assessmentTemplateUrl = storage.getCurrent($, 'surveyToolAssessmentTemplateUrl');
@@ -33,7 +33,8 @@ module.exports = ($, placeholder, assessment, currentQuestion, rootUrl) => {
         assessment,
         assessments,
         question: currentQuestion,
-        rootUrl: rootUrl
+        rootUrl: rootUrl,
+        hasSampleProject
     });
     shared.setSurveyContent($, placeholder, content);
 
@@ -42,7 +43,7 @@ module.exports = ($, placeholder, assessment, currentQuestion, rootUrl) => {
         initialized = true;
         createAssessment($, placeholder);
         deleteAssessment($, placeholder);
-        createDefaultAssessment($, placeholder);
+        createDefaultAssessment($, placeholder, type);
     }
 
     exportAssessement($, placeholder);

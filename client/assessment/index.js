@@ -654,7 +654,7 @@ const styleRadio = require('./resources/style-radio');
                                         if (currentQuestion && currentQuestion.name === constants.specializedTemplates.description) {
                                             const questionnaire = _.find(result.data._embedded.questionnaires, [ 'id', result.data.surveyId ]);
                                             const questionnaireUrl = questionnaire ? questionnaire._links.self.href : '';
-                                            projectDescription($, placeholder, assessment, currentQuestion, questionnaireUrl);
+                                            projectDescription($, placeholder, assessment, currentQuestion, questionnaireUrl, result.data._embedded.questionnaires[0].key, result.data._embedded.questionnaires[0].hasSampleProject);
                                         } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.details) {
                                             shared.setSurveyContent($, placeholder, questionnaireLevelsTemplate({level: assessment.detailLevel, question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null}));
                                             assignDetailLevelSelected();

@@ -34,7 +34,6 @@ module.exports = ($, data) => {
     });
 
     $(document).on('click', '.close-copyright', () => {
-        console.log('triggered close');
         $('[data-toggle="tooltip"]').tooltip('hide');
     });
 };
