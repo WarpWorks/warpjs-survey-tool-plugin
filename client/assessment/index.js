@@ -143,7 +143,7 @@ const styleRadio = require('./resources/style-radio');
                 };
 
                 filterContent();
-                progress = 1 / categories.length * 100;
+                progress = 0;
 
                 const getAssessment = () => {
                     assessment = storage.getAssessment(storage.getCurrent($, 'surveyId'), storage.getCurrent($, 'assessmentId'));
@@ -628,7 +628,7 @@ const styleRadio = require('./resources/style-radio');
                                 const progressPosition = categories[categoryPointer] ? _.findIndex(progressFilteredCategories, function(o) {
                                     return o.id && o.id === categories[categoryPointer].id;
                                 }) : null;
-                                progress = (progressPosition + 1) / progressFilteredCategories.length * 100;
+                                progress = (progressPosition) / progressFilteredCategories.length * 100;
                                 const currentCategory = categories[categoryPointer] ? _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
                                     return category.id === categories[categoryPointer].id;
                                 }) : null;

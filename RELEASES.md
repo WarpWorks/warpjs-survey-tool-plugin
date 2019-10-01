@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.123 - 2019-10-01
+
+- #152 Progress bar limited scope.
+
 ## 1.2.122 - 2019-10-01
 
 - #150 Link sample file to surveys key.
