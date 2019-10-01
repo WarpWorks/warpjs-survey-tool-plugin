@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.124 - 2019-10-01
+
+- #159 Style changes for buttons on guidance cards.
+
 ## 1.2.123 - 2019-10-01
 
 - #152 Progress bar limited scope.
