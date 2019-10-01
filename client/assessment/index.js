@@ -437,9 +437,9 @@ const styleRadio = require('./resources/style-radio');
                                                 const questionQ = question ? _.find(categoryQ._embedded.questions, (questionQuestion) => {
                                                     return questionQuestion.id === question.id;
                                                 }) : null;
-                                                const option = _.find(questionQ._embedded.options, (option) => {
+                                                const option = questionQ ? _.find(questionQ._embedded.options, (option) => {
                                                     return option.id === question.answer;
-                                                });
+                                                }) : null;
                                                 position = option ? option.position : null;
 
                                                 const priority = calculatePriority(question.priority);
@@ -509,10 +509,10 @@ const styleRadio = require('./resources/style-radio');
                                                 const questionQ = question ? _.find(categoryQ._embedded.questions, (questionQuestion) => {
                                                     return questionQuestion.id === question.id;
                                                 }) : null;
-                                                const option = _.find(questionQ._embedded.options, (option) => {
+                                                const option = questionQ ? _.find(questionQ._embedded.options, (option) => {
                                                     return option.id === question.answer;
-                                                });
-                                                const selectedOption = questionQ._embedded.options.length && option ? option.position : null;
+                                                }) : null;
+                                                const selectedOption = questionQ && questionQ._embedded.options.length && option ? option.position : null;
                                                 const priority = calculatePriority(question.priority);
                                                 const preppedPriority = (5 - parseInt(selectedOption, 10)) * priority;
                                                 let urgency = 'none';
@@ -524,7 +524,7 @@ const styleRadio = require('./resources/style-radio');
                                                     urgency = 'yellow';
                                                 }
 
-                                                const allStatuses = questionQ._embedded.options ? _.map(questionQ._embedded.options, (optionQ) => {
+                                                const allStatuses = questionQ && questionQ._embedded.options ? _.map(questionQ._embedded.options, (optionQ) => {
                                                     return {
                                                         currentStatus: optionQ.currentStatus,
                                                         isSelected: optionQ.id === question.answer
@@ -532,13 +532,13 @@ const styleRadio = require('./resources/style-radio');
                                                 }) : null;
 
                                                 return {
-                                                    name: questionQ.name,
-                                                    hasOptions: !!questionQ._embedded.options.length,
+                                                    name: questionQ ? questionQ.name : null,
+                                                    hasOptions: !!questionQ && questionQ._embedded.options.length,
                                                     position: selectedOption,
-                                                    option: questionQ._embedded.options.length && option ? option : null,
+                                                    option: questionQ && questionQ._embedded.options.length && option ? option : null,
                                                     comments: question.comments,
                                                     priority: priority,
-                                                    moreInformation: questionQ.moreInformation,
+                                                    moreInformation: questionQ ? questionQ.moreInformation : null,
                                                     urgency: urgency,
                                                     allStatuses: allStatuses
                                                 };
