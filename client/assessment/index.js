@@ -970,42 +970,44 @@ const styleRadio = require('./resources/style-radio');
                             });
 
                             $(document).on('click', '.progress-results-button', (event) => {
-                                const $clicked = $(event.target);
-                                categoryPointer = categories.length - 1;
-                                iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
-                                    return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
-                                });
-                                iterationPointer = iterations.length - 1;
-                                questions = getQuestions(iterations);
-                                questionPointer = questions.length ? questions.length - 1 : -1;
+                                if (result.data.assessmentId) {
+                                    const $clicked = $(event.target);
+                                    categoryPointer = categories.length - 1;
+                                    iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
+                                        return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
+                                    });
+                                    iterationPointer = iterations.length - 1;
+                                    questions = getQuestions(iterations);
+                                    questionPointer = questions.length ? questions.length - 1 : -1;
 
-                                if (isMM) {
-                                    switch ($clicked.data('result')) {
-                                        case 1:
-                                            summarySetup();
-                                            break;
-                                        case 2:
-                                            subDetailsSetup();
-                                            break;
-                                        case 3:
-                                            detailsSetup();
+                                    if (isMM) {
+                                        switch ($clicked.data('result')) {
+                                            case 1:
+                                                summarySetup();
+                                                break;
+                                            case 2:
+                                                subDetailsSetup();
+                                                break;
+                                            case 3:
+                                                detailsSetup();
+                                        }
+                                    } else {
+                                        switch ($clicked.data('result')) {
+                                            case 1:
+                                                summarySetup();
+                                                break;
+                                            case 2:
+                                                detailsSetup();
+                                                break;
+                                            case 3:
+                                                relatedReadingSetup();
+                                        }
                                     }
-                                } else {
-                                    switch ($clicked.data('result')) {
-                                        case 1:
-                                            summarySetup();
-                                            break;
-                                        case 2:
-                                            detailsSetup();
-                                            break;
-                                        case 3:
-                                            relatedReadingSetup();
-                                    }
+
+                                    $('.progress-results-button').removeClass('selected-result');
+                                    $clicked.addClass('selected-result');
+                                    $('.survey-tool .progress-bar').css('width', '100%');
                                 }
-
-                                $('.progress-results-button').removeClass('selected-result');
-                                $clicked.addClass('selected-result');
-                                $('.survey-tool .progress-bar').css('width', '100%');
                             });
 
                             $(document).on('click', '.show-related-all', (event) => {
