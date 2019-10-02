@@ -193,10 +193,19 @@
         }
     }
 
-    .related-reading .star-container {
-        position: absolute;
-        left: 10px;
-        bottom: 40px;
+    .related-reading {
+        .tooltip-arrow {
+            border-bottom-color: #424A54;
+        }
+        .tooltip > .tooltip-inner {
+            background-color: #424A54;
+        }
+
+        .star-container {
+            position: absolute;
+            left: 10px;
+            bottom: 40px;
+        }
     }
 
     .star-container {
@@ -354,26 +363,16 @@
 
     .recommend-text-container {
         .recommend-text {
-            font-size: 10px;
+            font-size: 11px;
             display: none;
+            padding : 5px;
+            color: #fff;
         }
 
-        &.star-number-1 .recommend-text.recommend-text-1 {
-            display: block;
-        }
-
-        &.star-number-2 .recommend-text.recommend-text-2 {
-            display: block;
-        }
-
-        &.star-number-3 .recommend-text.recommend-text-3 {
-            display: block;
-        }
-
-        &.star-number-4 .recommend-text.recommend-text-4 {
-            display: block;
-        }
-
+        &.star-number-1 .recommend-text.recommend-text-1,
+        &.star-number-2 .recommend-text.recommend-text-2,
+        &.star-number-3 .recommend-text.recommend-text-3,
+        &.star-number-4 .recommend-text.recommend-text-4,
         &.star-number-5 .recommend-text.recommend-text-5 {
             display: block;
         }

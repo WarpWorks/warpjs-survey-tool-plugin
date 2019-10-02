@@ -912,6 +912,7 @@ const styleRadio = require('./resources/style-radio');
 
                                 $('.progress-results-button').removeClass('selected-result');
                                 $('.progress-results-button[data-result="3"]').addClass('selected-result');
+                                $('.star-container[data-toggle="tooltip"]', placeholder).tooltip({html: true});
                             };
 
                             if (assessment.answers[0]._embedded.categories[categoryPointer].isRepeatable === true) {

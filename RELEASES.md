@@ -1,5 +1,10 @@
 # Release Notes
 
+## 1.2.125 - 2019-10-02
+
+- #158 Tooltip for guidance cards ratings.
+- Error handling for summary with outdated question content.
+
 ## 1.2.124 - 2019-10-01
 
 - #159 Style changes for buttons on guidance cards.

@@ -16,7 +16,14 @@
               <h3>{{name}}</h3>
               <div class="related-reading-image"></div>
               <h2>{{recommendationName}}</h2>
-              <div class="star-container star-number-{{recommendation.stars}}">
+              <div
+                class="star-container
+                star-number-{{recommendation.stars}}"
+                data-toggle="tooltip"
+                data-html="true"
+                data-placement="bottom"
+                title="<div class='recommend-text-container star-number-{{recommendation.textRank}}'><span class='recommend-text recommend-text-1'>Not recommended for your project</span><span class='recommend-text recommend-text-2'>Potentially not good fit for your project</span><span class='recommend-text recommend-text-3'>Unusual tool for your project</span><span class='recommend-text recommend-text-4'>Potentially a good fit for your project</span><span class='recommend-text recommend-text-5'>Potentially a very good fit for your project</span></div>"
+              >
                 <div class="star star1">
                   <span class="star-icon"></span>
                   <span class="star-icon-remainder star-icon-remainder-{{recommendation.starRemainder}}"><span class="remainder-inner"></span></span>
@@ -38,18 +45,15 @@
                   <span class="star-icon-remainder star-icon-remainder-{{recommendation.starRemainder}}"><span class="remainder-inner"></span></span>
                 </div>
               </div>
-              <div class="recommend-text-container star-number-{{recommendation.textRank}}">
-                <span class="recommend-text recommend-text-1">Not recommended for your project</span>
-                <span class="recommend-text recommend-text-2">Potentially not good fit for your project</span>
-                <span class="recommend-text recommend-text-3">Unusual tool for your project</span>
-                <span class="recommend-text recommend-text-4">Potentially a good fit for your project</span>
-                <span class="recommend-text recommend-text-5">Potentially a very good fit for your project</span>
-              </div>
               <div class="recommend_buttons">
                 <button class="related-read-more" data-warpjs-result-set="{{id}}">Read more</button>
                 <a class="show-related-all" data-warpjs-result-set="{{id}}">All tools in this category</a>
               </div>
             </div>
+
+            <button type="button" class="btn btn-secondary" data-toggle="tooltip" data-html="true" title="<em>Tooltip</em> <u>with</u> <b>HTML</b>">
+  Tooltip with HTML
+</button>
           </div>
         {{/if}}
       {{/each}}

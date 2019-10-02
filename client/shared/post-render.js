@@ -12,7 +12,7 @@ module.exports = ($, data) => {
 
     $('.warpjs-home-link').attr('href', data._links.warpjsHomepage.href);
 
-    $('[data-toggle="tooltip"]', placeholder).tooltip({
+    $('.copyright[data-toggle="tooltip"]', placeholder).tooltip({
         container: 'body',
         trigger: 'manual'
     });
