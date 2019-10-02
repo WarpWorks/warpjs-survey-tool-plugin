@@ -90,16 +90,28 @@
             border: 0px;
             border-radius: 3px;
             padding: 3px 7px;
-            margin-left: 10px;
             margin-bottom: 3px;
             text-transform: uppercase;
             font-size: 11px;
+            vertical-align: middle;
 
             &[data-survey-tool-action="download-json"] {
                 display: none;
             }
-            &.spider-button {
+
+            &.spider-button,
+            &.guidance-results {
+                background-image: url('images/map-icon.png');
+                background-size: 52%;
+                background-position: center center;
+                background-repeat: no-repeat;
+                width: 24px;
+                height: 24px;
                 display: none;
+            }
+
+            &.guidance-results {
+                background-image: url('images/bulb-icon.png');
             }
         }
     }
@@ -697,7 +709,6 @@
         }
     }
 
-
     .related-reading {
         background-color: #f0f0f0;
         border: solid 1px #dedede;
@@ -1059,7 +1070,9 @@
     }
 }
 
-.progress-container, .progress-results-container {
+.progress-container,
+.details-button-container,
+.progress-results-button {
     display: none;
 }
 
@@ -1125,7 +1138,6 @@
     .title-container {
         width: 25%;
         float: left;
-        padding-right: 15px;
         padding-left: 15px;
 
         .survey-type-title-container {
@@ -1190,13 +1202,35 @@
     }
 
     .progress-header-container {
-        width: 33%;
+        width: 26%;
         float: left;
-        padding-right: 15px;
         padding-left: 15px;
 
+        .details-button-container {
+            width: 34px;
+            float: left;
+            padding-top: 10px;
+
+            .details-button {
+                background-color: #5296b3;
+                border: 0px;
+                border-radius: 3px;
+                padding: 3px 5px;
+                margin-bottom: 3px;
+                text-transform: uppercase;
+                font-size: 12px;
+                vertical-align: middle;
+                width: 24px;
+                height: 24px;
+
+                span {
+                    color: #ffffff;
+                }
+            }
+        }
+
         .progress-container {
-            width: 80%;
+            width: calc(100% - 34px);
             float: left;
 
             .progress-label {
@@ -1217,26 +1251,6 @@
                     width: 0px;
                     height: 12px;
                     border-radius: 6px;
-                }
-            }
-        }
-
-        .progress-results-container {
-            width: 20%;
-            float: left;
-            padding-left: 5px;
-
-            .progress-results-button {
-                background-color: #ccc;
-                width: 14px;
-                height: 14px;
-                border-radius: 7px;
-                margin: 17px 1px;
-                display: inline-block;
-                cursor: pointer;
-
-                &.selected-result {
-                    background-color:#337ab7;
                 }
             }
         }
@@ -1284,10 +1298,8 @@
 
 .survey-tool.ipt {
     &.show-spider .blue-button-container {
-        max-width: 200px;
 
         .blue-button {
-            width: 72px;
 
             &.spider-button {
                 display: inline-block;

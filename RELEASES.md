@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.126 - 2019-10-02
+
+- #157 Button style changes based on new designs.
+
 ## 1.2.125 - 2019-10-02
 
 - #158 Tooltip for guidance cards ratings.

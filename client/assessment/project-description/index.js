@@ -46,8 +46,6 @@ module.exports = ($, placeholder, assessment, currentQuestion, rootUrl, type, ha
         createDefaultAssessment($, placeholder, type);
     }
 
-    $('.copyright[data-toggle="tooltip"]', placeholder).tooltip();
-
     exportAssessement($, placeholder);
     loadAssessment($, placeholder);
 };

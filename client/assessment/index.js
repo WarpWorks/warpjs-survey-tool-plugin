@@ -33,7 +33,8 @@ const styleRadio = require('./resources/style-radio');
 (($) => $(document).ready(() => {
     const loader = window.WarpJS.toast.loading($, "Page is loading");
     const placeholder = shared.preRender($);
-    $('.progress-container, .progress-results-container', placeholder).css('display', 'block');
+    $('.progress-container, .details-button-container', placeholder).css('display', 'block');
+    $('.progress-results-button', placeholder).css('display', 'inline-block');
     $('[data-toggle="tooltip"]').tooltip({
         container: 'body',
         trigger: 'click'
@@ -105,6 +106,12 @@ const styleRadio = require('./resources/style-radio');
                     return isMatch;
                 };
 
+                const getIterations = (categories) => {
+                    return categories[categoryPointer] ? _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
+                        return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
+                    }) : [];
+                };
+
                 const getCategories = (categories) => {
                     let filteredCategories = [];
                     if (isMM) {
@@ -136,9 +143,7 @@ const styleRadio = require('./resources/style-radio');
 
                 const filterContent = () => {
                     categories = getCategories(assessment.answers[0]._embedded.categories);
-                    iterations = categories && categories[categoryPointer] ? _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
-                        return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
-                    }) : [];
+                    iterations = getIterations(categories);
                     questions = getQuestions(iterations);
                 };
 
@@ -599,10 +604,8 @@ const styleRadio = require('./resources/style-radio');
                                         }
                                     )
                                 }));
-                                summaryCalculations();
 
-                                $('.progress-results-button').removeClass('selected-result');
-                                $('.progress-results-button[data-result="1"]').addClass('selected-result');
+                                summaryCalculations();
                             };
 
                             const spiderSetup = (type) => {
@@ -689,10 +692,6 @@ const styleRadio = require('./resources/style-radio');
 
                                         $('.image-map-img-container > img').css({width: values.imageWidth ? values.imageWidth : 'auto', height: values.imageHeight ? values.imageHeight : 'auto'});
                                     }
-                                }
-
-                                if (outOfBounds === '') {
-                                    $('.progress-results-button').removeClass('selected-result');
                                 }
 
                                 $('.survey-tool .progress-bar').css('width', progress + '%');
@@ -786,10 +785,6 @@ const styleRadio = require('./resources/style-radio');
                                 $('[data-toggle="tooltip"]').tooltip({
                                     container: 'body'
                                 });
-
-                                const number = isMM ? 3 : 2;
-                                $('.progress-results-button').removeClass('selected-result');
-                                $('.progress-results-button[data-result="' + number + '"]').addClass('selected-result');
                             };
 
                             const subDetailsSetup = () => {
@@ -822,9 +817,6 @@ const styleRadio = require('./resources/style-radio');
                                     $('.comment-text-not-editable').css('display', 'block');
                                     $('.comment-text-not-editable').html(comment);
                                 });
-
-                                $('.progress-results-button').removeClass('selected-result');
-                                $('.progress-results-button[data-result="2"]').addClass('selected-result');
                             };
 
                             let flattenedAnswers = [];
@@ -910,8 +902,6 @@ const styleRadio = require('./resources/style-radio');
                                 });
                                 shared.setSurveyContent($, placeholder, questionnaireRelatedReadingTemplate({readings: result.data._embedded.questionnaires[0]._embedded.resultSets, feedbackUrl: feedbackUrl}));
 
-                                $('.progress-results-button').removeClass('selected-result');
-                                $('.progress-results-button[data-result="3"]').addClass('selected-result');
                                 $('.star-container[data-toggle="tooltip"]', placeholder).tooltip({html: true});
                             };
 
@@ -966,7 +956,6 @@ const styleRadio = require('./resources/style-radio');
                             });
                             $(document).on('click', '.next-to-email-form', () => {
                                 shared.setSurveyContent($, placeholder, emailFormTemplate());
-                                $('.progress-results-button').removeClass('selected-result');
                             });
 
                             $(document).on('click', '.progress-results-button', (event) => {
@@ -1004,8 +993,6 @@ const styleRadio = require('./resources/style-radio');
                                         }
                                     }
 
-                                    $('.progress-results-button').removeClass('selected-result');
-                                    $clicked.addClass('selected-result');
                                     $('.survey-tool .progress-bar').css('width', '100%');
                                 }
                             });
@@ -1062,7 +1049,7 @@ const styleRadio = require('./resources/style-radio');
 
                             $(document).on('click', '.related-read-more', (event) => {
                                 getAssessment();
-                                $('.progress-container, .blue-button-container, .progress-results-container').css('display', 'none');
+                                $('.progress-container, .blue-button-container, .details-button-container, .progress-results-button').css('display', 'none');
                                 const resultSetId = $(event.target).data('warpjsResultSet');
                                 const relatedResultSet = _.find(result.data._embedded.questionnaires[0]._embedded.resultSets, (resultSet) => {
                                     return resultSet.id === resultSetId;
@@ -1073,7 +1060,7 @@ const styleRadio = require('./resources/style-radio');
 
                             $(document).on('click', '.related-all-read-more', (event) => {
                                 getAssessment();
-                                $('.progress-container, .blue-button-container, .progress-results-container').css('display', 'none');
+                                $('.progress-container, .blue-button-container, .details-button-container, .progress-results-button').css('display', 'none');
                                 const resultSetId = $('.related-all').data('warpjsResultsetId');
                                 const relatedResultSet = _.find(result.data._embedded.questionnaires[0]._embedded.resultSets, (resultSet) => {
                                     return resultSet.id === resultSetId;
@@ -1089,7 +1076,8 @@ const styleRadio = require('./resources/style-radio');
                             });
 
                             $(document).on('click', '.related-details-back', () => {
-                                $('.progress-container, .blue-button-container, .progress-results-container').css('display', 'block');
+                                $('.progress-container, .blue-button-container, .details-button-container').css('display', 'block');
+                                $('.progress-results-button', placeholder).css('display', 'inline-block');
                                 relatedReadingSetup();
                             });
 
@@ -1284,6 +1272,22 @@ const styleRadio = require('./resources/style-radio');
                                 shared.setSurveyContent($, placeholder, questionnaireModulesTemplate({sections: sections, question: currentQuestion}));
                                 assignModulesSelected();
                                 styleRadio($);
+                            });
+
+                            $(document).on('click', '.details-button', (event) => {
+                                categoryPointer = 0;
+                                iterationPointer = 0;
+                                progress = 0;
+                                categories = getCategories(assessment.answers[0]._embedded.categories);
+                                iterations = getIterations(categories);
+                                questions = getQuestions(iterations);
+                                questionPointer = _.findIndex(questions, (currentQuestion) => {
+                                    const qQuestion = _.find(result.data._embedded.questionnaires[0]._embedded.categories[0]._embedded.questions, [ 'id', currentQuestion.id ]);
+
+                                    return qQuestion && qQuestion.name === constants.specializedTemplates.description;
+                                });
+
+                                updateQuestionContent();
                             });
                         })
                     ;
