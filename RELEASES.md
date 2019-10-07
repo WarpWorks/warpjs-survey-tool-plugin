@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.127 - 2019-10-07
+
+- #160 Move the map icon next to progress bar.
+
 ## 1.2.126 - 2019-10-02
 
 - #157 Button style changes based on new designs.

@@ -107,7 +107,12 @@
                 background-repeat: no-repeat;
                 width: 24px;
                 height: 24px;
-                display: none;
+            }
+
+            &.spider-button,
+            &.progress-results-button {
+                cursor: default;
+                opacity: .8;
             }
 
             &.guidance-results {
@@ -1072,7 +1077,8 @@
 
 .progress-container,
 .details-button-container,
-.progress-results-button {
+.progress-results-button,
+.spider-button {
     display: none;
 }
 
@@ -1297,14 +1303,11 @@
 }
 
 .survey-tool.ipt {
-    &.show-spider .blue-button-container {
-
-        .blue-button {
-
-            &.spider-button {
-                display: inline-block;
-
-            }
+    &.active-nav-buttons .blue-button-container .blue-button {
+        &.spider-button,
+        &.progress-results-button {
+            cursor: pointer;
+            opacity: 1;
         }
     }
 

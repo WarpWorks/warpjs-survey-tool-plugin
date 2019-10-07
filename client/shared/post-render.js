@@ -11,10 +11,10 @@ module.exports = ($, data) => {
     storage.setCurrent($, 'assessmentId', data.assessmentId);
 
     $('.warpjs-home-link').attr('href', data._links.warpjsHomepage.href);
-
-    $('.copyright[data-toggle="tooltip"]', placeholder).tooltip({
+    $('.spider-button[data-toggle="tooltip"]', placeholder).tooltip({trigger: 'hover'});
+    $('.copyright[data-toggle="tooltip"], .copyright-mm[data-toggle="tooltip"]', placeholder).tooltip({
         container: 'body',
-        trigger: 'manual'
+        trigger: 'click'
     });
 
     if (data._embedded.questionnaires && data._embedded.questionnaires[0].key) {

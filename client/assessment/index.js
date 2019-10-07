@@ -34,8 +34,9 @@ const styleRadio = require('./resources/style-radio');
     const loader = window.WarpJS.toast.loading($, "Page is loading");
     const placeholder = shared.preRender($);
     $('.progress-container, .details-button-container', placeholder).css('display', 'block');
-    $('.progress-results-button', placeholder).css('display', 'inline-block');
-    $('[data-toggle="tooltip"]').tooltip({
+    $('.progress-results-button, .spider-button', placeholder).css('display', 'inline-block');
+    $('.spider-button[data-toggle="tooltip"]', placeholder).tooltip();
+    $('.copyright[data-toggle="tooltip"], .copyright-mm[data-toggle="tooltip"]', placeholder).tooltip({
         container: 'body',
         trigger: 'click'
     });
@@ -78,7 +79,7 @@ const styleRadio = require('./resources/style-radio');
                         return;
                     }
 
-                    $('.survey-tool.ipt').addClass('show-spider');
+                    $('.survey-tool.ipt').addClass('active-nav-buttons');
                 } else {
                     storage.setCurrent($, 'surveyId', result.data.surveyId);
                     const questionnaire = storage.getCurrent($, 'surveyToolQuestionnaires')[storage.getCurrent($, 'surveyId')];
@@ -1049,7 +1050,7 @@ const styleRadio = require('./resources/style-radio');
 
                             $(document).on('click', '.related-read-more', (event) => {
                                 getAssessment();
-                                $('.progress-container, .blue-button-container, .details-button-container, .progress-results-button').css('display', 'none');
+                                $('.progress-container, .blue-button-container, .details-button-container, .progress-results-button, .spider-button').css('display', 'none');
                                 const resultSetId = $(event.target).data('warpjsResultSet');
                                 const relatedResultSet = _.find(result.data._embedded.questionnaires[0]._embedded.resultSets, (resultSet) => {
                                     return resultSet.id === resultSetId;
@@ -1060,7 +1061,7 @@ const styleRadio = require('./resources/style-radio');
 
                             $(document).on('click', '.related-all-read-more', (event) => {
                                 getAssessment();
-                                $('.progress-container, .blue-button-container, .details-button-container, .progress-results-button').css('display', 'none');
+                                $('.progress-container, .blue-button-container, .details-button-container, .progress-results-button, .spider-button').css('display', 'none');
                                 const resultSetId = $('.related-all').data('warpjsResultsetId');
                                 const relatedResultSet = _.find(result.data._embedded.questionnaires[0]._embedded.resultSets, (resultSet) => {
                                     return resultSet.id === resultSetId;
@@ -1077,7 +1078,7 @@ const styleRadio = require('./resources/style-radio');
 
                             $(document).on('click', '.related-details-back', () => {
                                 $('.progress-container, .blue-button-container, .details-button-container').css('display', 'block');
-                                $('.progress-results-button', placeholder).css('display', 'inline-block');
+                                $('.progress-results-button, .spider-button', placeholder).css('display', 'inline-block');
                                 relatedReadingSetup();
                             });
 
@@ -1245,7 +1246,9 @@ const styleRadio = require('./resources/style-radio');
                             });
 
                             $(document).on('click', '.spider-button', (event) => {
-                                spiderSetup('progress');
+                                if (result.data.assessmentId) {
+                                    spiderSetup('progress');
+                                }
                             });
 
                             $(document).on('click', '.module-details-button', (event) => {
