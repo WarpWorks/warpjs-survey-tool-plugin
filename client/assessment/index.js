@@ -79,7 +79,7 @@ const styleRadio = require('./resources/style-radio');
                         return;
                     }
 
-                    $('.survey-tool.ipt').addClass('active-nav-buttons');
+                    $('.survey-tool').addClass('active-nav-buttons');
                 } else {
                     storage.setCurrent($, 'surveyId', result.data.surveyId);
                     const questionnaire = storage.getCurrent($, 'surveyToolQuestionnaires')[storage.getCurrent($, 'surveyId')];
