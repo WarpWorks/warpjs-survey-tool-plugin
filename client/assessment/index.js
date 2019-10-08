@@ -676,11 +676,8 @@ const styleRadio = require('./resources/style-radio');
                                             }
                                         } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.modules) {
                                             _.each(categoriesMinusIntro, (category) => {
-                                                console.log('test:::', category.modularDetailsContent, category.modularDetailsName, !!category.modularDetailsContent || !!category.modularDetailsName);
-
                                                 category.showDetails = !!category.modularDetailsContent || !!category.modularDetailsName;
                                             });
-                                            console.log('categoriesMinusIntro', categoriesMinusIntro);
 
                                             let sections = _.groupBy(categoriesMinusIntro, (category) => {
                                                 return category.section === undefined ? '' : category.section;

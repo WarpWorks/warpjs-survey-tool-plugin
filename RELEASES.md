@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.131 - 2019-10-08
+
+- #162 update: remove console logs.
+
 ## 1.2.130 - 2019-10-08
 
 - #162 update: show details button if details title or content.
