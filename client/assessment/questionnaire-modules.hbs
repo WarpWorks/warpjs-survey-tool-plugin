@@ -36,9 +36,11 @@
                     <p>{{module.description}}</p>
                   </div>
                 </div>
-                <div class="col-sm-2 module-details blue-button-container">
-                  <button class="blue-button module-details-button" data-warpjs-module-id="{{module.id}}" data-warpjs-question-id="{{../../question.id}}">details</button>
-                </div>
+                {{#if module.showDetails}}
+                  <div class="col-sm-2 module-details blue-button-container">
+                    <button class="blue-button module-details-button" data-warpjs-module-id="{{module.id}}" data-warpjs-question-id="{{../../question.id}}">details</button>
+                  </div>
+                {{/if}}
               </div>
             {{/each}}
           {{/each}}

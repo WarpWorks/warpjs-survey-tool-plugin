@@ -1,5 +1,13 @@
 # Release Notes
 
+## 1.2.130 - 2019-10-08
+
+- #162 update: show details button if details title or content.
+
+## 1.2.129 - 2019-10-08
+
+- #162 Remove details button from categories if there are no details.
+
 ## 1.2.128 - 2019-10-07
 
 - #160 update: fix bug where mm buttons stayed disabled after creating assessment.

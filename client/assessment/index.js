@@ -675,7 +675,14 @@ const styleRadio = require('./resources/style-radio');
                                                 updatePointers(direction);
                                             }
                                         } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.modules) {
-                                            const sections = _.groupBy(categoriesMinusIntro, (category) => {
+                                            _.each(categoriesMinusIntro, (category) => {
+                                                console.log('test:::', category.modularDetailsContent, category.modularDetailsName, !!category.modularDetailsContent || !!category.modularDetailsName);
+
+                                                category.showDetails = !!category.modularDetailsContent || !!category.modularDetailsName;
+                                            });
+                                            console.log('categoriesMinusIntro', categoriesMinusIntro);
+
+                                            let sections = _.groupBy(categoriesMinusIntro, (category) => {
                                                 return category.section === undefined ? '' : category.section;
                                             });
 
