@@ -95,7 +95,7 @@ const styleRadio = require('./resources/style-radio');
                 const intro = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (qCategory) => {
                     return qCategory.name === "Introduction";
                 });
-                const categoriesMinusIntro = _.reject(result.data._embedded.questionnaires[0]._embedded.categories, {id: intro.id});
+                const categoriesMinusIntro = _.reject(result.data._embedded.questionnaires[0]._embedded.categories, { id: intro.id });
 
                 const questionInSelection = (question) => {
                     let isMatch = true;
@@ -336,7 +336,7 @@ const styleRadio = require('./resources/style-radio');
 
                             const assignOptionSelected = (qQuestion, aQuestion) => {
                                 if (typeof qQuestion !== 'undefined' && typeof aQuestion !== 'undefined') {
-                                    let option = _.find(qQuestion._embedded.options, (option) => {
+                                    const option = _.find(qQuestion._embedded.options, (option) => {
                                         return option.id === aQuestion.answer;
                                     });
                                     if (typeof option !== 'undefined') {
@@ -359,7 +359,7 @@ const styleRadio = require('./resources/style-radio');
                                     updatedQuestion.comments = questions[questionPointer].comments;
                                     updatedQuestion.priority = questions[questionPointer].priority;
                                 }
-                                let values = {category: currentCategory, question: updatedQuestion};
+                                const values = { category: currentCategory, question: updatedQuestion };
                                 if (iterations[iterationPointer] && iterations[iterationPointer].name !== '') {
                                     values.iteration = iterations[iterationPointer];
                                 }
@@ -415,7 +415,7 @@ const styleRadio = require('./resources/style-radio');
                                 const currentQuestion = questions[questionPointer] ? _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
                                     return question.id === questions[questionPointer].id;
                                 })) : null;
-                                let values = {category: currentCategory, question: currentQuestion};
+                                const values = { category: currentCategory, question: currentQuestion };
                                 if (questionPointer) {
                                     values.notFirst = true;
                                 }
@@ -450,7 +450,7 @@ const styleRadio = require('./resources/style-radio');
 
                                                 const priority = calculatePriority(question.priority);
                                                 const positionNumber = parseInt(position);
-                                                let positions = [];
+                                                const positions = [];
                                                 if (assessment.detailLevel !== '1' && isMM) {
                                                     for (let i = 0; i < priority; i++) {
                                                         positions.push(positionNumber);
@@ -646,7 +646,7 @@ const styleRadio = require('./resources/style-radio');
                                     }
                                 } else if (questionPointer === -1) {
                                     const values = templateValues();
-                                    shared.setSurveyContent($, placeholder, questionnaireIterationTemplate({category: values.category, iterations: categories[categoryPointer]._embedded.iterations, image: values.image}));
+                                    shared.setSurveyContent($, placeholder, questionnaireIterationTemplate({ category: values.category, iterations: categories[categoryPointer]._embedded.iterations, image: values.image }));
                                     if (values.imageMap) {
                                         createImageMapElements($, values.imageMap);
                                     }
@@ -660,13 +660,13 @@ const styleRadio = require('./resources/style-radio');
                                             const questionnaireUrl = questionnaire ? questionnaire._links.self.href : '';
                                             projectDescription($, placeholder, assessment, currentQuestion, questionnaireUrl, result.data._embedded.questionnaires[0].key, result.data._embedded.questionnaires[0].hasSampleProject);
                                         } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.details) {
-                                            shared.setSurveyContent($, placeholder, questionnaireLevelsTemplate({level: assessment.detailLevel, question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null}));
+                                            shared.setSurveyContent($, placeholder, questionnaireLevelsTemplate({ level: assessment.detailLevel, question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null }));
                                             assignDetailLevelSelected();
                                         } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.spider) {
                                             spiderSetup('intro');
                                         } else if (currentQuestion && currentQuestion.name === constants.specializedTemplates.personas) {
                                             if (result.data._embedded.questionnaires[0]._embedded.personas && result.data._embedded.questionnaires[0]._embedded.personas.length) {
-                                                shared.setSurveyContent($, placeholder, questionnairePersonasTemplate({personas: _.orderBy(result.data._embedded.questionnaires[0]._embedded.personas, [ 'position' ], [ 'asc' ]), question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null}));
+                                                shared.setSurveyContent($, placeholder, questionnairePersonasTemplate({ personas: _.orderBy(result.data._embedded.questionnaires[0]._embedded.personas, [ 'position' ], [ 'asc' ]), question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null }));
                                                 assignPersonaSelected();
                                                 $('[data-toggle="tooltip"]').tooltip({
                                                     container: 'body'
@@ -679,11 +679,11 @@ const styleRadio = require('./resources/style-radio');
                                                 category.showDetails = !!category.modularDetailsContent || !!category.modularDetailsName;
                                             });
 
-                                            let sections = _.groupBy(categoriesMinusIntro, (category) => {
+                                            const sections = _.groupBy(categoriesMinusIntro, (category) => {
                                                 return category.section === undefined ? '' : category.section;
                                             });
 
-                                            shared.setSurveyContent($, placeholder, questionnaireModulesTemplate({sections: sections, question: currentQuestion}));
+                                            shared.setSurveyContent($, placeholder, questionnaireModulesTemplate({ sections: sections, question: currentQuestion }));
                                             assignModulesSelected();
                                         } else {
                                             shared.setSurveyContent($, placeholder, questionnaireIntroTemplate(introTemplateValues()));
@@ -695,7 +695,7 @@ const styleRadio = require('./resources/style-radio');
                                             createImageMapElements($, values.imageMap);
                                         }
 
-                                        $('.image-map-img-container > img').css({width: values.imageWidth ? values.imageWidth : 'auto', height: values.imageHeight ? values.imageHeight : 'auto'});
+                                        $('.image-map-img-container > img').css({ width: values.imageWidth ? values.imageWidth : 'auto', height: values.imageHeight ? values.imageHeight : 'auto' });
                                     }
                                 }
 
@@ -905,9 +905,9 @@ const styleRadio = require('./resources/style-radio');
                                     resultSet.recommendation = recommendation;
                                     resultSet.recommendationName = recommendation ? recommendation.name : null;
                                 });
-                                shared.setSurveyContent($, placeholder, questionnaireRelatedReadingTemplate({readings: result.data._embedded.questionnaires[0]._embedded.resultSets, feedbackUrl: feedbackUrl}));
+                                shared.setSurveyContent($, placeholder, questionnaireRelatedReadingTemplate({ readings: result.data._embedded.questionnaires[0]._embedded.resultSets, feedbackUrl: feedbackUrl }));
 
-                                $('.star-container[data-toggle="tooltip"]', placeholder).tooltip({html: true});
+                                $('.star-container[data-toggle="tooltip"]', placeholder).tooltip({ html: true });
                             };
 
                             if (assessment.answers[0]._embedded.categories[categoryPointer].isRepeatable === true) {
@@ -1008,7 +1008,7 @@ const styleRadio = require('./resources/style-radio');
                                     return resultSet.id === resultSetId;
                                 });
 
-                                shared.setSurveyContent($, placeholder, questionnaireRelatedAllTemplate({resultSet: relatedResultSet, orderedRecommendations: relatedResultSet.orderedRecommendations}));
+                                shared.setSurveyContent($, placeholder, questionnaireRelatedAllTemplate({ resultSet: relatedResultSet, orderedRecommendations: relatedResultSet.orderedRecommendations }));
                             });
 
                             const readMoreSetup = (resultSetId, relatedResultSet) => {
@@ -1049,7 +1049,7 @@ const styleRadio = require('./resources/style-radio');
                                     contentDocumentHref = relatedResultSet.recommendation._embedded.contents[0]._links.self.href;
                                 }
 
-                                shared.setSurveyContent($, placeholder, questionnaireRelatedDetailsTemplate({resultSet: relatedResultSet, contentPreview: contentPreview, href: contentDocumentHref, feedbackUrl: feedbackUrl}));
+                                shared.setSurveyContent($, placeholder, questionnaireRelatedDetailsTemplate({ resultSet: relatedResultSet, contentPreview: contentPreview, href: contentDocumentHref, feedbackUrl: feedbackUrl }));
                             };
 
                             $(document).on('click', '.related-read-more', (event) => {
@@ -1264,19 +1264,19 @@ const styleRadio = require('./resources/style-radio');
                                 const selectedCategory = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
                                     return category.id === moduleId;
                                 });
-                                shared.setSurveyContent($, placeholder, questionnaireModuleDetailsTemplate({selectedCategory: selectedCategory, questionId: questionId}));
+                                shared.setSurveyContent($, placeholder, questionnaireModuleDetailsTemplate({ selectedCategory: selectedCategory, questionId: questionId }));
                             });
 
                             $(document).on('click', '.module-details-back', (event) => {
                                 const target = $(event.target);
                                 const moduleId = target.data('warpjsModuleId');
                                 const questionId = target.data('warpjsQuestionId');
-                                const selectedCategory = _.find(categories, {id: moduleId});
-                                const currentQuestion = selectedCategory ? _.cloneDeep(_.find(selectedCategory._embedded.questions, {id: questionId})) : null;
+                                const selectedCategory = _.find(categories, { id: moduleId });
+                                const currentQuestion = selectedCategory ? _.cloneDeep(_.find(selectedCategory._embedded.questions, { id: questionId })) : null;
                                 const sections = _.groupBy(categoriesMinusIntro, (category) => {
                                     return category.section === undefined ? '' : category.section;
                                 });
-                                shared.setSurveyContent($, placeholder, questionnaireModulesTemplate({sections: sections, question: currentQuestion}));
+                                shared.setSurveyContent($, placeholder, questionnaireModulesTemplate({ sections: sections, question: currentQuestion }));
                                 assignModulesSelected();
                                 styleRadio($);
                             });

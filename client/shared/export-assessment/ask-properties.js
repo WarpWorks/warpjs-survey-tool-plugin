@@ -15,5 +15,5 @@ module.exports = ($, placeholder, assessment) => {
         assessmentMeta.exportRevision = assessmentMeta.exportRevision.replace(/^(.*[^\d])(\d+)(.*)$/, replacer);
     }
 
-    $('.blue-button-container', placeholder).append(template({name: assessment.projectName, assessmentMeta}));
+    $('.blue-button-container', placeholder).append(template({ name: assessment.projectName, assessmentMeta }));
 };

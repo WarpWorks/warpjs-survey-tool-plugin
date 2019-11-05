@@ -1,7 +1,7 @@
 const storage = require('./../storage');
 
 module.exports = (assessment) => {
-    let assessmentMeta = {};
+    const assessmentMeta = {};
 
     if (assessment) {
         const warjsUser = storage.getCurrent($, 'warpjsUser');

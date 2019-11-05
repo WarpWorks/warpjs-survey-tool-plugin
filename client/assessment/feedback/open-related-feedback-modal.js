@@ -43,7 +43,7 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
     } else if (feedbackType === 'survey') {
         $('> .modal-dialog > .modal-content > .modal-body', modal).html(surveyTemplate());
     } else if (feedbackType === 'question') {
-        $('> .modal-dialog > .modal-content > .modal-body', modal).html(questionTemplate({questionName: questionName}));
+        $('> .modal-dialog > .modal-content > .modal-body', modal).html(questionTemplate({ questionName: questionName }));
     }
 
     modal.modal('show');
@@ -128,13 +128,13 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
                     }
                     let foundFeedback;
                     if (feedbackType === 'result') {
-                        foundFeedback = _.find(assessment.resultsetFeedback, {resultId: resultId, resultsetId: resultsetId, feedbackType: feedbackType});
+                        foundFeedback = _.find(assessment.resultsetFeedback, { resultId: resultId, resultsetId: resultsetId, feedbackType: feedbackType });
                     } else if (feedbackType === 'resultQuestion') {
-                        foundFeedback = _.find(assessment.resultsetFeedback, {resultId: resultId, resultsetId: resultsetId, questionId: questionId, feedbackType: feedbackType});
+                        foundFeedback = _.find(assessment.resultsetFeedback, { resultId: resultId, resultsetId: resultsetId, questionId: questionId, feedbackType: feedbackType });
                     } else if (feedbackType === 'survey') {
-                        foundFeedback = _.find(assessment.resultsetFeedback, {feedbackType: feedbackType});
+                        foundFeedback = _.find(assessment.resultsetFeedback, { feedbackType: feedbackType });
                     } else if (feedbackType === 'question') {
-                        foundFeedback = _.find(assessment.resultsetFeedback, {questionId: questionId, feedbackType: feedbackType});
+                        foundFeedback = _.find(assessment.resultsetFeedback, { questionId: questionId, feedbackType: feedbackType });
                     }
 
                     if (foundFeedback) {

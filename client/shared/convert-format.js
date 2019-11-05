@@ -1,7 +1,7 @@
 module.exports = ($, assessment) => {
     if (assessment) {
         if (!assessment._meta) {
-            assessment._meta = {history: []};
+            assessment._meta = { history: [] };
         }
 
         if (assessment.exportProperties) {

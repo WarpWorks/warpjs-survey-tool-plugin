@@ -7,7 +7,7 @@ const storage = require('./../../storage');
 
 module.exports = ($, placeholder, result) => {
     try {
-        let obj = JSON.parse(result);
+        const obj = JSON.parse(result);
         const current = storage.getCurrent($);
 
         if (obj.id) {
@@ -18,14 +18,16 @@ module.exports = ($, placeholder, result) => {
             // Assume current survey to be default for old format.
             obj.surveyId = current.surveyId || current.surveyToolDefaultSurveyId;
 
-            obj._meta = {history: [
-                {
-                    name: "",
-                    revision: "1.0",
-                    description: "",
-                    timestamp: Date.now()
-                }
-            ]};
+            obj._meta = {
+                history: [
+                    {
+                        name: "",
+                        revision: "1.0",
+                        description: "",
+                        timestamp: Date.now()
+                    }
+                ]
+            };
         }
 
         convertFormat($, obj);

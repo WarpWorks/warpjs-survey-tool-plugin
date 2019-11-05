@@ -221,7 +221,7 @@ const template = require('./../template.hbs');
 
                         const assignOptionSelected = (qQuestion, aQuestion) => {
                             if (typeof qQuestion !== 'undefined' && typeof aQuestion !== 'undefined') {
-                                let option = _.find(qQuestion._embedded.options, (option) => {
+                                const option = _.find(qQuestion._embedded.options, (option) => {
                                     return option.id === aQuestion.answer;
                                 });
                                 if (typeof option !== 'undefined') {
@@ -243,7 +243,7 @@ const template = require('./../template.hbs');
                             if (updatedQuestion) {
                                 updatedQuestion.comments = questions[questionPointer].comments;
                             }
-                            let values = {category: currentCategory, question: updatedQuestion};
+                            const values = { category: currentCategory, question: updatedQuestion };
                             if (iterations[iterationPointer] && iterations[iterationPointer].name !== '') {
                                 values.iteration = iterations[iterationPointer];
                             }
@@ -292,7 +292,7 @@ const template = require('./../template.hbs');
                             const currentQuestion = _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
                                 return question.id === questions[questionPointer].id;
                             }));
-                            let values = {category: currentCategory, question: currentQuestion};
+                            const values = { category: currentCategory, question: currentQuestion };
                             if (questionPointer) {
                                 values.notFirst = true;
                             }
@@ -431,7 +431,7 @@ const template = require('./../template.hbs');
                         };
 
                         const summaryCalculations = () => {
-                            shared.setSurveyContent($, placeholder, questionnaireSummaryTemplate({values: summaryValues()}));
+                            shared.setSurveyContent($, placeholder, questionnaireSummaryTemplate({ values: summaryValues() }));
                             $('.marker').each((index, element) => {
                                 const score = $(element).data('score');
                                 const offset = (score - 1) / 4 * 100 + 12.5;
@@ -551,7 +551,7 @@ const template = require('./../template.hbs');
                                 }
                             } else if (questionPointer === -1) {
                                 const values = templateValues();
-                                shared.setSurveyContent($, placeholder, questionnaireIterationTemplate({category: values.category, iterations: categories[categoryPointer]._embedded.iterations, image: values.image}));
+                                shared.setSurveyContent($, placeholder, questionnaireIterationTemplate({ category: values.category, iterations: categories[categoryPointer]._embedded.iterations, image: values.image }));
                                 if (values.imageMap) {
                                     createImageMapElements(values.imageMap);
                                 }
@@ -561,9 +561,9 @@ const template = require('./../template.hbs');
                                         return question.id === questions[questionPointer].id;
                                     }));
                                     if (currentQuestion.name === constants.specializedTemplates.description) {
-                                        shared.setSurveyContent($, placeholder, questionnaireDescriptionTemplate({projectName: result.data.projectName, projectStatus: result.data.projectStatus, mainContact: result.data.mainContact, question: currentQuestion}));
+                                        shared.setSurveyContent($, placeholder, questionnaireDescriptionTemplate({ projectName: result.data.projectName, projectStatus: result.data.projectStatus, mainContact: result.data.mainContact, question: currentQuestion }));
                                     } else if (currentQuestion.name === constants.specializedTemplates.details) {
-                                        shared.setSurveyContent($, placeholder, questionnaireLevelsTemplate({level: result.data.detailLevel, question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null}));
+                                        shared.setSurveyContent($, placeholder, questionnaireLevelsTemplate({ level: result.data.detailLevel, question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null }));
                                         assignDetailLevelSelected();
                                     } else {
                                         shared.setSurveyContent($, placeholder, questionnaireIntroTemplate(introTemplateValues()));
@@ -575,7 +575,7 @@ const template = require('./../template.hbs');
                                         createImageMapElements(values.imageMap);
                                     }
 
-                                    $('.image-map-img-container > img').css({width: values.imageWidth ? values.imageWidth : 'auto', height: values.imageHeight ? values.imageHeight : 'auto'});
+                                    $('.image-map-img-container > img').css({ width: values.imageWidth ? values.imageWidth : 'auto', height: values.imageHeight ? values.imageHeight : 'auto' });
                                 }
                             }
 
@@ -700,7 +700,7 @@ const template = require('./../template.hbs');
                                 resultSet.recommendationName = recommendation ? recommendation.name : null;
                             });
 
-                            shared.setSurveyContent($, placeholder, questionnaireRelatedReadingTemplate({readings: result.data._embedded.questionnaires[0]._embedded.resultSets}));
+                            shared.setSurveyContent($, placeholder, questionnaireRelatedReadingTemplate({ readings: result.data._embedded.questionnaires[0]._embedded.resultSets }));
                         };
 
                         if (result.data._embedded.answers[0]._embedded.categories[categoryPointer].isRepeatable === true) {
@@ -773,7 +773,7 @@ const template = require('./../template.hbs');
                                 contentDocumentHref = relatedResultSet.recommendation._embedded.contents[0]._links.self.href;
                             }
 
-                            shared.setSurveyContent($, placeholder, questionnaireRelatedDetailsTemplate({resultSet: relatedResultSet, contentPreview: contentPreview, href: contentDocumentHref}));
+                            shared.setSurveyContent($, placeholder, questionnaireRelatedDetailsTemplate({ resultSet: relatedResultSet, contentPreview: contentPreview, href: contentDocumentHref }));
                         });
 
                         $(document).on('click', '.releated-details-back', () => {

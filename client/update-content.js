@@ -9,7 +9,7 @@ module.exports = ($, cache, result) => Promise.resolve()
         link.rel = 'stylesheet';
         link.href = result.link;
         document.head.appendChild(link);
-        $('.modal-body').html($(questionnaireTemplate({questionnaire: result})));
+        $('.modal-body').html($(questionnaireTemplate({ questionnaire: result })));
 
         $('input:radio').hide().each(function() {
             $(this).attr('data-radio-fx', this.name);
@@ -34,7 +34,7 @@ module.exports = ($, cache, result) => Promise.resolve()
         let progress = total_question_position / total_questions * 100;
         let category_num = 0;
         let question_num = 0;
-        let category_count = result._embedded.categories.length;
+        const category_count = result._embedded.categories.length;
         let questions_in_cat = result._embedded.categories[category_num]._embedded.questions.length;
         const changeViewForward = (event) => {
             total_question_position += 1;

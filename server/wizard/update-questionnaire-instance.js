@@ -7,7 +7,7 @@ const Questionnaire = require('./../../lib/models/questionnaire');
 const utils = require('./../utils');
 
 module.exports = (req, res) => {
-    const {domain, isatId} = req.params;
+    const { domain, isatId } = req.params;
 
     const pluginConfig = req.app.get(constants.appKeys.pluginConfig);
     const Persistence = require(pluginConfig.persistence.module);
@@ -17,7 +17,7 @@ module.exports = (req, res) => {
         .then(() => req.app.get(constants.appKeys.warpCore).getDomainByName(domain))
         .then((domainModel) => domainModel.getEntityByName(pluginConfig.schema.questionnaire))
         .then((questionnaireEntity) => Promise.resolve()
-            .then(() => questionnaireEntity.getDocuments(persistence, {_id: isatId}, true))
+            .then(() => questionnaireEntity.getDocuments(persistence, { _id: isatId }, true))
             .then((questionnaireDocument) => new Questionnaire(questionnaireEntity, questionnaireDocument[0]))
             .then((questionnaire) => Promise.resolve()
                 .then(() => {
@@ -33,7 +33,7 @@ module.exports = (req, res) => {
                 .then((questionnaireAttempt) => Promise.resolve()
                     .then(() => questionnaire.setNewAttempt(persistence, pluginConfig.schema.attempt, questionnaireAttempt))
                     .then((attemptId) => {
-                        const href = RoutesInfo.expand(constants.routes.wizard, {domain: domain, wizardId: attemptId});
+                        const href = RoutesInfo.expand(constants.routes.wizard, { domain: domain, wizardId: attemptId });
                         return warpjsUtils.createResource(href, questionnaireAttempt);
                     })
                     .then((resource) => utils.sendHal(req, res, resource))

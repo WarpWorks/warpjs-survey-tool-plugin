@@ -8,7 +8,7 @@ const Questionnaire = require('./../../lib/models/questionnaire');
 const utils = require('./../utils');
 
 module.exports = (req, res) => {
-    const {domain, wizardId} = req.params;
+    const { domain, wizardId } = req.params;
     const pluginConfig = req.app.get(constants.appKeys.pluginConfig);
     const Persistence = require(pluginConfig.persistence.module);
     const persistence = new Persistence(pluginConfig.persistence.host, domain);
@@ -24,14 +24,14 @@ module.exports = (req, res) => {
         },
         [warpjsUtils.constants.HAL_CONTENT_TYPE]: () => {
             Promise.resolve()
-                .then(() => persistence.documents(pluginConfig.schema.attempt, {_id: wizardId}, true))
+                .then(() => persistence.documents(pluginConfig.schema.attempt, { _id: wizardId }, true))
                 .then((attemptDocument) => Promise.resolve()
                     .then(() => warpjsUtils.createResource(req, attemptDocument[0]))
                     .then((resource) => Promise.resolve()
                         .then(() => req.app.get(constants.appKeys.warpCore).getDomainByName(domain))
                         .then((domainModel) => domainModel.getEntityByName(pluginConfig.schema.questionnaire))
                         .then((questionnaireEntity) => Promise.resolve()
-                            .then(() => attemptDocument.length ? questionnaireEntity.getDocuments(persistence, {_id: attemptDocument[0].questionnaireId}, true) : null)
+                            .then(() => attemptDocument.length ? questionnaireEntity.getDocuments(persistence, { _id: attemptDocument[0].questionnaireId }, true) : null)
                             .then((questionnaireDocument) => questionnaireDocument ? new Questionnaire(questionnaireEntity, questionnaireDocument[0]) : null)
                             .then((questionnaireInstance) => questionnaireInstance ? questionnaireInstance.toHallFull(domain, pluginConfig, persistence) : null)
                         )

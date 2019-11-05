@@ -8,7 +8,7 @@ const utils = require('./../utils');
 module.exports = async (req, res) => {
     const pluginInfo = utils.getPluginInfo(req);
     const domain = pluginInfo.domain;
-    const {questionnaireId} = req.body;
+    const { questionnaireId } = req.body;
 
     const pluginConfig = req.app.get(constants.appKeys.pluginConfig);
     const Persistence = require(pluginConfig.persistence.module);
@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
         .then((domainModel) => Promise.resolve()
             .then(() => domainModel.getEntityByName(pluginConfig.schema.questionnaire))
             .then((questionnaireEntity) => Promise.resolve()
-                .then(() => questionnaireEntity.getDocuments(persistence, {_id: questionnaireId}, true))
+                .then(() => questionnaireEntity.getDocuments(persistence, { _id: questionnaireId }, true))
                 .then((questionnaireDocument) => new Questionnaire(questionnaireEntity, questionnaireDocument[0]))
                 .then((questionnaire) => Promise.resolve()
                     .then(() => {

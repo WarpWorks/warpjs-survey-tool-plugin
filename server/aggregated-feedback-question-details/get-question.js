@@ -37,7 +37,7 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
             const questionHAL = await questionModel.toHalResultFeedbackSpecific(warpjsUtils, RoutesInfo, constants.routes, resultId, thumbDirection);
 
             const questionnaireEntity = await domainModel.getEntityByName(pluginInfo.config.schema.questionnaire);
-            const questionnaireDocument = await questionnaireEntity.getDocuments(persistence, {_id: surveyId}, true);
+            const questionnaireDocument = await questionnaireEntity.getDocuments(persistence, { _id: surveyId }, true);
             const feedbackRelationship = await questionnaireEntity.getRelationshipByName(pluginInfo.config.schema.surveyToolFeedback);
             const feedbackDocuments = await feedbackRelationship.getDocuments(persistence, questionnaireDocument[0]);
             const filteredFeedback = _.filter(feedbackDocuments, (document) => {

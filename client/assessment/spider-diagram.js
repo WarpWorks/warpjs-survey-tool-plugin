@@ -5,11 +5,11 @@ const questionnaireSpiderTemplate = require('./questionnaire-spider.hbs');
 
 module.exports = ($, isMM, questionnaire, categories, selector, type, answers, surveyDetailLevel, goToQuestion) => {
     const modal = window.WarpJS.modal($, 'spider', 'Questions of this assignment in one overview');
-    $('> .modal-dialog > .modal-content > .modal-body', modal).html(questionnaireSpiderTemplate({type: type}));
+    $('> .modal-dialog > .modal-content > .modal-body', modal).html(questionnaireSpiderTemplate({ type: type }));
     modal.modal('show');
 
     const width = 1200;
-    const margin = ({top: 10, right: 120, bottom: 10, left: 40});
+    const margin = ({ top: 10, right: 120, bottom: 10, left: 40 });
     const dy = width / 4.5;
     const dx = 20;
 
@@ -48,7 +48,7 @@ module.exports = ($, isMM, questionnaire, categories, selector, type, answers, s
 
                         var answerPosition = answer ? answer.position : null;
 
-                        return {type: 'question', name: categoryQuestion ? categoryQuestion.name : null, questionIndex: questionIndex, iterationIndex: iterationIndex, categoryIndex: categoryIndex, answered: isAnswered, answer: answerPosition, hasOptions: categoryQuestion && categoryQuestion._embedded && categoryQuestion._embedded.options.length > 0, detailLevel: categoryQuestion ? categoryQuestion.detailLevel : null, linkTo: true};
+                        return { type: 'question', name: categoryQuestion ? categoryQuestion.name : null, questionIndex: questionIndex, iterationIndex: iterationIndex, categoryIndex: categoryIndex, answered: isAnswered, answer: answerPosition, hasOptions: categoryQuestion && categoryQuestion._embedded && categoryQuestion._embedded.options.length > 0, detailLevel: categoryQuestion ? categoryQuestion.detailLevel : null, linkTo: true };
                     });
 
                     let answeredLevel = 'none';
@@ -58,7 +58,7 @@ module.exports = ($, isMM, questionnaire, categories, selector, type, answers, s
                         answeredLevel = 'one';
                     }
 
-                    return {name: iteration.name, children: iterationChildren, answeredLevel: answeredLevel};
+                    return { name: iteration.name, children: iterationChildren, answeredLevel: answeredLevel };
                 }), (iteration) => {
                     return iteration.name !== null && iteration.name !== '';
                 });
@@ -79,24 +79,24 @@ module.exports = ($, isMM, questionnaire, categories, selector, type, answers, s
 
                     var answerPosition = answer ? answer.position : null;
 
-                    return {type: 'question', name: question.name, questionIndex: questionIndex, iterationIndex: 0, categoryIndex: categoryIndex, answered: answerQuestion && answerQuestion.answer !== undefined && answerQuestion.answer !== null, answer: answerPosition, hasOptions: question._embedded && question._embedded.options.length > 0, detailLevel: question.detailLevel, linkTo: true};
+                    return { type: 'question', name: question.name, questionIndex: questionIndex, iterationIndex: 0, categoryIndex: categoryIndex, answered: answerQuestion && answerQuestion.answer !== undefined && answerQuestion.answer !== null, answer: answerPosition, hasOptions: question._embedded && question._embedded.options.length > 0, detailLevel: question.detailLevel, linkTo: true };
                 });
             }
 
-            return {type: 'category', categoryIndex: categoryIndex, isRepeatable: category.isRepeatable, name: category.name, children: categoryChildren, dataId: category.id};
+            return { type: 'category', categoryIndex: categoryIndex, isRepeatable: category.isRepeatable, name: category.name, children: categoryChildren, dataId: category.id };
         });
     } else {
         questionnaireChildren = _.map(categories, (category) => {
             const categoryChildren = _.filter(_.map(category._embedded.questions, (question) => {
-                return {type: 'question', name: question.name, dataId: question.id, detailLevel: question.detailLevel};
+                return { type: 'question', name: question.name, dataId: question.id, detailLevel: question.detailLevel };
             }), (question) => {
                 return parseInt(question.detailLevel, 10) <= parseInt(surveyDetailLevel, 10);
             });
-            return {name: category.name, children: categoryChildren, dataId: category.id};
+            return { name: category.name, children: categoryChildren, dataId: category.id };
         });
     }
 
-    const data = {name: questionnaire.name, children: questionnaireChildren};
+    const data = { name: questionnaire.name, children: questionnaireChildren };
     const tree = d3.tree().nodeSize([ dx, dy ]);
     const diagonal = d3.linkHorizontal().x(d => d.y).y(d => d.x);
 
@@ -300,8 +300,8 @@ module.exports = ($, isMM, questionnaire, categories, selector, type, answers, s
 
         const linkEnter = link.enter().append("path")
             .attr("d", d => {
-                const o = {x: source.x0, y: source.y0};
-                return diagonal({source: o, target: o});
+                const o = { x: source.x0, y: source.y0 };
+                return diagonal({ source: o, target: o });
             });
 
         link.merge(linkEnter).transition(transition)
@@ -309,8 +309,8 @@ module.exports = ($, isMM, questionnaire, categories, selector, type, answers, s
 
         link.exit().transition(transition).remove()
             .attr("d", d => {
-                const o = {x: source.x, y: source.y};
-                return diagonal({source: o, target: o});
+                const o = { x: source.x, y: source.y };
+                return diagonal({ source: o, target: o });
             });
 
         root.eachBefore(d => {

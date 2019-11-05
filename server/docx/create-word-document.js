@@ -38,7 +38,7 @@ module.exports = async (req, res) => {
     });
 
     const createText = (string, css) => {
-        let customMessage = docx.createP();
+        const customMessage = docx.createP();
         string = string.replace(/&ldquo;|&rdquo;|&lsquo;|&rsquo;/g, '`');
         string = string.replace(/&nbsp;/g, ' ');
         string = string.replace(/&middot;/g, '●');
@@ -50,26 +50,26 @@ module.exports = async (req, res) => {
     };
 
     if (customMessages && Object.keys(customMessages).length) {
-        createText(customMessages.SurveytoolWord1, {font_face: 'Arial', bold: true, font_size: 28});
-        createText(customMessages.SurveytoolWord2, {font_face: 'Arial', italic: true, font_size: 11});
-        createText(customMessages.SurveytoolWord3, {font_face: 'Arial', color: '3277b3', font_size: 16});
-        createText(customMessages.SurveytoolWord4, {font_face: 'Arial', font_size: 11});
-        createText(customMessages.SurveytoolWord5, {font_face: 'Arial', color: '3277b3', font_size: 16});
-        createText(customMessages.SurveytoolWord6, {font_face: 'Arial', font_size: 11});
-        createText(customMessages.SurveytoolWord7, {font_face: 'Arial', color: '3277b3', font_size: 16});
-        createText(customMessages.SurveytoolWord8, {font_face: 'Arial', font_size: 11});
-        createText(customMessages.SurveytoolWord9, {font_face: 'Arial', color: '3277b3', font_size: 16});
-        createText(customMessages.SurveytoolWord10, {font_face: 'Arial', font_size: 11});
-        createText(customMessages.SurveytoolWord11, {font_face: 'Arial', color: '3277b3', font_size: 16});
-        createText(customMessages.SurveytoolWord12, {font_face: 'Arial', font_size: 11});
-        createText(customMessages.SurveytoolWord13, {font_face: 'Arial', color: '3277b3', font_size: 16});
-        createText(customMessages.SurveytoolWord14, {font_face: 'Arial', font_size: 11});
-        createText(customMessages.SurveytoolWord15, {font_face: 'Arial', color: '3277b3', font_size: 16});
-        createText(customMessages.SurveytoolWord16, {font_face: 'Arial', font_size: 11});
-        createText(customMessages.SurveytoolWord17, {font_face: 'Arial', color: '3277b3', font_size: 16});
-        createText(customMessages.SurveytoolWord18, {font_face: 'Arial', font_size: 11});
-        createText(customMessages.SurveytoolWord19, {font_face: 'Arial', color: '3277b3', font_size: 16});
-        createText(customMessages.SurveytoolWord20, {font_face: 'Arial', font_size: 11});
+        createText(customMessages.SurveytoolWord1, { font_face: 'Arial', bold: true, font_size: 28 });
+        createText(customMessages.SurveytoolWord2, { font_face: 'Arial', italic: true, font_size: 11 });
+        createText(customMessages.SurveytoolWord3, { font_face: 'Arial', color: '3277b3', font_size: 16 });
+        createText(customMessages.SurveytoolWord4, { font_face: 'Arial', font_size: 11 });
+        createText(customMessages.SurveytoolWord5, { font_face: 'Arial', color: '3277b3', font_size: 16 });
+        createText(customMessages.SurveytoolWord6, { font_face: 'Arial', font_size: 11 });
+        createText(customMessages.SurveytoolWord7, { font_face: 'Arial', color: '3277b3', font_size: 16 });
+        createText(customMessages.SurveytoolWord8, { font_face: 'Arial', font_size: 11 });
+        createText(customMessages.SurveytoolWord9, { font_face: 'Arial', color: '3277b3', font_size: 16 });
+        createText(customMessages.SurveytoolWord10, { font_face: 'Arial', font_size: 11 });
+        createText(customMessages.SurveytoolWord11, { font_face: 'Arial', color: '3277b3', font_size: 16 });
+        createText(customMessages.SurveytoolWord12, { font_face: 'Arial', font_size: 11 });
+        createText(customMessages.SurveytoolWord13, { font_face: 'Arial', color: '3277b3', font_size: 16 });
+        createText(customMessages.SurveytoolWord14, { font_face: 'Arial', font_size: 11 });
+        createText(customMessages.SurveytoolWord15, { font_face: 'Arial', color: '3277b3', font_size: 16 });
+        createText(customMessages.SurveytoolWord16, { font_face: 'Arial', font_size: 11 });
+        createText(customMessages.SurveytoolWord17, { font_face: 'Arial', color: '3277b3', font_size: 16 });
+        createText(customMessages.SurveytoolWord18, { font_face: 'Arial', font_size: 11 });
+        createText(customMessages.SurveytoolWord19, { font_face: 'Arial', color: '3277b3', font_size: 16 });
+        createText(customMessages.SurveytoolWord20, { font_face: 'Arial', font_size: 11 });
     }
 
     // let logo = docx.createP();
@@ -78,12 +78,12 @@ module.exports = async (req, res) => {
     // mainTitle.addText('IIC Project Explorer', {font_face: 'Arial', bold: true, font_size: 28});
     // let projectTitle = docx.createP();
     // projectTitle.addText(title, {font_face: 'Arial', bold: true, font_size: 26});
-    let projectDescription = docx.createP();
-    projectDescription.addText('This summary shows how your project is rated in the main IPT categories. For each category, the average score is shown. In general, low score means few problems to be expected, high score means that in this category has a very high level of complexity and potential risks.', {font_face: 'Arial', font_size: 12});
+    const projectDescription = docx.createP();
+    projectDescription.addText('This summary shows how your project is rated in the main IPT categories. For each category, the average score is shown. In general, low score means few problems to be expected, high score means that in this category has a very high level of complexity and potential risks.', { font_face: 'Arial', font_size: 12 });
 
     if (values) {
-        let summarySectionTitle = docx.createP();
-        summarySectionTitle.addText('Summary Project Assessment', {font_face: 'Arial', bold: true, font_size: 16});
+        const summarySectionTitle = docx.createP();
+        summarySectionTitle.addText('Summary Project Assessment', { font_face: 'Arial', bold: true, font_size: 16 });
         const tableStyle = {
             tableColWidth: 4261,
             tableSize: 24,
@@ -178,12 +178,12 @@ module.exports = async (req, res) => {
                     }
                 }]
             ];
-            let categoryTitle = docx.createP();
-            categoryTitle.addText(value.category, {font_face: 'Arial', bold: true, font_size: 12});
+            const categoryTitle = docx.createP();
+            categoryTitle.addText(value.category, { font_face: 'Arial', bold: true, font_size: 12 });
             const roundedAverage = Math.floor(parseInt(value.answerAverage, 10)) - 1;
-            summaryTable[0][roundedAverage]['opts']['color'] = '7eba41';
-            summaryTable[1][roundedAverage]['opts']['color'] = '000000';
-            summaryTable[1][roundedAverage]['val'] = value.answerAverage;
+            summaryTable[0][roundedAverage].opts.color = '7eba41';
+            summaryTable[1][roundedAverage].opts.color = '000000';
+            summaryTable[1][roundedAverage].val = value.answerAverage;
             docx.createTable(summaryTable, tableStyle);
         });
     }
@@ -202,22 +202,22 @@ module.exports = async (req, res) => {
             'fcb830',
             'de2a2d'
         ];
-        let detailSectionTitle = docx.createP();
-        detailSectionTitle.addText('Summary Project Assessment', {font_face: 'Arial', bold: true, font_size: 16});
+        const detailSectionTitle = docx.createP();
+        detailSectionTitle.addText('Summary Project Assessment', { font_face: 'Arial', bold: true, font_size: 16 });
 
         details.data.forEach((detail) => {
-            let categoryTitle = docx.createP();
-            categoryTitle.addText(detail.category, {font_face: 'Arial', bold: true, font_size: 18});
+            const categoryTitle = docx.createP();
+            categoryTitle.addText(detail.category, { font_face: 'Arial', bold: true, font_size: 18 });
 
             if (detail.comments) {
-                let categoryComment = docx.createP();
-                categoryComment.addText('Comment: ' + detail.comments, {font_face: 'Arial', font_size: 12});
+                const categoryComment = docx.createP();
+                categoryComment.addText('Comment: ' + detail.comments, { font_face: 'Arial', font_size: 12 });
             }
 
             detail.iterations.forEach((iteration) => {
                 if (iteration.name) {
-                    let iterationTitle = docx.createP();
-                    iterationTitle.addText(iteration.name, {font_face: 'Arial', bold: true, font_size: 14});
+                    const iterationTitle = docx.createP();
+                    iterationTitle.addText(iteration.name, { font_face: 'Arial', bold: true, font_size: 14 });
                 }
 
                 if (iteration.questions) {
@@ -305,19 +305,19 @@ module.exports = async (req, res) => {
                             ];
 
                             if (question.option && question.position) {
-                                detailTable[0][question.position - 1]['opts']['color'] = selectedColors[question.position - 1];
+                                detailTable[0][question.position - 1].opts.color = selectedColors[question.position - 1];
                             }
 
                             docx.createTable(detailTable, detailTableStyle);
                             docx.createP();
                         } else {
-                            let questionTitle = docx.createP();
-                            questionTitle.addText(question.name, {font_face: 'Arial', bold: true, font_size: 12});
+                            const questionTitle = docx.createP();
+                            questionTitle.addText(question.name, { font_face: 'Arial', bold: true, font_size: 12 });
                         }
 
                         if (question.comments) {
-                            let questionComment = docx.createP();
-                            questionComment.addText('Comment: ' + question.comments, {font_face: 'Arial', font_size: 12});
+                            const questionComment = docx.createP();
+                            questionComment.addText('Comment: ' + question.comments, { font_face: 'Arial', font_size: 12 });
                         }
                     });
                 }

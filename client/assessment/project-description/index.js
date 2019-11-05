@@ -14,7 +14,7 @@ module.exports = ($, placeholder, assessment, currentQuestion, rootUrl, type, ha
     const showCreate = !storage.getCurrent($, 'assessmentId');
     const surveyId = storage.getCurrent($, 'surveyId');
     const assessmentTemplateUrl = storage.getCurrent($, 'surveyToolAssessmentTemplateUrl');
-    let assessments = storage.getAssessments(surveyId).map((assessment) => {
+    const assessments = storage.getAssessments(surveyId).map((assessment) => {
         assessment.href = window.WarpJS.expandUrlTemplate(assessmentTemplateUrl, { surveyId, assessmentId: assessment.assessmentId });
         return assessment;
     });
