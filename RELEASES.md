@@ -1,5 +1,15 @@
 # Release Notes
 
+## 1.3.2 - 2020-04-21
+
+- #166: Empty copyright.
+- #167: Removed link on header logo
+- #168: Set static Assessment Tool title.
+- #169: Changed download button label
+- Removed IPT from text
+- Disabled stay in touch submit
+- Replaced with temporary header logo
+
 ## 1.2.131 - 2019-10-08
 
 - #162 update: remove console logs.
@@ -224,7 +234,7 @@
 
 ## 1.2.77 - 2019-03-19
 
-- Fix html parsing in selected status for MM. 
+- Fix html parsing in selected status for MM.
 
 ## 1.2.76 - 2019-03-18
 
@@ -268,7 +278,7 @@
 
 ## 1.2.66 - 2019-02-26
 
-- #109 New Algorithm for recommendations. 
+- #109 New Algorithm for recommendations.
 
 ## 1.2.65 - 2019-02-22
 
