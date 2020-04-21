@@ -1223,6 +1223,8 @@ const styleRadio = require('./resources/style-radio');
                             });
 
                             $(document).on('click', '.email-submit', (event) => {
+                                window.WarpJS.toast.info($, "Submit disabled");
+                                /*
                                 const data = {
                                     fullName: $("input#name").val(),
                                     email: $("input#email").val(),
@@ -1247,6 +1249,7 @@ const styleRadio = require('./resources/style-radio');
                                         )
                                     ;
                                 }
+                                */
                             });
 
                             $(document).on('click', '.spider-button', (event) => {
