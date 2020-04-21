@@ -29,6 +29,10 @@
   "bugs": {
     "url": "https://github.com/WarpWorks/warpjs-survey-tool-plugin/issues"
   },
+  "publishConfig": {
+    "access": "public",
+    "tag": "poc"
+  },
   "homepage": "https://github.com/WarpWorks/warpjs-survey-tool-plugin#readme",
   "devDependencies": {
     "@quoin/eslint-config-quoin": "~0.3.3",
