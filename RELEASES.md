@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.3.3 - 2020-04-22
+
+- Replaced header logo with DTF logo.
+
 ## 1.3.2 - 2020-04-21
 
 - #166: Empty copyright.
