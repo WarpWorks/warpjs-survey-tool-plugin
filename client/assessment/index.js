@@ -2,6 +2,8 @@ const _ = require('lodash');
 const Promise = require('bluebird');
 const uuid = require('uuid/v4');
 
+// const track = require('./track');
+
 const cannotFindAssessmentTemplate = require('./cannot-find-assessment.hbs');
 const constants = require('./../constants');
 const createImageMapElements = require('./resources/create-image-map-elements.js');
@@ -44,9 +46,9 @@ const styleRadio = require('./resources/style-radio');
     return Promise.resolve()
         .then(() => window.WarpJS.getCurrentPageHAL($))
         .then((result) => {
-            storage.setCurrent($, 'defaultAnswers', result.data._embedded.answers[0]);
+            storage.setCurrent($, storage.KEYS.DEFAULT_ANSWERS, result.data._embedded.answers[0]);
             if (result.data && result.data._embedded && result.data._embedded.questionnaires) {
-                storage.setCurrent($, 'surveyToolQuestionnaires', result.data._embedded.questionnaires.reduce(
+                storage.setCurrent($, storage.KEYS.QUESTIONNAIRES, result.data._embedded.questionnaires.reduce(
                     (cumulator, questionnaire) => {
                         cumulator[questionnaire.id] = Questionnaire.fromHal(questionnaire);
                         return cumulator;
@@ -72,8 +74,8 @@ const styleRadio = require('./resources/style-radio');
                     assessment = storage.getAssessment(result.data.surveyId, result.data.assessmentId);
                     if (assessment) {
                         questionPointer = 2;
-                        storage.setCurrent($, 'surveyId', result.data.surveyId);
-                        storage.setCurrent($, 'assessmentId', result.data.assessmentId);
+                        storage.setCurrent($, storage.KEYS.SURVEY_ID, result.data.surveyId);
+                        storage.setCurrent($, storage.KEYS.ASSESSMENT_ID, result.data.assessmentId);
                     } else {
                         shared.setSurveyContent($, placeholder, cannotFindAssessmentTemplate({ assessmentId: result.data.assessmentId }));
                         return;
@@ -81,8 +83,8 @@ const styleRadio = require('./resources/style-radio');
 
                     $('.survey-tool').addClass('active-nav-buttons');
                 } else {
-                    storage.setCurrent($, 'surveyId', result.data.surveyId);
-                    const questionnaire = storage.getCurrent($, 'surveyToolQuestionnaires')[storage.getCurrent($, 'surveyId')];
+                    storage.setCurrent($, storage.KEYS.SURVEY_ID, result.data.surveyId);
+                    const questionnaire = storage.getCurrent($, storage.KEYS.QUESTIONNAIRES)[storage.getCurrent($, storage.KEYS.SURVEY_ID)];
                     assessment = questionnaire.generateDefaultAssessment(uuid, 'foobar').toHal(mockWarpjsUtils).toJSON();
                     assessment.answers = assessment._embedded.answers;
                     delete assessment._embedded.answers;
@@ -152,12 +154,12 @@ const styleRadio = require('./resources/style-radio');
                 progress = 0;
 
                 const getAssessment = () => {
-                    assessment = storage.getAssessment(storage.getCurrent($, 'surveyId'), storage.getCurrent($, 'assessmentId'));
+                    assessment = storage.getAssessment(storage.getCurrent($, storage.KEYS.SURVEY_ID), storage.getCurrent($, storage.KEYS.ASSESSMENT_ID));
                     filterContent();
                 };
 
                 const updateAssessment = () => {
-                    storage.updateAssessment(storage.getCurrent($, 'surveyId'), storage.getCurrent($, 'assessmentId'), assessment);
+                    storage.updateAssessment(storage.getCurrent($, storage.KEYS.SURVEY_ID), storage.getCurrent($, storage.KEYS.ASSESSMENT_ID), assessment);
                 };
 
                 let progressFilteredCategories = [];
@@ -241,6 +243,8 @@ const styleRadio = require('./resources/style-radio');
 
                             $(document).on('click', '.description-back, .description-next', (event) => {
                                 const direction = $(event.target).hasClass('description-back') ? 'back' : 'next';
+                                // track(direction, categoryPointer, iterationPointer, questionPointer, progress, 'description');
+
                                 if ($('#project-name').val() || $(event.target).hasClass('description-back')) {
                                     if (result.data.assessmentId) {
                                         getAssessment();
@@ -936,6 +940,7 @@ const styleRadio = require('./resources/style-radio');
                             });
                             $(document).on('click', '.question-next-intro, .question-back-intro', (event) => {
                                 const direction = $(event.target).hasClass('question-back-intro') ? 'back' : 'next';
+                                // track(direction, categoryPointer, iterationPointer, questionPointer, progress, 'question-intro');
                                 updatePointers(direction);
                             });
                             $(document).on('click', '.iteration-next', () => {

@@ -63,10 +63,10 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
     });
 
     const getAssessment = () => {
-        assessment = storage.getAssessment(storage.getCurrent($, 'surveyId'), storage.getCurrent($, 'assessmentId'));
+        assessment = storage.getAssessment(storage.getCurrent($, storage.KEYS.SURVEY_ID), storage.getCurrent($, storage.KEYS.ASSESSMENT_ID));
     };
     const updateAssessment = () => {
-        storage.updateAssessment(storage.getCurrent($, 'surveyId'), storage.getCurrent($, 'assessmentId'), assessment);
+        storage.updateAssessment(storage.getCurrent($, storage.KEYS.SURVEY_ID), storage.getCurrent($, storage.KEYS.ASSESSMENT_ID), assessment);
     };
 
     getAssessment();
@@ -103,7 +103,7 @@ module.exports = ($, questionId, answerName, answerNum, questionName, submitUrl,
 
     $(modal).on('click', '.related-feedback-submit', function(event) {
         const data = {
-            questionnaireId: storage.getCurrent($, 'surveyId'),
+            questionnaireId: storage.getCurrent($, storage.KEYS.SURVEY_ID),
             questionId: questionId,
             resultsetId: resultsetId,
             resultId: resultId,

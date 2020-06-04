@@ -14,8 +14,8 @@ const template = require('./template.hbs');
     const loader = window.WarpJS.toast.loading($, "Page is loading");
     const placeholder = shared.preRender($);
 
-    storage.setCurrent($, 'surveyId', undefined);
-    storage.setCurrent($, 'assessmentId', undefined);
+    storage.setCurrent($, storage.KEYS.SURVEY_ID, undefined);
+    storage.setCurrent($, storage.KEYS.ASSESSMENT_ID, undefined);
 
     return Promise.resolve()
         .then(() => window.WarpJS.getCurrentPageHAL($))
@@ -28,7 +28,7 @@ const template = require('./template.hbs');
                 shared.setSurveyContent($, placeholder, content);
 
                 if (result.data && result.data._embedded && result.data._embedded.questionnaires) {
-                    storage.setCurrent($, 'surveyToolQuestionnaires', result.data._embedded.questionnaires.reduce(
+                    storage.setCurrent($, storage.KEYS.QUESTIONNAIRES, result.data._embedded.questionnaires.reduce(
                         (cumulator, questionnaire) => {
                             cumulator[questionnaire.id] = Questionnaire.fromHal(questionnaire);
                             return cumulator;
