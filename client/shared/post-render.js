@@ -3,12 +3,12 @@ const storage = require('./../storage');
 module.exports = ($, data) => {
     const placeholder = $('#warpjs-content-placeholder');
 
-    storage.setCurrent($, 'warpjsUser', data.warpjsUser);
-    storage.setCurrent($, 'surveyToolUrl', data._links.self.href);
-    storage.setCurrent($, 'surveyToolAssessmentTemplateUrl', data._links.assessmentTemplate.href);
-    storage.setCurrent($, 'surveyToolDefaultSurveyId', data.defaultSurveyId);
-    storage.setCurrent($, 'surveyId', data.surveyId);
-    storage.setCurrent($, 'assessmentId', data.assessmentId);
+    storage.setCurrent($, storage.KEYS.USER, data.warpjsUser);
+    storage.setCurrent($, storage.KEYS.URL, data._links.self.href);
+    storage.setCurrent($, storage.KEYS.ASSESSMENT_TEMPLATE_URL, data._links.assessmentTemplate.href);
+    storage.setCurrent($, storage.KEYS.DEFAULT_SURVEY_ID, data.defaultSurveyId);
+    storage.setCurrent($, storage.KEYS.SURVEY_ID, data.surveyId);
+    storage.setCurrent($, storage.KEYS.ASSESSMENT_ID, data.assessmentId);
 
     $('.warpjs-home-link').attr('href', data._links.warpjsHomepage.href);
     $('.spider-button[data-toggle="tooltip"]', placeholder).tooltip({ trigger: 'hover' });

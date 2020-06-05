@@ -14,7 +14,7 @@ module.exports = ($, placeholder, obj, stored) => {
     });
 
     $('[data-survey-tool-action="load-clone"]', div).on('click', function() {
-        const questionnaires = storage.getCurrent($, 'surveyToolQuestionnaires');
+        const questionnaires = storage.getCurrent($, storage.KEYS.QUESTIONNAIRES);
         const questionnaire = questionnaires[obj.surveyId];
         const assessmentId = storage.createAssessment(obj.surveyId, questionnaire);
         obj.assessmentId = assessmentId;

@@ -11,16 +11,16 @@ const loadAssessment = require('./../../shared/load-assessment');
 let initialized = false;
 
 module.exports = ($, placeholder, assessment, currentQuestion, rootUrl, type, hasSampleProject) => {
-    const showCreate = !storage.getCurrent($, 'assessmentId');
-    const surveyId = storage.getCurrent($, 'surveyId');
-    const assessmentTemplateUrl = storage.getCurrent($, 'surveyToolAssessmentTemplateUrl');
+    const showCreate = !storage.getCurrent($, storage.KEYS.ASSESSMENT_ID);
+    const surveyId = storage.getCurrent($, storage.KEYS.SURVEY_ID);
+    const assessmentTemplateUrl = storage.getCurrent($, storage.KEYS.ASSESSMENT_TEMPLATE_URL);
     const assessments = storage.getAssessments(surveyId).map((assessment) => {
         assessment.href = window.WarpJS.expandUrlTemplate(assessmentTemplateUrl, { surveyId, assessmentId: assessment.assessmentId });
         return assessment;
     });
 
     if (showCreate) {
-        const warpjsUser = storage.getCurrent($, 'warpjsUser');
+        const warpjsUser = storage.getCurrent($, storage.KEYS.USER);
         assessment.mainContact = warpjsUser ? warpjsUser.Name : '';
     }
 
@@ -39,7 +39,7 @@ module.exports = ($, placeholder, assessment, currentQuestion, rootUrl, type, ha
     shared.setSurveyContent($, placeholder, content);
 
     if (!initialized) {
-        console.log("initialize project-description event listeners...");
+        // console.log("initialize project-description event listeners...");
         initialized = true;
         createAssessment($, placeholder);
         deleteAssessment($, placeholder);

@@ -1,4 +1,8 @@
 module.exports = {
+    NAVIGATION: Object.freeze({
+        BACK: 'back',
+        NEXT: 'next'
+    }),
     specializedTemplates: {
         introCategory: 'Introduction',
         description: 'Project Description',

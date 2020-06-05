@@ -1,3 +1,5 @@
+const constants = require('./constants');
+
 module.exports = Object.freeze({
     createAssessment: require('./create-assessment'),
     getAssessment: require('./get-assessment'),
@@ -6,5 +8,6 @@ module.exports = Object.freeze({
     removeAssessment: require('./remove-assessment'),
     setAssessments: require('./set-assessments'),
     setCurrent: require('./set-current'),
-    updateAssessment: require('./update-assessment')
+    updateAssessment: require('./update-assessment'),
+    KEYS: constants.KEYS
 });
