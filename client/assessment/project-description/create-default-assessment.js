@@ -2,8 +2,11 @@ var http = require('http');
 
 const fileLoaded = require('./../../shared/load-assessment/file-loaded');
 
+const track = require('./../../track');
+
 module.exports = ($, placeholder, type) => {
     placeholder.on('click', '.load-sample-project', (event) => {
+        track('load', 'Sample project');
         function get_json(url, callback) {
             http.get(url, (res) => {
                 let body = '';

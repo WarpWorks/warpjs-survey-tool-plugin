@@ -3,6 +3,7 @@ const htmlDownload = require('./../html-download');
 const storage = require('./../../storage');
 const askProperties = require('./ask-properties');
 const convertFormat = require('./../convert-format');
+const track = require('./../../track');
 
 module.exports = ($, placeholder) => {
     const { surveyId, assessmentId } = storage.getCurrent($);
@@ -11,6 +12,7 @@ module.exports = ($, placeholder) => {
         $('[data-survey-tool-action="download-json"]', placeholder).show();
 
         placeholder.on('click', '[data-survey-tool-action="download-json"]', function() {
+            track('download', 'Export assessment');
             let assessment = storage.getAssessment(surveyId, assessmentId);
             assessment = convertFormat($, assessment);
             askProperties($, placeholder, assessment);

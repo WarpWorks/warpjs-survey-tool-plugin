@@ -1,4 +1,5 @@
 const storage = require('./../../storage');
+const track = require('./../../track');
 
 module.exports = ($, placeholder) => {
     placeholder.on('click', '[data-survey-tool-action="create-new-assessment"]', (event) => {
@@ -22,6 +23,7 @@ module.exports = ($, placeholder) => {
             assessment.projectStatus = $('#project-status').val();
         }
         storage.updateAssessment(surveyId, assessmentId, assessment);
+        track('create-assessment', `Project: ${assessment.projectName || '<no name>'} // ${assessment.mainContact || '<no contact>'} // ${assessment.projectStatus || '<no status>'}`);
 
         const assessmentTemplateUrl = storage.getCurrent($, storage.KEYS.ASSESSMENT_TEMPLATE_URL);
         const redirectUrl = window.WarpJS.expandUrlTemplate(assessmentTemplateUrl, { surveyId, assessmentId });

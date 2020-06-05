@@ -2,7 +2,8 @@ const _ = require('lodash');
 const Promise = require('bluebird');
 const uuid = require('uuid/v4');
 
-// const track = require('./track');
+const { NAVIGATION } = require('./../constants');
+const track = require('./../track');
 
 const cannotFindAssessmentTemplate = require('./cannot-find-assessment.hbs');
 const constants = require('./../constants');
@@ -69,6 +70,10 @@ const styleRadio = require('./resources/style-radio');
                 let questionPointer = 0;
                 let progress = 0;
                 let assessment;
+
+                $(document).on('click', '.copyright, .copyright-mm', (event) => {
+                    track('click', `Copyright`);
+                });
 
                 if (result.data.assessmentId) {
                     assessment = storage.getAssessment(result.data.surveyId, result.data.assessmentId);
@@ -252,6 +257,7 @@ const styleRadio = require('./resources/style-radio');
                                     assessment.projectName = $('#project-name').val();
                                     assessment.mainContact = $('#main-contact').val();
                                     assessment.projectStatus = $('#project-status').val();
+                                    track(direction, `Project Description: ${assessment.projectName || '<no name>'} // ${assessment.mainContact || '<no contact>'} // ${assessment.projectStatus || '<no status>'}`);
                                     updateQuestions();
                                     updatePointers(direction);
                                     updateAssessment();
@@ -266,6 +272,8 @@ const styleRadio = require('./resources/style-radio');
                             });
 
                             $(document).on('click', '.levels-back, .levels-next', () => {
+                                const detailLevel = $("input[name='questionnaire-level'][checked='checked']").val();
+                                track('next-or-back', `Level: ${detailLevel}`);
                                 levelsOnLeave();
                             });
 
@@ -926,13 +934,41 @@ const styleRadio = require('./resources/style-radio');
 
                             updateQuestionContent();
 
+                            $(document).on('click', '.warpjs-home-link', () => {
+                                track('home', `Question: Category=${categoryPointer} - Question=${questionPointer}`);
+                            });
+
+                            $(document).on('submit', '.word-download-form', () => {
+                                track('download', `Summary: Download Draft RFP`);
+                            });
+
+                            $(document).on('click', 'input[name="questionnaire-level"] + a', (event) => {
+                                const checked = $(event.currentTarget).siblings('input').attr('checked') === 'checked';
+                                const value = $(event.currentTarget).siblings('input').val();
+                                track('select-level-details', `Level Details: ${value}/${checked}`);
+                            });
+
+                            $(document).on('click', 'input[name="questionnaire-persona"] + a', (event) => {
+                                const checked = $(event.currentTarget).siblings('input').attr('checked') === 'checked';
+                                const label = $(event.currentTarget).siblings('h3').text();
+                                track('select-persona', `Persona: ${label} (checked:${checked})`);
+                            });
+
+                            $(document).on('click', '.modules .module-container input[type="checkbox"] + a', (event) => {
+                                const checked = $(event.currentTarget).siblings('input').attr('checked') === 'checked';
+                                const label = $(event.currentTarget).siblings('input').attr('name');
+                                track('select-module', `Module: ${label} (checked:${checked})`);
+                            });
+
                             $(document).on('click', '.question-next', () => {
+                                track(NAVIGATION.NEXT, `Question: Category=${categoryPointer} - Question=${questionPointer}`);
                                 getAssessment();
                                 updateQuestions();
                                 updatePointers('next');
                                 updateAssessment();
                             });
                             $(document).on('click', '.question-back', () => {
+                                track(NAVIGATION.BACK, `Question: Category=${categoryPointer} - Question=${questionPointer}`);
                                 getAssessment();
                                 updateQuestions();
                                 updatePointers('back');
@@ -940,32 +976,40 @@ const styleRadio = require('./resources/style-radio');
                             });
                             $(document).on('click', '.question-next-intro, .question-back-intro', (event) => {
                                 const direction = $(event.target).hasClass('question-back-intro') ? 'back' : 'next';
-                                // track(direction, categoryPointer, iterationPointer, questionPointer, progress, 'question-intro');
+                                track(direction, `Question-intro: Category=${categoryPointer} - Question=${questionPointer}`);
                                 updatePointers(direction);
                             });
                             $(document).on('click', '.iteration-next', () => {
+                                track(NAVIGATION.NEXT, `Iteration: Category=${categoryPointer} - Question=${questionPointer}`);
                                 iterationClick('next');
                             });
                             $(document).on('click', '.iteration-back', () => {
+                                track(NAVIGATION.BACK, `Iteration: Category=${categoryPointer} - Question=${questionPointer}`);
                                 iterationClick('back');
                             });
                             $(document).on('click', '.summary-back', () => {
+                                track(NAVIGATION.BACK, `Back from Summary`);
                                 updateQuestionContent();
                             });
                             $(document).on('click', '.details-next, .email-back-to-related', () => {
+                                track('next-or-back', `Guidance`);
                                 relatedReadingSetup();
                             });
                             $(document).on('click', '.details-back, .sub-details-back', () => {
+                                track('next-or-back', `Summary`);
                                 summarySetup();
                             });
                             $(document).on('click', '.summary-next, .sub-summary-next, .related-reading-back, .email-back-to-details', () => {
+                                track('next-or-back', `Details`);
                                 detailsSetup();
                             });
                             $(document).on('click', '.mm-summary-next, .mm-details-back', () => {
+                                track('next-or-back', `Overview`);
                                 subDetailsSetup();
                             });
                             $(document).on('click', '.next-to-email-form', () => {
                                 shared.setSurveyContent($, placeholder, emailFormTemplate());
+                                track(NAVIGATION.NEXT, 'Stay in touch');
                             });
 
                             $(document).on('click', '.progress-results-button', (event) => {
@@ -982,23 +1026,29 @@ const styleRadio = require('./resources/style-radio');
                                     if (isMM) {
                                         switch ($clicked.data('result')) {
                                             case 1:
+                                                track('progress', `Summary`);
                                                 summarySetup();
                                                 break;
                                             case 2:
+                                                track('progress', `Overview`);
                                                 subDetailsSetup();
                                                 break;
                                             case 3:
+                                                track('progress', `Details`);
                                                 detailsSetup();
                                         }
                                     } else {
                                         switch ($clicked.data('result')) {
                                             case 1:
+                                                track('progress', `Summary`);
                                                 summarySetup();
                                                 break;
                                             case 2:
+                                                track('progress', `Details`);
                                                 detailsSetup();
                                                 break;
                                             case 3:
+                                                track('progress', `Guidance`);
                                                 relatedReadingSetup();
                                         }
                                     }
@@ -1092,6 +1142,7 @@ const styleRadio = require('./resources/style-radio');
                             });
 
                             $(document).on('click', '.progress-bar-container', (event) => {
+                                track('progress-bar', `Progress bar: Category=${categoryPointer} - Question=${questionPointer}`);
                                 if (result.data.assessmentId) {
                                     const progressBar = $('.progress-bar-container');
                                     const progressWidth = progressBar.innerWidth();
@@ -1228,6 +1279,7 @@ const styleRadio = require('./resources/style-radio');
                             });
 
                             $(document).on('click', '.email-submit', (event) => {
+                                track('submit', `Stay in touch: ${$('input#name').val() || '<no name>'} // ${$('input#email').val() || '<no email>'}`);
                                 const data = {
                                     fullName: $("input#name").val(),
                                     email: $("input#email").val(),
@@ -1255,6 +1307,7 @@ const styleRadio = require('./resources/style-radio');
                             });
 
                             $(document).on('click', '.spider-button', (event) => {
+                                track('overview', `Overview`);
                                 if (result.data.assessmentId) {
                                     spiderSetup('progress');
                                 }
@@ -1287,6 +1340,7 @@ const styleRadio = require('./resources/style-radio');
                             });
 
                             $(document).on('click', '.details-button', (event) => {
+                                track('details', `Details: Category=${categoryPointer} - Question=${questionPointer}`);
                                 categoryPointer = 0;
                                 iterationPointer = 0;
                                 progress = 0;
