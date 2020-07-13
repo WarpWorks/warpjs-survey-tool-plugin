@@ -1,6 +1,6 @@
 const Promise = require('bluebird');
 const RoutesInfo = require('@quoin/expressjs-routes-info');
-const uuid = require('uuid');
+const { v4: uuid } = require('uuid');
 const warpjsUtils = require('@warp-works/warpjs-utils');
 
 const constants = require('./../../lib/constants');

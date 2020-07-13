@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const Promise = require('bluebird');
 const RoutesInfo = require('@quoin/expressjs-routes-info');
-const uuid = require('uuid/v4');
+const { v4: uuid } = require('uuid');
 const warpjsUtils = require('@warp-works/warpjs-utils');
 
 const config = require('../config');
