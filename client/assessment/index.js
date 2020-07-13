@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const Promise = require('bluebird');
-const uuid = require('uuid/v4');
+const { v4: uuid } = require('uuid');
 
 const { NAVIGATION } = require('./../constants');
 const track = require('./../track');

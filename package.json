@@ -75,6 +75,6 @@
     "grunt-contrib-copy": "~1.0.0",
     "lodash": "~4.17.19",
     "officegen": "~0.4.5",
-    "uuid": "~3.3.3"
+    "uuid": "~8.2.0"
   }
 }
