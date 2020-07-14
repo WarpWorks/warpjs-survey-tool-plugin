@@ -5,6 +5,7 @@ module.exports = Object.freeze({
         CUSTOM_MESSAGES: 'customMessages',
         DEFAULT_ANSWERS: 'defaultAnswers',
         DEFAULT_SURVEY_ID: 'surveyToolDefaultSurveyId',
+        PROJECT_EMAIL_URL: 'surveyToolProjectEmail',
         QUESTIONNAIRES: 'surveyToolQuestionnaires',
         SURVEY_ID: 'surveyId',
         URL: 'surveyToolUrl',

@@ -69,6 +69,8 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
                     value: customMessage.Message
                 })));
 
+            resource.link('projectEmail', RoutesInfo.expand(constants.routes.projectEmail, { surveyId }));
+
             await utils.sendHal(req, res, resource);
         } catch (err) {
             // eslint-disable-next-line no-console

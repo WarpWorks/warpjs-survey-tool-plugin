@@ -22,12 +22,10 @@ module.exports = async (req, res) => {
                 .then(() => questionnaireEntity.getDocuments(persistence, { _id: questionnaireId }, true))
                 .then((questionnaireDocument) => new Questionnaire(questionnaireEntity, questionnaireDocument[0]))
                 .then((questionnaire) => Promise.resolve()
-                    .then(() => {
-                        return {
-                            fullName: req.body.fullName,
-                            email: req.body.email
-                        };
-                    })
+                    .then(() => ({
+                        fullName: req.body.fullName,
+                        email: req.body.email
+                    }))
                     .then((emailValues) => Promise.resolve()
                         .then(() => domainModel.getEntityByName(pluginInfo.config.schema.email))
                         .then((emailEntity) => questionnaire.newEmail(emailEntity.id, emailValues.fullName, emailValues.email))
