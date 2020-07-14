@@ -107,6 +107,7 @@ const template = require('./../template.hbs');
                             if ($('#project-name').val()) {
                                 result.data.projectName = $('#project-name').val();
                                 result.data.mainContact = $('#main-contact').val();
+                                result.data.projectEmail = $('#project-email').val();
                                 result.data.projectStatus = $('#project-status').val();
                                 $('.progress-label').html('Progress for ' + result.data.projectName); ;
                                 updateQuestions();
@@ -456,6 +457,7 @@ const template = require('./../template.hbs');
                                 questionnaire: result.data._embedded.questionnaires[0].name,
                                 name: result.data.projectName,
                                 contact: result.data.mainContact,
+                                projectEmail: result.data.projectEmail,
                                 status: result.data.projectStatus,
                                 data: detailsValues()
                             };
@@ -561,7 +563,13 @@ const template = require('./../template.hbs');
                                         return question.id === questions[questionPointer].id;
                                     }));
                                     if (currentQuestion.name === constants.specializedTemplates.description) {
-                                        shared.setSurveyContent($, placeholder, questionnaireDescriptionTemplate({ projectName: result.data.projectName, projectStatus: result.data.projectStatus, mainContact: result.data.mainContact, question: currentQuestion }));
+                                        shared.setSurveyContent($, placeholder, questionnaireDescriptionTemplate({
+                                            projectName: result.data.projectName,
+                                            mainContact: result.data.mainContact,
+                                            projectEmail: result.data.projectEmail,
+                                            projectStatus: result.data.projectStatus,
+                                            question: currentQuestion
+                                        }));
                                     } else if (currentQuestion.name === constants.specializedTemplates.details) {
                                         shared.setSurveyContent($, placeholder, questionnaireLevelsTemplate({ level: result.data.detailLevel, question: currentQuestion, detailedEnabled: result.data.warpjsUser !== null && result.data.warpjsUser.UserName !== null }));
                                         assignDetailLevelSelected();
@@ -622,6 +630,7 @@ const template = require('./../template.hbs');
                                 questionnaire: result.data._embedded.questionnaires[0].name,
                                 name: result.data.projectName,
                                 contact: result.data.mainContact,
+                                projectEmail: result.data.projectEmail,
                                 status: result.data.projectStatus,
                                 data: detailsValues()
                             };
@@ -795,6 +804,7 @@ const template = require('./../template.hbs');
                                 if ($('#project-name').val()) {
                                     result.data.projectName = $('#project-name').val();
                                     result.data.mainContact = $('#main-contact').val();
+                                    result.data.projectEmail = $('#project-email').val();
                                     result.data.projectStatus = $('#project-status').val();
                                     updateProgressLabel();
                                     $('.progress-label').html('Progress for ' + result.data.projectName);
@@ -860,31 +870,6 @@ const template = require('./../template.hbs');
                                 updateQuestionContent('');
                             }
                         });
-
-                        // const onReaderLoad = (event) => {
-                        //     var obj = JSON.parse(event.target.result);
-                        //     result.data.projectName = obj.projectName;
-                        //     result.data.mainContact = obj.mainContact;
-                        //     result.data.projectStatus = obj.projectStatus;
-                        //     result.data.detailLevel = obj.detailLevel;
-                        //     result.data._embedded.answers = obj.answers;
-
-                        //     categoryPointer = 0;
-                        //     iterationPointer = 0;
-                        //     questionPointer = 0;
-                        //     iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
-                        //         return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
-                        //     });
-                        //     questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                        //         return question.detailLevel <= result.data.detailLevel;
-                        //     }) : [];
-
-                        //     if (categories[categoryPointer].isRepeatable) {
-                        //         questionPointer = -1;
-                        //     }
-                        //     updateProgressLabel();
-                        //     updateQuestionContent('');
-                        // };
 
                         $(document).on('change keyup paste', '.comment-text', (event) => {
                             if ($(event.target).val().length) {

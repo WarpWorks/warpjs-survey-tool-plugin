@@ -22,6 +22,7 @@ module.exports = ($, placeholder, assessment, currentQuestion, rootUrl, type, ha
     if (showCreate) {
         const warpjsUser = storage.getCurrent($, storage.KEYS.USER);
         assessment.mainContact = warpjsUser ? warpjsUser.Name : '';
+        assessment.projectEmail = warpjsUser ? warpjsUser.Email : '';
     }
 
     $.each(assessments, (index, item) => {
