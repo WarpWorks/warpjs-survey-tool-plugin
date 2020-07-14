@@ -1,4 +1,4 @@
-const cloneDeep = require('lodash');
+const cloneDeep = require('lodash/cloneDeep');
 const officegen = require('officegen');
 // const path = require('path');
 const warpjsUtils = require('@warp-works/warpjs-utils');
