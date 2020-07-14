@@ -48,6 +48,7 @@ const styleRadio = require('./resources/style-radio');
         .then(() => window.WarpJS.getCurrentPageHAL($))
         .then((result) => {
             storage.setCurrent($, storage.KEYS.DEFAULT_ANSWERS, result.data._embedded.answers[0]);
+            storage.setCurrent($, storage.KEYS.CUSTOM_MESSAGES, result.data._embedded[storage.KEYS.CUSTOM_MESSAGES]);
             if (result.data && result.data._embedded && result.data._embedded.questionnaires) {
                 storage.setCurrent($, storage.KEYS.QUESTIONNAIRES, result.data._embedded.questionnaires.reduce(
                     (cumulator, questionnaire) => {

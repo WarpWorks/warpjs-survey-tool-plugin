@@ -35,7 +35,14 @@ module.exports = ($, placeholder, assessment, currentQuestion, rootUrl, type, ha
         assessments,
         question: currentQuestion,
         rootUrl: rootUrl,
-        hasSampleProject
+        hasSampleProject,
+        customMessages: storage.getCurrent($, storage.KEYS.CUSTOM_MESSAGES).reduce(
+            (cumul, customMessage) => ({
+                ...cumul,
+                [customMessage.key]: customMessage.value
+            }),
+            {}
+        )
     });
     shared.setSurveyContent($, placeholder, content);
 
