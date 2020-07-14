@@ -9,6 +9,7 @@ module.exports = ($, data) => {
     storage.setCurrent($, storage.KEYS.DEFAULT_SURVEY_ID, data.defaultSurveyId);
     storage.setCurrent($, storage.KEYS.SURVEY_ID, data.surveyId);
     storage.setCurrent($, storage.KEYS.ASSESSMENT_ID, data.assessmentId);
+    storage.setCurrent($, storage.KEYS.PROJECT_EMAIL_URL, data._links.projectEmail.href);
 
     $('.warpjs-home-link').attr('href', data._links.warpjsHomepage.href);
     $('.spider-button[data-toggle="tooltip"]', placeholder).tooltip({ trigger: 'hover' });

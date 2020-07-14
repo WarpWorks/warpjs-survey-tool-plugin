@@ -7,6 +7,7 @@ const storage = require('./../../storage');
 const template = require('./template.hbs');
 const exportAssessement = require('./../../shared/export-assessment');
 const loadAssessment = require('./../../shared/load-assessment');
+const projectEmailChanged = require('./project-email-changed');
 
 let initialized = false;
 
@@ -52,6 +53,7 @@ module.exports = ($, placeholder, assessment, currentQuestion, rootUrl, type, ha
         createAssessment($, placeholder);
         deleteAssessment($, placeholder);
         createDefaultAssessment($, placeholder, type);
+        projectEmailChanged($, placeholder);
     }
 
     exportAssessement($, placeholder);
