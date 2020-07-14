@@ -59,6 +59,16 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
             // create answers resource
             resource.embed('answers', questionnaire.generateDefaultAnswer(uuid).toHal(warpjsUtils));
 
+            // Custom messages
+            const customMessageEntity = domain.getEntityByName('CustomMessage');
+            const customMessages = await customMessageEntity.getDocuments(pluginInfo.persistence);
+            resource.embed('customMessages', customMessages
+                .filter((customMessage) => customMessage.Name.startsWith('SurveyTool') || customMessage.Name.startsWith('IPT'))
+                .map((customMessage) => warpjsUtils.createResource('', {
+                    key: customMessage.Name,
+                    value: customMessage.Message
+                })));
+
             await utils.sendHal(req, res, resource);
         } catch (err) {
             // eslint-disable-next-line no-console
