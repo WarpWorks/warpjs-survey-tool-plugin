@@ -22,6 +22,13 @@ module.exports = ($, placeholder) => {
             assessment.mainContact = $('#main-contact').val();
             assessment.projectEmail = $('#project-email').val();
             assessment.projectStatus = $('#project-status').val();
+
+            if (assessment.projectEmail) {
+                const projectEmailUrl = storage.getCurrent($, storage.KEYS.PROJECT_EMAIL_URL);
+                window.WarpJS.proxy.post($, projectEmailUrl, {
+                    projectEmail: assessment.projectEmail
+                });
+            }
         }
         storage.updateAssessment(surveyId, assessmentId, assessment);
         track('create-assessment', `Project: ${assessment.projectName || '<no name>'} // ${assessment.mainContact || '<no contact>'} // ${assessment.projectEmail || '<no email>'} // ${assessment.projectStatus || '<no status>'}`);
