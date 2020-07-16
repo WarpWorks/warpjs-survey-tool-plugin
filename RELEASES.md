@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.2.133 - 2020-07-15
+
+- #173: Adding email field to project description.
+
 ## 1.2.132 - 2020-06-04
 
 - #171: Adding gtag events to track behavior.
