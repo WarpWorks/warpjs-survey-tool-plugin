@@ -1,61 +1,65 @@
 const constants = require('./../../lib/constants');
 const utils = require('./../utils');
 
-const ENTITY_NAME = 'IPT_ProjectEmail';
-const SURVEY_TOOL_RELATIONSHIP_NAME = 'SurveyTool';
+const ENTITY_NAME = 'IPT';
+const EMAIL_RELATIONSHIP = 'Email';
+const EMAIL_ENTITY_NAME = 'Email';
 
 module.exports = async (req, res) => {
     const { surveyId } = req.params;
-    const { projectEmail } = req.body;
+    let { fullName, projectEmail } = req.body;
 
-    const email = projectEmail ? projectEmail.trim() : '';
+    if (projectEmail) {
+        projectEmail = projectEmail.trim();
 
-    let persistence;
+        let persistence;
 
-    try {
-        const pluginInfo = utils.getPluginInfo(req);
-        const domain = pluginInfo.domain;
+        try {
+            const pluginInfo = utils.getPluginInfo(req);
+            const domain = pluginInfo.domain;
 
-        const pluginConfig = req.app.get(constants.appKeys.pluginConfig);
-        const Persistence = require(pluginConfig.persistence.module);
-        persistence = new Persistence(pluginConfig.persistence.host, domain);
+            const pluginConfig = req.app.get(constants.appKeys.pluginConfig);
+            const Persistence = require(pluginConfig.persistence.module);
+            persistence = new Persistence(pluginConfig.persistence.host, domain);
 
-        const domainModel = await req.app.get(constants.appKeys.warpCore).getDomainByName(domain);
-        const projectEmailEntity = domainModel.getEntityByName(ENTITY_NAME);
+            const domainModel = await req.app.get(constants.appKeys.warpCore).getDomainByName(domain);
+            const surveyToolEntity = domainModel.getEntityByName(ENTITY_NAME);
 
-        const documents = await projectEmailEntity.getDocuments(persistence);
-        const found = documents.find((doc) => doc.Name === email);
+            const surveys = await surveyToolEntity.getDocuments(persistence);
 
-        const relationship = projectEmailEntity.getRelationshipByName(SURVEY_TOOL_RELATIONSHIP_NAME);
-        const surveyDocuments = await relationship.getTargetEntity().getDocuments(persistence);
-        const survey = surveyDocuments.find((survey) => survey.id === surveyId);
-        const surveyData = {
-            id: surveyId,
-            type: survey.type,
-            typeID: survey.typeID
-        };
+            const survey = surveys.find((doc) => doc.id === surveyId);
 
-        if (found) {
-            const reference = relationship.getTargetReferences(found).find((ref) => ref._id === surveyId);
-            if (!reference) {
-                const instance = await relationship.addAssociation(found, surveyData, persistence);
-                await projectEmailEntity.updateDocument(persistence, instance);
+            const relationship = surveyToolEntity.getRelationshipByName(EMAIL_RELATIONSHIP);
+            const emailEntity = relationship.getTargetEntity();
+
+            const emails = await relationship.getDocuments(persistence, survey);
+
+            const foundEmail = emails.find((email) => email.Email === projectEmail);
+
+            if (foundEmail) {
+                if (foundEmail.FullName !== fullName) {
+                    foundEmail.Name = projectEmail;
+                    foundEmail.FullName = fullName;
+                    await emailEntity.updateDocument(persistence, foundEmail);
+                }
+            } else {
+                const child = await relationship.addAggregation(persistence, surveyToolEntity, survey, EMAIL_ENTITY_NAME);
+
+                child.Name = projectEmail;
+                child.Email = projectEmail;
+                child.FullName = fullName;
+
+                await emailEntity.createDocument(persistence, child);
             }
-        } else {
-            let instance = projectEmailEntity.newInstance();
-            instance.Name = email;
-            instance = await relationship.addAssociation(instance, surveyData, persistence);
-            await projectEmailEntity.createDocument(persistence, instance);
-        }
-
-        res.status(204).send();
-    } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error("Error adding project email: err=", err);
-        res.status(500).send('Error saving email.');
-    } finally {
-        if (persistence) {
-            persistence.close();
+        } catch (err) {
+            // eslint-disable-next-line no-console
+            console.error("Error adding project email: err=", err);
+            res.status(500).send('Error saving email.');
+        } finally {
+            if (persistence) {
+                persistence.close();
+            }
         }
     }
+    res.status(204).send();
 };

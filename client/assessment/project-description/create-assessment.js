@@ -26,6 +26,7 @@ module.exports = ($, placeholder) => {
             if (assessment.projectEmail) {
                 const projectEmailUrl = storage.getCurrent($, storage.KEYS.PROJECT_EMAIL_URL);
                 window.WarpJS.proxy.post($, projectEmailUrl, {
+                    fullName: assessment.mainContact,
                     projectEmail: assessment.projectEmail
                 });
             }
