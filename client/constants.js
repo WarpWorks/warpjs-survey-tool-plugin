@@ -11,5 +11,9 @@ module.exports = {
         spider: 'Spider Diagram',
         personas: 'Personas',
         modules: 'Modules'
-    }
+    },
+    TITLES: Object.freeze({
+        IPT: 'IIC Project Explorer',
+        MM: 'Maturity Assessment'
+    })
 };

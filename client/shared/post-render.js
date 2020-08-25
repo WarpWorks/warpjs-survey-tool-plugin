@@ -1,4 +1,5 @@
 const storage = require('./../storage');
+const { classByKey, titleByKey } = require('../utils');
 
 module.exports = ($, data) => {
     const placeholder = $('#warpjs-content-placeholder');
@@ -18,8 +19,11 @@ module.exports = ($, data) => {
         trigger: 'click'
     });
 
-    if (data._embedded.questionnaires && data._embedded.questionnaires[0].key) {
-        $('.survey-tool').addClass(data._embedded.questionnaires[0].key);
+    const key = (data._embedded.questionnaires && data._embedded.questionnaires[0].key) ? data._embedded.questionnaires[0].key : null;
+    if (key) {
+        const surveyKey = classByKey(key);
+        $('.survey-tool').addClass(surveyKey);
+        $(`.survey-tool.${surveyKey} .survey-type-${surveyKey} h2`).text(titleByKey(key));
     }
 
     $(document).on('click', '.closed[data-toggle="tooltip"]', (event) => {

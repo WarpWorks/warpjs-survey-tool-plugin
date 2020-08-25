@@ -4,6 +4,7 @@ const { v4: uuid } = require('uuid');
 
 const { NAVIGATION } = require('./../constants');
 const track = require('./../track');
+const utils = require('./../utils');
 
 const cannotFindAssessmentTemplate = require('./cannot-find-assessment.hbs');
 const constants = require('./../constants');
@@ -59,7 +60,7 @@ const styleRadio = require('./resources/style-radio');
                 ));
             }
 
-            const isMM = result.data._embedded.questionnaires[0].key === 'mm';
+            const isMM = utils.isMM(result.data._embedded.questionnaires[0].key);
 
             if (result.error) {
                 shared.setSurveyContent($, placeholder, errorTemplate(result.data));
@@ -489,8 +490,8 @@ const styleRadio = require('./resources/style-radio');
 
                             const summaryCalculations = () => {
                                 const key = result.data._embedded.questionnaires[0].key;
-                                const numberOfSections = key === 'mm' ? 5 : 4;
-                                const offsetConstant = key === 'mm' ? 10 : 12.5;
+                                const numberOfSections = utils.isMM(key) ? 5 : 4;
+                                const offsetConstant = utils.isMM(key) ? 10 : 12.5;
 
                                 $('.marker').each((index, element) => {
                                     const score = $(element).data('score');

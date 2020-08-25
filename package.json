@@ -1,11 +1,13 @@
 {
   "name": "@warp-works/warpjs-survey-tool-plugin",
-  "version": "1.2.133",
+  "version": "1.2.134",
   "description": "Plugin to set up survey",
   "main": "index.js",
   "scripts": {
     "prepare": "grunt",
-    "grunt": "grunt"
+    "grunt": "grunt",
+    "test": "mocha \"client/**/*.unit.test.js\"",
+    "test:watch": "mocha -w \"client/**/*.unit.test.js\""
   },
   "repository": {
     "type": "git",
@@ -38,7 +40,9 @@
     "babel-preset-stage-0": "~6.24.1",
     "babel-preset-stage-2": "~6.24.1",
     "body-parser": "~1.19.0",
+    "chai": "~4.2.0",
     "cookie-parser": "~1.4.5",
+    "dirty-chai": "~2.0.1",
     "eslint": "~6.8.0",
     "eslint-config-standard": "~14.1.1",
     "eslint-plugin-html": "~6.0.2",
@@ -57,6 +61,7 @@
     "handlebars-loader": "~1.7.1",
     "http-server": "~0.12.3",
     "load-grunt-config": "~3.0.1",
+    "mocha": "~6.2.3",
     "svg.js": "~2.7.1",
     "webpack": "~2.7.0"
   },
