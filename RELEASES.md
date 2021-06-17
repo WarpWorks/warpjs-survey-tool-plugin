@@ -1,5 +1,9 @@
 # Release Notes
 
+## 2.0.0-rc.1 - 2021-06-17
+
+- Updating packages and node@14
+
 ## 1.2.134 - 2020-08-24
 
 - #175: Allow customizing title.

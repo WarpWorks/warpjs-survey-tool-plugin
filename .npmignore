@@ -1,6 +1,9 @@
 /.babelrc
+/.github
+/.mocharc.json
 /.npmignore
 /.nycrc
+/*.test.js
 /client
 /Gruntfile.js
 /grunt
