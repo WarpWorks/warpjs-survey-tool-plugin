@@ -43,7 +43,7 @@ module.exports = async (req, res) => {
         string = string.replace(/&nbsp;/g, ' ');
         string = string.replace(/&middot;/g, '●');
         const split = string.split("<br />");
-        for (var x of split) {
+        for (const x of split) {
             customMessage.addText(x, css);
             customMessage.addLineBreak();
         }

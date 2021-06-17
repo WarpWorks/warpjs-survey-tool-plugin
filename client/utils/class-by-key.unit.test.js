@@ -1,4 +1,8 @@
+const testHelpers = require('@quoin/node-test-helpers');
+
 const moduleToTest = require('./class-by-key');
+
+const { expect } = testHelpers;
 
 describe('client/utils/class-by-key.unit.test.js', () => {
   it('exports a function with 1 param', () => {

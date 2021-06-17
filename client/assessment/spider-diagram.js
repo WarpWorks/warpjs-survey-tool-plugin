@@ -42,11 +42,13 @@ module.exports = ($, isMM, questionnaire, categories, selector, type, answers, s
                             allAnswered = false;
                         }
 
-                        const answer = categoryQuestion ? _.find(categoryQuestion._embedded.options, (answer) => {
-                            return answer && answer.id === question.answer;
-                        }) : null;
+                        const answer = categoryQuestion
+                            ? _.find(categoryQuestion._embedded.options, (answer) => {
+                                return answer && answer.id === question.answer;
+                            })
+                            : null;
 
-                        var answerPosition = answer ? answer.position : null;
+                        const answerPosition = answer ? answer.position : null;
 
                         return { type: 'question', name: categoryQuestion ? categoryQuestion.name : null, questionIndex: questionIndex, iterationIndex: iterationIndex, categoryIndex: categoryIndex, answered: isAnswered, answer: answerPosition, hasOptions: categoryQuestion && categoryQuestion._embedded && categoryQuestion._embedded.options.length > 0, detailLevel: categoryQuestion ? categoryQuestion.detailLevel : null, linkTo: true };
                     });
@@ -77,7 +79,7 @@ module.exports = ($, isMM, questionnaire, categories, selector, type, answers, s
                         return answer && answerQuestion && answer.id === answerQuestion.answer;
                     });
 
-                    var answerPosition = answer ? answer.position : null;
+                    const answerPosition = answer ? answer.position : null;
 
                     return { type: 'question', name: question.name, questionIndex: questionIndex, iterationIndex: 0, categoryIndex: categoryIndex, answered: answerQuestion && answerQuestion.answer !== undefined && answerQuestion.answer !== null, answer: answerPosition, hasOptions: question._embedded && question._embedded.options.length > 0, detailLevel: question.detailLevel, linkTo: true };
                 });
@@ -328,7 +330,7 @@ module.exports = ($, isMM, questionnaire, categories, selector, type, answers, s
     });
 
     const expand = (d) => {
-        var children = (d.children) ? d.children : d._children;
+        const children = (d.children) ? d.children : d._children;
         if (d._children) {
             d.children = d._children;
             d._children = null;

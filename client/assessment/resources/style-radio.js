@@ -2,7 +2,7 @@ module.exports = ($) => {
     if (!$('a.radio-fx').length) {
         $("input:radio, input[type='checkbox']").hide().each(function() {
             $(this).attr('data-radio-fx', this.name);
-            var label = $("label[for=" + '"' + this.id + '"' + "]").text();
+            const label = $("label[for=" + '"' + this.id + '"' + "]").text();
             $('<a ' + (label !== '' ? 'title=" ' + label + ' "' : '') + ' data-radio-fx="' + this.name + '" class="radio-fx" href="#">' +
                 '<span class="radio ' + (this.checked ? ' radio-checked' : '') + ' ' + $(this).attr("class") + '"></span></a>').insertAfter(this);
         });
