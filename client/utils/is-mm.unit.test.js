@@ -1,4 +1,8 @@
+const testHelpers = require('@quoin/node-test-helpers');
+
 const moduleToTest = require('./is-mm');
+
+const { expect } = testHelpers;
 
 describe('client/utils/is-mm.js', () => {
   it('exports a function with 1 param', () => {

@@ -1,11 +1,18 @@
 {
   "name": "@warp-works/warpjs-survey-tool-plugin",
-  "version": "1.2.134",
+  "version": "2.0.1",
   "description": "Plugin to set up survey",
   "main": "index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=14.15.0"
+  },
   "scripts": {
     "prepare": "grunt",
     "grunt": "grunt",
+    "coverage": "nyc npm test",
     "test": "mocha \"client/**/*.unit.test.js\"",
     "test:watch": "mocha -w \"client/**/*.unit.test.js\""
   },
@@ -30,56 +37,99 @@
   },
   "homepage": "https://github.com/WarpWorks/warpjs-survey-tool-plugin#readme",
   "devDependencies": {
-    "@quoin/eslint-config-quoin": "~0.3.3",
-    "@quoin/expressjs-routes-info": "~0.2.2",
-    "@warp-works/warpjs-plugins": "~1.2.7",
-    "@warp-works/warpjs-utils": "~1.2.129",
+    "@quoin/eslint-config-quoin": "^2.0.2",
+    "@quoin/expressjs-routes-info": "^2.0.1",
+    "@quoin/node-test-helpers": "^2.0.1",
+    "@warp-works/warpjs-plugins": "^2.0.1",
+    "@warp-works/warpjs-utils": "^2.0.3",
     "babel-core": "~6.26.3",
     "babel-loader": "~7.1.5",
     "babel-preset-env": "~1.7.0",
     "babel-preset-stage-0": "~6.24.1",
     "babel-preset-stage-2": "~6.24.1",
     "body-parser": "~1.19.0",
-    "chai": "~4.2.0",
     "cookie-parser": "~1.4.5",
-    "dirty-chai": "~2.0.1",
-    "eslint": "~6.8.0",
-    "eslint-config-standard": "~14.1.1",
-    "eslint-plugin-html": "~6.0.2",
-    "eslint-plugin-import": "~2.22.0",
-    "eslint-plugin-json": "~2.1.1",
+    "eslint": "^7.29.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-html": "^6.1.2",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-json": "^3.0.0",
     "eslint-plugin-node": "~11.1.0",
-    "eslint-plugin-promise": "~4.2.1",
-    "eslint-plugin-standard": "~4.0.1",
+    "eslint-plugin-promise": "^5.1.0",
     "express": "~4.17.1",
-    "grunt": "~1.2.1",
+    "grunt": "^1.4.1",
     "grunt-contrib-clean": "~2.0.0",
-    "grunt-contrib-less": "~2.0.0",
-    "grunt-eslint": "~22.0.0",
+    "grunt-contrib-less": "^3.0.0",
+    "grunt-eslint": "^23.0.0",
     "grunt-webpack": "~3.1.3",
-    "handlebars": "~4.7.6",
+    "handlebars": "^4.7.7",
     "handlebars-loader": "~1.7.1",
     "http-server": "~0.12.3",
     "load-grunt-config": "~3.0.1",
-    "mocha": "~6.2.3",
+    "mocha": "^9.0.1",
+    "nyc": "^15.1.0",
     "svg.js": "~2.7.1",
     "webpack": "~2.7.0"
   },
   "peerDependencies": {
-    "@quoin/expressjs-routes-info": ">=0.2.0",
-    "@warp-works/warpjs-utils": ">=1.2.129",
+    "@quoin/expressjs-routes-info": ">=2.0.1",
+    "@warp-works/warpjs-utils": ">=2.0.3",
     "body-parser": ">=1.19.0",
     "cookie-parser": ">=1.4.5",
     "express": ">=4.17.0"
   },
   "dependencies": {
-    "@warp-works/warpjs-action-plugin": "~1.2.1",
+    "@warp-works/warpjs-action-plugin": "^2.0.2",
     "bluebird": "~3.7.2",
-    "d3": "~5.16.0",
-    "debug": "~4.1.1",
+    "d3": "^5.16.0",
+    "debug": "^4.3.1",
     "grunt-contrib-copy": "~1.0.0",
     "lodash": "~4.17.19",
     "officegen": "~0.4.5",
-    "uuid": "~8.2.0"
+    "uuid": "^8.3.2"
+  },
+  "nyc": {
+    "all": true,
+    "temp-dir": "./reports/nyc_output",
+    "report-dir": "reports/coverage",
+    "include": [
+      "index.js",
+      "lib/**/*.js?(x)"
+    ],
+    "exclude": [
+      "build/",
+      "reports/",
+      "src/**/*.test.js?(x)",
+      "src/**/debug.js",
+      "src/_.test",
+      "src/server.js"
+    ],
+    "extension": [
+      ".js",
+      ".jsx"
+    ],
+    "reporter": [
+      "cobertura",
+      "lcov",
+      "html"
+    ],
+    "watermarks": {
+      "statements": [
+        50,
+        80
+      ],
+      "lines": [
+        50,
+        80
+      ],
+      "functions": [
+        50,
+        80
+      ],
+      "branches": [
+        50,
+        80
+      ]
+    }
   }
 }

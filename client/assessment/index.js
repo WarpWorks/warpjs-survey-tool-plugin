@@ -117,9 +117,11 @@ const styleRadio = require('./resources/style-radio');
                 };
 
                 const getIterations = (categories) => {
-                    return categories[categoryPointer] ? _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
-                        return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
-                    }) : [];
+                    return categories[categoryPointer]
+                        ? _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
+                            return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
+                        })
+                        : [];
                 };
 
                 const getCategories = (categories) => {
@@ -142,9 +144,11 @@ const styleRadio = require('./resources/style-radio');
                 };
 
                 const getQuestions = (iterations) => {
-                    return iterations.length ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                        return questionInSelection(question);
-                    }) : [];
+                    return iterations.length
+                        ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
+                            return questionInSelection(question);
+                        })
+                        : [];
                 };
 
                 const calculatePriority = (priorityValue) => {
@@ -289,9 +293,11 @@ const styleRadio = require('./resources/style-radio');
 
                             const updatePointers = (direction) => {
                                 categories = getCategories(assessment.answers[0]._embedded.categories);
-                                iterations = categories[categoryPointer] ? _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
-                                    return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
-                                }) : [];
+                                iterations = categories[categoryPointer]
+                                    ? _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
+                                        return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
+                                    })
+                                    : [];
                                 questions = getQuestions(iterations);
                                 let outOfBounds = '';
                                 if (direction === 'next') {
@@ -361,13 +367,17 @@ const styleRadio = require('./resources/style-radio');
                             };
 
                             const templateValues = () => {
-                                const currentCategory = categories[categoryPointer] ? _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
-                                    return category.id === categories[categoryPointer].id;
-                                }) : null;
+                                const currentCategory = categories[categoryPointer]
+                                    ? _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
+                                        return category.id === categories[categoryPointer].id;
+                                    })
+                                    : null;
                                 currentCategory.comments = categories[categoryPointer].comments;
-                                const currentQuestion = questions[questionPointer] ? _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
-                                    return question.id === questions[questionPointer].id;
-                                })) : null;
+                                const currentQuestion = questions[questionPointer]
+                                    ? _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
+                                        return question.id === questions[questionPointer].id;
+                                    }))
+                                    : null;
                                 const updatedQuestion = assignOptionSelected(currentQuestion, questions[questionPointer]);
                                 if (updatedQuestion) {
                                     updatedQuestion.comments = questions[questionPointer].comments;
@@ -389,6 +399,7 @@ const styleRadio = require('./resources/style-radio');
                                 if (currentQuestion && currentQuestion.imgLibId && currentQuestion.imageArea) {
                                     currentImageLibrary = currentQuestion.imgLibId;
                                     imageArea = currentQuestion.imageArea;
+                                    // eslint-disable-next-line no-empty
                                 } else if (currentQuestion && currentQuestion.imgLibId) {
 
                                 } else if (currentQuestion && currentQuestion.imageArea) {
@@ -403,9 +414,11 @@ const styleRadio = require('./resources/style-radio');
                                     return imageLibrary.id === currentImageLibrary;
                                 });
 
-                                const currentImageArea = imageArea ? _.find(currentImglib && currentImglib._embedded.images ? currentImglib._embedded.images[0]._embedded.imageMaps : null, (imageMap) => {
-                                    return imageMap && imageMap.title === imageArea;
-                                }) : null;
+                                const currentImageArea = imageArea
+                                    ? _.find(currentImglib && currentImglib._embedded.images ? currentImglib._embedded.images[0]._embedded.imageMaps : null, (imageMap) => {
+                                        return imageMap && imageMap.title === imageArea;
+                                    })
+                                    : null;
                                 const currentImageHeight = currentImglib && currentImglib._embedded.images ? currentImglib._embedded.images[0].height : null;
                                 const currentImageWidth = currentImglib && currentImglib._embedded.images ? currentImglib._embedded.images[0].width : null;
                                 values.imageMap = currentImageArea ? currentImageArea.coords : null;
@@ -423,12 +436,16 @@ const styleRadio = require('./resources/style-radio');
                             };
 
                             const introTemplateValues = () => {
-                                const currentCategory = categories[categoryPointer] ? _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
-                                    return category.id === categories[categoryPointer].id;
-                                }) : null;
-                                const currentQuestion = questions[questionPointer] ? _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
-                                    return question.id === questions[questionPointer].id;
-                                })) : null;
+                                const currentCategory = categories[categoryPointer]
+                                    ? _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
+                                        return category.id === categories[categoryPointer].id;
+                                    })
+                                    : null;
+                                const currentQuestion = questions[questionPointer]
+                                    ? _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
+                                        return question.id === questions[questionPointer].id;
+                                    }))
+                                    : null;
                                 const values = { category: currentCategory, question: currentQuestion };
                                 if (questionPointer) {
                                     values.notFirst = true;
@@ -454,12 +471,16 @@ const styleRadio = require('./resources/style-radio');
                                                 const categoryQ = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (questionCategory) => {
                                                     return questionCategory.id === category.id;
                                                 });
-                                                const questionQ = question ? _.find(categoryQ._embedded.questions, (questionQuestion) => {
-                                                    return questionQuestion.id === question.id;
-                                                }) : null;
-                                                const option = questionQ ? _.find(questionQ._embedded.options, (option) => {
-                                                    return option.id === question.answer;
-                                                }) : null;
+                                                const questionQ = question
+                                                    ? _.find(categoryQ._embedded.questions, (questionQuestion) => {
+                                                        return questionQuestion.id === question.id;
+                                                    })
+                                                    : null;
+                                                const option = questionQ
+                                                    ? _.find(questionQ._embedded.options, (option) => {
+                                                        return option.id === question.answer;
+                                                    })
+                                                    : null;
                                                 position = option ? option.position : null;
 
                                                 const priority = calculatePriority(question.priority);
@@ -526,12 +547,16 @@ const styleRadio = require('./resources/style-radio');
                                     const answersList = _.map(category._embedded.iterations, (iteration) => {
                                         const iterationQ = _.map(iteration._embedded.questions, (question) => {
                                             if ((isMM && parseInt(question.detailLevel, 10) === parseInt(assessment.detailLevel, 10)) || !isMM) {
-                                                const questionQ = question ? _.find(categoryQ._embedded.questions, (questionQuestion) => {
-                                                    return questionQuestion.id === question.id;
-                                                }) : null;
-                                                const option = questionQ ? _.find(questionQ._embedded.options, (option) => {
-                                                    return option.id === question.answer;
-                                                }) : null;
+                                                const questionQ = question
+                                                    ? _.find(categoryQ._embedded.questions, (questionQuestion) => {
+                                                        return questionQuestion.id === question.id;
+                                                    })
+                                                    : null;
+                                                const option = questionQ
+                                                    ? _.find(questionQ._embedded.options, (option) => {
+                                                        return option.id === question.answer;
+                                                    })
+                                                    : null;
                                                 const selectedOption = questionQ && questionQ._embedded.options.length && option ? option.position : null;
                                                 const priority = calculatePriority(question.priority);
                                                 const preppedPriority = (5 - parseInt(selectedOption, 10)) * priority;
@@ -544,12 +569,14 @@ const styleRadio = require('./resources/style-radio');
                                                     urgency = 'yellow';
                                                 }
 
-                                                const allStatuses = questionQ && questionQ._embedded.options ? _.map(questionQ._embedded.options, (optionQ) => {
-                                                    return {
-                                                        currentStatus: optionQ.currentStatus,
-                                                        isSelected: optionQ.id === question.answer
-                                                    };
-                                                }) : null;
+                                                const allStatuses = questionQ && questionQ._embedded.options
+                                                    ? _.map(questionQ._embedded.options, (optionQ) => {
+                                                        return {
+                                                            currentStatus: optionQ.currentStatus,
+                                                            isSelected: optionQ.id === question.answer
+                                                        };
+                                                    })
+                                                    : null;
 
                                                 return {
                                                     name: questionQ ? questionQ.name : null,
@@ -643,15 +670,20 @@ const styleRadio = require('./resources/style-radio');
                             };
 
                             const updateQuestionContent = (outOfBounds = '', direction = null) => {
-                                const progressPosition = categories[categoryPointer] ? _.findIndex(progressFilteredCategories, function(o) {
-                                    return o.id && o.id === categories[categoryPointer].id;
-                                }) : null;
+                                const progressPosition = categories[categoryPointer]
+                                    ? _.findIndex(progressFilteredCategories, function(o) {
+                                        return o.id && o.id === categories[categoryPointer].id;
+                                    })
+                                    : null;
                                 progress = (progressPosition) / progressFilteredCategories.length * 100;
-                                const currentCategory = categories[categoryPointer] ? _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
-                                    return category.id === categories[categoryPointer].id;
-                                }) : null;
+                                const currentCategory = categories[categoryPointer]
+                                    ? _.find(result.data._embedded.questionnaires[0]._embedded.categories, (category) => {
+                                        return category.id === categories[categoryPointer].id;
+                                    })
+                                    : null;
 
                                 if (outOfBounds !== '') {
+                                    // eslint-disable-next-line no-empty
                                     if (outOfBounds === 'front') {
 
                                     } else if (outOfBounds === 'end') {
@@ -666,9 +698,11 @@ const styleRadio = require('./resources/style-radio');
                                     }
                                 } else {
                                     if (currentCategory && currentCategory.name === constants.specializedTemplates.introCategory) {
-                                        const currentQuestion = questions[questionPointer] ? _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
-                                            return question.id === questions[questionPointer].id;
-                                        })) : null;
+                                        const currentQuestion = questions[questionPointer]
+                                            ? _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
+                                                return question.id === questions[questionPointer].id;
+                                            }))
+                                            : null;
                                         if (currentQuestion && currentQuestion.name === constants.specializedTemplates.description) {
                                             const questionnaire = _.find(result.data._embedded.questionnaires, [ 'id', result.data.surveyId ]);
                                             const questionnaireUrl = questionnaire ? questionnaire._links.self.href : '';
@@ -849,16 +883,22 @@ const styleRadio = require('./resources/style-radio');
                                     _.each(rCategory._embedded.iterations, (rIteration) => {
                                         _.each(rIteration._embedded.questions, (rQuestion) => {
                                             if (((isMM && parseInt(rQuestion.detailLevel, 10) === parseInt(assessment.detailLevel, 10)) || (!isMM && rQuestion.detailLevel <= assessment.detailLevel)) && rQuestion.answer) {
-                                                const questionCategory = rCategory ? _.find(result.data._embedded.questionnaires[0]._embedded.categories, (qCategory) => {
-                                                    return qCategory.id === rCategory.id;
-                                                }) : null;
-                                                const questionQuestion = questionCategory ? _.find(questionCategory._embedded.questions, (qQuestion) => {
-                                                    return qQuestion.id === rQuestion.id;
-                                                }) : null;
+                                                const questionCategory = rCategory
+                                                    ? _.find(result.data._embedded.questionnaires[0]._embedded.categories, (qCategory) => {
+                                                        return qCategory.id === rCategory.id;
+                                                    })
+                                                    : null;
+                                                const questionQuestion = questionCategory
+                                                    ? _.find(questionCategory._embedded.questions, (qQuestion) => {
+                                                        return qQuestion.id === rQuestion.id;
+                                                    })
+                                                    : null;
                                                 numberOfOptions = Math.max(numberOfOptions, questionQuestion._embedded.options.length);
-                                                const questionAnswer = questionQuestion ? _.find(questionQuestion._embedded.options, (qOption) => {
-                                                    return qOption.id === rQuestion.answer;
-                                                }) : null;
+                                                const questionAnswer = questionQuestion
+                                                    ? _.find(questionQuestion._embedded.options, (qOption) => {
+                                                        return qOption.id === rQuestion.answer;
+                                                    })
+                                                    : null;
                                                 flattenedAnswers.push({
                                                     id: rQuestion.id,
                                                     answer: questionAnswer ? questionAnswer.position : null,
@@ -879,9 +919,11 @@ const styleRadio = require('./resources/style-radio');
                                         result.points = 0;
                                         result.numberAnswered = 0;
                                         _.each(result._embedded.relevantQuestions, (relevantQuestion) => {
-                                            _.each(relevantQuestion ? _.filter(flattenedAnswers, (aQuestion) => {
-                                                return aQuestion.id === relevantQuestion.id;
-                                            }) : null, (aQuestion) => {
+                                            _.each(relevantQuestion
+                                                ? _.filter(flattenedAnswers, (aQuestion) => {
+                                                    return aQuestion.id === relevantQuestion.id;
+                                                })
+                                                : null, (aQuestion) => {
                                                 if (relevantQuestion.relevance === 'high') {
                                                     result.points += Math.max(0, parseInt(aQuestion.answer, 10) - weightAdjustment);
                                                     result.numberAnswered += 1;

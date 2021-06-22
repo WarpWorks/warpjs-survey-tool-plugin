@@ -10,7 +10,7 @@ const questionTemplate = require('./question-feedback-modal.hbs');
 const styleThumbRadio = () => {
     $('.thumbs-container input:radio').hide().each(function() {
         $(this).attr('data-radio-thumb', this.name);
-        var label = $("label[for=" + '"' + this.id + '"' + "]").text();
+        const label = $("label[for=" + '"' + this.id + '"' + "]").text();
         $('<a ' + (label !== '' ? 'title=" ' + label + ' "' : '') + ' data-radio-thumb="' + this.name + '" class="radio-thumb" href="#">' + '<span class="radio ' + $(this).data('direction') + ' ' + (this.checked ? ' radio-checked' : '') + '"></span></a>').insertAfter(this);
     });
 };

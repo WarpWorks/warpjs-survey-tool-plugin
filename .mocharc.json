@@ -1,8 +1,5 @@
 {
   "diff": true,
   "exit": true,
-  "recursive": true,
-  "require": [
-    "setup.test.js"
-  ]
+  "recursive": true
 }

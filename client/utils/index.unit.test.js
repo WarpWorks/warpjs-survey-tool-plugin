@@ -1,4 +1,8 @@
+const testHelpers = require('@quoin/node-test-helpers');
+
 const moduleToTest = require('./index');
+
+const { expect } = testHelpers;
 
 describe('client/utils/index.unit.test.js', () => {
   const clone = { ...moduleToTest };

@@ -1,6 +1,10 @@
+const testHelpers = require('@quoin/node-test-helpers');
+
 const moduleToTest = require('./title-by-key');
 
 const { TITLES } = require('../constants');
+
+const { expect } = testHelpers;
 
 describe('client/utils/title-by-key.unit.test.js', () => {
   it('exports a function with 1 param', () => {

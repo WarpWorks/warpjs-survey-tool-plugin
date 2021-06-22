@@ -13,13 +13,13 @@ module.exports = ($, cache, result) => Promise.resolve()
 
         $('input:radio').hide().each(function() {
             $(this).attr('data-radio-fx', this.name);
-            var label = $("label[for=" + '"' + this.id + '"' + "]").text();
+            const label = $("label[for=" + '"' + this.id + '"' + "]").text();
             $('<a ' + (label !== '' ? 'title=" ' + label + ' "' : '') + ' data-radio-fx="' + this.name + '" class="radio-fx" href="#">' +
                 '<span class="radio' + (this.checked ? ' radio-checked' : '') + '"></span></a>').insertAfter(this);
         });
         $('a.radio-fx').on('click', function(e) {
             e.preventDefault();
-            var unique = $(this).attr('data-radio-fx');
+            const unique = $(this).attr('data-radio-fx');
             $("a[data-radio-fx='" + unique + "'] span").removeClass('radio-checked');
             $(":radio[data-radio-fx='" + unique + "']").attr('checked', false);
             $(this).find('span').addClass('radio-checked');

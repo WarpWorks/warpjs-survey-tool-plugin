@@ -27,7 +27,7 @@ const template = require('./../template.hbs');
     const styleRadio = () => {
         $('input:radio').hide().each(function() {
             $(this).attr('data-radio-fx', this.name);
-            var label = $("label[for=" + '"' + this.id + '"' + "]").text();
+            const label = $("label[for=" + '"' + this.id + '"' + "]").text();
             $('<a ' + (label !== '' ? 'title=" ' + label + ' "' : '') + ' data-radio-fx="' + this.name + '" class="radio-fx" href="#">' +
                 '<span class="radio' + (this.checked ? ' radio-checked' : '') + '"></span></a>').insertAfter(this);
         });
@@ -69,9 +69,11 @@ const template = require('./../template.hbs');
             let iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
                 return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
             });
-            let questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                return question.detailLevel <= result.data.detailLevel;
-            }) : [];
+            let questions = iterations.length > 0
+                ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
+                    return question.detailLevel <= result.data.detailLevel;
+                })
+                : [];
 
             let progressFilteredCategories = [];
 
@@ -156,9 +158,11 @@ const template = require('./../template.hbs');
                             iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
                                 return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                             });
-                            questions = iterations.length ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                return question.detailLevel <= result.data.detailLevel;
-                            }) : [];
+                            questions = iterations.length
+                                ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
+                                    return question.detailLevel <= result.data.detailLevel;
+                                })
+                                : [];
                             let outOfBounds = '';
                             if (direction === 'next') {
                                 if (questionPointer + 1 >= questions.length) {
@@ -174,9 +178,11 @@ const template = require('./../template.hbs');
                                                 return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                                             });
 
-                                            questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                                return question.detailLevel <= result.data.detailLevel;
-                                            }) : [];
+                                            questions = iterations.length > 0
+                                                ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
+                                                    return question.detailLevel <= result.data.detailLevel;
+                                                })
+                                                : [];
                                             if (categories[categoryPointer].isRepeatable) {
                                                 questionPointer = -1;
                                             }
@@ -202,9 +208,11 @@ const template = require('./../template.hbs');
                                             iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
                                                 return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                                             });
-                                            questions = iterations.length ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                                return question.detailLevel <= result.data.detailLevel;
-                                            }) : [];
+                                            questions = iterations.length
+                                                ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
+                                                    return question.detailLevel <= result.data.detailLevel;
+                                                })
+                                                : [];
                                             iterationPointer = iterations.length === 0 ? 0 : iterations.length - 1;
                                             questionPointer = questions.length - 1;
                                         }
@@ -237,9 +245,11 @@ const template = require('./../template.hbs');
                                 return category.id === categories[categoryPointer].id;
                             });
                             currentCategory.comments = categories[categoryPointer].comments;
-                            const currentQuestion = questions[questionPointer] ? _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
-                                return question.id === questions[questionPointer].id;
-                            })) : null;
+                            const currentQuestion = questions[questionPointer]
+                                ? _.cloneDeep(_.find(currentCategory._embedded.questions, (question) => {
+                                    return question.id === questions[questionPointer].id;
+                                }))
+                                : null;
                             const updatedQuestion = assignOptionSelected(currentQuestion, questions[questionPointer]);
                             if (updatedQuestion) {
                                 updatedQuestion.comments = questions[questionPointer].comments;
@@ -260,6 +270,7 @@ const template = require('./../template.hbs');
                             if (currentQuestion && currentQuestion.imgLibId && currentQuestion.imageArea) {
                                 currentImageLibrary = currentQuestion.imgLibId;
                                 imageArea = currentQuestion.imageArea;
+                                // eslint-disable-next-line no-empty
                             } else if (currentQuestion && currentQuestion.imgLibId) {
 
                             } else if (currentQuestion && currentQuestion.imageArea) {
@@ -270,13 +281,17 @@ const template = require('./../template.hbs');
                                 imageArea = currentCategory.imageArea;
                             }
 
-                            const currentImglib = currentImageLibrary ? _.find(result.data._embedded.questionnaires[0]._embedded.imageLibraries, (imageLibrary) => {
-                                return imageLibrary.id === currentImageLibrary;
-                            }) : null;
+                            const currentImglib = currentImageLibrary
+                                ? _.find(result.data._embedded.questionnaires[0]._embedded.imageLibraries, (imageLibrary) => {
+                                    return imageLibrary.id === currentImageLibrary;
+                                })
+                                : null;
 
-                            const currentImageArea = imageArea ? _.find(currentImglib && currentImglib._embedded.images ? currentImglib._embedded.images[0]._embedded.imageMaps : null, (imageMap) => {
-                                return imageMap && imageMap.title === imageArea;
-                            }) : null;
+                            const currentImageArea = imageArea
+                                ? _.find(currentImglib && currentImglib._embedded.images ? currentImglib._embedded.images[0]._embedded.imageMaps : null, (imageMap) => {
+                                    return imageMap && imageMap.title === imageArea;
+                                })
+                                : null;
                             const currentImageHeight = currentImglib && currentImglib._embedded.images ? currentImglib._embedded.images[0].height : null;
                             const currentImageWidth = currentImglib && currentImglib._embedded.images ? currentImglib._embedded.images[0].width : null;
                             values.imageMap = currentImageArea ? currentImageArea.coords : null;
@@ -545,6 +560,7 @@ const template = require('./../template.hbs');
                             });
 
                             if (outOfBounds !== '') {
+                                // eslint-disable-next-line no-empty
                                 if (outOfBounds === 'front') {
 
                                 } else if (outOfBounds === 'end') {
@@ -666,12 +682,16 @@ const template = require('./../template.hbs');
                                             const questionCategory = _.find(result.data._embedded.questionnaires[0]._embedded.categories, (qCategory) => {
                                                 return qCategory.id === rCategory.id;
                                             });
-                                            const questionQuestion = questionCategory ? _.find(questionCategory._embedded.questions, (qQuestion) => {
-                                                return qQuestion.id === rQuestion.id;
-                                            }) : null;
-                                            const questionAnswer = questionQuestion ? _.find(questionQuestion._embedded.options, (qOption) => {
-                                                return qOption.id === rQuestion.answer;
-                                            }) : null;
+                                            const questionQuestion = questionCategory
+                                                ? _.find(questionCategory._embedded.questions, (qQuestion) => {
+                                                    return qQuestion.id === rQuestion.id;
+                                                })
+                                                : null;
+                                            const questionAnswer = questionQuestion
+                                                ? _.find(questionQuestion._embedded.options, (qOption) => {
+                                                    return qOption.id === rQuestion.answer;
+                                                })
+                                                : null;
                                             flattenedAnswers.push({
                                                 id: rQuestion.id,
                                                 answer: questionAnswer ? questionAnswer.position : null,
@@ -720,9 +740,11 @@ const template = require('./../template.hbs');
                         iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
                             return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                         });
-                        questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                            return question.detailLevel <= result.data.detailLevel;
-                        }) : [];
+                        questions = iterations.length > 0
+                            ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
+                                return question.detailLevel <= result.data.detailLevel;
+                            })
+                            : [];
 
                         updateQuestionContent();
 
@@ -844,9 +866,11 @@ const template = require('./../template.hbs');
                                     return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                                 });
                                 iterationPointer = iterations.length - 1;
-                                questions = iterations.length ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                    return question.detailLevel <= result.data.detailLevel;
-                                }) : [];
+                                questions = iterations.length
+                                    ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
+                                        return question.detailLevel <= result.data.detailLevel;
+                                    })
+                                    : [];
                                 questionPointer = questions.length ? questions.length - 1 : -1;
 
                                 updatePointers('next');
@@ -859,9 +883,11 @@ const template = require('./../template.hbs');
                                 iterations = _.filter(categories[categoryPointer]._embedded.iterations, function(iteration) {
                                     return categories[categoryPointer].isRepeatable ? iteration.name !== '' : true;
                                 });
-                                questions = iterations.length > 0 ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
-                                    return question.detailLevel <= result.data.detailLevel;
-                                }) : [];
+                                questions = iterations.length > 0
+                                    ? _.filter(iterations[iterationPointer]._embedded.questions, function(question) {
+                                        return question.detailLevel <= result.data.detailLevel;
+                                    })
+                                    : [];
 
                                 if (categories[categoryPointer].isRepeatable) {
                                     questionPointer = -1;
