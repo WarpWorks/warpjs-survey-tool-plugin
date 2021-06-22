@@ -1,11 +1,10 @@
 {
   "name": "@warp-works/warpjs-survey-tool-plugin",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Plugin to set up survey",
   "main": "index.js",
   "publishConfig": {
-    "access": "public",
-    "tag": "node14"
+    "access": "public"
   },
   "engines": {
     "node": ">=14.15.0"
@@ -38,11 +37,11 @@
   },
   "homepage": "https://github.com/WarpWorks/warpjs-survey-tool-plugin#readme",
   "devDependencies": {
-    "@quoin/eslint-config-quoin": "^2.0.1",
-    "@quoin/expressjs-routes-info": "^2.0.0",
-    "@quoin/node-test-helpers": "^2.0.0",
-    "@warp-works/warpjs-plugins": "^2.0.0",
-    "@warp-works/warpjs-utils": "^2.0.0",
+    "@quoin/eslint-config-quoin": "^2.0.2",
+    "@quoin/expressjs-routes-info": "^2.0.1",
+    "@quoin/node-test-helpers": "^2.0.1",
+    "@warp-works/warpjs-plugins": "^2.0.1",
+    "@warp-works/warpjs-utils": "^2.0.3",
     "babel-core": "~6.26.3",
     "babel-loader": "~7.1.5",
     "babel-preset-env": "~1.7.0",
@@ -73,14 +72,14 @@
     "webpack": "~2.7.0"
   },
   "peerDependencies": {
-    "@quoin/expressjs-routes-info": ">=2.0.0",
-    "@warp-works/warpjs-utils": ">=2.0.0",
+    "@quoin/expressjs-routes-info": ">=2.0.1",
+    "@warp-works/warpjs-utils": ">=2.0.3",
     "body-parser": ">=1.19.0",
     "cookie-parser": ">=1.4.5",
     "express": ">=4.17.0"
   },
   "dependencies": {
-    "@warp-works/warpjs-action-plugin": "^2.0.1",
+    "@warp-works/warpjs-action-plugin": "^2.0.2",
     "bluebird": "~3.7.2",
     "d3": "^5.16.0",
     "debug": "^4.3.1",
