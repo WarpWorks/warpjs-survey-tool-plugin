@@ -1,6 +1,6 @@
 {
   "name": "@warp-works/warpjs-survey-tool-plugin",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Plugin to set up survey",
   "main": "index.js",
   "publishConfig": {
