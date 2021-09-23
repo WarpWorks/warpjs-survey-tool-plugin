@@ -13,7 +13,8 @@ module.exports = {
         modules: 'Modules'
     },
     TITLES: Object.freeze({
-        IPT: 'AI project explorer',
-        MM: 'Maturity Assessment'
+        IPT: 'IIC Project Explorer',
+        MM: 'Maturity Assessment',
+        AI: 'AI Project Explorer'
     })
 };

@@ -23,6 +23,7 @@ module.exports = ($, data) => {
     if (key) {
         const surveyKey = classByKey(key);
         $('.survey-tool').addClass(surveyKey);
+        $('.logo').addClass(`logo-${key}`);
         $(`.survey-tool.${surveyKey} .survey-type-${surveyKey} h2`).text(titleByKey(key));
     }
 
