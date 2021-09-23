@@ -23,7 +23,9 @@ module.exports = ($, data) => {
     if (key) {
         const surveyKey = classByKey(key);
         $('.survey-tool').addClass(surveyKey);
-        $('.logo').addClass(`logo-${key}`);
+        if (key !== 'ai') {
+            $('.logo').addClass('logo-show');
+        }
         $(`.survey-tool.${surveyKey} .survey-type-${surveyKey} h2`).text(titleByKey(key));
     }
 
