@@ -29,6 +29,7 @@ Add the following to `.warp-works-warpjsrc` of your project:
             "relevantHigh": "Relevant_If_High",
             "relevantLow": "Relevant_If_Low",
             "content": "Content"
+            "hideLogo": "yes"
           }
         }
       }]
@@ -48,3 +49,4 @@ Add the following to `.warp-works-warpjsrc` of your project:
 - `relevantHigh` is for the list of questions of relevance with emphasis on answers with higher positions
 - `relevantLow` is for the list of questions of relevance with emphasis on answers with lower positions
 - `content` is the associated content linked to a result
+- `hideLogo` is used to hide the logo from the root page if set to `yes`

@@ -12,7 +12,6 @@ module.exports = ($, data) => {
     storage.setCurrent($, storage.KEYS.ASSESSMENT_ID, data.assessmentId);
     storage.setCurrent($, storage.KEYS.PROJECT_EMAIL_URL, data._links.projectEmail.href);
 
-    $('.warpjs-home-link').attr('href', data._links.warpjsHomepage.href);
     $('.spider-button[data-toggle="tooltip"]', placeholder).tooltip({ trigger: 'hover' });
     $('.copyright[data-toggle="tooltip"], .copyright-mm[data-toggle="tooltip"]', placeholder).tooltip({
         container: 'body',
@@ -20,13 +19,18 @@ module.exports = ($, data) => {
     });
 
     const key = (data._embedded.questionnaires && data._embedded.questionnaires[0].key) ? data._embedded.questionnaires[0].key : null;
+    const hideLogo = data._embedded.hideLogo.hideLogo && data._embedded.hideLogo.hideLogo === 'yes';
     if (key) {
         const surveyKey = classByKey(key);
         $('.survey-tool').addClass(surveyKey);
         if (key !== 'ai') {
+            $('.warpjs-home-link').attr('href', data._links.warpjsHomepage.href);
             $('.logo').addClass('logo-show');
         }
         $(`.survey-tool.${surveyKey} .survey-type-${surveyKey} h2`).text(titleByKey(key));
+    } else if (!hideLogo) {
+        $('.warpjs-home-link').attr('href', data._links.warpjsHomepage.href);
+        $('.logo').addClass('logo-show');
     }
 
     $(document).on('click', '.closed[data-toggle="tooltip"]', (event) => {

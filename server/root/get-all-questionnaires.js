@@ -38,7 +38,9 @@ module.exports = (req, res) => warpjsUtils.wrapWith406(res, {
             );
 
             const questionnairesHAL = questionnaireInstances.map((questionnaireInstance) => questionnaireInstance.toHal(warpjsUtils, RoutesInfo, constants.routes));
+            const hideLogo = pluginInfo.config.schema.hideLogo ? pluginInfo.config.schema.hideLogo : '';
             resource.embed('questionnaires', questionnairesHAL);
+            resource.embed('hideLogo', hideLogo);
             await utils.sendHal(req, res, resource);
         } catch (err) {
             // eslint-disable-next-line no-console
