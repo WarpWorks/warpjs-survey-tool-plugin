@@ -19,7 +19,7 @@ module.exports = ($, data) => {
     });
 
     const key = (data._embedded.questionnaires && data._embedded.questionnaires[0].key) ? data._embedded.questionnaires[0].key : null;
-    const hideLogo = data._embedded.hideLogo.hideLogo && data._embedded.hideLogo.hideLogo === 'yes';
+    const hideLogo = data._embedded.hideLogo && data._embedded.hideLogo === 'yes';
     if (key) {
         const surveyKey = classByKey(key);
         $('.survey-tool').addClass(surveyKey);
